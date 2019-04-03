@@ -4,24 +4,24 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 
-class MyFragmentAdapter(fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
+class Adapter(fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
 
     override fun getItem(position: Int): Fragment? {
 
-        when (position) {
+        return when (position) {
             TAB_1 -> {
-                return EasyTabTextFragmentTab1()
+                EasyTabTextFragmentTab1()
             }
 
             TAB_2 -> {
-                return EasyTabTextFragmentTab2()
+                EasyTabTextFragmentTab2()
             }
 
             TAB_3 -> {
-                return EasyTabTextFragmentTab3()
+                EasyTabTextFragmentTab3()
             }
 
-            else -> return null
+            else -> null
         }
     }
 

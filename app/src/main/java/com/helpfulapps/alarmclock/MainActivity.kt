@@ -10,7 +10,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val pagerAdapter = MyFragmentAdapter(supportFragmentManager)
+        val pagerAdapter = Adapter(supportFragmentManager)
         viewpager.adapter = pagerAdapter
         easyTabs.viewPager = viewpager
 
