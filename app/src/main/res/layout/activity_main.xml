@@ -8,49 +8,82 @@
 		android:layout_height="match_parent"
 		tools:context=".MainActivity">
 
-	<com.loicteillard.easytabs.EasyTabs
-			android:id="@+id/easyTabs"
-			android:layout_width="0dp"
+	<androidx.constraintlayout.widget.ConstraintLayout
+			android:id="@+id/toolbar_layout"
+			android:background="@color/toolbar"
+			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
+			android:orientation="horizontal"
 			app:layout_constraintTop_toTopOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintEnd_toStartOf="@+id/menu">
+			app:layout_constraintEnd_toEndOf="parent">
 
-		<com.loicteillard.easytabs.EasyTabImageView
-				android:layout_width="wrap_content"
+		<com.loicteillard.easytabs.EasyTabs
+				android:id="@+id/easyTabs"
+				android:layout_width="0dp"
 				android:layout_height="wrap_content"
-				easytabs:selected_color="@color/colorAccent"
-				android:src="@drawable/ic_alarm" />
+				easytabs:selected_color="@color/tabActive"
+				easytabs:unselected_color="@color/tabNotActive"
+				easytabs:selected_size="@dimen/indicator_size"
+				easytabs:selected_padding_bottom="10dp"
+				easytabs:selected_padding_top="10dp"
+				easytabs:indicator_shape="@drawable/indicator"
+				app:layout_constraintTop_toTopOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintBottom_toBottomOf="parent"
+				app:layout_constraintEnd_toStartOf="@+id/menu"
+		>
 
-		<com.loicteillard.easytabs.EasyTabImageView
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				easytabs:selected_color="@color/colorAccent"
-				android:src="@drawable/ic_hourglass" />
+			<com.loicteillard.easytabs.EasyTabImageView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:src="@drawable/ic_alarm" />
 
-		<com.loicteillard.easytabs.EasyTabImageView
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				easytabs:selected_color="@color/colorAccent"
-				android:src="@drawable/ic_stopwatch" />
+			<com.loicteillard.easytabs.EasyTabImageView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:src="@drawable/ic_hourglass" />
 
-	</com.loicteillard.easytabs.EasyTabs>
+			<com.loicteillard.easytabs.EasyTabImageView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:src="@drawable/ic_stopwatch" />
 
-	<ImageView
-			android:id="@+id/menu"
-			android:src="@drawable/ic_menu"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			app:layout_constraintEnd_toEndOf="parent"
-			android:layout_marginEnd="8dp"
-			app:layout_constraintTop_toTopOf="parent" />
+		</com.loicteillard.easytabs.EasyTabs>
+
+		<ImageButton
+				android:id="@+id/menu"
+				android:src="@drawable/ic_menu"
+				android:layout_width="@dimen/menu_icon_width"
+				android:layout_height="@dimen/menu_icon_height"
+				android:minHeight="0dp"
+				android:minWidth="0dp"
+				style="@style/Widget.AppCompat.Button.Borderless"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintBottom_toBottomOf="@+id/easyTabs"
+				app:layout_constraintTop_toTopOf="@+id/easyTabs" />
+	</androidx.constraintlayout.widget.ConstraintLayout>
+
 	<androidx.viewpager.widget.ViewPager
 			android:id="@+id/viewpager"
 			android:layout_width="0dp"
 			android:layout_height="0dp"
-			app:layout_constraintTop_toBottomOf="@+id/easyTabs"
+			app:layout_constraintTop_toBottomOf="@+id/toolbar_layout"
 			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintBottom_toBottomOf="parent">
+	</androidx.viewpager.widget.ViewPager>
+	<com.google.android.material.floatingactionbutton.FloatingActionButton
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:clickable="true"
+			app:srcCompat="@drawable/ic_add"
+			android:id="@+id/floatingActionButton"
+			android:layout_marginEnd="8dp"
+			app:layout_constraintEnd_toEndOf="parent"
+			android:layout_marginStart="8dp"
+			app:layout_constraintStart_toStartOf="parent"
+			android:layout_marginBottom="8dp"
 			app:layout_constraintBottom_toBottomOf="parent" />
 
 

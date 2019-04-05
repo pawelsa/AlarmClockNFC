@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">AlarmClock</string>
+
+    <string name="add_alarm_short">Add alarm</string>
+    <string name="start_stopwatch_short">Start stopwatch</string>
+    <string name="set_hourglass_short">Set hourglass</string>
 </resources>
