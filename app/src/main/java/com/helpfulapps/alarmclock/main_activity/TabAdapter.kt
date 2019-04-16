@@ -1,8 +1,11 @@
-package com.helpfulapps.alarmclock
+package com.helpfulapps.alarmclock.main_activity
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
+import com.helpfulapps.alarmclock.clock_fragment.ClockFragment
+import com.helpfulapps.alarmclock.hourwatch_fragment.HourWatchFragment
+import com.helpfulapps.alarmclock.stopwatch_fragment.StopwatchFragment
 
 class TabAdapter(fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
 
@@ -10,17 +13,16 @@ class TabAdapter(fragmentManager: FragmentManager) : FragmentStatePagerAdapter(f
 
         return when (position) {
             TAB_1 -> {
-                EasyTabTextFragmentTab1()
+                ClockFragment()
             }
 
             TAB_2 -> {
-                EasyTabTextFragmentTab2()
+                HourWatchFragment()
             }
 
             TAB_3 -> {
-                EasyTabTextFragmentTab3()
+                StopwatchFragment()
             }
-
             else -> null
         }
     }

@@ -1,16 +1,17 @@
-package com.helpfulapps.alarmclock
+package com.helpfulapps.alarmclock.stopwatch_fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.helpfulapps.alarmclock.R
 
-class EasyTabTextFragmentTab1 : Fragment() {
+class StopwatchFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        return inflater.inflate(R.layout.easytabtext_fragment_tab_1, container, false)
+        return inflater.inflate(R.layout.fragment_stopwatch, container, false)
 
     }
 }

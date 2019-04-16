@@ -1,16 +1,16 @@
-package com.helpfulapps.alarmclock
+package com.helpfulapps.alarmclock.clock_fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.helpfulapps.alarmclock.R
 
-class EasyTabTextFragmentTab2 : Fragment() {
+class ClockFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        return inflater.inflate(R.layout.easytabtext_fragment_tab_2, container, false)
-
+        return inflater.inflate(R.layout.fragment_clock, container, false)
     }
 }
