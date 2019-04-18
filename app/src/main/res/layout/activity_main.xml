@@ -41,20 +41,19 @@
                 easytabs:unselected_color="@color/tabNotActive">
 
                 <com.loicteillard.easytabs.EasyTabImageView
-                    style="@style/Widget.AppCompat.ActionButton"
+                    android:background="?selectableItemBackgroundBorderless"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_alarm" />
-
-                <!--android:background="?android:attr/selectableItemBackground"-->
+                <!--style="@style/Widget.AppCompat.ActionButton"-->
                 <com.loicteillard.easytabs.EasyTabImageView
-                    style="@style/Widget.AppCompat.ActionButton"
+                    android:background="?selectableItemBackgroundBorderless"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_hourglass" />
 
                 <com.loicteillard.easytabs.EasyTabImageView
-                    style="@style/Widget.AppCompat.ActionButton"
+                    android:background="?selectableItemBackgroundBorderless"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_stopwatch" />
