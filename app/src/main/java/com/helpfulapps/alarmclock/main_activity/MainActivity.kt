@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
 
     private val TAG = this::class.java.name
 
-    val popupMenu by lazy {
+    private val popupMenu by lazy {
         val popup = PopupMenu(applicationContext, ib_main_menu)
         popup.menuInflater.inflate(R.menu.clock_menu, popup.menu)
         popup.setOnMenuItemClickListener {
@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         popup
     }
 
-    val viewModel by lazy {
+    private val viewModel by lazy {
         ViewModelProviders.of(this).get(MainActivityViewModel::class.java)
     }
 
@@ -59,12 +59,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initTabs() {
+        setupFragmentChangeListener()
+
         val pagerAdapter = TabAdapter(supportFragmentManager)
         vp_main_tab_pager.adapter = pagerAdapter
         vp_main_tab_pager.currentItem = 0
         et_main_tab_layout.viewPager = vp_main_tab_pager
 
-        setupFragmentChangeListener()
         manageFragmentLaunching(intent)
     }
 

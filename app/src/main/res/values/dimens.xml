@@ -3,4 +3,5 @@
 	<dimen name="indicator_size">50dp</dimen>
 	<dimen name="menu_icon_width">30dp</dimen>
 	<dimen name="menu_icon_height">0dp</dimen>
+    <dimen name="icon_tab_size">24dp</dimen>
 </resources>

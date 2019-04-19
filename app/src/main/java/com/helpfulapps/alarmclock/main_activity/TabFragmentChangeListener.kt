@@ -21,11 +21,6 @@ class TabFragmentChangeListener(
 
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
 
-        if (first && position != 0 && positionOffset == 0f && positionOffsetPixels == 0) {
-            onPageSelected(position)
-            first = false
-        }
-
         if (!isFloatButtonHidden && state == 1 && positionOffset.toDouble() != 0.0) {
             isFloatButtonHidden = true
 
@@ -49,13 +44,12 @@ class TabFragmentChangeListener(
         this.state = state
         if (state == SCROLL_STATE_IDLE) {
             isFloatButtonHidden = false
-        } else if (state == 2 && isFloatButtonHidden /*&& !first*/) {
+        } else if (state == 2 && isFloatButtonHidden) {
             //this only happen if user is swapping but swap back to current tab (cancel to change tab)
             selectedTabs(position)
         }
 
     }
-
 
     private fun swappingAway() {
         floatingActionButton.clearAnimation()
