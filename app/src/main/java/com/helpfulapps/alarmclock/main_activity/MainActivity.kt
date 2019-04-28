@@ -17,6 +17,8 @@ class MainActivity : AppCompatActivity() {
 
     private val TAG = this::class.java.name
 
+    private val pager: TabFragmentChangeListener by lazy { TabFragmentChangeListener(fab_main_fab) }
+
     private val popupMenu by lazy {
         val popup = PopupMenu(applicationContext, ib_main_menu)
         popup.menuInflater.inflate(R.menu.clock_menu, popup.menu)
@@ -51,7 +53,6 @@ class MainActivity : AppCompatActivity() {
         binding.viewModel = viewModel
 
         viewModel.listenToMenuButtonClicks().observe(this, Observer {
-            Log.d(TAG, "onCreate: $it")
             popupMenu.show()
         })
 
@@ -70,8 +71,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupFragmentChangeListener() {
-        val pager2 = TabFragmentChangeListener(fab_main_fab)
-        vp_main_tab_pager.addOnPageChangeListener(pager2)
+
+        vp_main_tab_pager.addOnPageChangeListener(pager)
     }
 
     private fun manageFragmentLaunching(intent: Intent) {
@@ -85,16 +86,19 @@ class MainActivity : AppCompatActivity() {
     private fun addAlarm() {
         Log.d(TAG, "addAlarm: ")
         vp_main_tab_pager.setCurrentItem(0, false)
+        pager.onPageStarting(0)
     }
 
     private fun setHourglass() {
         Log.d(TAG, "setHourglass: ")
         vp_main_tab_pager.setCurrentItem(1, false)
+        pager.onPageStarting(1)
     }
 
     private fun startStopwatch() {
         Log.d(TAG, "startStopwatch: ")
         vp_main_tab_pager.setCurrentItem(2, false)
+        pager.onPageStarting(2)
     }
 
 }

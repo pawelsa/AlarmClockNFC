@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/comment_background"
+    android:descendantFocusability="blocksDescendants"
+    android:stateListAnimator="@animator/comment_selection">
+
+    <data>
+
+        <variable
+            name="alarmData"
+            type="com.helpfulapps.alarmclock.clock_fragment.AlarmData" />
+
+        <import type="android.view.View" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_alarm_item_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Switch
+            android:id="@+id/sw_alarm_item_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/item_alarm_margin_right"
+            app:layout_constraintBottom_toBottomOf="@+id/vs_alarm_item_title_switcher"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/vs_alarm_item_title_switcher" />
+
+        <TextView
+            android:id="@+id/tv_alarm_item_clock"
+            android:layout_width="@dimen/alarm_item_time_text_width"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/item_alarm_margin_left"
+            android:text="10:47"
+            android:textSize="@dimen/item_alarm_time_text_size"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_alarm_item_expanding_icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/iv_alarm_item_expanding_icon" />
+
+        <ViewSwitcher
+            android:id="@+id/vs_alarm_item_title_switcher"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/item_alarm_view_switcher_height"
+            android:layout_marginStart="@dimen/item_alarm_margin_left"
+            android:layout_marginTop="@dimen/item_alarm_margin_top"
+            android:layout_marginBottom="@dimen/item_alarm_margin_bottom"
+            app:layout_constraintBottom_toBottomOf="@id/barrier_alarm_item_below_head"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_alarm_item_clock">
+
+            <TextView
+                android:id="@+id/tv_alarm_item_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="Nazwa alarmu"
+                android:textSize="@dimen/item_alarm_text_size" />
+
+            <TextView
+                android:id="@+id/tv_alarm_item_title_rename"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:drawableStart="@drawable/ic_label"
+                android:text="Nazwa alarmu"
+                android:textAllCaps="false"
+                android:textSize="@dimen/item_alarm_text_size" />
+
+        </ViewSwitcher>
+
+        <com.akaita.android.morphview.MorphView
+            android:id="@+id/iv_alarm_item_expanding_icon"
+            android:layout_width="@dimen/clickable_icon"
+            android:layout_height="@dimen/clickable_icon"
+            android:layout_marginTop="@dimen/item_alarm_margin_top"
+            android:layout_marginEnd="@dimen/item_alarm_margin_right"
+            app:avdFirst="@drawable/ic_expand_less_anim"
+            app:avdSecond="@drawable/ic_expand_more_anim"
+            app:iconExpanded="@{alarmData.isExpanded}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier_alarm_item_below_head"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="sw_alarm_item_switch,vs_alarm_item_title_switcher"
+            tools:layout_editor_absoluteX="143dp"
+            tools:layout_editor_absoluteY="79dp" />
+
+        <include
+            android:id="@+id/inc_alarm_item_extension"
+            layout="@layout/item_alarm_extension"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/barrier_alarm_item_below_head"
+            bind:alarmData="@{alarmData}" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

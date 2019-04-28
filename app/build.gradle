@@ -22,7 +22,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-    dataBinding{
+    dataBinding {
         enabled = true
     }
 }
@@ -45,4 +45,12 @@ dependencies {
 
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
     kapt "com.android.databinding:compiler:$gradle_version"
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+
+    //animate icons
+    implementation 'com.akaita.android:morphview:1.0.0'
+
+    //day picker
+    implementation 'ca.antonious:materialdaypicker:0.4.0'
+
 }

@@ -16,12 +16,12 @@
 
     <shortcut
         android:enabled="true"
-        android:icon="@drawable/ic_stopwatch"
-        android:shortcutId="start_stopwatch"
-        android:shortcutShortLabel="@string/start_stopwatch_short">
+        android:icon="@drawable/ic_hourglass"
+        android:shortcutId="set_hourglass"
+        android:shortcutShortLabel="@string/set_hourglass_short">
 
         <intent
-            android:action="com.helpfulapps.alarmclock.startStopwatch"
+            android:action="com.helpfulapps.alarmclock.setHourglass"
             android:targetClass="com.helpfulapps.alarmclock.main_activity.MainActivity"
             android:targetPackage="com.helpfulapps.alarmclock" />
 
@@ -29,12 +29,12 @@
 
     <shortcut
         android:enabled="true"
-        android:icon="@drawable/ic_hourglass"
-        android:shortcutId="set_hourglass"
-        android:shortcutShortLabel="@string/set_hourglass_short">
+        android:icon="@drawable/ic_stopwatch"
+        android:shortcutId="start_stopwatch"
+        android:shortcutShortLabel="@string/start_stopwatch_short">
 
         <intent
-            android:action="com.helpfulapps.alarmclock.setHourglass"
+            android:action="com.helpfulapps.alarmclock.startStopwatch"
             android:targetClass="com.helpfulapps.alarmclock.main_activity.MainActivity"
             android:targetPackage="com.helpfulapps.alarmclock" />
 

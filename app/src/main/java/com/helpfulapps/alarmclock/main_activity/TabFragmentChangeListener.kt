@@ -1,5 +1,6 @@
 package com.helpfulapps.alarmclock.main_activity
 
+import android.util.Log
 import android.view.animation.AnimationUtils
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.ViewPager.SCROLL_STATE_IDLE
@@ -12,12 +13,12 @@ class TabFragmentChangeListener(
 ) : ViewPager.OnPageChangeListener {
 
 
+    private val TAG = this.javaClass.name
+
     private var state = SCROLL_STATE_IDLE
     private var isFloatButtonHidden = false
-    private var position = 0
 
-    private val TAG = this.javaClass.name
-    var first: Boolean = true
+    private var position = 0
 
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
 
@@ -51,6 +52,10 @@ class TabFragmentChangeListener(
 
     }
 
+    fun onPageStarting(position: Int) {
+        selectedTabs(position)
+    }
+
     private fun swappingAway() {
         floatingActionButton.clearAnimation()
         val animation = AnimationUtils.loadAnimation(floatingActionButton.context, R.anim.pop_down)
@@ -58,6 +63,7 @@ class TabFragmentChangeListener(
     }
 
     private fun selectedTabs(tab: Int) {
+        Log.d(TAG, "selectedTab : $tab")
         val icon = when (tab) {
             0 -> R.drawable.ic_add
             else -> R.drawable.ic_start
