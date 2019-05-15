@@ -26,7 +26,7 @@ android {
 
 }
 
-def dbflow_version = "5.0.0-alpha1"
+def dbflow_version = "4.2.4"
 //Configured Kotlin in data module. Added dbFlow, rxJava, rxKotlin to data module.
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -39,14 +39,15 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     // dbFlow
-    kapt "com.github.agrosner.dbflow:processor:${dbflow_version}"
-    implementation "com.github.agrosner.dbflow:core:${dbflow_version}"
-    implementation "com.github.agrosner.dbflow:lib:${dbflow_version}"
-    implementation "com.github.agrosner.dbflow:reactive-streams:${dbflow_version}"
+    kapt "com.github.Raizlabs.DBFlow:dbflow-processor:${dbflow_version}"
+    implementation "com.github.Raizlabs.DBFlow:dbflow-core:${dbflow_version}"
+    implementation "com.github.Raizlabs.DBFlow:dbflow:${dbflow_version}"
+    implementation "com.github.Raizlabs.DBFlow:dbflow-rx2:${dbflow_version}"
 
     // rxJava & rxKotlin
     implementation "io.reactivex.rxjava2:rxjava:$rxJava_version"
     implementation "io.reactivex.rxjava2:rxkotlin:$rxKotlin_version"
+    implementation project(path: ':domain')
 }
 repositories {
     mavenCentral()
