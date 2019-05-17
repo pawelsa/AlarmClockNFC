@@ -2,7 +2,7 @@ package com.helpfulapps.domain.model
 
 
 data class Alarm(
-    val id: Int,
+    val id: Long,
     val name: String,
     val isRepeating: Boolean,
     val isVibrationOn: Boolean,

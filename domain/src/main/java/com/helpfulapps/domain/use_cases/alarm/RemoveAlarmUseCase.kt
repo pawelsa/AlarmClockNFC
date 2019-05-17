@@ -5,7 +5,7 @@ import com.helpfulapps.domain.use_cases.type.CompletableUseCaseWithParameter
 import io.reactivex.Completable
 
 class RemoveAlarmUseCase(private val repository: AlarmRepository) :
-    CompletableUseCaseWithParameter<Int> {
+    CompletableUseCaseWithParameter<Long> {
 
-    override fun execute(alarmId: Int): Completable = repository.removeAlarm(alarmId)
+    override fun execute(alarmId: Long): Completable = repository.removeAlarm(alarmId)
 }
