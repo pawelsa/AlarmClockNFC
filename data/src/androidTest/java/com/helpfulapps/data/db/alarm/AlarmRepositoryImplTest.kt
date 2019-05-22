@@ -8,7 +8,13 @@ import org.junit.Before
 import org.junit.runner.RunWith
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.helpfulapps.domain.model.Alarm
+import com.helpfulapps.domain.repository.AlarmRepository
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.mock
 import io.reactivex.Completable
+import io.reactivex.Flowable
+import io.reactivex.Observable
+import io.reactivex.Single
 import org.junit.Test
 import org.junit.Assert.*
 
@@ -32,23 +38,79 @@ public class AlarmRepositoryImplTest {
     @Test
     public fun getNoAlarmsTest(){
 
-        val alarmList = alarmRepositoryImpl.getAlarms().blockingGet()
+        val alarmList = alarmRepositoryImpl.getAlarms()
+            .test()
+            .assertValueCount(0)
 
-        assertEquals(0, alarmList.size)
+        //assertEquals(0, alarmList.size)
     }
 
     @Test
     public fun getAlarmsTest(){
 
-        val test1 = alarmRepositoryImpl.addAlarm(Alarm(0,"",false,true,false,15,0L,15L, IntArray(0)))
-        val test2 = alarmRepositoryImpl.addAlarm(Alarm(0,"co tam slychac",true,true,false,15,0L,15L, IntArray(0, {3})))
-        val test3 = alarmRepositoryImpl.addAlarm(Alarm(0,"test",false,true,false,15,0L,15L, IntArray(0)))
-        val arrayOfElements = arrayListOf(test1, test2, test3)
-        Completable.merge(arrayOfElements).blockingGet()
+        val alarm1 = Alarm(0,"",false,true,false,15,0L,15L, IntArray(0))
 
-        val alarmList = alarmRepositoryImpl.getAlarms().blockingGet()
+        val repositoryMock = mock<AlarmRepository>{
+            on { getAlarms() } doReturn Single.just(listOf(alarm1))
+        }
 
-        assertEquals(3, alarmList.size)
+        repositoryMock.getAlarms()
+            .test()
+            .assertValueCount(1)
+            .dispose()
+    }
+
+    @Test
+    public fun getAlarmCountTest(){
+
+        val alarm1 = Alarm(0,"",false,true,false,15,0L,15L, IntArray(0))
+        val alarm2 = Alarm(0,"co tam slychac",true,true,false,15,0L,15L, IntArray(0, {3}))
+        val alarm3 = Alarm(0,"test",false,true,false,15,0L,15L, IntArray(0))
+
+        val repositoryMock = mock<AlarmRepository>{
+            on { getAlarms() } doReturn Single.just(listOf(alarm1, alarm2, alarm3))
+        }
+
+        repositoryMock.getAlarms()
+            .flatMap { list -> Single.just(list.size) }
+            .test()
+            .assertValue(3)
+            .dispose()
+    }
+
+    @Test
+    public fun addAlarmsIdsTest(){
+
+        val alarm1 = alarmRepositoryImpl.addAlarm(Alarm(0,"",false,true,false,15,0L,15L, IntArray(0)))
+        val alarm2 = alarmRepositoryImpl.addAlarm(Alarm(0,"co tam slychac",true,true,false,15,0L,15L, IntArray(0, {3})))
+        val alarm3 = alarmRepositoryImpl.addAlarm(Alarm(0,"test",false,true,false,15,0L,15L, IntArray(0)))
+
+        val alarmList = listOf(alarm1,alarm2, alarm3)
+        Completable.merge(alarmList).blockingGet()
+
+        alarmRepositoryImpl.getAlarms()
+            .flatMapObservable { list -> Observable.fromIterable(list) }
+            .map { alarm -> alarm.id }
+            .test()
+            .assertValues(0,0,0)
+            .dispose()
+
+    }
+
+    @Test
+    public fun addAlarmTest(){
+
+        val alarm1 = alarmRepositoryImpl.addAlarm(Alarm(0,"",false,true,false,15,0L,15L, IntArray(0)))
+        val alarm2 = alarmRepositoryImpl.addAlarm(Alarm(0,"co tam slychac",true,true,false,15,0L,15L, IntArray(0, {3})))
+        val alarm3 = alarmRepositoryImpl.addAlarm(Alarm(0,"test",false,true,false,15,0L,15L, IntArray(0)))
+
+        val alarmList = listOf(alarm1,alarm2, alarm3)
+        Completable.merge(alarmList).blockingGet()
+
+        alarmRepositoryImpl.getAlarms()
+            .test()
+            .assertComplete()
+            .dispose()
     }
 
     @Test
