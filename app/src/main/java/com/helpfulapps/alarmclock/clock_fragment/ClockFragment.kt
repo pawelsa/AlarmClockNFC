@@ -12,7 +12,6 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.FragmentClockBinding
-import com.helpfulapps.data.db.alarm.AlarmRepositoryImpl
 import com.helpfulapps.domain.model.Alarm
 import com.helpfulapps.domain.use_cases.alarm.AddAlarmUseCase
 import io.reactivex.functions.Action

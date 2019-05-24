@@ -13,25 +13,18 @@ import com.raizlabs.android.dbflow.rx2.kotlinextensions.rx
 import io.reactivex.*
 import io.reactivex.schedulers.Schedulers
 
-open class AlarmRepositoryImpl(context: Context) : AlarmRepository {
+open class AlarmRepositoryImpl(val context: Context) : AlarmRepository {
 
     init {
         FlowManager.init(context)
-    }
-
-
-    fun savvve(){
-
-        val alarm1 = Alarm(0,"",false,true,false,15,0L,15L, IntArray(0))
-        val alarmEntry = AlarmEntry(alarm1)
-
-        alarmEntry.save().subscribe ({ isSaved -> Log.d("saveing", "saved : $isSaved") },{ t-> Log.d("saveing", t.message) }).dispose()
     }
 
     override fun getAlarms(): Single<List<Alarm>> =
         select.from(AlarmEntry::class.java).rx().queryList().map { list ->
             list.map { element -> element.toDomain() }
         }
+            .doOnSuccess { println("getAlarm success") }
+            .doOnError { println("getAlarm error") }
             .subscribeOn(getSchedulerIO())
 
     override fun removeAlarm(alarmId: Long): Completable =
@@ -55,7 +48,6 @@ open class AlarmRepositoryImpl(context: Context) : AlarmRepository {
 
     override fun addAlarm(alarm: Alarm): Completable =
         AlarmEntry(alarm).save()
-            .doOnSuccess { success->  Log.d("add alarm", "added : $success") }
             .flatMapCompletable { isSaved -> isSaved.completed("Couldn't save alarm") }
             .subscribeOn(getSchedulerIO())
 
@@ -65,5 +57,5 @@ open class AlarmRepositoryImpl(context: Context) : AlarmRepository {
             .subscribeOn(getSchedulerIO())
 
 
-    fun getSchedulerIO() : Scheduler = Schedulers.io()
+    override fun getSchedulerIO() : Scheduler = Schedulers.io()
 }

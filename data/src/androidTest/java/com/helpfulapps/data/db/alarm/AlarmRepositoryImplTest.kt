@@ -1,6 +1,7 @@
 package com.helpfulapps.data.db.alarm
 
 import android.app.Application
+import android.content.Context
 import android.util.Log
 import androidx.test.core.app.ApplicationProvider
 import com.raizlabs.android.dbflow.config.FlowManager
@@ -8,10 +9,13 @@ import org.junit.After
 import org.junit.Before
 import org.junit.runner.RunWith
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.helpfulapps.data.db.alarm.model.AlarmEntry
 import com.helpfulapps.domain.model.Alarm
 import com.helpfulapps.domain.repository.AlarmRepository
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.spy
+import com.nhaarman.mockitokotlin2.whenever
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Observable
@@ -21,17 +25,24 @@ import org.junit.Assert.*
 import io.reactivex.observers.TestObserver
 import org.mockito.Mockito
 import io.reactivex.schedulers.TestScheduler
-
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.Scheduler
+import io.reactivex.exceptions.CompositeException
+import io.reactivex.plugins.RxJavaPlugins
+import java.util.concurrent.Callable
 
 
 @RunWith(AndroidJUnit4::class)
 public class AlarmRepositoryImplTest {
 
     lateinit var alarmRepositoryImpl: AlarmRepositoryImpl
+    lateinit var context: Context
 
     @Before
     public fun setUp() {
+
         val application = ApplicationProvider.getApplicationContext<Application>()
+        context = application.applicationContext
         FlowManager.init(application.applicationContext)
         alarmRepositoryImpl = AlarmRepositoryImpl(application.applicationContext)
     }
@@ -44,11 +55,14 @@ public class AlarmRepositoryImplTest {
     @Test
     public fun getNoAlarmsTest(){
 
-        val alarmList = alarmRepositoryImpl.getAlarms()
+        val repoMock = Mockito.spy(alarmRepositoryImpl)
+
+        whenever(repoMock.getAlarms()).thenReturn(Single.never())
+
+        repoMock.getAlarms()
             .test()
             .assertValueCount(0)
-
-        //assertEquals(0, alarmList.size)
+            .dispose()
     }
 
     @Test
@@ -56,9 +70,9 @@ public class AlarmRepositoryImplTest {
 
         val alarm1 = Alarm(0,"",false,true,false,15,0L,15L, IntArray(0))
 
-        val repositoryMock = mock<AlarmRepository>{
-            on { getAlarms() } doReturn Single.just(listOf(alarm1))
-        }
+        val repositoryMock = mock<AlarmRepository>()
+
+        whenever(repositoryMock.getAlarms()).thenReturn(Single.just(listOf(alarm1)))
 
         repositoryMock.getAlarms()
             .test()
@@ -106,7 +120,9 @@ public class AlarmRepositoryImplTest {
     @Test
     public fun addAlarmTest(){
 
-        val repoMock = mock<AlarmRepositoryImpl>()
+        val repoMock = Mockito.spy(alarmRepositoryImpl)
+
+        whenever(repoMock.getSchedulerIO()).thenReturn(Schedulers.trampoline())
 
         val alarm1 = repoMock.addAlarm(Alarm(0,"",false,true,false,15,0L,15L, IntArray(0)))
         val alarm2 = repoMock.addAlarm(Alarm(0,"co tam slychac",true,true,false,15,0L,15L, IntArray(0, {3})))
@@ -114,24 +130,9 @@ public class AlarmRepositoryImplTest {
 
         val alarmList = listOf(alarm1,alarm2, alarm3)
 
-        /*Completable.merge(alarmList)
-            .doOnComplete { Log.d("addAlarmTest", "Completed") }
-            .doOnComplete { println("addAlarmTest : Completed") }
-            .test()
-            .assertComplete()
-            .dispose()*/
-
-        val testScheduler = TestScheduler()
-        Mockito.doReturn(testScheduler)
-            .`when`(repoMock)
-            .getSchedulerIO()
-
         Completable.merge(alarmList)
-            .subscribeOn(testScheduler)
-            .observeOn(testScheduler)
             .test()
-            .assertNotTerminated() // not compulsory, but STRONGLY recommended
-            .assertComplete()
+            .assertResult()
             .dispose()
     }
 
