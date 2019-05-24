@@ -1,12 +1,12 @@
 package com.helpfulapps.data.db.alarm.model
 
 import com.helpfulapps.data.db.AlarmAppDatabase
-import com.helpfulapps.data.db.alarm.model.AlarmEntry.Companion.NAME
 import com.helpfulapps.domain.model.Alarm
 import com.raizlabs.android.dbflow.annotation.PrimaryKey
 import com.raizlabs.android.dbflow.annotation.Table
+import com.raizlabs.android.dbflow.rx2.structure.BaseRXModel
 
-@Table(name = NAME, database = AlarmAppDatabase::class, allFields = true)
+@Table(database = AlarmAppDatabase::class, allFields = true)
 data class AlarmEntry(
 
     //todo ogarnąć ID w alarmach, bo będzie problem zaraz
@@ -22,7 +22,7 @@ data class AlarmEntry(
     var startTime: Long = 0,
     var endTime: Long = 0
 
-    ) {
+    ) :BaseRXModel() {
 
     companion object {
         const val NAME = "AlarmTable"

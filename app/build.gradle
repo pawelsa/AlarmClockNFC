@@ -63,5 +63,10 @@ dependencies {
 
     //day picker
     implementation 'ca.antonious:materialdaypicker:0.4.0'
+    implementation project(path: ':data')
+
+    // rxJava & rxKotlin
+    implementation "io.reactivex.rxjava2:rxjava:$rxJava_version"
+    implementation "io.reactivex.rxjava2:rxkotlin:$rxKotlin_version"
 
 }

@@ -1,6 +1,7 @@
 package com.helpfulapps.data.db.alarm
 
 import android.app.Application
+import android.util.Log
 import androidx.test.core.app.ApplicationProvider
 import com.raizlabs.android.dbflow.config.FlowManager
 import org.junit.After
@@ -17,6 +18,11 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import org.junit.Test
 import org.junit.Assert.*
+import io.reactivex.observers.TestObserver
+import org.mockito.Mockito
+import io.reactivex.schedulers.TestScheduler
+
+
 
 @RunWith(AndroidJUnit4::class)
 public class AlarmRepositoryImplTest {
@@ -100,15 +106,31 @@ public class AlarmRepositoryImplTest {
     @Test
     public fun addAlarmTest(){
 
-        val alarm1 = alarmRepositoryImpl.addAlarm(Alarm(0,"",false,true,false,15,0L,15L, IntArray(0)))
-        val alarm2 = alarmRepositoryImpl.addAlarm(Alarm(0,"co tam slychac",true,true,false,15,0L,15L, IntArray(0, {3})))
-        val alarm3 = alarmRepositoryImpl.addAlarm(Alarm(0,"test",false,true,false,15,0L,15L, IntArray(0)))
+        val repoMock = mock<AlarmRepositoryImpl>()
+
+        val alarm1 = repoMock.addAlarm(Alarm(0,"",false,true,false,15,0L,15L, IntArray(0)))
+        val alarm2 = repoMock.addAlarm(Alarm(0,"co tam slychac",true,true,false,15,0L,15L, IntArray(0, {3})))
+        val alarm3 = repoMock.addAlarm(Alarm(0,"test",false,true,false,15,0L,15L, IntArray(0)))
 
         val alarmList = listOf(alarm1,alarm2, alarm3)
-        Completable.merge(alarmList).blockingGet()
 
-        alarmRepositoryImpl.getAlarms()
+        /*Completable.merge(alarmList)
+            .doOnComplete { Log.d("addAlarmTest", "Completed") }
+            .doOnComplete { println("addAlarmTest : Completed") }
             .test()
+            .assertComplete()
+            .dispose()*/
+
+        val testScheduler = TestScheduler()
+        Mockito.doReturn(testScheduler)
+            .`when`(repoMock)
+            .getSchedulerIO()
+
+        Completable.merge(alarmList)
+            .subscribeOn(testScheduler)
+            .observeOn(testScheduler)
+            .test()
+            .assertNotTerminated() // not compulsory, but STRONGLY recommended
             .assertComplete()
             .dispose()
     }

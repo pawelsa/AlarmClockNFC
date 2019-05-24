@@ -1,76 +1,69 @@
 package com.helpfulapps.data.db.alarm
 
 import android.content.Context
+import android.util.Log
 import com.helpfulapps.data.db.alarm.model.AlarmEntry
 import com.helpfulapps.data.db.alarm.model.AlarmEntry_Table
+import com.helpfulapps.data.db.extensions.completed
 import com.helpfulapps.domain.model.Alarm
 import com.helpfulapps.domain.repository.AlarmRepository
 import com.raizlabs.android.dbflow.config.FlowManager
-import com.raizlabs.android.dbflow.kotlinextensions.delete
-import com.raizlabs.android.dbflow.kotlinextensions.save
 import com.raizlabs.android.dbflow.kotlinextensions.select
-import com.raizlabs.android.dbflow.kotlinextensions.update
 import com.raizlabs.android.dbflow.rx2.kotlinextensions.rx
-import io.reactivex.Completable
-import io.reactivex.Completable.complete
-import io.reactivex.CompletableObserver
-import io.reactivex.Single
+import io.reactivex.*
 import io.reactivex.schedulers.Schedulers
 
-class AlarmRepositoryImpl(context: Context) : AlarmRepository {
+open class AlarmRepositoryImpl(context: Context) : AlarmRepository {
 
     init {
         FlowManager.init(context)
+    }
+
+
+    fun savvve(){
+
+        val alarm1 = Alarm(0,"",false,true,false,15,0L,15L, IntArray(0))
+        val alarmEntry = AlarmEntry(alarm1)
+
+        alarmEntry.save().subscribe ({ isSaved -> Log.d("saveing", "saved : $isSaved") },{ t-> Log.d("saveing", t.message) }).dispose()
     }
 
     override fun getAlarms(): Single<List<Alarm>> =
         select.from(AlarmEntry::class.java).rx().queryList().map { list ->
             list.map { element -> element.toDomain() }
         }
-            .subscribeOn(Schedulers.io())
+            .subscribeOn(getSchedulerIO())
 
     override fun removeAlarm(alarmId: Long): Completable =
         select.from(AlarmEntry::class.java).where(AlarmEntry_Table.id.`is`(alarmId)).rx()
-            .queryList().flatMapCompletable {
-                var allDeleted = true
-                var currentDeleted = false
-                it.forEach { alarmEntry: AlarmEntry? ->
-                    currentDeleted = alarmEntry?.delete()!!
-                    when {
-                        !currentDeleted -> allDeleted = false
-                    }
-                }
-                when (allDeleted) {
-                    true -> complete()
-                    else -> error(Throwable("Could'n delete all alarms of this id"))
-                }
-            }
-            .subscribeOn(Schedulers.io())
+            .querySingle()
+            .flatMapSingle { it.delete() }
+            .flatMapCompletable { isDeleted -> isDeleted.completed("Couldn't delete alarm") }
+            .subscribeOn(getSchedulerIO())
 
 
     override fun switchAlarm(alarmId: Long): Completable =
         select.from(AlarmEntry::class.java).where(AlarmEntry_Table.id.`is`(alarmId)).rx()
             .querySingle()
-            .flatMapCompletable { alarmEntry: AlarmEntry ->
+            .map { alarmEntry ->
                 alarmEntry.isTurnedOn = !alarmEntry.isTurnedOn
-                when (alarmEntry.update()) {
-                    true -> complete()
-                    else -> Completable.error(Throwable("Couldn't switch the alarm"))
-                }
+                alarmEntry
             }
-            .subscribeOn(Schedulers.io())
+            .flatMapSingle(AlarmEntry::update)
+            .flatMapCompletable { isUpdated -> isUpdated.completed("Couldn't update the alarm") }
+            .subscribeOn(getSchedulerIO())
 
-    override fun addAlarm(alarm: Alarm): Completable = object : Completable() {
-        override fun subscribeActual(observer: CompletableObserver?) {
-            when (AlarmEntry(alarm).save()) {
-                true -> observer?.onComplete()
-                else -> observer?.onError(Throwable("Couldn't add the alarm"))
-            }
-        }
-    }
-        .subscribeOn(Schedulers.io())
+    override fun addAlarm(alarm: Alarm): Completable =
+        AlarmEntry(alarm).save()
+            .doOnSuccess { success->  Log.d("add alarm", "added : $success") }
+            .flatMapCompletable { isSaved -> isSaved.completed("Couldn't save alarm") }
+            .subscribeOn(getSchedulerIO())
 
-    override fun updateAlarm(alarm: Alarm): Completable {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun updateAlarm(alarm: Alarm): Completable =
+        AlarmEntry(alarm).update()
+            .flatMapCompletable { isUpdated -> isUpdated.completed("Couldn't update alarm") }
+            .subscribeOn(getSchedulerIO())
+
+
+    fun getSchedulerIO() : Scheduler = Schedulers.io()
 }
