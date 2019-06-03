@@ -16,6 +16,4 @@ interface AlarmRepository {
     fun addAlarm(alarm: Alarm): Completable
 
     fun updateAlarm(alarm: Alarm): Completable
-
-    fun getSchedulerIO() : Scheduler
 }

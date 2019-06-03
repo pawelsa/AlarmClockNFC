@@ -1,6 +1,5 @@
 package com.helpfulapps.domain.model
 
-
 data class Alarm(
     val id: Long,
     val name: String,
@@ -10,7 +9,7 @@ data class Alarm(
     val ringtoneId: Int,
     val startTime: Long,
     val endTime: Long,
-    val repetitionDays: IntArray
+    val repetitionDays: Array<Boolean>
 
 ) {
     override fun equals(other: Any?): Boolean {
