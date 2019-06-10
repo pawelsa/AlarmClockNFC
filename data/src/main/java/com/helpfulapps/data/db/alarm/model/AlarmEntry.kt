@@ -2,7 +2,7 @@ package com.helpfulapps.data.db.alarm.model
 
 import com.helpfulapps.data.db.AlarmAppDatabase
 import com.helpfulapps.data.db.alarm.model.AlarmEntry.Companion.NAME
-import com.helpfulapps.domain.model.Alarm
+import com.helpfulapps.domain.models.alarm.Alarm
 import com.raizlabs.android.dbflow.annotation.ForeignKey
 import com.raizlabs.android.dbflow.annotation.PrimaryKey
 import com.raizlabs.android.dbflow.annotation.Table
@@ -66,17 +66,18 @@ data class AlarmEntry(
         this.daysOfWeek = DaysOfWeekEntry(days)
     }
 
-    fun toDomain(): Alarm = Alarm(
-        id,
-        name,
-        isRepeating,
-        isVibrationOn,
-        isTurnedOn,
-        ringtoneId,
-        startTime,
-        endTime,
-        daysOfWeek!!.toDomain()
-    )
+    fun toDomain(): Alarm =
+        Alarm(
+            id,
+            name,
+            isRepeating,
+            isVibrationOn,
+            isTurnedOn,
+            ringtoneId,
+            startTime,
+            endTime,
+            daysOfWeek!!.toDomain()
+        )
 
     override fun hashCode(): Int = this.id.toInt()
 

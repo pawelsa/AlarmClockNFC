@@ -6,7 +6,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.helpfulapps.data.db.alarm.exceptions.AlarmException
 import com.helpfulapps.data.db.alarm.model.AlarmEntry
-import com.helpfulapps.domain.model.Alarm
+import com.helpfulapps.domain.models.alarm.Alarm
 import com.nhaarman.mockitokotlin2.whenever
 import com.raizlabs.android.dbflow.config.FlowManager
 import io.reactivex.Completable
@@ -21,13 +21,13 @@ import java.util.*
 
 
 @RunWith(AndroidJUnit4::class)
-public class AlarmRepositoryImplTest {
+class AlarmRepositoryImplTest {
 
     lateinit var alarmRepositoryImpl: AlarmRepositoryImpl
     lateinit var context: Context
 
     @Before
-    public fun setUp() {
+    fun setUp() {
 
         val application = ApplicationProvider.getApplicationContext<Application>()
         context = application.applicationContext
@@ -36,12 +36,13 @@ public class AlarmRepositoryImplTest {
     }
 
     @After
-    public fun destroy() {
+    fun destroy() {
         FlowManager.destroy()
     }
-//todo here is also sth to repair - details inside
+
+    //todo here is also sth to repair - details inside
     @Test
-    public fun getNoAlarmsTest() {
+    fun getNoAlarmsTest() {
 
         val repoMock = Mockito.spy(alarmRepositoryImpl)
 
@@ -56,9 +57,19 @@ public class AlarmRepositoryImplTest {
     }
 
     @Test
-    public fun getAlarmsTest() {
+    fun getAlarmsTest() {
 
-        val alarm = Alarm(0, "", false, true, false, 15, 0L, 15L, arrayOf(true, true, false, false, false, false, false))
+        val alarm = Alarm(
+            0,
+            "",
+            false,
+            true,
+            false,
+            15,
+            0L,
+            15L,
+            arrayOf(true, true, false, false, false, false, false)
+        )
         val alarmEntry = AlarmEntry(alarm)
 
         val repoMock = Mockito.spy(alarmRepositoryImpl)
@@ -73,11 +84,41 @@ public class AlarmRepositoryImplTest {
     }
 
     @Test
-    public fun getAlarmCountTest() {
+    fun getAlarmCountTest() {
 
-        val alarm1 = Alarm(0, "", false, true, false, 15, 0L, 15L, arrayOf(true, true, false, false, false, false, false))
-        val alarm2 = Alarm(1, "co tam slychac", true, true, false, 15, 0L, 15L, arrayOf(true, true, false, false, false, false, false))
-        val alarm3 = Alarm(2, "test", false, true, false, 15, 0L, 15L, arrayOf(true, true, false, false, false, false, false))
+        val alarm1 = Alarm(
+            0,
+            "",
+            false,
+            true,
+            false,
+            15,
+            0L,
+            15L,
+            arrayOf(true, true, false, false, false, false, false)
+        )
+        val alarm2 = Alarm(
+            1,
+            "co tam slychac",
+            true,
+            true,
+            false,
+            15,
+            0L,
+            15L,
+            arrayOf(true, true, false, false, false, false, false)
+        )
+        val alarm3 = Alarm(
+            2,
+            "test",
+            false,
+            true,
+            false,
+            15,
+            0L,
+            15L,
+            arrayOf(true, true, false, false, false, false, false)
+        )
 
         val alarmEntry1 = AlarmEntry(alarm1)
         val alarmEntry2 = AlarmEntry(alarm2)
@@ -103,13 +144,25 @@ public class AlarmRepositoryImplTest {
     }
 
     @Test
-    public fun addAlarmTest() {
+    fun addAlarmTest() {
 
         val repoMock = Mockito.spy(alarmRepositoryImpl)
 
         whenever(repoMock.getSchedulerIO()).thenReturn(Schedulers.trampoline())
 
-        val alarm1 = repoMock.addAlarm(Alarm(0, "", false, true, false, 15, 0L, 15L, arrayOf(true, true, false, false, false, false, false)))
+        val alarm1 = repoMock.addAlarm(
+            Alarm(
+                0,
+                "",
+                false,
+                true,
+                false,
+                15,
+                0L,
+                15L,
+                arrayOf(true, true, false, false, false, false, false)
+            )
+        )
         val alarm2 = repoMock.addAlarm(
             Alarm(
                 0,
@@ -124,7 +177,19 @@ public class AlarmRepositoryImplTest {
             )
         )
         val alarm3 =
-            repoMock.addAlarm(Alarm(0, "test", false, true, false, 15, 0L, 15L, arrayOf(true, true, false, false, false, false, false)))
+            repoMock.addAlarm(
+                Alarm(
+                    0,
+                    "test",
+                    false,
+                    true,
+                    false,
+                    15,
+                    0L,
+                    15L,
+                    arrayOf(true, true, false, false, false, false, false)
+                )
+            )
 
         val alarmList = listOf(alarm1, alarm2, alarm3)
 
@@ -135,7 +200,7 @@ public class AlarmRepositoryImplTest {
     }
 
     @Test
-    public fun removeAlarmWhenDbTableIsEmptyTest() {
+    fun removeAlarmWhenDbTableIsEmptyTest() {
 
         val repoMock = Mockito.spy(alarmRepositoryImpl)
 
@@ -148,13 +213,25 @@ public class AlarmRepositoryImplTest {
     }
 
     @Test
-    public fun removeAlarmTest() {
+    fun removeAlarmTest() {
 
         val repoMock = Mockito.spy(alarmRepositoryImpl)
 
         whenever(repoMock.getSchedulerIO()).thenReturn(Schedulers.trampoline())
 
-        val alarm1 = repoMock.addAlarm(Alarm(5, "", false, true, false, 15, 0L, 15L, arrayOf(true, true, false, false, false, false, false)))
+        val alarm1 = repoMock.addAlarm(
+            Alarm(
+                5,
+                "",
+                false,
+                true,
+                false,
+                15,
+                0L,
+                15L,
+                arrayOf(true, true, false, false, false, false, false)
+            )
+        )
 
         alarm1.concatWith(repoMock.removeAlarm(5))
             .test()
@@ -163,13 +240,25 @@ public class AlarmRepositoryImplTest {
     }
 
     @Test
-    public fun removeAlarmThatIsNotInDbTest() {
+    fun removeAlarmThatIsNotInDbTest() {
 
         val repoMock = Mockito.spy(alarmRepositoryImpl)
 
         whenever(repoMock.getSchedulerIO()).thenReturn(Schedulers.trampoline())
 
-        val alarm1 = repoMock.addAlarm(Alarm(5, "", false, true, false, 15, 0L, 15L, arrayOf(true, true, false, false, false, false, false)))
+        val alarm1 = repoMock.addAlarm(
+            Alarm(
+                5,
+                "",
+                false,
+                true,
+                false,
+                15,
+                0L,
+                15L,
+                arrayOf(true, true, false, false, false, false, false)
+            )
+        )
 
         alarm1.concatWith(repoMock.removeAlarm(2))
             .test()
@@ -179,13 +268,25 @@ public class AlarmRepositoryImplTest {
 //todo test when there is update made if there is not a new object added to db
 
     @Test
-    public fun switchWhenThereIsAlarmInDbTest(){
+    fun switchWhenThereIsAlarmInDbTest() {
 
         val repoMock = Mockito.spy(alarmRepositoryImpl)
 
         whenever(repoMock.getSchedulerIO()).thenReturn(Schedulers.trampoline())
 
-        val alarm1 = repoMock.addAlarm(Alarm(5, "", false, true, false, 15, 0L, 15L, arrayOf(true, true, false, false, false, false, false)))
+        val alarm1 = repoMock.addAlarm(
+            Alarm(
+                5,
+                "",
+                false,
+                true,
+                false,
+                15,
+                0L,
+                15L,
+                arrayOf(true, true, false, false, false, false, false)
+            )
+        )
 
         alarm1.concatWith(repoMock.switchAlarm(5))
             .test()
@@ -194,13 +295,25 @@ public class AlarmRepositoryImplTest {
     }
 
     @Test
-    public fun switchWhenThereIsNoAlarmInDbTest(){
+    fun switchWhenThereIsNoAlarmInDbTest() {
 
         val repoMock = Mockito.spy(alarmRepositoryImpl)
 
         whenever(repoMock.getSchedulerIO()).thenReturn(Schedulers.trampoline())
 
-        val alarm1 = repoMock.addAlarm(Alarm(5, "", false, true, false, 15, 0L, 15L, arrayOf(true, true, false, false, false, false, false)))
+        val alarm1 = repoMock.addAlarm(
+            Alarm(
+                5,
+                "",
+                false,
+                true,
+                false,
+                15,
+                0L,
+                15L,
+                arrayOf(true, true, false, false, false, false, false)
+            )
+        )
 
         alarm1.concatWith(repoMock.switchAlarm(2))
             .test()
@@ -209,7 +322,7 @@ public class AlarmRepositoryImplTest {
     }
 
     @Test
-    public fun switchWhenDbTableIsEmptyTest(){
+    fun switchWhenDbTableIsEmptyTest() {
 
         val repoMock = Mockito.spy(alarmRepositoryImpl)
 
@@ -222,12 +335,22 @@ public class AlarmRepositoryImplTest {
     }
 
     @Test
-    public fun updateWhenThereIsAlarmInDbTest(){
+    fun updateWhenThereIsAlarmInDbTest() {
 
         val repoMock = Mockito.spy(alarmRepositoryImpl)
 
         whenever(repoMock.getSchedulerIO()).thenReturn(Schedulers.trampoline())
-        val alarm = Alarm(5, "", false, true, false, 15, 0L, 15L, arrayOf(true, true, false, false, false, false, false))
+        val alarm = Alarm(
+            5,
+            "",
+            false,
+            true,
+            false,
+            15,
+            0L,
+            15L,
+            arrayOf(true, true, false, false, false, false, false)
+        )
         val alarm1 = repoMock.addAlarm(alarm)
 
         alarm1.concatWith(repoMock.updateAlarm(alarm))
@@ -237,13 +360,23 @@ public class AlarmRepositoryImplTest {
     }
 
     @Test
-    public fun updateWhenDbTableIsEmptyTest(){
+    fun updateWhenDbTableIsEmptyTest() {
 
         val repoMock = Mockito.spy(alarmRepositoryImpl)
 
         whenever(repoMock.getSchedulerIO()).thenReturn(Schedulers.trampoline())
 
-        val alarm1 = Alarm(5, "", false, true, false, 15, 0L, 15L, arrayOf(true, true, false, false, false, false, false))
+        val alarm1 = Alarm(
+            5,
+            "",
+            false,
+            true,
+            false,
+            15,
+            0L,
+            15L,
+            arrayOf(true, true, false, false, false, false, false)
+        )
 
         repoMock.updateAlarm(alarm1)
             .test()
@@ -252,14 +385,34 @@ public class AlarmRepositoryImplTest {
     }
 
     @Test
-    public fun updateWhenThereIsNotAlarmInDbTest(){
+    fun updateWhenThereIsNotAlarmInDbTest() {
 
         val repoMock = Mockito.spy(alarmRepositoryImpl)
 
         whenever(repoMock.getSchedulerIO()).thenReturn(Schedulers.trampoline())
 
-        val alarm = Alarm(5, "", false, true, false, 15, 0L, 15L, arrayOf(true, true, false, false, false, false, false))
-        val alarmNotInDb = Alarm(7, "", false, true, false, 15, 0L, 15L, arrayOf(true, true, false, false, false, false, false))
+        val alarm = Alarm(
+            5,
+            "",
+            false,
+            true,
+            false,
+            15,
+            0L,
+            15L,
+            arrayOf(true, true, false, false, false, false, false)
+        )
+        val alarmNotInDb = Alarm(
+            7,
+            "",
+            false,
+            true,
+            false,
+            15,
+            0L,
+            15L,
+            arrayOf(true, true, false, false, false, false, false)
+        )
         val alarm1 = repoMock.addAlarm(alarm)
 
         alarm1.concatWith(repoMock.updateAlarm(alarmNotInDb))

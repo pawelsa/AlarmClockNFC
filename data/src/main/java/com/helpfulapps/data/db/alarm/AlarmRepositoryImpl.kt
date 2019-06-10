@@ -4,12 +4,14 @@ import android.content.Context
 import com.helpfulapps.data.db.alarm.model.AlarmEntry
 import com.helpfulapps.data.db.alarm.model.AlarmEntry_Table
 import com.helpfulapps.data.db.extensions.completed
-import com.helpfulapps.domain.model.Alarm
+import com.helpfulapps.domain.models.alarm.Alarm
 import com.helpfulapps.domain.repository.AlarmRepository
 import com.raizlabs.android.dbflow.config.FlowManager
 import com.raizlabs.android.dbflow.kotlinextensions.select
 import com.raizlabs.android.dbflow.rx2.kotlinextensions.rx
-import io.reactivex.*
+import io.reactivex.Completable
+import io.reactivex.Scheduler
+import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 

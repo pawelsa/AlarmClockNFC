@@ -1,4 +1,4 @@
-package com.helpfulapps.domain.model
+package com.helpfulapps.domain.models.alarm
 
 data class Alarm(
     val id: Long,

@@ -1,0 +1,3 @@
+package com.helpfulapps.domain.repository
+
+interface WeatherRepository

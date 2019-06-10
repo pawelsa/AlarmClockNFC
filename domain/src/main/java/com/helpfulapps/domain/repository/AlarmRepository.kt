@@ -1,8 +1,7 @@
 package com.helpfulapps.domain.repository
 
-import com.helpfulapps.domain.model.Alarm
+import com.helpfulapps.domain.models.alarm.Alarm
 import io.reactivex.Completable
-import io.reactivex.Scheduler
 import io.reactivex.Single
 
 interface AlarmRepository {
