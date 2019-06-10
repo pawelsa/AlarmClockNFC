@@ -1,4 +1,4 @@
-package com.helpfulapps.domain.models.weather
+package com.helpfulapps.data.db.weather.model
 
 data class ForecastForCity(
     val city: City,
