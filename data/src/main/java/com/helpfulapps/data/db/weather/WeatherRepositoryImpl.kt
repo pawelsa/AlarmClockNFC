@@ -1,35 +1,45 @@
 package com.helpfulapps.data.db.weather
 
 import com.helpfulapps.data.db.common.Settings
+import com.helpfulapps.domain.models.alarm.Alarm
 import com.helpfulapps.domain.repository.WeatherRepository
+import io.reactivex.Completable
 import io.reactivex.Single
 import com.helpfulapps.domain.models.weather.Forecast as ForecastModel
 
 class WeatherRepositoryImpl(private val settings: Settings) : WeatherRepository {
-    override fun getForecast(
+    override fun downloadForecast(
         city: String,
         time: Long
-    ): Single<com.helpfulapps.domain.models.weather.Forecast> {
+    ): Completable {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun getForecast(
+    override fun downloadForecast(
         lat: Long,
         lon: Long,
         time: Long
-    ): Single<com.helpfulapps.domain.models.weather.Forecast> {
+    ): Completable {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun getForecastForAlarms(): Single<List<com.helpfulapps.domain.models.weather.Forecast>> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun getForecastForAlarm(alarm: Alarm): Single<com.helpfulapps.domain.models.weather.Forecast> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     /*
     // todo implement using forecastFromDatabase
-    override fun getForecast(city: String, time: Long): Single<ForecastModel> =
+    override fun downloadForecast(city: String, time: Long): Single<ForecastModel> =
         Downloader.create()
-            .getForecast(city, settings.units, API_KEY)
+            .downloadForecast(city, settings.units, API_KEY)
             .toForecastAtTime(time)
 
 
-    override fun getForecast(lat: Long, lon: Long, time: Long): Single<ForecastModel> =
+    override fun downloadForecast(lat: Long, lon: Long, time: Long): Single<ForecastModel> =
         Downloader.create()
             .getForecastForCoordinates(lat.toString(),lon.toString(), settings.units, API_KEY)
             .toForecastAtTime(time)

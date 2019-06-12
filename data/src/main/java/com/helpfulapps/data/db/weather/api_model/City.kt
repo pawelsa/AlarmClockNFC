@@ -1,4 +1,4 @@
-package com.helpfulapps.data.db.weather.model
+package com.helpfulapps.data.db.weather.api_model
 
 data class City(
     val coord: Coord,

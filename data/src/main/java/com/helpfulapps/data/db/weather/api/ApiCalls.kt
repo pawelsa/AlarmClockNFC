@@ -1,6 +1,6 @@
 package com.helpfulapps.data.db.weather.api
 
-import com.helpfulapps.data.db.weather.model.ForecastForCity
+import com.helpfulapps.data.db.weather.api_model.ForecastForCity
 
 import io.reactivex.Maybe
 import retrofit2.Response

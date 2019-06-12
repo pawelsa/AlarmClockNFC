@@ -7,7 +7,9 @@ import com.helpfulapps.data.db.extensions.completed
 import com.helpfulapps.domain.models.alarm.Alarm
 import com.helpfulapps.domain.repository.AlarmRepository
 import com.raizlabs.android.dbflow.config.FlowManager
+import com.raizlabs.android.dbflow.kotlinextensions.from
 import com.raizlabs.android.dbflow.kotlinextensions.select
+import com.raizlabs.android.dbflow.kotlinextensions.where
 import com.raizlabs.android.dbflow.rx2.kotlinextensions.rx
 import io.reactivex.Completable
 import io.reactivex.Scheduler
@@ -61,5 +63,5 @@ open class AlarmRepositoryImpl(context: Context) : AlarmRepository {
 
     open fun getAlarmsQuery() = select.from(AlarmEntry::class.java).rx().queryList()
 
-    open fun getAlarm(alarmId : Long) = select.from(AlarmEntry::class.java).where(AlarmEntry_Table.id.`is`(alarmId)).rx().querySingle()
+    open fun getAlarm(alarmId : Long) = (select from AlarmEntry::class where AlarmEntry_Table.id.`is`(alarmId)).rx().querySingle()
 }
