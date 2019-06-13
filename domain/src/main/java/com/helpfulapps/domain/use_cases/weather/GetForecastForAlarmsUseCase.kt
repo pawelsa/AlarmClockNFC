@@ -5,7 +5,7 @@ import com.helpfulapps.domain.repository.WeatherRepository
 import com.helpfulapps.domain.use_cases.type.SingleUseCase
 import io.reactivex.Single
 
-class GetForecastForAlarmsUseCase(val repository: WeatherRepository) : SingleUseCase<List<Forecast>> {
+class GetForecastForAlarmsUseCase(val repository: WeatherRepository) : SingleUseCase<Forecast> {
 
-    override fun execute(): Single<List<Forecast>> = repository.getForecastForAlarms()
+    override fun execute(): Single<Forecast> = repository.getForecastForAlarms()
 }

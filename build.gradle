@@ -9,6 +9,7 @@ buildscript {
     ext.dbflow_version = '4.2.4'
     ext.gradle_version = '3.4.1'
     ext.mockito_version = '2.27.0'
+    ext.mockk_version = '1.9.1'
     ext.mockito_kotlin_version = '2.1.0'
     ext.kotlin_core_version = '1.0.2'
     repositories {

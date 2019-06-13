@@ -8,11 +8,10 @@ class DownloadForecastForCityUseCase(val repository: WeatherRepository) :
     CompletableUseCaseWithParameter<DownloadForecastForCityUseCase.Param> {
 
     override fun execute(parameter: Param): Completable =
-        repository.downloadForecast(parameter.cityName, parameter.time)
+        repository.downloadForecast(parameter.cityName)
 
 
     data class Param(
-        val cityName: String,
-        val time: Long
+        val cityName: String
     )
 }

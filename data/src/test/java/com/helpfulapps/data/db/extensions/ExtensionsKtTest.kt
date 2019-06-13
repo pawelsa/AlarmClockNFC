@@ -9,10 +9,10 @@ import org.junit.Test
 class ExtensionsKtTest {
 
     @Test
-    public fun doesBooleanCompleteExtensionOnCompleteReturnCorrectAnswer() {
+    fun doesBooleanCompleteExtensionOnCompleteReturnCorrectAnswer() {
         val falseBoolean = true
 
-        val result: CompletableSource = falseBoolean.completed("It's ok")
+        val result: CompletableSource = falseBoolean.completed(Throwable("It's ok"))
 
         val observer = TestObserver<Completable>()
 
@@ -24,10 +24,10 @@ class ExtensionsKtTest {
     }
 
     @Test
-    public fun doesBooleanCompleteExtensionOnErrorReturnCorrectAnswer() {
+    fun doesBooleanCompleteExtensionOnErrorReturnCorrectAnswer() {
         val falseBoolean = false
 
-        val result: CompletableSource = falseBoolean.completed("It's ok")
+        val result: CompletableSource = falseBoolean.completed(AlarmException("It's ok"))
 
         val observer = TestObserver<Completable>()
 

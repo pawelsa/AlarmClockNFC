@@ -1,6 +1,6 @@
 package com.helpfulapps.data.db.alarm.model
 
-import com.helpfulapps.data.db.AlarmAppDatabase
+import com.helpfulapps.data.AlarmAppDatabase
 import com.helpfulapps.data.db.alarm.model.AlarmEntry.Companion.NAME
 import com.helpfulapps.domain.models.alarm.Alarm
 import com.raizlabs.android.dbflow.annotation.ForeignKey
@@ -10,8 +10,6 @@ import com.raizlabs.android.dbflow.rx2.structure.BaseRXModel
 
 @Table(name = NAME, database = AlarmAppDatabase::class, allFields = true)
 data class AlarmEntry(
-
-    //todo ogarnąć ID w alarmach, bo będzie problem zaraz
 
     @PrimaryKey(autoincrement = true)
     var id: Long = 0L,

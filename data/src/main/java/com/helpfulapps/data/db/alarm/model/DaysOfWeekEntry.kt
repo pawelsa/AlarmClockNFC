@@ -1,6 +1,6 @@
 package com.helpfulapps.data.db.alarm.model
 
-import com.helpfulapps.data.db.AlarmAppDatabase
+import com.helpfulapps.data.AlarmAppDatabase
 import com.helpfulapps.data.db.alarm.model.DaysOfWeekEntry.Companion.NAME
 import com.raizlabs.android.dbflow.annotation.Column
 import com.raizlabs.android.dbflow.annotation.PrimaryKey

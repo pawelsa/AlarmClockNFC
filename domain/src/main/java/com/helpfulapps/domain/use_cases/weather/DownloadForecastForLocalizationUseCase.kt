@@ -8,11 +8,10 @@ class DownloadForecastForLocalizationUseCase(val repository: WeatherRepository) 
     CompletableUseCaseWithParameter<DownloadForecastForLocalizationUseCase.Param> {
 
     override fun execute(parameter: Param): Completable =
-        repository.downloadForecast(parameter.lat, parameter.lon, parameter.time)
+        repository.downloadForecast(parameter.lat, parameter.lon)
 
     data class Param(
         val lat: Long,
-        val lon: Long,
-        val time: Long
+        val lon: Long
     )
 }

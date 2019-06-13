@@ -1,11 +1,11 @@
 package com.helpfulapps.data.db.alarm.model
 
 import com.helpfulapps.domain.models.alarm.Alarm
-import com.nhaarman.mockitokotlin2.whenever
+import io.mockk.every
+import io.mockk.spyk
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import org.mockito.Mockito
 
 
 class AlarmMappingTest {
@@ -40,8 +40,8 @@ class AlarmMappingTest {
     @Test
     fun fromDataToDomainMappingTest() {
         val domainAlarm = baseDataAlarm.toDomain()
-        val mockedTestedDomainAlarm = Mockito.spy(domainAlarm)
-        whenever(mockedTestedDomainAlarm.repetitionDays).thenReturn(baseDomainDaysOfWeek)
+        val mockedTestedDomainAlarm = spyk(domainAlarm)
+        every { mockedTestedDomainAlarm.repetitionDays } returns baseDomainDaysOfWeek
 
         assertEquals(baseDomainAlarm, mockedTestedDomainAlarm)
     }
