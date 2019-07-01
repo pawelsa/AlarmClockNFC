@@ -4,6 +4,5 @@ import io.reactivex.Observable
 
 interface UseCase<T> {
 
-    fun execute(): Observable<T>
-
+    operator fun invoke(): Observable<T>
 }

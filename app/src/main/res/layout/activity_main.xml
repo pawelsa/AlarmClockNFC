@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.helpfulapps.alarmclock.main_activity.MainActivityViewModel" />
+            type="com.helpfulapps.alarmclock.views.main_activity.MainActivityViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

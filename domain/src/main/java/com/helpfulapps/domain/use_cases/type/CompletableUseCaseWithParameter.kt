@@ -4,5 +4,5 @@ import io.reactivex.Completable
 
 interface CompletableUseCaseWithParameter<P> {
 
-    fun execute(parameter: P): Completable
+    operator fun invoke(parameter: P): Completable
 }

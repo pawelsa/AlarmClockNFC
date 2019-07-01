@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.helpfulapps.alarmclock.clock_fragment.ClockViewModel" />
+            type="com.helpfulapps.alarmclock.views.clock_fragment.ClockViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -4,5 +4,5 @@ import io.reactivex.Single
 
 interface SingleUseCaseWithParameter<P, R> {
 
-    fun execute(parameter: P): Single<R>
+    operator fun invoke(parameter: P): Single<R>
 }
