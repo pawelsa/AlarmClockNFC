@@ -13,7 +13,7 @@ data class WeatherDbModel(
 
     @PrimaryKey(autoincrement = true)
     var id: Long = 0L,
-    var timestamp: Int = -1,
+    var timestamp: Long = -1,
     var cloudPercent: Int = -1,
     var windSpeed: Double = -1.0,
     var snowIn3h: Double = -1.0,

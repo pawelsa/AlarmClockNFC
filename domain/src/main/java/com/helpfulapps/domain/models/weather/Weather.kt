@@ -1,7 +1,7 @@
 package com.helpfulapps.domain.models.weather
 
 data class Weather(
-    val timestamp: Int,
+    val timestamp: Long,
     val cloudPercent: Int,
     val windSpeed: Double,
     val snowIn3h: Double,
