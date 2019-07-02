@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.test.core.app.ApplicationProvider
 import com.helpfulapps.data.api.weather.exceptions.WeatherException
 import io.mockk.every
+import io.mockk.mockk
 import io.mockk.spyk
 import org.junit.Before
 import org.junit.Test
@@ -16,7 +17,7 @@ class NetworkCheckTest {
     fun setUp() {
         val application = ApplicationProvider.getApplicationContext<Application>()
         val context = application.applicationContext
-        networkCheck = NetworkCheck(context)
+        networkCheck = mockk { NetworkCheck(context) }
     }
 
     @Test

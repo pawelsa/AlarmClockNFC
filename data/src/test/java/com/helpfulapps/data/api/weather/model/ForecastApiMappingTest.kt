@@ -1,7 +1,5 @@
 package com.helpfulapps.data.api.weather.model
 
-import com.helpfulapps.data.db.weather.model.ForecastDbModel
-import com.helpfulapps.data.db.weather.model.WeatherDbModel
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

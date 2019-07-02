@@ -4,7 +4,7 @@ import android.content.Context
 import com.helpfulapps.data.db.alarm.exceptions.AlarmException
 import com.helpfulapps.data.db.alarm.model.AlarmEntry
 import com.helpfulapps.data.db.alarm.model.AlarmEntry_Table
-import com.helpfulapps.data.db.extensions.completed
+import com.helpfulapps.data.db.extensions.checkCompleted
 import com.helpfulapps.domain.models.alarm.Alarm
 import com.helpfulapps.domain.repository.AlarmRepository
 import com.raizlabs.android.dbflow.config.FlowManager
@@ -35,7 +35,7 @@ class AlarmRepositoryImpl(context: Context) : AlarmRepository {
     override fun removeAlarm(alarmId: Long): Completable =
         getAlarm(alarmId)
             .flatMapSingle { it.delete() }
-            .flatMapCompletable { isDeleted -> isDeleted.completed(AlarmException("Couldn't delete alarm")) }
+            .flatMapCompletable { isDeleted -> isDeleted.checkCompleted(AlarmException("Couldn't delete alarm")) }
             .subscribeOn(getSchedulerIO())
 
 
@@ -46,17 +46,17 @@ class AlarmRepositoryImpl(context: Context) : AlarmRepository {
                 alarmEntry
             }
             .flatMapSingle(AlarmEntry::update)
-            .flatMapCompletable { isUpdated -> isUpdated.completed(AlarmException("Couldn't update the alarm")) }
+            .flatMapCompletable { isUpdated -> isUpdated.checkCompleted(AlarmException("Couldn't update the alarm")) }
             .subscribeOn(getSchedulerIO())
 
     override fun addAlarm(alarm: Alarm): Completable =
         AlarmEntry(alarm).save()
-            .flatMapCompletable { isSaved -> isSaved.completed(AlarmException("Couldn't save alarm")) }
+            .flatMapCompletable { isSaved -> isSaved.checkCompleted(AlarmException("Couldn't save alarm")) }
             .subscribeOn(getSchedulerIO())
 
     override fun updateAlarm(alarm: Alarm): Completable =
         AlarmEntry(alarm).update()
-            .flatMapCompletable { isUpdated -> isUpdated.completed(AlarmException("Couldn't update alarm")) }
+            .flatMapCompletable { isUpdated -> isUpdated.checkCompleted(AlarmException("Couldn't update alarm")) }
             .subscribeOn(getSchedulerIO())
 
 

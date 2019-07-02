@@ -1,7 +1,6 @@
 package com.helpfulapps.domain.repository
 
-import com.helpfulapps.domain.models.weather.Forecast
-import com.helpfulapps.domain.models.weather.Weather
+import com.helpfulapps.domain.models.weather.DayWeather
 import io.reactivex.Completable
 import io.reactivex.Single
 
@@ -11,8 +10,8 @@ interface WeatherRepository {
 
     fun downloadForecast(lat: Long, lon: Long): Completable
 
-    fun getForecastForAlarms(): Single<Forecast>
+    fun getForecastForAlarms(): Single<List<DayWeather>>
 
-    fun getForecastForAlarm(time: Long): Single<Weather>
+    fun getForecastForAlarm(time: Long): Single<DayWeather>
 
 }

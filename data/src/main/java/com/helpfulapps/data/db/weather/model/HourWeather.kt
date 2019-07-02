@@ -1,7 +1,9 @@
 package com.helpfulapps.data.db.weather.model
 
 import com.helpfulapps.data.AlarmAppDatabase
+import com.helpfulapps.data.api.weather.model.Forecast
 import com.helpfulapps.data.db.weather.model.HourWeather.Companion.TABLE_NAME
+import com.helpfulapps.domain.models.weather.HourWeather
 import com.raizlabs.android.dbflow.annotation.ForeignKey
 import com.raizlabs.android.dbflow.annotation.PrimaryKey
 import com.raizlabs.android.dbflow.annotation.Table
@@ -28,4 +30,32 @@ class HourWeather(
     companion object {
         const val TABLE_NAME = "HourWeather"
     }
+
+    constructor(forecast: Forecast) : this(
+        dt = forecast.dt,
+        clouds = forecast.clouds?.all ?: 0,
+        rain = forecast.rain?._3h ?: 0.0,
+        snow = forecast.snow?._3h ?: 0.0,
+        wind = forecast.wind?.speed ?: 0.0,
+        humidity = forecast.main.humidity,
+        pressure = forecast.main.pressure,
+        temp = forecast.main.temp,
+        tempMax = forecast.main.temp_max,
+        tempMin = forecast.main.temp_min
+    )
+
+    fun toDomain() =
+        HourWeather(
+            id = this.id,
+            dt = this.dt,
+            clouds = this.clouds,
+            rain = this.rain,
+            snow = this.snow,
+            wind = this.wind,
+            humidity = this.humidity,
+            pressure = this.pressure,
+            temp = this.temp,
+            tempMax = this.tempMax,
+            tempMin = this.tempMin
+        )
 }

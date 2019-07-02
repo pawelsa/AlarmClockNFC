@@ -23,5 +23,5 @@ fun Completable.backgroundTask(): Completable =
         .observeOn(AndroidSchedulers.mainThread())
 
 
-fun <T : Any> ModelQueriable<T>.rxQueryListSingle() =
+fun <T : Any> ModelQueriable<T>.rxQueryListSingle(): Single<T> =
     this.rx().querySingle().toSingle()
