@@ -2,8 +2,9 @@ package com.helpfulapps.domain.models.weather
 
 
 data class DayWeather(
-    var id: Int = 0,
-    var dt: Long = 0,
-    var cityName: String = "",
-    var hourWeatherList: List<HourWeather> = listOf()
+    val id: Int = 0,
+    val dt: Long = 0,
+    val cityName: String = "",
+    val hourWeatherList: List<HourWeather> = listOf(),
+    val weatherInfo: WeatherInfo = WeatherInfo()
 )

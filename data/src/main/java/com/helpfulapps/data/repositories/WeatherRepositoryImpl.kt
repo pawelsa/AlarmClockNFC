@@ -2,6 +2,7 @@ package com.helpfulapps.data.repositories
 
 import android.content.Context
 import com.helpfulapps.data.api.weather.api.ApiCalls
+import com.helpfulapps.data.api.weather.converter.analyzeWeather
 import com.helpfulapps.data.api.weather.converter.transformResponseIntoDays
 import com.helpfulapps.data.api.weather.exceptions.CouldNotObtainForecast
 import com.helpfulapps.data.api.weather.exceptions.WeatherException
@@ -35,7 +36,7 @@ class WeatherRepositoryImpl(
 
     override fun downloadForecast(city: String): Completable =
         networkCheck.isConnectedToNetwork
-            .flatMap { apiCalls.downloadForecast(city, settings.units) }
+            .flatMap { apiCalls.downloadForecast(city, settings.units.unit) }
             .convertModelsAndSaveInDb()
 
     override fun downloadForecast(lat: Long, lon: Long): Completable =
@@ -44,7 +45,7 @@ class WeatherRepositoryImpl(
                 apiCalls.downloadForecastForCoordinates(
                     lat.toString(),
                     lon.toString(),
-                    settings.units
+                    settings.units.unit
                 )
             }
             .convertModelsAndSaveInDb()
@@ -70,6 +71,7 @@ class WeatherRepositoryImpl(
         this.clearTables()
             .getResponseBody()
             .transformResponseIntoDays()
+            .analyzeWeather(settings.units)
             .saveInDatabase()
             .flatMapCompletable { savedInDb ->
                 savedInDb.checkCompleted(WeatherException("Couldn't save forecast in database"))

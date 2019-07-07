@@ -9,8 +9,17 @@ class Settings(val sharedPreferences: SharedPreferences) {
         private const val KEY_WEATHER_UNITS = "units"
     }
 
-    var units: String
-        set(value) = sharedPreferences.edit { putString(KEY_WEATHER_UNITS, value) }
-        get() = sharedPreferences.getString(KEY_WEATHER_UNITS, "metric")
+    var units: Units
+        set(value) = sharedPreferences.edit { putString(KEY_WEATHER_UNITS, value.unit) }
+        get() = if (sharedPreferences
+                .getString(KEY_WEATHER_UNITS, Units.METRIC.unit) == Units.METRIC.unit
+        ) Units.METRIC else Units.IMPERIAL
+
+
+}
+
+enum class Units(val unit: String) {
+    METRIC("metric"),
+    IMPERIAL("imperial")
 
 }
