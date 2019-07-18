@@ -7,6 +7,7 @@ import com.raizlabs.android.dbflow.annotation.PrimaryKey
 import com.raizlabs.android.dbflow.annotation.Table
 import com.raizlabs.android.dbflow.rx2.structure.BaseRXModel
 
+// TODO move conversion to another file, ex. converter
 @Table(name = NAME, database = AlarmAppDatabase::class)
 class DaysOfWeekEntry(
 

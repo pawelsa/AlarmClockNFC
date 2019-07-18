@@ -7,8 +7,8 @@ import androidx.test.core.app.ApplicationProvider
 import com.helpfulapps.data.api.weather.api.ApiCalls
 import com.helpfulapps.data.api.weather.api.Downloader
 import com.helpfulapps.data.api.weather.exceptions.WeatherException
-import com.helpfulapps.data.common.NetworkCheck
-import com.helpfulapps.data.common.Settings
+import com.helpfulapps.data.helper.NetworkCheck
+import com.helpfulapps.data.helper.Settings
 import com.helpfulapps.data.repositories.WeatherRepositoryImpl.Companion.ONE_AND_HALF_AN_HOUR
 import com.helpfulapps.domain.models.weather.DayWeather
 import com.raizlabs.android.dbflow.config.FlowManager

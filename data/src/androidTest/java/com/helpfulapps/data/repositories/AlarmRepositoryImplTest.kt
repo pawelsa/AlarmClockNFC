@@ -4,7 +4,7 @@ import android.app.Application
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.helpfulapps.data.db.alarm.exceptions.AlarmException
+import com.helpfulapps.data.api.weather.exceptions.AlarmException
 import com.helpfulapps.data.db.alarm.model.AlarmEntry
 import com.helpfulapps.domain.models.alarm.Alarm
 import com.raizlabs.android.dbflow.config.FlowManager

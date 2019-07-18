@@ -4,8 +4,8 @@ import com.helpfulapps.domain.repository.AlarmRepository
 import com.helpfulapps.domain.use_cases.alarm.definition.RemoveAlarmUseCase
 import io.reactivex.Completable
 
-class RemoveAlarmUseCaseImpl(private val repository: AlarmRepository) : RemoveAlarmUseCase {
+class RemoveAlarmUseCaseImpl(private val _repository: AlarmRepository) : RemoveAlarmUseCase {
 
     override fun invoke(parameter: RemoveAlarmUseCase.Params): Completable =
-        repository.removeAlarm(parameter.alarmId)
+        _repository.removeAlarm(parameter.alarmId)
 }

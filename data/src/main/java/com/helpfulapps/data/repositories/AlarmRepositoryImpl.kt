@@ -1,10 +1,10 @@
 package com.helpfulapps.data.repositories
 
 import android.content.Context
-import com.helpfulapps.data.db.alarm.exceptions.AlarmException
+import com.helpfulapps.data.api.weather.exceptions.AlarmException
 import com.helpfulapps.data.db.alarm.model.AlarmEntry
 import com.helpfulapps.data.db.alarm.model.AlarmEntry_Table
-import com.helpfulapps.data.db.extensions.checkCompleted
+import com.helpfulapps.data.extensions.checkCompleted
 import com.helpfulapps.domain.models.alarm.Alarm
 import com.helpfulapps.domain.repository.AlarmRepository
 import com.raizlabs.android.dbflow.config.FlowManager
@@ -18,6 +18,7 @@ import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
+// TODO remove subscribing on bg thread
 class AlarmRepositoryImpl(context: Context) : AlarmRepository {
 
     init {
@@ -30,13 +31,15 @@ class AlarmRepositoryImpl(context: Context) : AlarmRepository {
                 list.map { element -> element.toDomain() }
             }
             .timeout(2L, TimeUnit.SECONDS) { observer -> observer.onSuccess(emptyList()) }
-            .subscribeOn(getSchedulerIO())
 
     override fun removeAlarm(alarmId: Long): Completable =
         getAlarm(alarmId)
             .flatMapSingle { it.delete() }
-            .flatMapCompletable { isDeleted -> isDeleted.checkCompleted(AlarmException("Couldn't delete alarm")) }
-            .subscribeOn(getSchedulerIO())
+            .flatMapCompletable { isDeleted -> isDeleted.checkCompleted(
+                AlarmException(
+                    "Couldn't delete alarm"
+                )
+            ) }
 
 
     override fun switchAlarm(alarmId: Long): Completable =
@@ -46,21 +49,27 @@ class AlarmRepositoryImpl(context: Context) : AlarmRepository {
                 alarmEntry
             }
             .flatMapSingle(AlarmEntry::update)
-            .flatMapCompletable { isUpdated -> isUpdated.checkCompleted(AlarmException("Couldn't update the alarm")) }
-            .subscribeOn(getSchedulerIO())
+            .flatMapCompletable { isUpdated -> isUpdated.checkCompleted(
+                AlarmException(
+                    "Couldn't update the alarm"
+                )
+            ) }
 
     override fun addAlarm(alarm: Alarm): Completable =
         AlarmEntry(alarm).save()
-            .flatMapCompletable { isSaved -> isSaved.checkCompleted(AlarmException("Couldn't save alarm")) }
-            .subscribeOn(getSchedulerIO())
+            .flatMapCompletable { isSaved -> isSaved.checkCompleted(
+                AlarmException(
+                    "Couldn't save alarm"
+                )
+            ) }
 
     override fun updateAlarm(alarm: Alarm): Completable =
         AlarmEntry(alarm).update()
-            .flatMapCompletable { isUpdated -> isUpdated.checkCompleted(AlarmException("Couldn't update alarm")) }
-            .subscribeOn(getSchedulerIO())
-
-
-    fun getSchedulerIO(): Scheduler = Schedulers.io()
+            .flatMapCompletable { isUpdated -> isUpdated.checkCompleted(
+                AlarmException(
+                    "Couldn't update alarm"
+                )
+            ) }
 
     fun getAlarmsQuery() = select.from(AlarmEntry::class.java).rx().queryList()
 

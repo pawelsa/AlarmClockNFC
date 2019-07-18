@@ -1,6 +1,7 @@
 package com.helpfulapps.data.db.extensions
 
-import com.helpfulapps.data.db.alarm.exceptions.AlarmException
+import com.helpfulapps.data.api.weather.exceptions.AlarmException
+import com.helpfulapps.data.extensions.checkCompleted
 import io.reactivex.Completable
 import io.reactivex.CompletableSource
 import io.reactivex.observers.TestObserver
@@ -27,7 +28,11 @@ class ExtensionsKtTest {
     fun doesBooleanCompleteExtensionOnErrorReturnCorrectAnswer() {
         val falseBoolean = false
 
-        val result: CompletableSource = falseBoolean.checkCompleted(AlarmException("It's ok"))
+        val result: CompletableSource = falseBoolean.checkCompleted(
+            AlarmException(
+                "It's ok"
+            )
+        )
 
         val observer = TestObserver<Completable>()
 

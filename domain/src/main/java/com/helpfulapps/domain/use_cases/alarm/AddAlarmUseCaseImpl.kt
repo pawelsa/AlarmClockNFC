@@ -4,8 +4,9 @@ import com.helpfulapps.domain.repository.AlarmRepository
 import com.helpfulapps.domain.use_cases.alarm.definition.AddAlarmUseCase
 import io.reactivex.Completable
 
-class AddAlarmUseCaseImpl(private val repository: AlarmRepository) : AddAlarmUseCase {
+//alarms have to be working despite the set start time timestamp, it can destroy correct working of getAlarms zip
+class AddAlarmUseCaseImpl(private val _repository: AlarmRepository) : AddAlarmUseCase {
 
     override fun invoke(parameter: AddAlarmUseCase.Params): Completable =
-        repository.addAlarm(parameter.alarm)
+        _repository.addAlarm(parameter.alarm)
 }

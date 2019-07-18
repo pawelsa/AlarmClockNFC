@@ -1,3 +1,3 @@
-package com.helpfulapps.data.db.alarm.exceptions
+package com.helpfulapps.data.api.weather.exceptions
 
 class AlarmException(message: String) : Throwable(message)

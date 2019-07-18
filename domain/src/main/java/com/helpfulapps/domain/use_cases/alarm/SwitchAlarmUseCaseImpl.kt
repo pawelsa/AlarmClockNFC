@@ -4,8 +4,8 @@ import com.helpfulapps.domain.repository.AlarmRepository
 import com.helpfulapps.domain.use_cases.alarm.definition.SwitchAlarmUseCase
 import io.reactivex.Completable
 
-class SwitchAlarmUseCaseImpl(private val repository: AlarmRepository) : SwitchAlarmUseCase {
+class SwitchAlarmUseCaseImpl(private val _repository: AlarmRepository) : SwitchAlarmUseCase {
 
     override fun invoke(parameter: SwitchAlarmUseCase.Params): Completable =
-        repository.switchAlarm(parameter.alarmId)
+        _repository.switchAlarm(parameter.alarmId)
 }

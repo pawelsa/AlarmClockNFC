@@ -3,15 +3,16 @@ package com.helpfulapps.data.repositories
 import android.content.Context
 import com.helpfulapps.data.api.weather.api.ApiCalls
 import com.helpfulapps.data.api.weather.converter.analyzeWeather
-import com.helpfulapps.data.api.weather.converter.transformResponseIntoDays
 import com.helpfulapps.data.api.weather.exceptions.CouldNotObtainForecast
 import com.helpfulapps.data.api.weather.exceptions.WeatherException
 import com.helpfulapps.data.api.weather.model.ForecastForCity
-import com.helpfulapps.data.common.NetworkCheck
-import com.helpfulapps.data.common.Settings
-import com.helpfulapps.data.db.extensions.checkCompleted
-import com.helpfulapps.data.db.extensions.rxQueryListSingle
+import com.helpfulapps.data.helper.NetworkCheck
+import com.helpfulapps.data.helper.Settings
 import com.helpfulapps.data.db.weather.model.*
+import com.helpfulapps.data.extensions.checkCompleted
+import com.helpfulapps.data.extensions.dayOfMonth
+import com.helpfulapps.data.extensions.rxQueryListSingle
+import com.helpfulapps.data.extensions.timestampAtMidnight
 import com.helpfulapps.domain.repository.WeatherRepository
 import com.raizlabs.android.dbflow.config.FlowManager
 import com.raizlabs.android.dbflow.kotlinextensions.*
@@ -32,6 +33,10 @@ class WeatherRepositoryImpl(
 
     init {
         FlowManager.init(context)
+    }
+
+    companion object {
+        const val ONE_AND_HALF_AN_HOUR: Long = 15 * 3600 * 100
     }
 
     override fun downloadForecast(city: String): Completable =
@@ -99,8 +104,18 @@ class WeatherRepositoryImpl(
         this.flatMapObservable { list -> Observable.fromIterable(list) }
             .flatMap { dayWeatherList -> dayWeatherList.save().toObservable() }
 
-    companion object {
-        const val ONE_AND_HALF_AN_HOUR: Long = 15 * 3600 * 100
-    }
+
+    private fun Single<ForecastForCity>.transformResponseIntoDays(): Single<List<DayWeather>> =
+        this.map {
+            it.list
+                .map { forecast -> HourWeather(forecast).apply { dt *= 1000 } }
+                .groupBy { hourWeather -> hourWeather.dt.dayOfMonth() }
+                .map { hourWeather ->
+                    DayWeather(
+                        dt = hourWeather.value.first().dt.timestampAtMidnight(),
+                        hourWeatherList = hourWeather.value
+                    )
+                }
+        }
 
 }

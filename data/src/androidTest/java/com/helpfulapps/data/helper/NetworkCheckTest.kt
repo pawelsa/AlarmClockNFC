@@ -1,4 +1,4 @@
-package com.helpfulapps.data.common
+package com.helpfulapps.data.helper
 
 import android.app.Application
 import androidx.test.core.app.ApplicationProvider

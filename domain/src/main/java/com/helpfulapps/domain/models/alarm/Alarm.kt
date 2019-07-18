@@ -1,5 +1,8 @@
 package com.helpfulapps.domain.models.alarm
 
+import com.helpfulapps.domain.extensions.dayOfYear
+import com.helpfulapps.domain.models.weather.DayWeather
+
 data class Alarm(
     val id: Long,
     val name: String,
@@ -12,13 +15,13 @@ data class Alarm(
     val repetitionDays: Array<Boolean>
 
 ) {
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is Alarm) return false
-
-        if (id != other.id) return false
-
-        return true
+    override operator fun equals(other: Any?): Boolean {
+        return when(other) {
+            this === other -> true
+            is Alarm -> this.id == other.id
+            is DayWeather -> this.startTime.dayOfYear == other.dt.dayOfYear
+            else -> false
+        }
     }
 
     override fun hashCode(): Int {
