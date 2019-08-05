@@ -1,10 +1,10 @@
 package com.helpfulapps.data.repositories
 
 import android.content.Context
-import com.helpfulapps.data.api.weather.exceptions.AlarmException
 import com.helpfulapps.data.db.alarm.model.AlarmEntry
 import com.helpfulapps.data.db.alarm.model.AlarmEntry_Table
 import com.helpfulapps.data.extensions.checkCompleted
+import com.helpfulapps.domain.exceptions.AlarmException
 import com.helpfulapps.domain.models.alarm.Alarm
 import com.helpfulapps.domain.repository.AlarmRepository
 import com.raizlabs.android.dbflow.config.FlowManager
@@ -19,7 +19,7 @@ import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
 // TODO remove subscribing on bg thread
-class AlarmRepositoryImpl(context: Context) : AlarmRepository {
+open class AlarmRepositoryImpl(context: Context) : AlarmRepository {
 
     init {
         FlowManager.init(context)
@@ -75,4 +75,6 @@ class AlarmRepositoryImpl(context: Context) : AlarmRepository {
 
     private fun getAlarm(alarmId: Long) =
         (select from AlarmEntry::class where AlarmEntry_Table.id.`is`(alarmId)).rx().querySingle()
+
+    fun getSchedulerIO(): Scheduler = Schedulers.io()
 }

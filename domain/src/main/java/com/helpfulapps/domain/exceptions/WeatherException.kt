@@ -1,3 +1,3 @@
-package com.helpfulapps.data.api.weather.exceptions
+package com.helpfulapps.domain.exceptions
 
 class WeatherException(message: String) : Throwable(message)

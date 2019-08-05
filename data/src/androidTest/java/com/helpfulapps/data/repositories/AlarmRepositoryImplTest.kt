@@ -4,15 +4,14 @@ import android.app.Application
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.helpfulapps.data.api.weather.exceptions.AlarmException
 import com.helpfulapps.data.db.alarm.model.AlarmEntry
+import com.helpfulapps.domain.exceptions.AlarmException
 import com.helpfulapps.domain.models.alarm.Alarm
 import com.raizlabs.android.dbflow.config.FlowManager
 import io.mockk.every
 import io.mockk.spyk
 import io.reactivex.Completable
 import io.reactivex.Single
-import io.reactivex.schedulers.Schedulers
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -46,7 +45,7 @@ class AlarmRepositoryImplTest {
         val repoMock = spyk(alarmRepositoryImpl)
 
         every { repoMock.getAlarmsQuery() } returns Single.never()
-        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
+//        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
 
 
         val testObserver = repoMock.getAlarms()
@@ -78,7 +77,7 @@ class AlarmRepositoryImplTest {
         val repoMock = spyk(alarmRepositoryImpl)
 
         every { repoMock.getAlarmsQuery() } returns Single.just(listOf(alarmEntry))
-        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
+//        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
 
         repoMock.getAlarms()
             .test()
@@ -138,7 +137,7 @@ class AlarmRepositoryImplTest {
                     )
                 )
 
-        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
+//        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
 
         repoMock.getAlarms()
             .test()
@@ -151,7 +150,7 @@ class AlarmRepositoryImplTest {
 
         val repoMock = spyk(alarmRepositoryImpl)
 
-        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
+//        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
 
         val alarm1 = repoMock.addAlarm(
             Alarm(
@@ -207,7 +206,7 @@ class AlarmRepositoryImplTest {
 
         val repoMock = spyk(alarmRepositoryImpl)
 
-        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
+//        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
 
         repoMock.removeAlarm(5)
             .test()
@@ -220,7 +219,7 @@ class AlarmRepositoryImplTest {
 
         val repoMock = spyk(alarmRepositoryImpl)
 
-        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
+//        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
 
         val alarm1 = repoMock.addAlarm(
             Alarm(
@@ -247,7 +246,7 @@ class AlarmRepositoryImplTest {
 
         val repoMock = spyk(alarmRepositoryImpl)
 
-        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
+//        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
 
         val alarm1 = repoMock.addAlarm(
             Alarm(
@@ -274,7 +273,7 @@ class AlarmRepositoryImplTest {
 
         val repoMock = spyk(alarmRepositoryImpl)
 
-        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
+//        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
 
         val alarm1 = repoMock.addAlarm(
             Alarm(
@@ -301,7 +300,7 @@ class AlarmRepositoryImplTest {
 
         val repoMock = spyk(alarmRepositoryImpl)
 
-        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
+//        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
 
         val alarm1 = repoMock.addAlarm(
             Alarm(
@@ -328,7 +327,7 @@ class AlarmRepositoryImplTest {
 
         val repoMock = spyk(alarmRepositoryImpl)
 
-        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
+//        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
 
         repoMock.switchAlarm(2)
             .test()
@@ -341,7 +340,7 @@ class AlarmRepositoryImplTest {
 
         val repoMock = spyk(alarmRepositoryImpl)
 
-        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
+//        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
         val alarm = Alarm(
             5,
             "",
@@ -366,7 +365,7 @@ class AlarmRepositoryImplTest {
 
         val repoMock = spyk(alarmRepositoryImpl)
 
-        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
+//        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
 
         val alarm1 = Alarm(
             5,
@@ -391,7 +390,7 @@ class AlarmRepositoryImplTest {
 
         val repoMock = spyk(alarmRepositoryImpl)
 
-        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
+//        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
 
         val alarm = Alarm(
             5,
@@ -451,7 +450,7 @@ class AlarmRepositoryImplTest {
             arrayOf(true, true, false, false, false, false, false)
         )
 
-        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
+//        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
 
         repoMock.addAlarm(alarm1).concatWith(repoMock.addAlarm(alarm2)).blockingGet()
 

@@ -3,7 +3,7 @@ package com.helpfulapps.data.helper
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
-import com.helpfulapps.data.api.weather.exceptions.WeatherException
+import com.helpfulapps.domain.exceptions.WeatherException
 import io.reactivex.Maybe
 
 class NetworkCheck(context: Context) {

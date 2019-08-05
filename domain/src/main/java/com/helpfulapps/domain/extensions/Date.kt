@@ -5,6 +5,6 @@ import java.util.*
 val Long.dayOfYear: Int
     get() = GregorianCalendar()
         .apply {
-            timeInMillis = this@dayOfYear
+            timeInMillis = (this@dayOfYear * 1000)
         }
         .get(Calendar.DAY_OF_YEAR)

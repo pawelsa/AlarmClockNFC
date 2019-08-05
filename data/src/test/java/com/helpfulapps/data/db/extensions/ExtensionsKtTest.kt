@@ -1,7 +1,7 @@
 package com.helpfulapps.data.db.extensions
 
-import com.helpfulapps.data.api.weather.exceptions.AlarmException
 import com.helpfulapps.data.extensions.checkCompleted
+import com.helpfulapps.domain.exceptions.AlarmException
 import io.reactivex.Completable
 import io.reactivex.CompletableSource
 import io.reactivex.observers.TestObserver

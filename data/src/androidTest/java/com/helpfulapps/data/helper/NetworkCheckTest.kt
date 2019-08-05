@@ -2,7 +2,7 @@ package com.helpfulapps.data.helper
 
 import android.app.Application
 import androidx.test.core.app.ApplicationProvider
-import com.helpfulapps.data.api.weather.exceptions.WeatherException
+import com.helpfulapps.domain.exceptions.WeatherException
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
