@@ -5,9 +5,9 @@ import com.helpfulapps.domain.repository.WeatherRepository
 import com.helpfulapps.domain.use_cases.weather.definition.GetForecastForAlarmUseCase
 import io.reactivex.Single
 
-class GetForecastForAlarmUseCaseImpl(val repository: WeatherRepository) :
+class GetForecastForAlarmUseCaseImpl(private val _repository: WeatherRepository) :
     GetForecastForAlarmUseCase {
 
     override fun invoke(parameter: GetForecastForAlarmUseCase.Params): Single<DayWeather> =
-        repository.getForecastForAlarm(parameter.timestamp)
+        _repository.getForecastForAlarm(parameter.timestamp)
 }

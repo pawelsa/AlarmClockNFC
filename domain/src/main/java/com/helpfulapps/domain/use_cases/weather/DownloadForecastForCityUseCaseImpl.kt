@@ -4,10 +4,10 @@ import com.helpfulapps.domain.repository.WeatherRepository
 import com.helpfulapps.domain.use_cases.weather.definition.DownloadForecastForCityUseCase
 import io.reactivex.Completable
 
-class DownloadForecastForCityUseCaseImpl(val repository: WeatherRepository) :
+class DownloadForecastForCityUseCaseImpl(private val _repository: WeatherRepository) :
     DownloadForecastForCityUseCase {
 
     override fun invoke(parameter: DownloadForecastForCityUseCase.Params): Completable =
-        repository.downloadForecast(parameter.cityName)
+        _repository.downloadForecast(parameter.cityName)
 
 }
