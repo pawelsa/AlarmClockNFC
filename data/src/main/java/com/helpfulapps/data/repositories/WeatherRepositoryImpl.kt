@@ -1,6 +1,7 @@
 package com.helpfulapps.data.repositories
 
 import android.content.Context
+import android.util.Log
 import com.helpfulapps.data.api.weather.api.ApiCalls
 import com.helpfulapps.data.api.weather.converter.analyzeWeather
 import com.helpfulapps.data.api.weather.model.ForecastForCity
@@ -102,17 +103,22 @@ class WeatherRepositoryImpl(
 
     private fun Single<List<DayWeather>>.saveInDatabase() =
         this.flatMapObservable { list -> Observable.fromIterable(list) }
-            .flatMap { dayWeatherList -> dayWeatherList.save().toObservable() }
+            .flatMap { dayWeatherList ->
+                Log.d("TAG", "TAG")
+                dayWeatherList.save().toObservable()
+
+            }
 
 
     private fun Single<ForecastForCity>.transformResponseIntoDays(): Single<List<DayWeather>> =
         this.map {
             it.list
-                .map { forecast -> HourWeather(forecast).apply { dt *= 1000 } }
+                .map { forecast -> forecast.toDbModel().apply { dt *= 1000 } }
                 .groupBy { hourWeather -> hourWeather.dt.dayOfMonth() }
                 .map { hourWeather ->
                     DayWeather(
                         dt = hourWeather.value.first().dt.timestampAtMidnight(),
+                        cityName = it.city.name,
                         hourWeatherList = hourWeather.value
                     )
                 }

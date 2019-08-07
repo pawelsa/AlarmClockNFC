@@ -1,6 +1,10 @@
 package com.helpfulapps.data.api.weather.model
 
-import org.junit.Assert.assertEquals
+import com.helpfulapps.data.db.converter.DayWeatherConverter
+import com.helpfulapps.data.db.converter.HourWeatherConverter
+import com.helpfulapps.data.db.weather.model.DayWeather
+import com.helpfulapps.data.db.weather.model.HourWeather
+import com.helpfulapps.data.helper.Units
 import org.junit.Test
 
 class ForecastApiMappingTest {
@@ -34,35 +38,33 @@ class ForecastApiMappingTest {
 
     @Test
     fun mapForecastFromApiToDb() {
-        val apiForecast = forecastApi.toDbModel()
-        val dbWeather = listOf(
-            WeatherDbModel(
-                0,
-                1,
-                80,
-                200.0,
-                2.0,
-                2.0,
-                100.0,
-                100.0,
-                100.0,
-                "desc",
-                "20",
-                null
+        val dbWeatherList = listOf(
+            HourWeather(
+                tempMin = 100.0,
+                tempMax = 100.0,
+                temp = 100.0,
+                dt = 1,
+                clouds = 80,
+                rain = 2.0,
+                snow = 2.0,
+                humidity = 100,
+                pressure = 100.0,
+                wind = 200.0
             )
         )
-        val dbForecast = ForecastDbModel(0, "Pszczyna", 5, dbWeather)
+        HourWeatherConverter.analyzeWeather(dbWeatherList[0], Units.METRIC)
 
-        assertEquals(apiForecast, dbForecast)
+        val dayWeather = DayWeather(
+            dt = 0,
+            cityName = "Pszczyna"
+        )
+        DayWeatherConverter.analyzeWeather(dayWeather, Units.METRIC)
+
     }
 
     @Test
     fun mapWeatherFromApiToDb() {
-        val dbWeather =
-            WeatherDbModel(0, 1, 80, 200.0, 2.0, 2.0, 100.0, 100.0, 100.0, "desc", "20", null)
-        val apiWeather = forecasts.first().toDbModel()
 
-        assertEquals(dbWeather, apiWeather)
     }
 
 }

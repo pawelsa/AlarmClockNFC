@@ -1,6 +1,8 @@
 package com.helpfulapps.alarmclock.views.clock_fragment
 
+import android.content.Context.MODE_PRIVATE
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +11,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.FragmentClockBinding
+import com.helpfulapps.data.api.weather.api.Downloader
+import com.helpfulapps.data.helper.NetworkCheck
+import com.helpfulapps.data.helper.Settings
+import com.helpfulapps.data.repositories.WeatherRepositoryImpl
+import com.helpfulapps.domain.use_cases.weather.DownloadForecastForCityUseCaseImpl
+import com.helpfulapps.domain.use_cases.weather.definition.DownloadForecastForCityUseCase
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_clock.*
 
 
@@ -23,7 +32,11 @@ class ClockFragment : Fragment() {
         )
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
 
         return binding.root
     }
@@ -35,6 +48,19 @@ class ClockFragment : Fragment() {
         viewModel.setAdapter(ClockListAdapter(rv_clock_list))
 
         binding.viewModel
+
+        val useCase = DownloadForecastForCityUseCaseImpl(
+            WeatherRepositoryImpl(
+                Settings(context!!.getSharedPreferences("Test", MODE_PRIVATE)),
+                NetworkCheck(context!!),
+                Downloader.create(),
+                context!!
+            )
+        )
+
+        useCase(DownloadForecastForCityUseCase.Params("Pszczyna"))
+            .subscribeOn(Schedulers.io())
+            .subscribe { Log.d("TAG", "TAG") }
 
         /*val fab : FloatingActionButton? = activity?.findViewById(R.id.fab_main_fab)
         fab?.setOnClickListener {
