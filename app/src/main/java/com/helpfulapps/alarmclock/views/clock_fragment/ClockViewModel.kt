@@ -1,8 +1,9 @@
 package com.helpfulapps.alarmclock.views.clock_fragment
 
-import androidx.lifecycle.ViewModel
+import com.helpfulapps.base.base.BaseViewModel
 
-class ClockViewModel : ViewModel() {
+
+class ClockViewModel : BaseViewModel() {
 
     private lateinit var adapter: ClockListAdapter
 

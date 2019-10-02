@@ -1,26 +1,26 @@
 package com.helpfulapps.alarmclock.views.clock_fragment
 
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintSet
-import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.TransitionManager
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.ItemAlarmBinding
 import com.helpfulapps.alarmclock.views.layout_helpers.OnLabelChangedListener
 import com.helpfulapps.alarmclock.views.layout_helpers.buildDialog
+import com.helpfulapps.base.base.BaseAdapter
 
 
 class ClockListAdapter(private val recyclerView: RecyclerView) :
-    RecyclerView.Adapter<ClockListAdapter.ClockListViewHolder>() {
+    BaseAdapter<AlarmData, ItemAlarmBinding>() {
 
     private val TAG = ClockListAdapter::class.java.simpleName
 
     private var expandedPosition = -1
     private val alarmItemList: ArrayList<AlarmData> = getMyData()
 
+    override val itemView: Int
+        get() = R.layout.item_alarm
 
     private fun getMyData(): ArrayList<AlarmData> = ArrayList<AlarmData>().also {
         it.add(
@@ -53,26 +53,16 @@ class ClockListAdapter(private val recyclerView: RecyclerView) :
         )
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ClockListViewHolder =
-        ClockListViewHolder(
-            DataBindingUtil.inflate(
-                LayoutInflater.from(parent.context),
-                R.layout.item_alarm,
-                parent,
-                false
-            )
-        )
-
     override fun getItemCount(): Int = alarmItemList.size
 
-    override fun onBindViewHolder(holder: ClockListViewHolder, position: Int) {
+    override fun View.setData(itemBinding: ItemAlarmBinding, item: AlarmData, position: Int) {
 
         val isExpanded = position == expandedPosition
 
-        with(holder.view) {
+        with(itemBinding) {
 
             if (!isExpanded && clAlarmItemContainer.isActivated) {
-                setCollapsed(holder.view)
+                setCollapsed(this)
             }
             alarmItemList[position].isExpanded = isExpanded
             alarmData = alarmItemList[position]
@@ -125,7 +115,5 @@ class ClockListAdapter(private val recyclerView: RecyclerView) :
             if (shouldBeExpanded) R.layout.item_alarm_edit else R.layout.item_alarm
         )
     }
-
-    class ClockListViewHolder(val view: ItemAlarmBinding) : RecyclerView.ViewHolder(view.root)
 
 }

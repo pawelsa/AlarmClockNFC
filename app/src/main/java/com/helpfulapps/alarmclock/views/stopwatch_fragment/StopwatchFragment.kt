@@ -1,17 +1,16 @@
 package com.helpfulapps.alarmclock.views.stopwatch_fragment
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import com.helpfulapps.alarmclock.R
+import com.helpfulapps.alarmclock.databinding.FragmentHourwatchBinding
+import com.helpfulapps.base.base.BaseFragment
+import org.koin.android.viewmodel.ext.android.viewModel
 
-class StopwatchFragment : Fragment() {
+class StopwatchFragment : BaseFragment<StopWatchViewModel, FragmentHourwatchBinding>() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override val layoutId: Int = R.layout.fragment_stopwatch
+    override val viewModel: StopWatchViewModel by viewModel()
 
-        return inflater.inflate(R.layout.fragment_stopwatch, container, false)
+    override fun init() {
 
     }
 }
