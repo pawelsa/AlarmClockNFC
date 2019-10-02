@@ -8,17 +8,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import io.reactivex.disposables.CompositeDisposable
 
-abstract class BaseFragment<T : BaseViewModel> : Fragment() {
+abstract class BaseFragment<T : BaseViewModel, DB : ViewDataBinding> : Fragment() {
     private val TAG = this::class.java.simpleName
     abstract val viewModel: T
     abstract val layoutId: Int
-    protected val mainActivity: BaseActivity?
-        get() = (activity as BaseActivity?)
+    protected val mainActivity: BaseActivity<*, *>?
+        get() = (activity as BaseActivity<*, *>?)
     protected open val navController: NavController?
         get() = view?.let { Navigation.findNavController(it) }
     protected var actionBar: Toolbar?
@@ -26,15 +28,22 @@ abstract class BaseFragment<T : BaseViewModel> : Fragment() {
             (activity as AppCompatActivity?)?.setSupportActionBar(value)
         }
         get() = activity?.actionBar as Toolbar?
+    open lateinit var binding: DB
     protected lateinit var disposables: CompositeDisposable
     protected lateinit var onStopDisposables: CompositeDisposable
+
+
+    private fun init(inflater: LayoutInflater, container: ViewGroup) {
+        binding = DataBindingUtil.inflate(inflater, layoutId, container, false)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(layoutId, container, false)
+        init(inflater, container!!)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

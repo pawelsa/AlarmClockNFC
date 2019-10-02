@@ -3,9 +3,12 @@ package com.helpfulapps.base.base
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 
-abstract class BaseAdapter<ITEM> : RecyclerView.Adapter<BaseAdapter<ITEM>.ViewHolder>() {
+abstract class BaseAdapter<ITEM, DB : ViewDataBinding> :
+    RecyclerView.Adapter<BaseAdapter<ITEM, DB>.ViewHolder>() {
 
     abstract val itemView: Int
 
@@ -20,8 +23,16 @@ abstract class BaseAdapter<ITEM> : RecyclerView.Adapter<BaseAdapter<ITEM>.ViewHo
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(itemView, parent, false)
-        return ViewHolder(view)
+        /*val view = LayoutInflater.from(parent.context).inflate(itemView, parent, false)
+        return ViewHolder(view)*/
+        return ViewHolder(
+            DataBindingUtil.inflate(
+                LayoutInflater.from(parent.context),
+                itemView,
+                parent,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -30,15 +41,16 @@ abstract class BaseAdapter<ITEM> : RecyclerView.Adapter<BaseAdapter<ITEM>.ViewHo
 
     override fun getItemCount(): Int = items.size
 
-    abstract fun View.setData(item: ITEM, position: Int)
+    abstract fun View.setData(itemBinding: DB, item: ITEM, position: Int)
 
     protected open fun View.setupListeners(item: ITEM, position: Int) = Unit
 
     protected open fun onNewDataProvided() = Unit
 
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    inner class ViewHolder(private val itemBinding: DB) :
+        RecyclerView.ViewHolder(itemBinding.root) {
         fun bind(item: ITEM) {
-            itemView.setData(item, adapterPosition)
+            itemView.setData(itemBinding, item, adapterPosition)
             itemView.setOnClickListener {
                 onPositionClick(adapterPosition)
                 onItemClick(items[adapterPosition])

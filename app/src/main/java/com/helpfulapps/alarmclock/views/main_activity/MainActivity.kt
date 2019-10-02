@@ -1,21 +1,23 @@
 package com.helpfulapps.alarmclock.views.main_activity
 
 import android.content.Intent
-import android.os.Bundle
 import android.util.Log
 import android.widget.PopupMenu
-import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import com.google.android.material.snackbar.Snackbar
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.ActivityMainBinding
+import com.helpfulapps.base.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity<MainActivityViewModel, ActivityMainBinding>() {
 
     private val TAG = this::class.java.name
+
+    override val viewModel: MainActivityViewModel by viewModel()
+    override val layoutId: Int = R.layout.activity_main
 
     private val pager: TabFragmentChangeListener by lazy { TabFragmentChangeListener(fab_main_fab) }
 
@@ -40,14 +42,8 @@ class MainActivity : AppCompatActivity() {
         popup
     }
 
-    private val viewModel: MainActivityViewModel by viewModel()
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val binding: ActivityMainBinding =
-            DataBindingUtil.setContentView(this, R.layout.activity_main)
-
+    override fun init() {
 
         viewModel.listenToMenuButtonClicks().observe(this, Observer {
             popupMenu.show()
@@ -96,6 +92,10 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG, "startStopwatch: ")
         vp_main_tab_pager.setCurrentItem(2, false)
         pager.onPageStarting(2)
+    }
+
+    override fun showMessage(text: String) {
+        Snackbar.make(l_main_first_layer, text, Snackbar.LENGTH_SHORT)
     }
 
 }

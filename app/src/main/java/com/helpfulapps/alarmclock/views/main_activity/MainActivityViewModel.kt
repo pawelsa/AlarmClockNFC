@@ -2,9 +2,9 @@ package com.helpfulapps.alarmclock.views.main_activity
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import com.helpfulapps.base.base.BaseViewModel
 
-class MainActivityViewModel : ViewModel() {
+class MainActivityViewModel : BaseViewModel() {
 
     private val TAG = this::class.java.name
 

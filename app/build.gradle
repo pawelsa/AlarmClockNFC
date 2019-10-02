@@ -74,4 +74,5 @@ dependencies {
 
     implementation project(path: ':data')
     implementation project(':domain')
+    implementation project(path: ':base')
 }

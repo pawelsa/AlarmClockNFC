@@ -9,21 +9,18 @@ import com.helpfulapps.alarmclock.views.stopwatch_fragment.StopwatchFragment
 
 class TabAdapter(fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
 
-    override fun getItem(position: Int): Fragment? {
+    override fun getItem(position: Int): Fragment {
 
         return when (position) {
-            TAB_1 -> {
-                ClockFragment()
-            }
-
             TAB_2 -> {
                 HourWatchFragment()
             }
-
             TAB_3 -> {
                 StopwatchFragment()
             }
-            else -> null
+            else -> {
+                ClockFragment()
+            }
         }
     }
 
