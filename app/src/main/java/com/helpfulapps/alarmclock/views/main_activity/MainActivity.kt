@@ -7,10 +7,10 @@ import android.widget.PopupMenu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.ActivityMainBinding
 import kotlinx.android.synthetic.main.activity_main.*
+import org.koin.android.viewmodel.ext.android.viewModel
 
 
 class MainActivity : AppCompatActivity() {
@@ -40,9 +40,7 @@ class MainActivity : AppCompatActivity() {
         popup
     }
 
-    private val viewModel by lazy {
-        ViewModelProviders.of(this).get(MainActivityViewModel::class.java)
-    }
+    private val viewModel: MainActivityViewModel by viewModel()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
