@@ -14,8 +14,6 @@ import org.koin.android.viewmodel.ext.android.viewModel
 
 class MainActivity : BaseActivity<MainActivityViewModel, ActivityMainBinding>() {
 
-    private val TAG = this::class.java.name
-
     override val viewModel: MainActivityViewModel by viewModel()
     override val layoutId: Int = R.layout.activity_main
 
@@ -44,6 +42,7 @@ class MainActivity : BaseActivity<MainActivityViewModel, ActivityMainBinding>() 
 
 
     override fun init() {
+        manageFragmentLaunching(intent)
 
         viewModel.listenToMenuButtonClicks().observe(this, Observer {
             popupMenu.show()
@@ -59,12 +58,9 @@ class MainActivity : BaseActivity<MainActivityViewModel, ActivityMainBinding>() 
         vp_main_tab_pager.adapter = pagerAdapter
         vp_main_tab_pager.currentItem = 0
         et_main_tab_layout.viewPager = vp_main_tab_pager
-
-        manageFragmentLaunching(intent)
     }
 
     private fun setupFragmentChangeListener() {
-
         vp_main_tab_pager.addOnPageChangeListener(pager)
     }
 
@@ -95,7 +91,7 @@ class MainActivity : BaseActivity<MainActivityViewModel, ActivityMainBinding>() 
     }
 
     override fun showMessage(text: String) {
-        Snackbar.make(l_main_first_layer, text, Snackbar.LENGTH_SHORT)
+        Snackbar.make(l_main_first_layer, text, Snackbar.LENGTH_SHORT).show()
     }
 
 }
