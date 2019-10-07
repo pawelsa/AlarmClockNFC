@@ -28,7 +28,7 @@ abstract class BaseFragment<T : BaseViewModel, DB : ViewDataBinding> : Fragment(
             (activity as AppCompatActivity?)?.setSupportActionBar(value)
         }
         get() = activity?.actionBar as Toolbar?
-    open lateinit var binding: DB
+    lateinit var binding: DB
     protected lateinit var disposables: CompositeDisposable
     protected lateinit var onStopDisposables: CompositeDisposable
 

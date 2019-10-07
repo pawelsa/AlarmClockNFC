@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<dimen name="indicator_size">50dp</dimen>
-	<dimen name="menu_icon_width">30dp</dimen>
-	<dimen name="menu_icon_height">0dp</dimen>
+    <dimen name="indicator_size">50dp</dimen>
+    <dimen name="menu_icon_width">30dp</dimen>
+    <dimen name="menu_icon_height">0dp</dimen>
     <dimen name="icon_tab_size">24dp</dimen>
     <dimen name="z_card">8dp</dimen>
     <dimen name="clickable_icon">48dp</dimen>
@@ -19,4 +19,6 @@
     <dimen name="item_alarm_check_box_margin_left">24dp</dimen>
     <dimen name="alarm_item_time_text_width">120dp</dimen>
     <dimen name="margin_big">16dp</dimen>
+    <dimen name="list_item_spacing">16dp</dimen>
+    <dimen name="list_item_spacing_half">8dp</dimen>
 </resources>
