@@ -7,26 +7,18 @@ import com.helpfulapps.alarmclock.views.clock_fragment.ClockFragment
 import com.helpfulapps.alarmclock.views.hourwatch_fragment.HourWatchFragment
 import com.helpfulapps.alarmclock.views.stopwatch_fragment.StopwatchFragment
 
-class TabAdapter(fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
+class TabAdapter(fragmentManager: FragmentManager) :
+    FragmentStatePagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     override fun getItem(position: Int): Fragment {
-
         return when (position) {
-            TAB_2 -> {
-                HourWatchFragment()
-            }
-            TAB_3 -> {
-                StopwatchFragment()
-            }
-            else -> {
-                ClockFragment()
-            }
+            TAB_2 -> HourWatchFragment()
+            TAB_3 -> StopwatchFragment()
+            else -> ClockFragment()
         }
     }
 
-    override fun getCount(): Int {
-        return NB_TABS
-    }
+    override fun getCount(): Int = NB_TABS
 
     companion object {
 

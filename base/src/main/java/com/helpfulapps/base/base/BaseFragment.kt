@@ -16,7 +16,7 @@ import androidx.navigation.Navigation
 import io.reactivex.disposables.CompositeDisposable
 
 abstract class BaseFragment<T : BaseViewModel, DB : ViewDataBinding> : Fragment() {
-    private val TAG = this::class.java.simpleName
+    val TAG: String = this::class.java.simpleName
     abstract val viewModel: T
     abstract val layoutId: Int
     protected val mainActivity: BaseActivity<*, *>?

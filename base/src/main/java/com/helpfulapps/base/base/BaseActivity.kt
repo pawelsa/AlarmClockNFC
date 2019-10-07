@@ -7,13 +7,15 @@ import androidx.databinding.ViewDataBinding
 
 abstract class BaseActivity<VM : BaseViewModel, DB : ViewDataBinding> : AppCompatActivity() {
 
+    val TAG: String = this::class.java.simpleName
     abstract val layoutId: Int
     abstract val viewModel: VM
+    lateinit var binding: DB
+        private set
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding: DB =
-            DataBindingUtil.setContentView(this, layoutId)
+        binding = DataBindingUtil.setContentView(this, layoutId)
         init()
     }
 
