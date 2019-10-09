@@ -61,7 +61,7 @@ dependencies {
     implementation 'com.akaita.android:morphview:1.0.0'
 
     //day picker
-    implementation 'ca.antonious:materialdaypicker:0.4.0'
+    implementation 'ca.antonious:materialdaypicker:0.5.0'
 
     // rxJava & rxKotlin
     implementation "io.reactivex.rxjava2:rxjava:$rxJava_version"

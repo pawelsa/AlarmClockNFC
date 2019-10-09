@@ -8,4 +8,8 @@
     <string name="menu_help">Help</string>
     <string name="info_popup_menu">Popup menu</string>
     <string name="hint_alarm_name">Alarm name</string>
+    <string name="add_alarm_save">Save</string>
+    <string name="add_alarm_repeat">Repeat</string>
+    <string name="add_alarm_vibrations">Vibrations</string>
+    <string name="time">%1$d:%2$d</string>
 </resources>

@@ -1,16 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
+    <data>
+
+        <variable
+            name="model"
+            type="com.helpfulapps.alarmclock.views.clock_fragment.add_alarm_bs.NewAlarmModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="700dp"
-        android:background="@color/colorAccent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/margin_big">
 
-        <Button
-            android:id="@+id/button"
-            android:layout_width="match_parent"
-            android:layout_height="600dp"
-            android:text="Button" />
-    </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/bt_add_alarm_save"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:layout_marginEnd="@dimen/margin_big"
+            android:text="@string/add_alarm_save"
+            app:icon="@drawable/ic_add"
+            app:layout_constraintBottom_toTopOf="@id/b_add_alarm_barrier_top"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/ib_add_alarm_cancel"
+            style="@style/Widget.AppCompat.ActionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_medium"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:backgroundTint="@color/colorPrimary"
+            android:src="@drawable/ic_cancel"
+            android:tint="@color/colorPrimary"
+            app:layout_constraintBottom_toTopOf="@id/b_add_alarm_barrier_top"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/b_add_alarm_barrier_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="top" />
+
+        <TextView
+            android:id="@+id/et_add_alarm_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_big"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:ems="5"
+            android:maxLength="5"
+            android:maxLines="1"
+            android:text="@{@string/time(model.hour, model.minute)}"
+            android:textSize="48sp"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/b_add_alarm_barrier_top" />
+
+        <CheckBox
+            android:id="@+id/cb_add_alarm_repeat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_big"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:checked="@{model.repeating}"
+            android:text="@string/add_alarm_repeat"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_add_alarm_time" />
+
+        <ca.antonious.materialdaypicker.MaterialDayPicker
+            android:id="@+id/dp_add_alarm_item_picker"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_big"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:layout_marginEnd="@dimen/margin_big"
+            android:paddingStart="@dimen/margin_medium"
+            android:paddingEnd="@dimen/margin_medium"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cb_add_alarm_repeat" />
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/bt_add_alarm_sound"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_big"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:text="Sound"
+            app:icon="@drawable/ic_bell"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dp_add_alarm_item_picker" />
+
+        <CheckBox
+            android:id="@+id/cb_add_alarm_vibrations"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_big"
+            android:checked="@{model.vibrations}"
+            android:text="@string/add_alarm_vibrations"
+            app:layout_constraintBottom_toBottomOf="@+id/bt_add_alarm_sound"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/bt_add_alarm_sound" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>
