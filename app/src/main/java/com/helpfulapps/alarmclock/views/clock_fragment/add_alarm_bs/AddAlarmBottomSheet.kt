@@ -107,11 +107,5 @@ class AddAlarmBottomSheet : BottomSheetDialogFragment() {
             }
         }
     }
-/*
-    private fun getAlarmData() : Alarm {
-        return Alarm(
-
-        )
-    }*/
 
 }
