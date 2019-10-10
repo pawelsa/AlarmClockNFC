@@ -4,11 +4,11 @@ import com.helpfulapps.domain.extensions.dayOfYear
 import com.helpfulapps.domain.models.weather.DayWeather
 
 data class Alarm(
-    val id: Long,
-    val name: String,
-    val isRepeating: Boolean,
-    val isVibrationOn: Boolean,
-    val isTurnedOn: Boolean,
+    val id: Long = 0,
+    val name: String = "",
+    val isRepeating: Boolean = false,
+    val isVibrationOn: Boolean = true,
+    val isTurnedOn: Boolean = true,
     val ringtoneId: Int,
     val startTime: Long,
     val endTime: Long,

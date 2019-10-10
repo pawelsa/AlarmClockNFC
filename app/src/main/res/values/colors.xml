@@ -12,4 +12,7 @@
 
     <color name="selected_comment_background">#678</color>
     <color name="comment_background">#876</color>
+
+    <color name="daySelected">#008577</color>
+    <color name="dayPressed">#00574B</color>
 </resources>
