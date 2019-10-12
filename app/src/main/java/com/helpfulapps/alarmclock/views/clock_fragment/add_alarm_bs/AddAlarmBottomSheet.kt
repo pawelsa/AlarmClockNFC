@@ -1,16 +1,24 @@
 package com.helpfulapps.alarmclock.views.clock_fragment.add_alarm_bs
 
+import android.Manifest
 import android.app.TimePickerDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import ca.antonious.materialdaypicker.MaterialDayPicker
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.DialogAddAlarmBinding
+import com.helpfulapps.alarmclock.helpers.ShortPermissionListener
+import com.helpfulapps.alarmclock.helpers.layout_helpers.buildSelectRingtoneDialog
+import com.helpfulapps.alarmclock.views.main_activity.MainActivity
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.listener.PermissionDeniedResponse
+import com.karumi.dexter.listener.PermissionGrantedResponse
 import kotlinx.android.synthetic.main.dialog_add_alarm.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -48,7 +56,22 @@ class AddAlarmBottomSheet : BottomSheetDialogFragment() {
 
     private fun listenToChangeSoundButton() {
         bt_add_alarm_sound.setOnClickListener {
-            // TODO implement
+            Dexter.withActivity(activity)
+                .withPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                .withListener(object : ShortPermissionListener {
+
+                    override fun onPermissionGranted(response: PermissionGrantedResponse?) {
+                        buildSelectRingtoneDialog(context!!) { selectedRingtone ->
+                            Toast.makeText(context, selectedRingtone.first, Toast.LENGTH_LONG)
+                                .show()
+                        }.show()
+                    }
+
+                    override fun onPermissionDenied(response: PermissionDeniedResponse?) {
+                        (activity as MainActivity).showMessage(getString(R.string.permission_ringtone))
+                    }
+                }
+                ).check()
         }
     }
 
