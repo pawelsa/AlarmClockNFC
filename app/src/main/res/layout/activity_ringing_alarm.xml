@@ -49,7 +49,7 @@
 
             <ImageView
                 android:id="@+id/iv_ring_alarm"
-                android:layout_width="200dp"
+                android:layout_width="@dimen/ringing_image_size"
                 android:layout_height="200dp"
                 app:layout_constraintBottom_toTopOf="@+id/tv_ring_title"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -63,7 +63,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{model.title}"
-                android:textSize="24sp"
+                android:textSize="@dimen/ringing_title_text_size"
                 tools:text="Tutuł alarmu"
                 app:layout_constraintBottom_toTopOf="@+id/tv_ring_time"
                 app:layout_constraintEnd_toEndOf="@+id/iv_ring_alarm"
@@ -76,7 +76,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{model.time}"
-                android:textSize="64sp"
+                android:textSize="@dimen/ringing_time_text_size"
                 android:textStyle="bold"
                 tools:text="8:30"
                 app:layout_constraintBottom_toTopOf="@+id/fab_ring_snooze"
