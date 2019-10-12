@@ -6,8 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.TransitionManager
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.ItemAlarmBinding
-import com.helpfulapps.alarmclock.views.layout_helpers.OnLabelChangedListener
-import com.helpfulapps.alarmclock.views.layout_helpers.buildDialog
+import com.helpfulapps.alarmclock.helpers.layout_helpers.buildDialog
 import com.helpfulapps.base.base.BaseAdapter
 
 
@@ -88,13 +87,11 @@ class ClockListAdapter(private val recyclerView: RecyclerView) :
             tvAlarmItemTitleRename.setOnClickListener {
                 buildDialog(
                     clAlarmItemContainer.context,
-                    tvAlarmItemTitleRename.text.toString(),
-                    object : OnLabelChangedListener {
-                        override fun onLabelChanged(newLabel: String) {
-                            tvAlarmItemTitleRename.text = newLabel
-                            tvAlarmItemTitle.text = newLabel
-                        }
-                    })
+                    tvAlarmItemTitleRename.text.toString()
+                ) { newLabel ->
+                    tvAlarmItemTitleRename.text = newLabel
+                    tvAlarmItemTitle.text = newLabel
+                }
             }
         }
     }

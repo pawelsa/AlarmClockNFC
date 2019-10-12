@@ -74,7 +74,6 @@
                     android:contentDescription="@string/info_popup_menu"
                     android:minWidth="0dp"
                     android:minHeight="0dp"
-                    android:onClick="@{()->viewModel.onMenuClicked()}"
                     android:src="@drawable/ic_menu"
                     app:layout_constraintBottom_toBottomOf="@+id/et_main_tab_layout"
                     app:layout_constraintEnd_toEndOf="parent"
