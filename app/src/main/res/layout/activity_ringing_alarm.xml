@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="model"
+            type="com.helpfulapps.alarmclock.views.ringing_alarm.AlarmModel" />
+    </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/cl_ringing_base"
@@ -54,8 +62,9 @@
                 android:id="@+id/tv_ring_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Tytuł alarmu"
+                android:text="@{model.title}"
                 android:textSize="24sp"
+                tools:text="Tutuł alarmu"
                 app:layout_constraintBottom_toTopOf="@+id/tv_ring_time"
                 app:layout_constraintEnd_toEndOf="@+id/iv_ring_alarm"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -66,9 +75,10 @@
                 android:id="@+id/tv_ring_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="8:30"
+                android:text="@{@string/time(model.hour, model.minute)}"
                 android:textSize="64sp"
                 android:textStyle="bold"
+                tools:text="8:30"
                 app:layout_constraintBottom_toTopOf="@+id/fab_ring_snooze"
                 app:layout_constraintEnd_toEndOf="@+id/tv_ring_title"
                 app:layout_constraintHorizontal_bias="0.5"

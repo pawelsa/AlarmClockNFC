@@ -9,14 +9,13 @@ import org.koin.android.viewmodel.ext.android.viewModel
 
 class RingingAlarmActivity : BaseActivity<RingingAlarmViewModel, ActivityRingingAlarmBinding>() {
 
-    override val layoutId: Int
-        get() = R.layout.activity_ringing_alarm
+    override val layoutId: Int = R.layout.activity_ringing_alarm
 
     override val viewModel: RingingAlarmViewModel by viewModel()
 
 
     override fun init() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        binding.model = viewModel.model
     }
 
     override fun showMessage(text: String) {
