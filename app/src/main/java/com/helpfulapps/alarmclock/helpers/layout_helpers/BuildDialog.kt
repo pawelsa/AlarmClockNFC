@@ -1,34 +1,72 @@
 package com.helpfulapps.alarmclock.helpers.layout_helpers
 
+import android.app.Dialog
 import android.content.Context
+import android.media.MediaPlayer
 import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
+import androidx.core.net.toUri
 import com.google.android.material.textfield.TextInputEditText
 import com.helpfulapps.alarmclock.R
+import com.helpfulapps.alarmclock.helpers.getRingtones
 
 
-fun buildDialog(context: Context, oldLabel: String, listener: (String) -> Unit) {
+fun buildEditTitleDialog(context: Context, oldLabel: String, listener: (String) -> Unit): Dialog {
 
-    val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_edit_text_label, null)
+    val alertDialogBuilder = AlertDialog.Builder(context).apply {
 
-    val alertDialogBuilder = AlertDialog.Builder(context)
+        val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_edit_text_label, null)
 
-    // set alert_dialog.xml to alertdialog builder
-    alertDialogBuilder.setView(dialogView)
+        val userInput: TextInputEditText = dialogView.findViewById(R.id.ed_dialog_alarm_name)
+        // set dialog message
+        userInput.setText(oldLabel)
 
-    val userInput = dialogView.findViewById(R.id.ed_dialog_alarm_name) as TextInputEditText
-    userInput.setText(oldLabel)
-
-    // set dialog message
-    alertDialogBuilder
-        .setCancelable(false)
-        .setPositiveButton("OK") { dialog, _ ->
+        // set alert_dialog.xml to alertdialog builder
+        setView(dialogView)
+        setCancelable(false)
+        setPositiveButton("OK") { dialog, _ ->
             listener(userInput.text.toString())
             dialog.dismiss()
         }
-        .setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
+        setNegativeButton("Cancel") { dialog, _ ->
+            dialog.dismiss()
+        }
+    }
+    return alertDialogBuilder.create()
+}
 
-    val alertDialog = alertDialogBuilder.create()
+fun buildSelectRingtoneDialog(
+    context: Context,
+    currentRingtoneTitle: String?,
+    selectedRingtone: (Pair<String, String>) -> Unit
+): Dialog {
+    val ringtones = getRingtones(context)
+    var selectedRingtoneIndex = ringtones
+        .indexOfFirst { it.first == currentRingtoneTitle }
+        .let { indexOfCurrentRingtoneInList ->
+            if (indexOfCurrentRingtoneInList > -1) indexOfCurrentRingtoneInList else 0
+        }
 
-    alertDialog.show()
+    val ringtoneTitles = ringtones.map { it.first }.toTypedArray()
+
+    var mp = MediaPlayer.create(context, ringtones[selectedRingtoneIndex].second.toUri())
+
+    val builder = AlertDialog.Builder(context).apply {
+        setTitle(context.getString(R.string.select_ringtone_dialog_title))
+        setSingleChoiceItems(ringtoneTitles, selectedRingtoneIndex) { _, which ->
+            selectedRingtoneIndex = which
+            mp.stop()
+            mp = MediaPlayer.create(context, ringtones[selectedRingtoneIndex].second.toUri())
+            mp.isLooping = false
+            mp.start()
+        }
+        setPositiveButton(android.R.string.ok) { _, _ ->
+            selectedRingtone(ringtones[selectedRingtoneIndex])
+            mp.stop()
+        }
+        setNegativeButton(android.R.string.cancel) { _, _ ->
+            mp.stop()
+        }
+    }
+    return builder.create()
 }

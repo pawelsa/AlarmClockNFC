@@ -3,6 +3,10 @@ package com.helpfulapps.alarmclock.helpers
 import java.text.SimpleDateFormat
 import java.util.*
 
+fun timeToString(time: Pair<Int, Int>): String {
+    return timeToString(time.first, time.second)
+}
+
 fun timeToString(hour: Int, minute: Int): String {
     val date: Date = GregorianCalendar()
         .apply {

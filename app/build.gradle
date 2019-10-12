@@ -73,6 +73,9 @@ dependencies {
     implementation "org.koin:koin-android-scope:$koin_version"
     implementation "org.koin:koin-android-viewmodel:$koin_version"
 
+    // Dexter - permissions
+    implementation 'com.karumi:dexter:6.0.0'
+
     implementation project(path: ':data')
     implementation project(':domain')
     implementation project(path: ':base')

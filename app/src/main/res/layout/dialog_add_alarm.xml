@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="model"
-            type="com.helpfulapps.alarmclock.views.clock_fragment.add_alarm_bs.NewAlarmModel" />
+            type="com.helpfulapps.alarmclock.views.clock_fragment.add_alarm_bs.AddAlarmBottomSheetViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -49,7 +52,7 @@
             app:barrierDirection="top" />
 
         <TextView
-            android:id="@+id/et_add_alarm_time"
+            android:id="@+id/tv_add_alarm_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/margin_big"
@@ -57,11 +60,12 @@
             android:ems="5"
             android:maxLength="5"
             android:maxLines="1"
-            android:text="@{@string/time(model.hour, model.minute)}"
-            android:textSize="48sp"
+            android:text="@{model.alarmTime}"
+            android:textSize="@dimen/add_alarm_time_text_size"
             android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/b_add_alarm_barrier_top" />
+            app:layout_constraintTop_toBottomOf="@id/b_add_alarm_barrier_top"
+            tools:text="8:30" />
 
         <CheckBox
             android:id="@+id/cb_add_alarm_repeat"
@@ -69,10 +73,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_big"
             android:layout_marginTop="@dimen/margin_medium"
-            android:checked="@{model.repeating}"
+            android:checked="@={model.repeating}"
             android:text="@string/add_alarm_repeat"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/et_add_alarm_time" />
+            app:layout_constraintTop_toBottomOf="@id/tv_add_alarm_time" />
 
         <ca.antonious.materialdaypicker.MaterialDayPicker
             android:id="@+id/dp_add_alarm_item_picker"
@@ -83,7 +87,7 @@
             android:layout_marginEnd="@dimen/margin_big"
             android:paddingStart="@dimen/margin_medium"
             android:paddingEnd="@dimen/margin_medium"
-            android:visibility="gone"
+            android:visibility="@{model.repeating.get() ? View.VISIBLE : View.GONE}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cb_add_alarm_repeat" />
@@ -96,18 +100,19 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_big"
             android:layout_marginTop="@dimen/margin_medium"
-            android:text="Sound"
+            android:text="@{model.ringtoneTitle}"
             app:icon="@drawable/ic_bell"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dp_add_alarm_item_picker" />
+            app:layout_constraintTop_toBottomOf="@+id/dp_add_alarm_item_picker"
+            tools:text="ALARM TITLE" />
 
         <CheckBox
             android:id="@+id/cb_add_alarm_vibrations"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/margin_big"
-            android:checked="@{model.vibrations}"
+            android:checked="@={model.vibrating}"
             android:text="@string/add_alarm_vibrations"
             app:layout_constraintBottom_toBottomOf="@+id/bt_add_alarm_sound"
             app:layout_constraintEnd_toEndOf="parent"
