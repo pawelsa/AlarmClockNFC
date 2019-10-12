@@ -25,4 +25,5 @@
     <dimen name="ringing_title_text_size">24sp</dimen>
     <dimen name="ringing_time_text_size">64sp</dimen>
     <dimen name="ringing_image_size">200dp</dimen>
+    <dimen name="add_alarm_time_text_size">48sp</dimen>
 </resources>

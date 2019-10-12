@@ -3,7 +3,6 @@ package com.helpfulapps.alarmclock.views.clock_fragment.add_alarm_bs
 import android.Manifest
 import android.app.TimePickerDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -66,9 +65,9 @@ class AddAlarmBottomSheet : BottomSheetDialogFragment() {
                     override fun onPermissionGranted(response: PermissionGrantedResponse?) {
                         buildSelectRingtoneDialog(
                             context!!,
-                            viewModel.alarmTitle.value
+                            viewModel.ringtoneTitle.value
                         ) {
-                            viewModel.alarm = it
+                            viewModel.ringtone = it
                         }.show()
                     }
 
@@ -88,9 +87,7 @@ class AddAlarmBottomSheet : BottomSheetDialogFragment() {
 
     private fun listenToSaveButton() {
         bt_add_alarm_save.setOnClickListener {
-            /*          val alarm = getAlarmData()
-                        viewModel.saveAlarm(alarm)*/
-            Log.d(TAG, "rp: ${viewModel.repeating.get()}, vb: ${viewModel.vibrating.get()}")
+            // todo implement
         }
     }
 

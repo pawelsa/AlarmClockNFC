@@ -43,8 +43,8 @@ fun buildSelectRingtoneDialog(
     val ringtones = getRingtones(context)
     var selectedRingtoneIndex = ringtones
         .indexOfFirst { it.first == currentRingtoneTitle }
-        .let {
-            if (it > -1) it else 0
+        .let { indexOfCurrentRingtoneInList ->
+            if (indexOfCurrentRingtoneInList > -1) indexOfCurrentRingtoneInList else 0
         }
 
     val ringtoneTitles = ringtones.map { it.first }.toTypedArray()
@@ -60,11 +60,11 @@ fun buildSelectRingtoneDialog(
             mp.isLooping = false
             mp.start()
         }
-        setPositiveButton("OK") { _, _ ->
+        setPositiveButton(android.R.string.ok) { _, _ ->
             selectedRingtone(ringtones[selectedRingtoneIndex])
             mp.stop()
         }
-        setNegativeButton("Cancel") { _, _ ->
+        setNegativeButton(android.R.string.cancel) { _, _ ->
             mp.stop()
         }
     }

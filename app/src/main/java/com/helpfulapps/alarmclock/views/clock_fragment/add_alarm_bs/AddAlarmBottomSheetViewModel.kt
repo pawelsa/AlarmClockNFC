@@ -15,9 +15,9 @@ import io.reactivex.rxkotlin.plusAssign
 class AddAlarmBottomSheetViewModel(private val _addAlarmUseCase: AddAlarmUseCase) :
     BaseViewModel() {
 
-    private val _alarmTitle: MutableLiveData<String> = MutableLiveData()
-    val alarmTitle: LiveData<String>
-        get() = _alarmTitle
+    private val _ringtoneTitle: MutableLiveData<String> = MutableLiveData()
+    val ringtoneTitle: LiveData<String>
+        get() = _ringtoneTitle
 
     private val _alarmTime: MutableLiveData<String> = MutableLiveData()
     val alarmTime: LiveData<String>
@@ -31,10 +31,10 @@ class AddAlarmBottomSheetViewModel(private val _addAlarmUseCase: AddAlarmUseCase
             field = value
             _alarmTime.value = timeToString(value)
         }
-    var alarm: Pair<String, String> = Pair("", "")
+    var ringtone: Pair<String, String> = Pair("", "")
         set(value) {
             field = value
-            _alarmTitle.value = value.first
+            _ringtoneTitle.value = value.first
         }
     var repeatingDays: Array<Boolean> = Array(7) { false }
 
@@ -45,7 +45,7 @@ class AddAlarmBottomSheetViewModel(private val _addAlarmUseCase: AddAlarmUseCase
 
     fun saveAlarm() {
         /*
-          disposables += _addAlarmUseCase(AddAlarmUseCase.Params(alarm))
+          disposables += _addAlarmUseCase(AddAlarmUseCase.Params(ringtone))
               .backgroundTask()
               .subscribeBy {
                   _alarmSaved.value = true
@@ -59,7 +59,7 @@ class AddAlarmBottomSheetViewModel(private val _addAlarmUseCase: AddAlarmUseCase
         }
             .backgroundTask()
             .subscribe { title ->
-                _alarmTitle.value = title.first
+                _ringtoneTitle.value = title.first
             }
     }
 
