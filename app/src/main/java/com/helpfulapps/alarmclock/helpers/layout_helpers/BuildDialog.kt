@@ -1,4 +1,4 @@
-package com.helpfulapps.alarmclock.views.layout_helpers
+package com.helpfulapps.alarmclock.helpers.layout_helpers
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,7 +7,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.helpfulapps.alarmclock.R
 
 
-fun buildDialog(context: Context, oldLabel: String, listener: OnLabelChangedListener) {
+fun buildDialog(context: Context, oldLabel: String, listener: (String) -> Unit) {
 
     val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_edit_text_label, null)
 
@@ -23,7 +23,7 @@ fun buildDialog(context: Context, oldLabel: String, listener: OnLabelChangedList
     alertDialogBuilder
         .setCancelable(false)
         .setPositiveButton("OK") { dialog, _ ->
-            listener.onLabelChanged(userInput.text.toString())
+            listener(userInput.text.toString())
             dialog.dismiss()
         }
         .setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
@@ -31,8 +31,4 @@ fun buildDialog(context: Context, oldLabel: String, listener: OnLabelChangedList
     val alertDialog = alertDialogBuilder.create()
 
     alertDialog.show()
-}
-
-interface OnLabelChangedListener {
-    fun onLabelChanged(newLabel: String)
 }

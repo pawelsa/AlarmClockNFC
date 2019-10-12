@@ -1,4 +1,4 @@
-package com.helpfulapps.alarmclock.views.layout_helpers
+package com.helpfulapps.alarmclock.helpers.layout_helpers
 
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.databinding.BindingAdapter
@@ -16,7 +16,7 @@ fun setIconExpanded(morphView: MorphView, isExpanded: Boolean) {
     }
 }
 
-@BindingAdapter("app:setAdapter")
+@BindingAdapter("app:adapter")
 fun <T : RecyclerView.ViewHolder> setRecyclerViewAdapter(
     recyclerView: RecyclerView,
     adapter: RecyclerView.Adapter<T>?
