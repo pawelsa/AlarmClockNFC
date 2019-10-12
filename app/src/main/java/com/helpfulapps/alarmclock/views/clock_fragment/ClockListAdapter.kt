@@ -91,7 +91,7 @@ class ClockListAdapter(private val recyclerView: RecyclerView) :
                 ) { newLabel ->
                     tvAlarmItemTitleRename.text = newLabel
                     tvAlarmItemTitle.text = newLabel
-                }
+                }.show()
             }
         }
     }

@@ -11,61 +11,62 @@ import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.helpers.getRingtones
 
 
-fun buildEditTitleDialog(context: Context, oldLabel: String, listener: (String) -> Unit) {
+fun buildEditTitleDialog(context: Context, oldLabel: String, listener: (String) -> Unit): Dialog {
 
-    val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_edit_text_label, null)
+    val alertDialogBuilder = AlertDialog.Builder(context).apply {
 
-    val alertDialogBuilder = AlertDialog.Builder(context)
+        val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_edit_text_label, null)
 
-    // set alert_dialog.xml to alertdialog builder
-    alertDialogBuilder.setView(dialogView)
+        val userInput: TextInputEditText = dialogView.findViewById(R.id.ed_dialog_alarm_name)
+        // set dialog message
+        userInput.setText(oldLabel)
 
-    val userInput = dialogView.findViewById(R.id.ed_dialog_alarm_name) as TextInputEditText
-    userInput.setText(oldLabel)
-
-    // set dialog message
-    alertDialogBuilder
-        .setCancelable(false)
-        .setPositiveButton("OK") { dialog, _ ->
+        // set alert_dialog.xml to alertdialog builder
+        setView(dialogView)
+        setCancelable(false)
+        setPositiveButton("OK") { dialog, _ ->
             listener(userInput.text.toString())
             dialog.dismiss()
         }
-        .setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
-
-    val alertDialog = alertDialogBuilder.create()
-
-    alertDialog.show()
+        setNegativeButton("Cancel") { dialog, _ ->
+            dialog.dismiss()
+        }
+    }
+    return alertDialogBuilder.create()
 }
 
 fun buildSelectRingtoneDialog(
     context: Context,
-    currentRingtone: Pair<String, String>,
+    currentRingtoneTitle: String?,
     selectedRingtone: (Pair<String, String>) -> Unit
 ): Dialog {
-    val builder = AlertDialog.Builder(context)
-    builder.setTitle(context.getString(R.string.select_ringtone_dialog_title))
-
     val ringtones = getRingtones(context)
-    val currentRingtoneIndex = ringtones.indexOfFirst { it.first == currentRingtone.first }
+    var selectedRingtoneIndex = ringtones
+        .indexOfFirst { it.first == currentRingtoneTitle }
+        .let {
+            if (it > -1) it else 0
+        }
+
     val ringtoneTitles = ringtones.map { it.first }.toTypedArray()
-    var selectedItem = if (currentRingtoneIndex > -1) currentRingtoneIndex else 0
-    var mp = MediaPlayer.create(context, ringtones[selectedItem].second.toUri())
-    builder.setSingleChoiceItems(ringtoneTitles, selectedItem) { _, which ->
-        selectedItem = which
-        mp.stop()
-        mp = MediaPlayer.create(context, ringtones[selectedItem].second.toUri())
-        mp.isLooping = false
-        mp.start()
-    }
 
-    builder.setPositiveButton("OK") { dialog, which ->
-        selectedRingtone(ringtones[selectedItem])
-        mp.stop()
-        dialog.dismiss()
-    }
-    builder.setNegativeButton("Cancel") { dialog, which ->
-        mp.stop()
-    }
+    var mp = MediaPlayer.create(context, ringtones[selectedRingtoneIndex].second.toUri())
 
+    val builder = AlertDialog.Builder(context).apply {
+        setTitle(context.getString(R.string.select_ringtone_dialog_title))
+        setSingleChoiceItems(ringtoneTitles, selectedRingtoneIndex) { _, which ->
+            selectedRingtoneIndex = which
+            mp.stop()
+            mp = MediaPlayer.create(context, ringtones[selectedRingtoneIndex].second.toUri())
+            mp.isLooping = false
+            mp.start()
+        }
+        setPositiveButton("OK") { _, _ ->
+            selectedRingtone(ringtones[selectedRingtoneIndex])
+            mp.stop()
+        }
+        setNegativeButton("Cancel") { _, _ ->
+            mp.stop()
+        }
+    }
     return builder.create()
 }

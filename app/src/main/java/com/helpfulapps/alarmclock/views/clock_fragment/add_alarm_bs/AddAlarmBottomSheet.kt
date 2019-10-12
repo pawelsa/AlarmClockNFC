@@ -7,14 +7,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import ca.antonious.materialdaypicker.MaterialDayPicker
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.DialogAddAlarmBinding
 import com.helpfulapps.alarmclock.helpers.ShortPermissionListener
-import com.helpfulapps.alarmclock.helpers.getDefaultRingtone
 import com.helpfulapps.alarmclock.helpers.layout_helpers.buildSelectRingtoneDialog
 import com.helpfulapps.alarmclock.views.main_activity.MainActivity
 import com.karumi.dexter.Dexter
@@ -41,16 +39,20 @@ class AddAlarmBottomSheet : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.model = viewModel.newAlarm
+        binding.model = viewModel
         listenToView()
+        subscribeData()
+    }
+
+    private fun subscribeData() {
+        viewModel.getDefaultAlarmTitle(context!!)
+        viewModel.getAlarm()
     }
 
     private fun listenToView() {
         listenToCancelButton()
         listenToSaveButton()
         listenToTimePicker()
-        listenToRepeatCheckBox()
-        listenToVibrationCheckBox()
         listenToDayPicker()
         listenToChangeSoundButton()
     }
@@ -64,11 +66,9 @@ class AddAlarmBottomSheet : BottomSheetDialogFragment() {
                     override fun onPermissionGranted(response: PermissionGrantedResponse?) {
                         buildSelectRingtoneDialog(
                             context!!,
-                            //todo make it global or sth
-                            getDefaultRingtone(context!!)
-                        ) { selectedRingtone ->
-                            Toast.makeText(context, selectedRingtone.first, Toast.LENGTH_LONG)
-                                .show()
+                            viewModel.alarmTitle.value
+                        ) {
+                            viewModel.alarm = it
                         }.show()
                     }
 
@@ -90,48 +90,33 @@ class AddAlarmBottomSheet : BottomSheetDialogFragment() {
         bt_add_alarm_save.setOnClickListener {
             /*          val alarm = getAlarmData()
                         viewModel.saveAlarm(alarm)*/
-            Log.d(TAG, viewModel.newAlarm.toString())
+            Log.d(TAG, "rp: ${viewModel.repeating.get()}, vb: ${viewModel.vibrating.get()}")
         }
     }
 
     private fun listenToTimePicker() {
-        et_add_alarm_time.setOnClickListener {
-            viewModel.newAlarm.let {
+        tv_add_alarm_time.setOnClickListener {
+            viewModel.let {
                 TimePickerDialog(
                     this.context, R.style.TimePickerTheme,
                     { _, hour, minute ->
-                        it.hour = hour
-                        it.minute = minute
-                    }, it.hour, it.minute, true
+                        it.time = hour to minute
+                    }, it.time.first, it.time.second, true
                 ).show()
             }
         }
     }
 
-    private fun listenToRepeatCheckBox() {
-        cb_add_alarm_repeat.setOnCheckedChangeListener { _, repeating ->
-            viewModel.newAlarm.repeatingDays = Array(7) { false }
-            dp_add_alarm_item_picker.visibility = if (repeating) View.VISIBLE else View.GONE
-            viewModel.newAlarm.repeating = repeating
-        }
-    }
-
-    private fun listenToVibrationCheckBox() {
-        cb_add_alarm_vibrations.setOnCheckedChangeListener { _, vibrations ->
-            viewModel.newAlarm.vibrations = vibrations
-        }
-    }
-
     private fun listenToDayPicker() {
         dp_add_alarm_item_picker.setDaySelectionChangedListener { list ->
-            viewModel.newAlarm.let { newAlarm ->
-                newAlarm.repeatingDays[0] = list.any { it == MaterialDayPicker.Weekday.MONDAY }
-                newAlarm.repeatingDays[1] = list.any { it == MaterialDayPicker.Weekday.TUESDAY }
-                newAlarm.repeatingDays[2] = list.any { it == MaterialDayPicker.Weekday.WEDNESDAY }
-                newAlarm.repeatingDays[3] = list.any { it == MaterialDayPicker.Weekday.THURSDAY }
-                newAlarm.repeatingDays[4] = list.any { it == MaterialDayPicker.Weekday.FRIDAY }
-                newAlarm.repeatingDays[5] = list.any { it == MaterialDayPicker.Weekday.SATURDAY }
-                newAlarm.repeatingDays[6] = list.any { it == MaterialDayPicker.Weekday.SUNDAY }
+            with(viewModel) {
+                repeatingDays[0] = list.any { it == MaterialDayPicker.Weekday.MONDAY }
+                repeatingDays[1] = list.any { it == MaterialDayPicker.Weekday.TUESDAY }
+                repeatingDays[2] = list.any { it == MaterialDayPicker.Weekday.WEDNESDAY }
+                repeatingDays[3] = list.any { it == MaterialDayPicker.Weekday.THURSDAY }
+                repeatingDays[4] = list.any { it == MaterialDayPicker.Weekday.FRIDAY }
+                repeatingDays[5] = list.any { it == MaterialDayPicker.Weekday.SATURDAY }
+                repeatingDays[6] = list.any { it == MaterialDayPicker.Weekday.SUNDAY }
             }
         }
     }
