@@ -15,7 +15,16 @@ class RingingAlarmActivity : BaseActivity<RingingAlarmViewModel, ActivityRinging
 
 
     override fun init() {
-        binding.model = viewModel.model
+        binding.model = viewModel
+        viewModel.getAlarm()
+
+        fab_ring_end.setOnClickListener {
+            // TODO implement
+        }
+
+        fab_ring_snooze.setOnClickListener {
+            // TODO implement
+        }
     }
 
     override fun showMessage(text: String) {

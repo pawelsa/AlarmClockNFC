@@ -7,7 +7,7 @@
 
         <variable
             name="model"
-            type="com.helpfulapps.alarmclock.views.ringing_alarm.AlarmModel" />
+            type="com.helpfulapps.alarmclock.views.ringing_alarm.RingingAlarmViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -31,7 +31,7 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/fab_ring_end"
                 app:layout_constraintTop_toTopOf="@+id/fab_ring_end"
-                app:srcCompat="@drawable/ic_alarm" />
+                app:srcCompat="@drawable/ic_snooze" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_ring_end"
@@ -75,7 +75,7 @@
                 android:id="@+id/tv_ring_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{@string/time(model.hour, model.minute)}"
+                android:text="@{model.time}"
                 android:textSize="64sp"
                 android:textStyle="bold"
                 tools:text="8:30"
