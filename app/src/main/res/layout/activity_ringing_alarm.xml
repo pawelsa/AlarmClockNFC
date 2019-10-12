@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="model"
+            type="com.helpfulapps.alarmclock.views.ringing_alarm.RingingAlarmViewModel" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/cl_ringing_base"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_ring_snooze"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                app:layout_constraintBottom_toBottomOf="@+id/fab_ring_end"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/fab_ring_end"
+                app:layout_constraintTop_toTopOf="@+id/fab_ring_end"
+                app:srcCompat="@drawable/ic_snooze" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_ring_end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                app:layout_constraintBottom_toBottomOf="@+id/gl_ring_fabs"
+                app:layout_constraintEnd_toStartOf="@+id/fab_ring_snooze"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/gl_ring_fabs"
+                app:srcCompat="@drawable/ic_cancel" />
+
+            <ImageView
+                android:id="@+id/iv_ring_alarm"
+                android:layout_width="@dimen/ringing_image_size"
+                android:layout_height="200dp"
+                app:layout_constraintBottom_toTopOf="@+id/tv_ring_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_alarm" />
+
+            <TextView
+                android:id="@+id/tv_ring_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{model.title}"
+                android:textSize="@dimen/ringing_title_text_size"
+                tools:text="Tutuł alarmu"
+                app:layout_constraintBottom_toTopOf="@+id/tv_ring_time"
+                app:layout_constraintEnd_toEndOf="@+id/iv_ring_alarm"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="@+id/iv_ring_alarm"
+                app:layout_constraintTop_toBottomOf="@+id/iv_ring_alarm" />
+
+            <TextView
+                android:id="@+id/tv_ring_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{model.time}"
+                android:textSize="@dimen/ringing_time_text_size"
+                android:textStyle="bold"
+                tools:text="8:30"
+                app:layout_constraintBottom_toTopOf="@+id/fab_ring_snooze"
+                app:layout_constraintEnd_toEndOf="@+id/tv_ring_title"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="@+id/tv_ring_title"
+                app:layout_constraintTop_toBottomOf="@+id/tv_ring_title" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gl_ring_fabs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.8" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</layout>

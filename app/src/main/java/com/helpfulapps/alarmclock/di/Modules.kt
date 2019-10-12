@@ -4,6 +4,7 @@ import com.helpfulapps.alarmclock.views.clock_fragment.ClockViewModel
 import com.helpfulapps.alarmclock.views.clock_fragment.add_alarm_bs.AddAlarmBottomSheetViewModel
 import com.helpfulapps.alarmclock.views.hourwatch_fragment.HourWatchViewModel
 import com.helpfulapps.alarmclock.views.main_activity.MainActivityViewModel
+import com.helpfulapps.alarmclock.views.ringing_alarm.RingingAlarmViewModel
 import com.helpfulapps.alarmclock.views.stopwatch_fragment.StopWatchViewModel
 import com.helpfulapps.data.repositories.AlarmRepositoryImpl
 import com.helpfulapps.domain.repository.AlarmRepository
@@ -26,6 +27,7 @@ object Modules {
         viewModel { HourWatchViewModel() }
         viewModel { StopWatchViewModel() }
         viewModel { AddAlarmBottomSheetViewModel(get()) }
+        viewModel { RingingAlarmViewModel() }
     }
 
     private val repository = module {
