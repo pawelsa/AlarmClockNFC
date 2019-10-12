@@ -3,10 +3,18 @@ package com.helpfulapps.alarmclock.helpers
 import android.content.Context
 import android.media.RingtoneManager
 
+fun getDefaultRingtone(context: Context): Pair<String, String> {
+    val uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
+    val ringtoneAlarm = RingtoneManager.getRingtone(context, uri)
+    val title = ringtoneAlarm.getTitle(context).let {
+        it.substring(it.indexOf("(") + 1, it.indexOf(")"))
+    }
+    return title to uri.toString()
+}
 
 fun getRingtones(context: Context): Array<Pair<String, String>> {
     val manager = RingtoneManager(context)
-    manager.setType(RingtoneManager.TYPE_RINGTONE)
+    manager.setType(RingtoneManager.TYPE_ALARM)
 
     val list = arrayListOf<Pair<String, String>>()
     with(manager.cursor) {

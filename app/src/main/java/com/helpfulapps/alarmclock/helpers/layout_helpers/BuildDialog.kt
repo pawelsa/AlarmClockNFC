@@ -39,17 +39,18 @@ fun buildEditTitleDialog(context: Context, oldLabel: String, listener: (String) 
 
 fun buildSelectRingtoneDialog(
     context: Context,
+    currentRingtone: Pair<String, String>,
     selectedRingtone: (Pair<String, String>) -> Unit
 ): Dialog {
     val builder = AlertDialog.Builder(context)
     builder.setTitle(context.getString(R.string.select_ringtone_dialog_title))
 
     val ringtones = getRingtones(context)
+    val currentRingtoneIndex = ringtones.indexOfFirst { it.first == currentRingtone.first }
     val ringtoneTitles = ringtones.map { it.first }.toTypedArray()
-    val checkedItem = 1 // cow
-    var selectedItem = checkedItem
+    var selectedItem = if (currentRingtoneIndex > -1) currentRingtoneIndex else 0
     var mp = MediaPlayer.create(context, ringtones[selectedItem].second.toUri())
-    builder.setSingleChoiceItems(ringtoneTitles, checkedItem) { _, which ->
+    builder.setSingleChoiceItems(ringtoneTitles, selectedItem) { _, which ->
         selectedItem = which
         mp.stop()
         mp = MediaPlayer.create(context, ringtones[selectedItem].second.toUri())

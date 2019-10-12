@@ -14,6 +14,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.DialogAddAlarmBinding
 import com.helpfulapps.alarmclock.helpers.ShortPermissionListener
+import com.helpfulapps.alarmclock.helpers.getDefaultRingtone
 import com.helpfulapps.alarmclock.helpers.layout_helpers.buildSelectRingtoneDialog
 import com.helpfulapps.alarmclock.views.main_activity.MainActivity
 import com.karumi.dexter.Dexter
@@ -61,7 +62,11 @@ class AddAlarmBottomSheet : BottomSheetDialogFragment() {
                 .withListener(object : ShortPermissionListener {
 
                     override fun onPermissionGranted(response: PermissionGrantedResponse?) {
-                        buildSelectRingtoneDialog(context!!) { selectedRingtone ->
+                        buildSelectRingtoneDialog(
+                            context!!,
+                            //todo make it global or sth
+                            getDefaultRingtone(context!!)
+                        ) { selectedRingtone ->
                             Toast.makeText(context, selectedRingtone.first, Toast.LENGTH_LONG)
                                 .show()
                         }.show()
