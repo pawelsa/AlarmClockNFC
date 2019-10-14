@@ -1,4 +1,9 @@
 package com.helpfulapps.device
 
-class AppAlarmManager {
+import android.app.AlarmManager
+
+class AppAlarmManager(val manager: AlarmManager) {
+
+    
+
 }
