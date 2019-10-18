@@ -1,5 +1,7 @@
 package com.helpfulapps.alarmclock.di
 
+import android.app.AlarmManager
+import android.content.Context
 import com.helpfulapps.alarmclock.views.clock_fragment.ClockViewModel
 import com.helpfulapps.alarmclock.views.clock_fragment.add_alarm_bs.AddAlarmBottomSheetViewModel
 import com.helpfulapps.alarmclock.views.hourwatch_fragment.HourWatchViewModel
@@ -7,7 +9,9 @@ import com.helpfulapps.alarmclock.views.main_activity.MainActivityViewModel
 import com.helpfulapps.alarmclock.views.ringing_alarm.RingingAlarmViewModel
 import com.helpfulapps.alarmclock.views.stopwatch_fragment.StopWatchViewModel
 import com.helpfulapps.data.repositories.AlarmRepositoryImpl
+import com.helpfulapps.device.alarms.AppAlarmManagerImpl
 import com.helpfulapps.domain.repository.AlarmRepository
+import com.helpfulapps.domain.repository.AppAlarmManager
 import com.helpfulapps.domain.use_cases.alarm.AddAlarmUseCaseImpl
 import com.helpfulapps.domain.use_cases.alarm.definition.AddAlarmUseCase
 import org.koin.android.ext.koin.androidContext
@@ -23,7 +27,7 @@ object Modules {
 
     private val appModules = module {
         viewModel { MainActivityViewModel() }
-        viewModel { ClockViewModel() }
+        viewModel { ClockViewModel(get()) }
         viewModel { HourWatchViewModel() }
         viewModel { StopWatchViewModel() }
         viewModel { AddAlarmBottomSheetViewModel(get()) }
@@ -32,6 +36,12 @@ object Modules {
 
     private val repository = module {
         single<AlarmRepository> { AlarmRepositoryImpl(androidContext()) }
+        single<AppAlarmManager> {
+            AppAlarmManagerImpl(
+                androidContext(),
+                androidContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            )
+        }
     }
 
     private val data = module {

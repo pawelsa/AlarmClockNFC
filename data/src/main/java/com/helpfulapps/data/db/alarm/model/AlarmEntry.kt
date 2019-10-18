@@ -19,8 +19,8 @@ data class AlarmEntry(
     var isVibrationOn: Boolean = true,
     var isTurnedOn: Boolean = true,
     var ringtoneId: Int = 0,
-    var startTime: Long = 0,
-    var endTime: Long = 0,
+    var hour: Int = 0,
+    var minute: Int = 0,
     @ForeignKey(saveForeignKeyModel = true)
     var daysOfWeek: DaysOfWeekEntry? = DaysOfWeekEntry()
 
@@ -37,8 +37,8 @@ data class AlarmEntry(
         this.isVibrationOn = alarm.isVibrationOn
         this.isTurnedOn = alarm.isTurnedOn
         this.ringtoneId = alarm.ringtoneId
-        this.startTime = alarm.startTime
-        this.endTime = alarm.endTime
+        this.hour = alarm.hours
+        this.minute = alarm.minutes
         this.daysOfWeek = DaysOfWeekEntry(alarm.repetitionDays)
     }
 
@@ -49,8 +49,8 @@ data class AlarmEntry(
         isVibrationOn: Boolean,
         isTurnedOn: Boolean,
         ringtoneId: Int,
-        startTime: Long,
-        endTime: Long,
+        startTime: Int,
+        endTime: Int,
         days: Array<Boolean>
     ) : this(){
 
@@ -60,8 +60,8 @@ data class AlarmEntry(
         this.isVibrationOn = isVibrationOn
         this.isTurnedOn = isTurnedOn
         this.ringtoneId = ringtoneId
-        this.startTime = startTime
-        this.endTime = endTime
+        this.hour = startTime
+        this.minute = endTime
         this.daysOfWeek = DaysOfWeekEntry(days)
     }
 
@@ -73,8 +73,8 @@ data class AlarmEntry(
             isVibrationOn,
             isTurnedOn,
             ringtoneId,
-            startTime,
-            endTime,
+            hour,
+            minute,
             daysOfWeek!!.toDomain()
         )
 
@@ -92,8 +92,8 @@ data class AlarmEntry(
         if (isVibrationOn != other.isVibrationOn) return false
         if (isTurnedOn != other.isTurnedOn) return false
         if (ringtoneId != other.ringtoneId) return false
-        if (startTime != other.startTime) return false
-        if (endTime != other.endTime) return false
+        if (hour != other.hour) return false
+        if (minute != other.minute) return false
         if (daysOfWeek != other.daysOfWeek) return false
 
         return true

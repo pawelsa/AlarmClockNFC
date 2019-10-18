@@ -4,5 +4,5 @@ import com.helpfulapps.domain.models.alarm.Alarm
 import com.helpfulapps.domain.use_cases.type.CompletableUseCaseWithParameter
 
 interface AddAlarmUseCase : CompletableUseCaseWithParameter<AddAlarmUseCase.Params> {
-    data class Params(val alarm: Alarm)
+    data class Params(val alarm: Alarm, val alarmIntent: Class<*>, val alarmInfoIntent: Class<*>)
 }

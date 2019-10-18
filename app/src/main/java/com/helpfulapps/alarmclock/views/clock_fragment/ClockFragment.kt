@@ -21,6 +21,9 @@ class ClockFragment : BaseFragment<ClockViewModel, FragmentClockBinding>() {
     override fun init() {
         viewModel.setAdapter(ClockListAdapter(rv_clock_list))
 
+        testButton.setOnClickListener {
+            viewModel.startAlarmMng()
+        }
 
     }
 

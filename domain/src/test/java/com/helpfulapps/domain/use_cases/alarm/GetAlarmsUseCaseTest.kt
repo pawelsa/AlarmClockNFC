@@ -55,36 +55,36 @@ class GetAlarmsUseCaseTest {
     val alarmList = listOf(
         Alarm(
             id = 1,
-            endTime = 1560996000,
+            minutes = 1560996000,
             isRepeating = false,
             isTurnedOn = false,
             isVibrationOn = true,
             name = "Alarm 1",
             repetitionDays = arrayOf(false, false, false, false, false, false, false),
             ringtoneId = 1,
-            startTime = 1560988800
+            hours = 1560988800
         ),
         Alarm(
             id = 2,
-            endTime = 1561168800,
+            minutes = 1561168800,
             isRepeating = false,
             isTurnedOn = false,
             isVibrationOn = true,
             name = "Alarm 2",
             repetitionDays = arrayOf(false, false, false, false, false, false, false),
             ringtoneId = 2,
-            startTime = 1561161600
+            hours = 1561161600
         ),
         Alarm(
             id = 3,
-            endTime = 1561341600,
+            minutes = 1561341600,
             isRepeating = false,
             isTurnedOn = true,
             isVibrationOn = false,
             name = "Alarm 3",
             repetitionDays = arrayOf(false, true, false, true, false, false, false),
             ringtoneId = 5,
-            startTime = 1561334400
+            hours = 1561334400
         )
     )
 

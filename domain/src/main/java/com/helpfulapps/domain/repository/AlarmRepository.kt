@@ -16,3 +16,14 @@ interface AlarmRepository {
 
     fun updateAlarm(alarm: Alarm): Completable
 }
+
+
+interface AppAlarmManager {
+    fun setAlarm(
+        alarm: Alarm,
+        classIntent: Class<*>,
+        classInfoIntent: Class<*>
+    ): Completable
+
+    fun stopAlarm(classIntent: Class<*>)
+}

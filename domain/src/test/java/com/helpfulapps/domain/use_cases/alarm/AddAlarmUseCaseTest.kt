@@ -21,7 +21,7 @@ class AddAlarmUseCaseTest {
         useCase(
             AddAlarmUseCase.Params(
                 Alarm(
-                    startTime = 1,
+                    hours = 1,
                     id = 1,
                     ringtoneId = 1,
                     repetitionDays = arrayOf(),
@@ -29,7 +29,7 @@ class AddAlarmUseCaseTest {
                     isVibrationOn = false,
                     isTurnedOn = true,
                     isRepeating = false,
-                    endTime = 2
+                    minutes = 2
                 )
             )
         )
@@ -44,7 +44,7 @@ class AddAlarmUseCaseTest {
         useCase(
             AddAlarmUseCase.Params(
                 Alarm(
-                    startTime = 1,
+                    hours = 1,
                     id = 1,
                     ringtoneId = 1,
                     repetitionDays = arrayOf(),
@@ -52,7 +52,7 @@ class AddAlarmUseCaseTest {
                     isVibrationOn = false,
                     isTurnedOn = true,
                     isRepeating = false,
-                    endTime = 2
+                    minutes = 2
                 )
             )
         )
