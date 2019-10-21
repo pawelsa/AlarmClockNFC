@@ -6,9 +6,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.util.Log
+import com.helpfulapps.base.extensions.rx.completableOf
 import com.helpfulapps.domain.repository.AppAlarmManager
 import io.reactivex.Completable
-import io.reactivex.CompletableEmitter
 import java.util.*
 import com.helpfulapps.domain.models.alarm.Alarm as DomainAlarm
 
@@ -23,7 +23,7 @@ class AppAlarmManagerImpl(private val context: Context, private val manager: Ala
         classIntent: Class<*>,
         classInfoIntent: Class<*>
     ): Completable {
-        return Completable.create { emitter: CompletableEmitter ->
+        return completableOf {
             val alarmStart = getAlarmStartingPoint(alarm)
 
             Log.d(TAG, "SettingAlarm at : $alarmStart")
@@ -48,7 +48,6 @@ class AppAlarmManagerImpl(private val context: Context, private val manager: Ala
                 )
                 else -> manager.set(AlarmManager.RTC_WAKEUP, alarmStart, alarmIntent)
             }
-            emitter.onComplete()
         }
     }
 

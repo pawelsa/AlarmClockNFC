@@ -13,6 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <service android:name=".receivers.AlarmService"></service>
+
         <activity android:name=".views.main_activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,10 +26,7 @@
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
         </activity>
-        <activity android:name=".views.ringing_alarm.RingingAlarmActivity">
-
-        </activity>
-
+        <activity android:name=".views.ringing_alarm.RingingAlarmActivity"></activity>
     </application>
 
 </manifest>

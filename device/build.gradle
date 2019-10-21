@@ -44,4 +44,5 @@ dependencies {
     // rxJava & rxKotlin
     implementation "io.reactivex.rxjava2:rxjava:$rxJava_version"
     implementation "io.reactivex.rxjava2:rxkotlin:$rxKotlin_version"
+    implementation project(path: ':base')
 }

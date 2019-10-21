@@ -27,8 +27,8 @@ class ClockViewModel(
         disposables += startAlarm(
             AddAlarmUseCase.Params(
                 Alarm(
-                    hours = 12,
-                    minutes = 3,
+                    hours = 23,
+                    minutes = 27,
                     repetitionDays = arrayOf(),
                     ringtoneId = 0
                 ), RingingAlarmActivity::class.java, RingingAlarmActivity::class.java
