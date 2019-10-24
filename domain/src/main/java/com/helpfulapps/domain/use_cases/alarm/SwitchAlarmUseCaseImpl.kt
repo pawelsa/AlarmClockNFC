@@ -1,11 +1,13 @@
 package com.helpfulapps.domain.use_cases.alarm
 
-import com.helpfulapps.domain.repository.AlarmRepository
+import com.helpfulapps.domain.repository.AlarmClockManager
 import com.helpfulapps.domain.use_cases.alarm.definition.SwitchAlarmUseCase
 import io.reactivex.Completable
 
-class SwitchAlarmUseCaseImpl(private val _repository: AlarmRepository) : SwitchAlarmUseCase {
+class SwitchAlarmUseCaseImpl(private val _repository: AlarmClockManager) : SwitchAlarmUseCase {
 
-    override fun invoke(parameter: SwitchAlarmUseCase.Params): Completable =
-        _repository.switchAlarm(parameter.alarmId)
+    //todo it should change value in the alarm to off or on and then interact with alarm manager
+    override fun invoke(parameter: SwitchAlarmUseCase.Params): Completable {
+        return _repository.stopAlarm(parameter.alarmId)
+    }
 }

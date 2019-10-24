@@ -4,7 +4,7 @@ import android.app.Application
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.helpfulapps.data.db.alarm.model.AlarmEntry
+import com.helpfulapps.data.db.alarm.model.AlarmEntity
 import com.helpfulapps.domain.exceptions.AlarmException
 import com.helpfulapps.domain.models.alarm.Alarm
 import com.raizlabs.android.dbflow.config.FlowManager
@@ -72,7 +72,7 @@ class AlarmRepositoryImplTest {
             15L,
             arrayOf(true, true, false, false, false, false, false)
         )
-        val alarmEntry = AlarmEntry(alarm)
+        val alarmEntry = AlarmEntity(alarm)
 
         val repoMock = spyk(alarmRepositoryImpl)
 
@@ -122,9 +122,9 @@ class AlarmRepositoryImplTest {
             arrayOf(true, true, false, false, false, false, false)
         )
 
-        val alarmEntry1 = AlarmEntry(alarm1)
-        val alarmEntry2 = AlarmEntry(alarm2)
-        val alarmEntry3 = AlarmEntry(alarm3)
+        val alarmEntry1 = AlarmEntity(alarm1)
+        val alarmEntry2 = AlarmEntity(alarm2)
+        val alarmEntry3 = AlarmEntity(alarm3)
 
         val repoMock = spyk(alarmRepositoryImpl)
 

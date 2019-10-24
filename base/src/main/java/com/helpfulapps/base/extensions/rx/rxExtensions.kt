@@ -6,6 +6,19 @@ import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
+fun <T> completableOf(action: () -> T): Completable {
+    return Completable.create {
+        try {
+            action()
+            it.onComplete()
+        } catch (ex: Exception) {
+            if (!it.isDisposed) {
+                it.onError(ex)
+            }
+        }
+    }
+}
+
 fun <T> singleOf(action: () -> T): Single<T> {
     return Single.create {
         try {

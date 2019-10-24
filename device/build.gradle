@@ -40,4 +40,9 @@ dependencies {
     androidTestImplementation "androidx.test:rules:$runner_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$esspresso_core_version"
     implementation project(':domain')
+
+    // rxJava & rxKotlin
+    implementation "io.reactivex.rxjava2:rxjava:$rxJava_version"
+    implementation "io.reactivex.rxjava2:rxkotlin:$rxKotlin_version"
+    implementation project(path: ':base')
 }

@@ -23,11 +23,32 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
+            app:adapter="@{viewModel.getAdapter()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:adapter="@{viewModel.getAdapter()}"
-            tools:listitem="@layout/item_alarm_edit" />
+            tools:listitem="@layout/item_alarm_edit"
+            tools:visibility="gone" />
+
+        <Button
+            android:id="@+id/testButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="start"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/stopButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="stop"
+            app:layout_constraintEnd_toEndOf="@+id/testButton"
+            app:layout_constraintStart_toStartOf="@+id/testButton"
+            app:layout_constraintTop_toBottomOf="@+id/testButton" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -16,3 +16,12 @@ interface AlarmRepository {
 
     fun updateAlarm(alarm: Alarm): Completable
 }
+
+
+interface AlarmClockManager {
+    fun setAlarm(
+        domainAlarm: Alarm
+    ): Completable
+
+    fun stopAlarm(alarmId: Long): Completable
+}
