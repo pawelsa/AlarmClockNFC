@@ -2,6 +2,7 @@ package com.helpfulapps.device.alarms
 
 import android.app.AlarmManager
 import android.app.PendingIntent
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -24,15 +25,25 @@ class AppAlarmManagerImpl(private val context: Context, private val manager: Ala
         classInfoIntent: Class<*>
     ): Completable {
         return completableOf {
-            val alarmStart = getAlarmStartingPoint(alarm)
+            //            val alarmStart = getAlarmStartingPoint(alarm)
+            val alarmStart = System.currentTimeMillis() + 10 * 1000
 
             Log.d(TAG, "SettingAlarm at : $alarmStart")
-            val alarmInfoIntent = Intent(context, classInfoIntent).let { intent ->
+            /*val alarmInfoIntent = Intent(context, classInfoIntent).let { intent ->
                 PendingIntent.getActivity(context, 0, intent, 0)
             }
             val alarmIntent = Intent(context, classIntent).let { intent ->
                 PendingIntent.getActivity(context, 1, intent, 0)
+            }*/
+
+            val alarmIntent = Intent().let {
+                it.component = ComponentName(
+                    "com.helpfulapps.alarmclock",
+                    "com.helpfulapps.alarmclock.receivers.AlarmService"
+                )
+                PendingIntent.getBroadcast(context, 0, it, 0)
             }
+            val alarmInfoIntent = alarmIntent
 
             when {
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> manager.setAlarmClock(
@@ -48,6 +59,7 @@ class AppAlarmManagerImpl(private val context: Context, private val manager: Ala
                 )
                 else -> manager.set(AlarmManager.RTC_WAKEUP, alarmStart, alarmIntent)
             }
+
         }
     }
 
