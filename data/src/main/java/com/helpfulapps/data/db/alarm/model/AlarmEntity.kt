@@ -1,7 +1,7 @@
 package com.helpfulapps.data.db.alarm.model
 
 import com.helpfulapps.data.AlarmAppDatabase
-import com.helpfulapps.data.db.alarm.model.AlarmEntry.Companion.NAME
+import com.helpfulapps.data.db.alarm.model.AlarmEntity.Companion.NAME
 import com.helpfulapps.domain.models.alarm.Alarm
 import com.raizlabs.android.dbflow.annotation.ForeignKey
 import com.raizlabs.android.dbflow.annotation.PrimaryKey
@@ -10,7 +10,7 @@ import com.raizlabs.android.dbflow.rx2.structure.BaseRXModel
 
 // TODO move conversion to another file, ex. converter
 @Table(name = NAME, database = AlarmAppDatabase::class, allFields = true)
-data class AlarmEntry(
+data class AlarmEntity(
 
     @PrimaryKey(autoincrement = true)
     var id: Long = 0L,
@@ -18,7 +18,7 @@ data class AlarmEntry(
     var isRepeating: Boolean = false,
     var isVibrationOn: Boolean = true,
     var isTurnedOn: Boolean = true,
-    var ringtoneId: Int = 0,
+    var ringtoneId: String = "",
     var hour: Int = 0,
     var minute: Int = 0,
     @ForeignKey(saveForeignKeyModel = true)
@@ -30,16 +30,16 @@ data class AlarmEntry(
         const val NAME = "AlarmTable"
     }
 
-    constructor(alarm: Alarm) : this(){
-        this.id = alarm.id
-        this.name = alarm.name
-        this.isRepeating = alarm.isRepeating
-        this.isVibrationOn = alarm.isVibrationOn
-        this.isTurnedOn = alarm.isTurnedOn
-        this.ringtoneId = alarm.ringtoneId
-        this.hour = alarm.hours
-        this.minute = alarm.minutes
-        this.daysOfWeek = DaysOfWeekEntry(alarm.repetitionDays)
+    constructor(domainAlarm: Alarm) : this() {
+        this.id = domainAlarm.id
+        this.name = domainAlarm.name
+        this.isRepeating = domainAlarm.isRepeating
+        this.isVibrationOn = domainAlarm.isVibrationOn
+        this.isTurnedOn = domainAlarm.isTurnedOn
+        this.ringtoneId = domainAlarm.ringtoneUrl
+        this.hour = domainAlarm.hours
+        this.minute = domainAlarm.minutes
+        this.daysOfWeek = DaysOfWeekEntry(domainAlarm.repetitionDays)
     }
 
     constructor(
@@ -48,7 +48,7 @@ data class AlarmEntry(
         isRepeating: Boolean,
         isVibrationOn: Boolean,
         isTurnedOn: Boolean,
-        ringtoneId: Int,
+        ringtoneId: String,
         startTime: Int,
         endTime: Int,
         days: Array<Boolean>
@@ -75,7 +75,7 @@ data class AlarmEntry(
             ringtoneId,
             hour,
             minute,
-            daysOfWeek!!.toDomain()
+            daysOfWeek?.toDomain() ?: BooleanArray(7) { false }.toTypedArray()
         )
 
     override fun hashCode(): Int = this.id.toInt()
@@ -84,7 +84,7 @@ data class AlarmEntry(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as AlarmEntry
+        other as AlarmEntity
 
         if (id != other.id) return false
         if (name != other.name) return false

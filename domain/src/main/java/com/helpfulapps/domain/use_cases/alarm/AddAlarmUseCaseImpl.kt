@@ -8,5 +8,5 @@ import io.reactivex.Completable
 class AddAlarmUseCaseImpl(private val _repository: AppAlarmManager) : AddAlarmUseCase {
 
     override fun invoke(parameter: AddAlarmUseCase.Params): Completable =
-        _repository.setAlarm(parameter.alarm, parameter.alarmIntent, parameter.alarmInfoIntent)
+        _repository.setAlarm(parameter.alarm)
 }

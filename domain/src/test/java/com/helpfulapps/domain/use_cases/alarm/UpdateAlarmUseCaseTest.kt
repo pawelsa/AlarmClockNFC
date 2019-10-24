@@ -23,7 +23,7 @@ class UpdateAlarmUseCaseTest {
                 Alarm(
                     hours = 1,
                     id = 1,
-                    ringtoneId = 1,
+                    ringtoneUrl = "ringtoneUrl",
                     repetitionDays = arrayOf(),
                     name = "Alarm 1",
                     isVibrationOn = false,
@@ -47,7 +47,7 @@ class UpdateAlarmUseCaseTest {
                 Alarm(
                     hours = 1,
                     id = 1,
-                    ringtoneId = 1,
+                    ringtoneUrl = "ringtoneUrl",
                     repetitionDays = arrayOf(),
                     name = "Alarm 1",
                     isVibrationOn = false,

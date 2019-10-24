@@ -5,16 +5,21 @@ import com.helpfulapps.domain.models.alarm.WeatherAlarm
 import com.helpfulapps.domain.models.weather.*
 import com.helpfulapps.domain.repository.AlarmRepository
 import com.helpfulapps.domain.repository.WeatherRepository
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.whenever
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import io.reactivex.Single
 import org.junit.Test
+import java.util.*
 
 class GetAlarmsUseCaseTest {
 
     val mockedWeatherRepository: WeatherRepository = mockk {}
     val mockedAlarmRepository: AlarmRepository = mockk {}
     val useCase = GetAlarmsUseCaseImpl(mockedAlarmRepository, mockedWeatherRepository)
+
 
     @Test
     fun `should get only alarms`() {
@@ -34,14 +39,19 @@ class GetAlarmsUseCaseTest {
             .dispose()
     }
 
+    //TODO write more cases for this test, for repeating alarms, non repeating, turned on & off
     @Test
     fun `should obtain alarms with weather data`() {
 
         val expectedResult = listOf(
             WeatherAlarm(alarmList[0], weatherList[0]),
-            WeatherAlarm(alarmList[1], weatherList[1]),
-            WeatherAlarm(alarmList[2], weatherList[5])
+//            WeatherAlarm(alarmList[1], weatherList[1]),
+            WeatherAlarm(alarmList[2], DayWeather())
         )
+        val calendar = mock<Calendar>()
+        mockkStatic(Calendar::class)
+        every { Calendar.getInstance() } returns calendar
+        whenever(calendar.timeInMillis).thenReturn(1560996000L)
 
         every { mockedWeatherRepository.getForecastForAlarms() } returns Single.just(weatherList)
         every { mockedAlarmRepository.getAlarms() } returns Single.just(alarmList)
@@ -55,36 +65,36 @@ class GetAlarmsUseCaseTest {
     val alarmList = listOf(
         Alarm(
             id = 1,
-            minutes = 1560996000,
+            minutes = 10,
             isRepeating = false,
-            isTurnedOn = false,
+            isTurnedOn = true,
             isVibrationOn = true,
             name = "Alarm 1",
             repetitionDays = arrayOf(false, false, false, false, false, false, false),
-            ringtoneId = 1,
-            hours = 1560988800
+            ringtoneUrl = "ringtoneUrl",
+            hours = 10
         ),
         Alarm(
             id = 2,
-            minutes = 1561168800,
+            minutes = 10,
             isRepeating = false,
-            isTurnedOn = false,
+            isTurnedOn = true,
             isVibrationOn = true,
             name = "Alarm 2",
             repetitionDays = arrayOf(false, false, false, false, false, false, false),
-            ringtoneId = 2,
-            hours = 1561161600
+            ringtoneUrl = "ringtoneUrl",
+            hours = 10
         ),
         Alarm(
             id = 3,
-            minutes = 1561341600,
+            minutes = 10,
             isRepeating = false,
-            isTurnedOn = true,
+            isTurnedOn = false,
             isVibrationOn = false,
             name = "Alarm 3",
             repetitionDays = arrayOf(false, true, false, true, false, false, false),
-            ringtoneId = 5,
-            hours = 1561334400
+            ringtoneUrl = "ringtoneUrl",
+            hours = 10
         )
     )
 

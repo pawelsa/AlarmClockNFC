@@ -1,7 +1,6 @@
 package com.helpfulapps.alarmclock.views.clock_fragment
 
 import android.util.Log
-import com.helpfulapps.alarmclock.views.ringing_alarm.RingingAlarmActivity
 import com.helpfulapps.base.base.BaseViewModel
 import com.helpfulapps.domain.models.alarm.Alarm
 import com.helpfulapps.domain.use_cases.alarm.definition.AddAlarmUseCase
@@ -30,8 +29,8 @@ class ClockViewModel(
                     hours = 19,
                     minutes = 34,
                     repetitionDays = arrayOf(),
-                    ringtoneId = 0
-                ), RingingAlarmActivity::class.java, RingingAlarmActivity::class.java
+                    ringtoneUrl = ""
+                )
             )
         ).subscribe {
             Log.d(TAG, "Completed")

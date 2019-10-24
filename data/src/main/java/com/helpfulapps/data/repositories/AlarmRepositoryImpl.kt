@@ -1,8 +1,8 @@
 package com.helpfulapps.data.repositories
 
 import android.content.Context
-import com.helpfulapps.data.db.alarm.model.AlarmEntry
-import com.helpfulapps.data.db.alarm.model.AlarmEntry_Table
+import com.helpfulapps.data.db.alarm.model.AlarmEntity
+import com.helpfulapps.data.db.alarm.model.AlarmEntity_Table
 import com.helpfulapps.data.extensions.checkCompleted
 import com.helpfulapps.domain.exceptions.AlarmException
 import com.helpfulapps.domain.models.alarm.Alarm
@@ -48,7 +48,7 @@ open class AlarmRepositoryImpl(context: Context) : AlarmRepository {
                 alarmEntry.isTurnedOn = !alarmEntry.isTurnedOn
                 alarmEntry
             }
-            .flatMapSingle(AlarmEntry::update)
+            .flatMapSingle(AlarmEntity::update)
             .flatMapCompletable { isUpdated -> isUpdated.checkCompleted(
                 AlarmException(
                     "Couldn't update the alarm"
@@ -56,7 +56,7 @@ open class AlarmRepositoryImpl(context: Context) : AlarmRepository {
             ) }
 
     override fun addAlarm(alarm: Alarm): Completable =
-        AlarmEntry(alarm).save()
+        AlarmEntity(alarm).save()
             .flatMapCompletable { isSaved -> isSaved.checkCompleted(
                 AlarmException(
                     "Couldn't save alarm"
@@ -64,17 +64,17 @@ open class AlarmRepositoryImpl(context: Context) : AlarmRepository {
             ) }
 
     override fun updateAlarm(alarm: Alarm): Completable =
-        AlarmEntry(alarm).update()
+        AlarmEntity(alarm).update()
             .flatMapCompletable { isUpdated -> isUpdated.checkCompleted(
                 AlarmException(
                     "Couldn't update alarm"
                 )
             ) }
 
-    fun getAlarmsQuery() = select.from(AlarmEntry::class.java).rx().queryList()
+    fun getAlarmsQuery() = select.from(AlarmEntity::class.java).rx().queryList()
 
     private fun getAlarm(alarmId: Long) =
-        (select from AlarmEntry::class where AlarmEntry_Table.id.`is`(alarmId)).rx().querySingle()
+        (select from AlarmEntity::class where AlarmEntity_Table.id.`is`(alarmId)).rx().querySingle()
 
     fun getSchedulerIO(): Scheduler = Schedulers.io()
 }

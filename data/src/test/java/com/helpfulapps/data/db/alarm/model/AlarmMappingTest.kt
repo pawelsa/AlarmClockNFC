@@ -12,16 +12,17 @@ class AlarmMappingTest {
 
     val baseDomainDaysOfWeek = arrayOf(true, true, false, false, false, false, false)
     val baseDataDaysOfWeek = DaysOfWeekEntry(baseDomainDaysOfWeek)
-    val baseDataAlarm = AlarmEntry(0, "", false, true, false, 15, 0L, 15L, baseDomainDaysOfWeek)
+    val baseDataAlarm =
+        AlarmEntity(0, "", false, true, false, "ringtoneUrl", 0, 15, baseDomainDaysOfWeek)
     val baseDomainAlarm = Alarm(
         0,
         "",
         false,
         true,
         false,
+        "ringtoneUrl",
+        0,
         15,
-        0L,
-        15L,
         baseDomainDaysOfWeek
     )
 
@@ -29,7 +30,7 @@ class AlarmMappingTest {
     @Test
     fun fromDomainToDataMappingTest() {
 
-        val dataAlarm = AlarmEntry(baseDomainAlarm)
+        val dataAlarm = AlarmEntity(baseDomainAlarm)
         dataAlarm.daysOfWeek = baseDataDaysOfWeek
 
         baseDataAlarm.daysOfWeek = baseDataDaysOfWeek

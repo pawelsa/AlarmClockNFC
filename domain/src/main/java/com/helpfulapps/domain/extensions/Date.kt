@@ -8,3 +8,11 @@ val Long.dayOfYear: Int
             timeInMillis = (this@dayOfYear)
         }
         .get(Calendar.DAY_OF_YEAR)
+
+val Long.dayOfWeek: Int
+    get() = GregorianCalendar()
+        .apply {
+            timeInMillis = (this@dayOfWeek)
+        }
+        .get(Calendar.DAY_OF_WEEK)
+

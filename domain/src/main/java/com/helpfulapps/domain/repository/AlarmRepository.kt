@@ -20,10 +20,8 @@ interface AlarmRepository {
 
 interface AppAlarmManager {
     fun setAlarm(
-        alarm: Alarm,
-        classIntent: Class<*>,
-        classInfoIntent: Class<*>
+        domainAlarm: Alarm
     ): Completable
 
-    fun stopAlarm(classIntent: Class<*>)
+    fun stopAlarm(domainAlarm: Alarm)
 }
