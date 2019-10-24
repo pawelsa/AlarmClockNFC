@@ -25,15 +25,15 @@ class AppAlarmManagerImpl(private val context: Context, private val manager: Ala
             //            val alarmStart = getAlarmStartingPoint(domainAlarm)
             val alarmStart = System.currentTimeMillis() + 10 * 1000
 
-            val alarmIntent = getAlarmIntent(alarm)
-            val alarmInfoIntent = createPendingIntentForAlarmIconPress(alarm)
+            val alarmIntent = getAlarmIntent(alarm.id)
+            val alarmInfoIntent = createPendingIntentForAlarmIconPress(alarm.id)
 
             setAlarmInAlarmManager(alarmStart, alarmInfoIntent, alarmIntent)
 
         }
     }
 
-    private fun getAlarmIntent(alarm: Alarm): PendingIntent {
+    private fun getAlarmIntent(alarmId: Int): PendingIntent {
         return Intent().let {
             it.component = ComponentName(
                 BASE_PACKAGE,
@@ -41,14 +41,14 @@ class AppAlarmManagerImpl(private val context: Context, private val manager: Ala
             )
             PendingIntent.getBroadcast(
                 context,
-                alarm.id,
+                alarmId,
                 it,
                 PendingIntent.FLAG_UPDATE_CURRENT
             )
         }
     }
 
-    private fun createPendingIntentForAlarmIconPress(alarm: Alarm): PendingIntent {
+    private fun createPendingIntentForAlarmIconPress(alarmId: Int): PendingIntent {
         return Intent().let {
             it.component = ComponentName(
                 BASE_PACKAGE,
@@ -56,7 +56,7 @@ class AppAlarmManagerImpl(private val context: Context, private val manager: Ala
             )
             PendingIntent.getBroadcast(
                 context,
-                alarm.id,
+                alarmId,
                 it,
                 PendingIntent.FLAG_UPDATE_CURRENT
             )
@@ -84,12 +84,12 @@ class AppAlarmManagerImpl(private val context: Context, private val manager: Ala
         }
     }
 
-    override fun stopAlarm(domainAlarm: DomainAlarm) {
+    override fun stopAlarm(alarmId: Long): Completable {
+        return completableOf {
+            val alarmIntent = getAlarmIntent(alarmId.toInt())
 
-        val alarm = Alarm(domainAlarm)
-        val alarmIntent = getAlarmIntent(alarm)
-
-        manager.cancel(alarmIntent)
+            manager.cancel(alarmIntent)
+        }
     }
 
     private fun getAlarmStartingPoint(alarm: Alarm): Long {

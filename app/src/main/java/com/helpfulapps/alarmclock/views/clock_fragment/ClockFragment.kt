@@ -25,6 +25,10 @@ class ClockFragment : BaseFragment<ClockViewModel, FragmentClockBinding>() {
             viewModel.startAlarmMng()
         }
 
+        stopButton.setOnClickListener {
+            viewModel.stopAlarm()
+        }
+
     }
 
     override fun onResume() {

@@ -2,6 +2,7 @@ package com.helpfulapps.data.repositories
 
 import android.content.Context
 import com.helpfulapps.data.api.weather.api.ApiCalls
+import com.helpfulapps.data.api.weather.api.Downloader
 import com.helpfulapps.data.api.weather.converter.analyzeWeather
 import com.helpfulapps.data.api.weather.model.ForecastForCity
 import com.helpfulapps.data.db.weather.model.*
@@ -25,10 +26,15 @@ import java.util.concurrent.TimeUnit
 import com.helpfulapps.domain.models.weather.DayWeather as DomainDayWeather
 
 class WeatherRepositoryImpl(
-    private val settings: Settings,
-    private val networkCheck: NetworkCheck,
-    private val apiCalls: ApiCalls,
-    context: Context
+    context: Context,
+    private val networkCheck: NetworkCheck = NetworkCheck(context),
+    private val apiCalls: ApiCalls = Downloader.create(),
+    private val settings: Settings = Settings(
+        context.getSharedPreferences(
+            "AlarmClock",
+            Context.MODE_PRIVATE
+        )
+    )
 ) : WeatherRepository {
 
     init {

@@ -47,10 +47,10 @@ class WeatherRepositoryImplTest {
 
         weatherRepository =
             WeatherRepositoryImpl(
-                settings,
+                context,
                 networkCheck,
                 apiCalls,
-                context
+                settings
             )
     }
 

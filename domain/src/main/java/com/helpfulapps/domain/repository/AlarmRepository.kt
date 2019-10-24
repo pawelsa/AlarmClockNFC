@@ -23,5 +23,5 @@ interface AppAlarmManager {
         domainAlarm: Alarm
     ): Completable
 
-    fun stopAlarm(domainAlarm: Alarm)
+    fun stopAlarm(alarmId: Long): Completable
 }
