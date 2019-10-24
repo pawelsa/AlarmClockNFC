@@ -10,9 +10,9 @@ import com.helpfulapps.alarmclock.views.ringing_alarm.RingingAlarmViewModel
 import com.helpfulapps.alarmclock.views.stopwatch_fragment.StopWatchViewModel
 import com.helpfulapps.data.repositories.AlarmRepositoryImpl
 import com.helpfulapps.data.repositories.WeatherRepositoryImpl
-import com.helpfulapps.device.alarms.AppAlarmManagerImpl
+import com.helpfulapps.device.alarms.AlarmClockManagerImpl
+import com.helpfulapps.domain.repository.AlarmClockManager
 import com.helpfulapps.domain.repository.AlarmRepository
-import com.helpfulapps.domain.repository.AppAlarmManager
 import com.helpfulapps.domain.repository.WeatherRepository
 import com.helpfulapps.domain.use_cases.alarm.*
 import com.helpfulapps.domain.use_cases.alarm.definition.*
@@ -46,8 +46,8 @@ object Modules {
 
     private val repository = module {
         single<AlarmRepository> { AlarmRepositoryImpl(androidContext()) }
-        single<AppAlarmManager> {
-            AppAlarmManagerImpl(
+        single<AlarmClockManager> {
+            AlarmClockManagerImpl(
                 androidContext(),
                 androidContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
             )

@@ -29,8 +29,8 @@ class ClockViewModel(
             AddAlarmUseCase.Params(
                 Alarm(
                     id = 5,
-                    hours = 19,
-                    minutes = 34,
+                    hour = 19,
+                    minute = 34,
                     repetitionDays = arrayOf(),
                     ringtoneUrl = ""
                 )

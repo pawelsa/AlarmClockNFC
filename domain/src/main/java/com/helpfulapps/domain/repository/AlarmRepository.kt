@@ -18,7 +18,7 @@ interface AlarmRepository {
 }
 
 
-interface AppAlarmManager {
+interface AlarmClockManager {
     fun setAlarm(
         domainAlarm: Alarm
     ): Completable

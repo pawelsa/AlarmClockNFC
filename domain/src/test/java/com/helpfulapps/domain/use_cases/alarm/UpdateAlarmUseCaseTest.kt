@@ -21,7 +21,7 @@ class UpdateAlarmUseCaseTest {
         useCase(
             UpdateAlarmUseCase.Params(
                 Alarm(
-                    hours = 1,
+                    hour = 1,
                     id = 1,
                     ringtoneUrl = "ringtoneUrl",
                     repetitionDays = arrayOf(),
@@ -29,7 +29,7 @@ class UpdateAlarmUseCaseTest {
                     isVibrationOn = false,
                     isTurnedOn = true,
                     isRepeating = false,
-                    minutes = 2
+                    minute = 2
                 )
             )
         )
@@ -45,7 +45,7 @@ class UpdateAlarmUseCaseTest {
         useCase(
             UpdateAlarmUseCase.Params(
                 Alarm(
-                    hours = 1,
+                    hour = 1,
                     id = 1,
                     ringtoneUrl = "ringtoneUrl",
                     repetitionDays = arrayOf(),
@@ -53,7 +53,7 @@ class UpdateAlarmUseCaseTest {
                     isVibrationOn = false,
                     isTurnedOn = true,
                     isRepeating = false,
-                    minutes = 2
+                    minute = 2
                 )
             )
         )

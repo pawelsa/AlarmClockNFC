@@ -37,8 +37,8 @@ data class AlarmEntity(
         this.isVibrationOn = domainAlarm.isVibrationOn
         this.isTurnedOn = domainAlarm.isTurnedOn
         this.ringtoneId = domainAlarm.ringtoneUrl
-        this.hour = domainAlarm.hours
-        this.minute = domainAlarm.minutes
+        this.hour = domainAlarm.hour
+        this.minute = domainAlarm.minute
         this.daysOfWeek = DaysOfWeekEntry(domainAlarm.repetitionDays)
     }
 
@@ -49,8 +49,8 @@ data class AlarmEntity(
         isVibrationOn: Boolean,
         isTurnedOn: Boolean,
         ringtoneId: String,
-        startTime: Int,
-        endTime: Int,
+        hour: Int,
+        minute: Int,
         days: Array<Boolean>
     ) : this(){
 
@@ -60,8 +60,8 @@ data class AlarmEntity(
         this.isVibrationOn = isVibrationOn
         this.isTurnedOn = isTurnedOn
         this.ringtoneId = ringtoneId
-        this.hour = startTime
-        this.minute = endTime
+        this.hour = hour
+        this.minute = minute
         this.daysOfWeek = DaysOfWeekEntry(days)
     }
 

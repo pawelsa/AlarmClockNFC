@@ -7,16 +7,16 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import com.helpfulapps.base.extensions.rx.completableOf
-import com.helpfulapps.domain.repository.AppAlarmManager
+import com.helpfulapps.domain.repository.AlarmClockManager
 import io.reactivex.Completable
 import java.util.*
 import com.helpfulapps.domain.models.alarm.Alarm as DomainAlarm
 
 
-class AppAlarmManagerImpl(private val context: Context, private val manager: AlarmManager) :
-    AppAlarmManager {
+class AlarmClockManagerImpl(private val context: Context, private val manager: AlarmManager) :
+    AlarmClockManager {
 
-    private val TAG = AppAlarmManagerImpl::class.java.simpleName
+    private val TAG = AlarmClockManagerImpl::class.java.simpleName
 
     override fun setAlarm(domainAlarm: DomainAlarm): Completable {
         return completableOf {
@@ -101,7 +101,7 @@ class AppAlarmManagerImpl(private val context: Context, private val manager: Ala
             set(Calendar.MILLISECOND, 0)
 
             if (this.timeInMillis <= System.currentTimeMillis()) {
-                add(Calendar.HOUR, 24)
+                add(Calendar.HOUR, HOURS_IN_DAY)
             }
         }
         return calendar.timeInMillis
@@ -111,6 +111,7 @@ class AppAlarmManagerImpl(private val context: Context, private val manager: Ala
         const val BASE_PACKAGE = "com.helpfulapps.alarmclock"
         const val PACKAGE_MAIN_ACTIVITY = "$BASE_PACKAGE.views.main_activity.MainActivity"
         const val PACKAGE_ALARM_SERVICE = "$BASE_PACKAGE.receivers.AlarmService"
+        const val HOURS_IN_DAY = 24
     }
 
 }

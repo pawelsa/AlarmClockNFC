@@ -11,8 +11,8 @@ data class Alarm(
 
     constructor(alarm: Alarm) : this(
         id = alarm.id.toInt(),
-        hour = alarm.hours,
-        minute = alarm.minutes,
+        hour = alarm.hour,
+        minute = alarm.minute,
         ringtoneUrl = alarm.ringtoneUrl
     )
 

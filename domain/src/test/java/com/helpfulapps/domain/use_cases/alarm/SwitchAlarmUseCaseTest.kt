@@ -3,7 +3,7 @@ package com.helpfulapps.domain.use_cases.alarm
 class SwitchAlarmUseCaseTest {
 /*
 
-    val alarmRepository: AppAlarmManager = mockk {}
+    val alarmRepository: AlarmClockManager = mockk {}
     val useCase = SwitchAlarmUseCaseImpl(alarmRepository)
 
     @Test
