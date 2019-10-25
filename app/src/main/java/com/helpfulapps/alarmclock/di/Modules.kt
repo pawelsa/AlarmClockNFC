@@ -15,15 +15,7 @@ import com.helpfulapps.domain.repository.AlarmClockManager
 import com.helpfulapps.domain.repository.AlarmRepository
 import com.helpfulapps.domain.repository.WeatherRepository
 import com.helpfulapps.domain.use_cases.alarm.*
-import com.helpfulapps.domain.use_cases.alarm.definition.*
-import com.helpfulapps.domain.use_cases.weather.DownloadForecastForCityUseCaseImpl
-import com.helpfulapps.domain.use_cases.weather.DownloadForecastForLocalizationUseCaseImpl
-import com.helpfulapps.domain.use_cases.weather.GetForecastForAlarmUseCaseImpl
-import com.helpfulapps.domain.use_cases.weather.GetForecastForAlarmsUseCaseImpl
-import com.helpfulapps.domain.use_cases.weather.definition.DownloadForecastForCityUseCase
-import com.helpfulapps.domain.use_cases.weather.definition.DownloadForecastForLocalizationUseCase
-import com.helpfulapps.domain.use_cases.weather.definition.GetForecastForAlarmUseCase
-import com.helpfulapps.domain.use_cases.weather.definition.GetForecastForAlarmsUseCase
+import com.helpfulapps.domain.use_cases.weather.*
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.dsl.module

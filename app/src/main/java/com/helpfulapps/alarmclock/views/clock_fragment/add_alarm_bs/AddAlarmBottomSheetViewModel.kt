@@ -9,7 +9,7 @@ import com.helpfulapps.alarmclock.helpers.timeToString
 import com.helpfulapps.base.base.BaseViewModel
 import com.helpfulapps.base.extensions.rx.backgroundTask
 import com.helpfulapps.base.extensions.rx.singleOf
-import com.helpfulapps.domain.use_cases.alarm.definition.AddAlarmUseCase
+import com.helpfulapps.domain.use_cases.alarm.AddAlarmUseCase
 import io.reactivex.rxkotlin.plusAssign
 
 class AddAlarmBottomSheetViewModel(private val _addAlarmUseCase: AddAlarmUseCase) :
