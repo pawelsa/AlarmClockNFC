@@ -16,43 +16,11 @@ class ClockListAdapter(private val recyclerView: RecyclerView) :
     private val TAG = ClockListAdapter::class.java.simpleName
 
     private var expandedPosition = -1
-    private val alarmItemList: ArrayList<AlarmData> = getMyData()
 
     override val itemView: Int
         get() = R.layout.item_alarm
 
-    private fun getMyData(): ArrayList<AlarmData> = ArrayList<AlarmData>().also {
-        it.add(
-            AlarmData(
-                "Hello1",
-                "Content1",
-                R.drawable.ic_add
-            )
-        )
-        it.add(
-            AlarmData(
-                "Hello2",
-                "Content2",
-                R.drawable.ic_alarm
-            )
-        )
-        it.add(
-            AlarmData(
-                "Hello3",
-                "Content3",
-                R.drawable.ic_hourglass
-            )
-        )
-        it.add(
-            AlarmData(
-                "Hello4",
-                "Content4",
-                R.drawable.ic_menu
-            )
-        )
-    }
-
-    override fun getItemCount(): Int = alarmItemList.size
+    override fun getItemCount(): Int = items.size
 
     override fun View.setData(itemBinding: ItemAlarmBinding, item: AlarmData, position: Int) {
 
@@ -63,8 +31,8 @@ class ClockListAdapter(private val recyclerView: RecyclerView) :
             if (!isExpanded && clAlarmItemContainer.isActivated) {
                 setCollapsed(this)
             }
-            alarmItemList[position].isExpanded = isExpanded
-            alarmData = alarmItemList[position]
+            items[position].isExpanded = isExpanded
+            alarmData = items[position]
             clAlarmItemContainer.isActivated = isExpanded
 
             ivAlarmItemExpandingIcon.setOnClickListener {
