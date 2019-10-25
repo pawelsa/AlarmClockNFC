@@ -71,8 +71,8 @@ class AddAlarmBottomSheetViewModel(private val _addAlarmUseCase: AddAlarmUseCase
             getDefaultRingtone(context)
         }
             .backgroundTask()
-            .subscribe { title ->
-                _ringtoneTitle.value = title.first
+            .subscribe { defaultRingtone ->
+                ringtone = defaultRingtone
             }
     }
 
