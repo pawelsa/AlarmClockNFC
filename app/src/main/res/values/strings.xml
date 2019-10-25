@@ -14,4 +14,5 @@
     <string name="time">%1$d:%2$d</string>
     <string name="select_ringtone_dialog_title">Select ringtone</string>
     <string name="permission_ringtone">This permission is required to select ringtone</string>
+    <string name="add_alarm_fail">Could not create alarm</string>
 </resources>

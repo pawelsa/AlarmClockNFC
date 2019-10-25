@@ -9,9 +9,11 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import ca.antonious.materialdaypicker.MaterialDayPicker
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.snackbar.Snackbar
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.DialogAddAlarmBinding
 import com.helpfulapps.alarmclock.helpers.ShortPermissionListener
+import com.helpfulapps.alarmclock.helpers.extensions.observe
 import com.helpfulapps.alarmclock.helpers.layout_helpers.buildSelectRingtoneDialog
 import com.helpfulapps.alarmclock.views.main_activity.MainActivity
 import com.karumi.dexter.Dexter
@@ -45,7 +47,21 @@ class AddAlarmBottomSheet : BottomSheetDialogFragment() {
 
     private fun subscribeData() {
         viewModel.getDefaultAlarmTitle(context!!)
-        viewModel.getAlarm()
+        viewModel.setupData()
+        subscribeSavingAlarm()
+    }
+
+    private fun subscribeSavingAlarm() {
+        viewModel.alarmSaved.observe(this) { alarmSaved ->
+            when {
+                alarmSaved -> dismiss()
+                else -> Snackbar.make(
+                    binding.clAddAlarmBase,
+                    getString(R.string.add_alarm_fail),
+                    Snackbar.LENGTH_LONG
+                ).show()
+            }
+        }
     }
 
     private fun listenToView() {
@@ -87,7 +103,7 @@ class AddAlarmBottomSheet : BottomSheetDialogFragment() {
 
     private fun listenToSaveButton() {
         bt_add_alarm_save.setOnClickListener {
-            // todo implement
+            viewModel.saveAlarm()
         }
     }
 

@@ -52,7 +52,7 @@ object Modules {
     }
 
     private val useCase = module {
-        single<AddAlarmUseCase> { AddAlarmUseCaseImpl(get()) }
+        single<AddAlarmUseCase> { AddAlarmUseCaseImpl(get(), get()) }
         single<SwitchAlarmUseCase> { SwitchAlarmUseCaseImpl(get()) }
         single<GetAlarmsUseCase> { GetAlarmsUseCaseImpl(get(), get()) }
         single<RemoveAlarmUseCase> { RemoveAlarmUseCaseImpl(get()) }

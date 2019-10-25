@@ -22,8 +22,8 @@ class AlarmClockManagerImpl(private val context: Context, private val manager: A
         return completableOf {
 
             val alarm = Alarm(domainAlarm)
-            //            val alarmStart = getAlarmStartingPoint(domainAlarm)
-            val alarmStart = System.currentTimeMillis() + 10 * 1000
+            val alarmStart = getAlarmStartingPoint(alarm)
+//            val alarmStart = System.currentTimeMillis() + 10 * 1000
 
             val alarmIntent = getAlarmIntent(alarm.id)
             val alarmInfoIntent = createPendingIntentForAlarmIconPress(alarm.id)

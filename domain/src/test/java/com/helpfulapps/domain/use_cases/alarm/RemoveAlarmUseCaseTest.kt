@@ -2,7 +2,6 @@ package com.helpfulapps.domain.use_cases.alarm
 
 import com.helpfulapps.domain.exceptions.AlarmException
 import com.helpfulapps.domain.repository.AlarmRepository
-import com.helpfulapps.domain.use_cases.alarm.definition.RemoveAlarmUseCase
 import io.mockk.every
 import io.mockk.mockk
 import io.reactivex.Completable
