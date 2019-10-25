@@ -1,9 +1,9 @@
 package com.helpfulapps.alarmclock.views.clock_fragment
 
 data class AlarmData(
-    val primaryText: String,
-    val secondaryText: String,
-    val icon: Int,
+    val alarmTime: String,
+    val title: String,
+    val weatherIcon: Int,
     var isExpanded: Boolean = false,
     var isRepeating: Boolean = false
 )

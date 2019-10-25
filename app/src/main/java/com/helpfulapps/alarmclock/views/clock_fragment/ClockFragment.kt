@@ -1,6 +1,5 @@
 package com.helpfulapps.alarmclock.views.clock_fragment
 
-import android.widget.Toast
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.FragmentClockBinding
 import com.helpfulapps.alarmclock.views.clock_fragment.add_alarm_bs.AddAlarmBottomSheet
@@ -13,29 +12,30 @@ import org.koin.android.viewmodel.ext.android.viewModel
 
 class ClockFragment : BaseFragment<ClockViewModel, FragmentClockBinding>() {
 
-
     override val layoutId: Int = R.layout.fragment_clock
 
     override val viewModel: ClockViewModel by viewModel()
+    private val modalBottomSheet: AddAlarmBottomSheet by lazy {
+        AddAlarmBottomSheet()
+    }
 
     override fun init() {
-        viewModel.setAdapter(ClockListAdapter(rv_clock_list))
+        setupViewModel()
+        setupData()
+    }
 
-        testButton.setOnClickListener {
-            viewModel.startAlarmMng()
-        }
+    private fun setupViewModel() {
+        viewModel.adapter = ClockListAdapter(rv_clock_list)
+        binding.viewModel = viewModel
+    }
 
-        stopButton.setOnClickListener {
-            viewModel.stopAlarm()
-        }
-
+    private fun setupData() {
+        viewModel.getAlarms()
     }
 
     override fun onResume() {
         super.onResume()
-        Toast.makeText(this.context, "ClockFragment : $TAG", Toast.LENGTH_SHORT).show()
         (mainActivity as MainActivity).fab_main_fab.setOnClickListener {
-            val modalBottomSheet = AddAlarmBottomSheet()
             modalBottomSheet.show(fragmentManager!!, AddAlarmBottomSheet::class.java.simpleName)
         }
     }
