@@ -1,8 +1,5 @@
 package com.helpfulapps.alarmclock.views.clock_fragment
 
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.helpfulapps.alarmclock.helpers.timeToString
 import com.helpfulapps.base.base.BaseViewModel
 import com.helpfulapps.domain.use_cases.alarm.GetAlarmsUseCase
@@ -18,10 +15,6 @@ class ClockViewModel(
     private val TAG = ClockViewModel::class.java.simpleName
 
     lateinit var adapter: ClockListAdapter
-
-    private val _alarmList: MutableLiveData<List<AlarmData>> = MutableLiveData()
-    val alarmList: LiveData<List<AlarmData>>
-        get() = _alarmList
 
     fun getAlarms() {
         disposables += getAlarmsUseCase()
@@ -40,8 +33,6 @@ class ClockViewModel(
                 }
             }
             .subscribeBy {
-                Log.d(TAG, "Received list of alarms, size : ${it.size}")
-                _alarmList.value = it
                 adapter.items = it
             }
     }
