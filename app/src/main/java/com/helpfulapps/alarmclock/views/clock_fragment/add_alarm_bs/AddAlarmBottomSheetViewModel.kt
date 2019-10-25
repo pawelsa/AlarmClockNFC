@@ -61,7 +61,7 @@ class AddAlarmBottomSheetViewModel(private val _addAlarmUseCase: AddAlarmUseCase
         disposables += _addAlarmUseCase(AddAlarmUseCase.Params(alarm))
             .backgroundTask()
             .subscribeBy(
-                onComplete = { _alarmSaved.value = false },
+                onComplete = { _alarmSaved.value = true },
                 onError = { _alarmSaved.value = false }
             )
     }

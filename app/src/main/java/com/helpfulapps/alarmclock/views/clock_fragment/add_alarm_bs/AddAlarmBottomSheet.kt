@@ -3,7 +3,6 @@ package com.helpfulapps.alarmclock.views.clock_fragment.add_alarm_bs
 import android.Manifest
 import android.app.TimePickerDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -54,12 +53,14 @@ class AddAlarmBottomSheet : BottomSheetDialogFragment() {
 
     private fun subscribeSavingAlarm() {
         viewModel.alarmSaved.observe(this) { alarmSaved ->
-            Log.d(TAG, "Alarm saved : $alarmSaved")
-            if (alarmSaved) dismiss() else Snackbar.make(
-                binding.clAddAlarmBase,
-                getString(R.string.add_alarm_fail),
-                Snackbar.LENGTH_LONG
-            ).show()
+            when {
+                alarmSaved -> dismiss()
+                else -> Snackbar.make(
+                    binding.clAddAlarmBase,
+                    getString(R.string.add_alarm_fail),
+                    Snackbar.LENGTH_LONG
+                ).show()
+            }
         }
     }
 
