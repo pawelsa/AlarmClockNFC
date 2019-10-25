@@ -12,6 +12,7 @@ import com.raizlabs.android.dbflow.kotlinextensions.from
 import com.raizlabs.android.dbflow.kotlinextensions.select
 import com.raizlabs.android.dbflow.kotlinextensions.where
 import com.raizlabs.android.dbflow.rx2.kotlinextensions.rx
+import com.raizlabs.android.dbflow.structure.Model
 import io.reactivex.Completable
 import io.reactivex.Scheduler
 import io.reactivex.Single
@@ -35,11 +36,13 @@ open class AlarmRepositoryImpl(context: Context) : AlarmRepository {
     override fun removeAlarm(alarmId: Long): Completable =
         getAlarm(alarmId)
             .flatMapSingle { it.delete() }
-            .flatMapCompletable { isDeleted -> isDeleted.checkCompleted(
-                AlarmException(
-                    "Couldn't delete alarm"
+            .flatMapCompletable { isDeleted ->
+                isDeleted.checkCompleted(
+                    AlarmException(
+                        "Couldn't delete alarm"
+                    )
                 )
-            ) }
+            }
 
 
     override fun switchAlarm(alarmId: Long): Completable =
@@ -49,27 +52,34 @@ open class AlarmRepositoryImpl(context: Context) : AlarmRepository {
                 alarmEntry
             }
             .flatMapSingle(AlarmEntity::update)
-            .flatMapCompletable { isUpdated -> isUpdated.checkCompleted(
-                AlarmException(
-                    "Couldn't update the alarm"
+            .flatMapCompletable { isUpdated ->
+                isUpdated.checkCompleted(
+                    AlarmException(
+                        "Couldn't update the alarm"
+                    )
                 )
-            ) }
+            }
 
-    override fun addAlarm(alarm: Alarm): Completable =
-        AlarmEntity(alarm).save()
-            .flatMapCompletable { isSaved -> isSaved.checkCompleted(
-                AlarmException(
-                    "Couldn't save alarm"
-                )
-            ) }
+    override fun addAlarm(alarm: Alarm): Single<Alarm> =
+        AlarmEntity(alarm).insert()
+            .flatMap { alarmId ->
+                if (alarmId == Model.INVALID_ROW_ID) {
+                    throw AlarmException("Couldn't save alarm")
+                }
+                getAlarm(alarmId).map { alarm ->
+                    alarm.toDomain()
+                }.toSingle()
+            }
 
     override fun updateAlarm(alarm: Alarm): Completable =
         AlarmEntity(alarm).update()
-            .flatMapCompletable { isUpdated -> isUpdated.checkCompleted(
-                AlarmException(
-                    "Couldn't update alarm"
+            .flatMapCompletable { isUpdated ->
+                isUpdated.checkCompleted(
+                    AlarmException(
+                        "Couldn't update alarm"
+                    )
                 )
-            ) }
+            }
 
     fun getAlarmsQuery() = select.from(AlarmEntity::class.java).rx().queryList()
 

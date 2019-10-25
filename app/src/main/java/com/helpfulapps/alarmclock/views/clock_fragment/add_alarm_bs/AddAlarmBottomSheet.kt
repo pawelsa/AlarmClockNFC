@@ -3,15 +3,18 @@ package com.helpfulapps.alarmclock.views.clock_fragment.add_alarm_bs
 import android.Manifest
 import android.app.TimePickerDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import ca.antonious.materialdaypicker.MaterialDayPicker
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.snackbar.Snackbar
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.DialogAddAlarmBinding
 import com.helpfulapps.alarmclock.helpers.ShortPermissionListener
+import com.helpfulapps.alarmclock.helpers.extensions.observe
 import com.helpfulapps.alarmclock.helpers.layout_helpers.buildSelectRingtoneDialog
 import com.helpfulapps.alarmclock.views.main_activity.MainActivity
 import com.karumi.dexter.Dexter
@@ -45,7 +48,19 @@ class AddAlarmBottomSheet : BottomSheetDialogFragment() {
 
     private fun subscribeData() {
         viewModel.getDefaultAlarmTitle(context!!)
-        viewModel.getAlarm()
+        viewModel.setupData()
+        subscribeSavingAlarm()
+    }
+
+    private fun subscribeSavingAlarm() {
+        viewModel.alarmSaved.observe(this) { alarmSaved ->
+            Log.d(TAG, "Alarm saved : $alarmSaved")
+            if (alarmSaved) dismiss() else Snackbar.make(
+                binding.clAddAlarmBase,
+                getString(R.string.add_alarm_fail),
+                Snackbar.LENGTH_LONG
+            ).show()
+        }
     }
 
     private fun listenToView() {
@@ -87,7 +102,7 @@ class AddAlarmBottomSheet : BottomSheetDialogFragment() {
 
     private fun listenToSaveButton() {
         bt_add_alarm_save.setOnClickListener {
-            // todo implement
+            viewModel.saveAlarm()
         }
     }
 

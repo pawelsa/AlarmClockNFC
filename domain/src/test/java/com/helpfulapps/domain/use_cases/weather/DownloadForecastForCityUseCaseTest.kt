@@ -2,7 +2,6 @@ package com.helpfulapps.domain.use_cases.weather
 
 import com.helpfulapps.domain.exceptions.WeatherException
 import com.helpfulapps.domain.repository.WeatherRepository
-import com.helpfulapps.domain.use_cases.weather.definition.DownloadForecastForCityUseCase
 import io.mockk.every
 import io.mockk.mockk
 import io.reactivex.Completable

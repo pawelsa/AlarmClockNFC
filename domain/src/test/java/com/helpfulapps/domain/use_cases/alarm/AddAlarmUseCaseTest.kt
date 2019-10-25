@@ -3,26 +3,43 @@ package com.helpfulapps.domain.use_cases.alarm
 import com.helpfulapps.domain.exceptions.AlarmException
 import com.helpfulapps.domain.models.alarm.Alarm
 import com.helpfulapps.domain.repository.AlarmClockManager
-import com.helpfulapps.domain.use_cases.alarm.definition.AddAlarmUseCase
+import com.helpfulapps.domain.repository.AlarmRepository
 import io.mockk.every
 import io.mockk.mockk
 import io.reactivex.Completable
+import io.reactivex.Single
 import org.junit.Test
 
 class AddAlarmUseCaseTest {
 
-    val alarmRepository: AlarmClockManager = mockk {}
-    val useCase = AddAlarmUseCaseImpl(alarmRepository)
+    val alarmRepository: AlarmRepository = mockk {}
+    val alarmManager: AlarmClockManager = mockk {}
+    val useCase = AddAlarmUseCaseImpl(alarmManager, alarmRepository)
 
     @Test
     fun `adding alarm was succcessful`() {
 
-        every { alarmRepository.setAlarm(any()) } returns Completable.complete()
+        every { alarmManager.setAlarm(any()) } returns Completable.complete()
+        every { alarmRepository.addAlarm(any()) } returns Single.create {
+            it.onSuccess(
+                Alarm(
+                    id = 1,
+                    hour = 1,
+                    minute = 2,
+                    ringtoneUrl = "ringtoneUrl",
+                    repetitionDays = arrayOf(),
+                    isVibrationOn = false,
+                    isTurnedOn = true,
+                    isRepeating = false,
+                    name = "Alarm 1"
+                )
+            )
+        }
+
         useCase(
             AddAlarmUseCase.Params(
                 Alarm(
                     hour = 1,
-                    id = 1,
                     ringtoneUrl = "ringtoneUrl",
                     repetitionDays = arrayOf(),
                     name = "Alarm 1",
@@ -40,7 +57,8 @@ class AddAlarmUseCaseTest {
 
     @Test
     fun `adding alarm was not successful`() {
-        every { alarmRepository.setAlarm(any()) } returns Completable.error(AlarmException("failed"))
+        every { alarmRepository.addAlarm(any()) } returns Single.error(AlarmException("failed"))
+
         useCase(
             AddAlarmUseCase.Params(
                 Alarm(

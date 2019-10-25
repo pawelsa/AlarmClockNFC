@@ -12,7 +12,7 @@ interface AlarmRepository {
 
     fun switchAlarm(alarmId: Long): Completable
 
-    fun addAlarm(alarm: Alarm): Completable
+    fun addAlarm(alarm: Alarm): Single<Alarm>
 
     fun updateAlarm(alarm: Alarm): Completable
 }
