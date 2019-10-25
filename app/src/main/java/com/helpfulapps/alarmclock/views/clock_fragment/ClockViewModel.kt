@@ -3,8 +3,8 @@ package com.helpfulapps.alarmclock.views.clock_fragment
 import android.util.Log
 import com.helpfulapps.base.base.BaseViewModel
 import com.helpfulapps.domain.models.alarm.Alarm
-import com.helpfulapps.domain.use_cases.alarm.definition.AddAlarmUseCase
-import com.helpfulapps.domain.use_cases.alarm.definition.SwitchAlarmUseCase
+import com.helpfulapps.domain.use_cases.alarm.AddAlarmUseCase
+import com.helpfulapps.domain.use_cases.alarm.SwitchAlarmUseCase
 import io.reactivex.rxkotlin.plusAssign
 
 

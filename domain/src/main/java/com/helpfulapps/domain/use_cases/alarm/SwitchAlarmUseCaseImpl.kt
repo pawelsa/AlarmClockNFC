@@ -1,8 +1,13 @@
 package com.helpfulapps.domain.use_cases.alarm
 
 import com.helpfulapps.domain.repository.AlarmClockManager
-import com.helpfulapps.domain.use_cases.alarm.definition.SwitchAlarmUseCase
+import com.helpfulapps.domain.use_cases.type.CompletableUseCaseWithParameter
 import io.reactivex.Completable
+
+
+interface SwitchAlarmUseCase : CompletableUseCaseWithParameter<SwitchAlarmUseCase.Params> {
+    data class Params(val alarmId: Long)
+}
 
 class SwitchAlarmUseCaseImpl(private val _repository: AlarmClockManager) : SwitchAlarmUseCase {
 

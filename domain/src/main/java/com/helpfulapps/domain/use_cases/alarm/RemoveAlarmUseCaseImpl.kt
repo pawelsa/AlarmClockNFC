@@ -1,8 +1,13 @@
 package com.helpfulapps.domain.use_cases.alarm
 
 import com.helpfulapps.domain.repository.AlarmRepository
-import com.helpfulapps.domain.use_cases.alarm.definition.RemoveAlarmUseCase
+import com.helpfulapps.domain.use_cases.type.CompletableUseCaseWithParameter
 import io.reactivex.Completable
+
+
+interface RemoveAlarmUseCase : CompletableUseCaseWithParameter<RemoveAlarmUseCase.Params> {
+    data class Params(val alarmId: Long)
+}
 
 class RemoveAlarmUseCaseImpl(private val _repository: AlarmRepository) : RemoveAlarmUseCase {
 
