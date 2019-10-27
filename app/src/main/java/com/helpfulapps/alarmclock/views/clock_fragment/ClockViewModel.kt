@@ -1,5 +1,6 @@
 package com.helpfulapps.alarmclock.views.clock_fragment
 
+import android.util.Log
 import com.helpfulapps.alarmclock.helpers.timeToString
 import com.helpfulapps.base.base.BaseViewModel
 import com.helpfulapps.domain.use_cases.alarm.GetAlarmsUseCase
@@ -15,6 +16,7 @@ class ClockViewModel(
     private val TAG = ClockViewModel::class.java.simpleName
 
     lateinit var adapter: ClockListAdapter
+    var isExpanded = false
 
     fun getAlarms() {
         disposables += getAlarmsUseCase()
@@ -37,4 +39,8 @@ class ClockViewModel(
             }
     }
 
+    override fun onCleared() {
+        super.onCleared()
+        Log.d(TAG, "OnCleared")
+    }
 }

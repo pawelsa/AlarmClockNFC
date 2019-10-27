@@ -6,7 +6,6 @@ import com.helpfulapps.alarmclock.views.clock_fragment.add_alarm_bs.AddAlarmBott
 import com.helpfulapps.alarmclock.views.main_activity.MainActivity
 import com.helpfulapps.base.base.BaseFragment
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_clock.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
 
@@ -25,7 +24,7 @@ class ClockFragment : BaseFragment<ClockViewModel, FragmentClockBinding>() {
     }
 
     private fun setupViewModel() {
-        viewModel.adapter = ClockListAdapter(rv_clock_list)
+        viewModel.adapter = ClockListAdapter()
         binding.viewModel = viewModel
     }
 

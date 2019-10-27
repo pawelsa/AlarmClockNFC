@@ -10,17 +10,22 @@ import com.helpfulapps.alarmclock.helpers.layout_helpers.buildEditTitleDialog
 import com.helpfulapps.base.base.BaseAdapter
 
 
-class ClockListAdapter(private val recyclerView: RecyclerView) :
+class ClockListAdapter :
     BaseAdapter<AlarmData, ItemAlarmBinding>() {
 
     private val TAG = ClockListAdapter::class.java.simpleName
-
+    private lateinit var recyclerView: RecyclerView
     private var expandedPosition = -1
 
     override val itemView: Int
         get() = R.layout.item_alarm
 
     override fun getItemCount(): Int = items.size
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        this.recyclerView = recyclerView
+    }
 
     override fun View.setData(itemBinding: ItemAlarmBinding, item: AlarmData, position: Int) {
 

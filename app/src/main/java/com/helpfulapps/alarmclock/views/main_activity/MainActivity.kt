@@ -54,6 +54,7 @@ class MainActivity : BaseActivity<MainActivityViewModel, ActivityMainBinding>() 
         setupFragmentChangeListener()
 
         val pagerAdapter = TabAdapter(supportFragmentManager)
+        vp_main_tab_pager.offscreenPageLimit = 2
         vp_main_tab_pager.adapter = pagerAdapter
         vp_main_tab_pager.currentItem = 0
         et_main_tab_layout.viewPager = vp_main_tab_pager
