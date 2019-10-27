@@ -39,22 +39,12 @@ class ClockListAdapter :
             clItemAlarmBase.isActivated = isExpanded
 
             mvItemAlarmExpand.setOnClickListener {
-                expandedPosition = if (isExpanded) -1 else position
-                val shouldBeExpanded = !isExpanded
-//                val constraintSet = getConstrainedSet(shouldBeExpanded)
-//                TransitionManager.beginDelayedTransition(recyclerView)
-//                vsAlarmItemTitleSwitcher.displayedChild = if (isExpanded) 0 else 1
-//                clAlarmItemContainer.setConstraintSet(constraintSet)
-                notifyDataSetChanged()
+                mvItemAlarmExpand.morph()
+                llAlarmItemExpanded.visibility =
+                    if (llAlarmItemExpanded.visibility == View.GONE) View.VISIBLE else View.GONE
+                notifyItemChanged(position)
             }
-/*
-            incAlarmItemExtension.cbAlarmItemRepeat.setOnCheckedChangeListener { _, isChecked ->
-                incAlarmItemExtension.wpAlarmItemPicker.visibility =
-                    if (isChecked) View.VISIBLE else View.GONE
-                TransitionManager.beginDelayedTransition(recyclerView)
-                notifyDataSetChanged()
-            }
-*/
+
             tvItemAlarmTitle.setOnClickListener {
                 buildEditTitleDialog(
                     context,

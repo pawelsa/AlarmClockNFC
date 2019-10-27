@@ -2,9 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@drawable/comment_background"
-    android:descendantFocusability="blocksDescendants"
-    android:stateListAnimator="@animator/comment_selection">
+    android:descendantFocusability="blocksDescendants">
 
     <data>
 
@@ -19,7 +17,9 @@
         android:id="@+id/cl_item_alarm_base"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/comment_background"
         android:animateLayoutChanges="true"
+        android:stateListAnimator="@animator/comment_selection"
         android:paddingBottom="16dp">
 
 
@@ -88,51 +88,62 @@
             app:layout_constraintStart_toEndOf="@+id/tv_item_alarm_title"
             tools:text="pn, wt, sr, nd" />
 
-        <CheckBox
-            android:id="@+id/cb_alarm_item_repeating"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/ll_alarm_item_expanded"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:text="@string/alarm_repeat"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/extension_barrier" />
-
-        <ca.antonious.materialdaypicker.MaterialDayPicker
-            android:id="@+id/dp_alarm_item_picker"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cb_alarm_item_repeating" />
-
-        <Button
-            android:id="@+id/bt_item_alarm_sound"
-            style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            app:icon="@drawable/ic_bell"
+            android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dp_alarm_item_picker"
-            tools:text="SOUND" />
+            app:layout_constraintTop_toBottomOf="@id/extension_barrier">
 
-        <Button
-            android:id="@+id/bt_item_alarm_remove"
-            style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:text="@string/alarm_remove"
-            app:icon="@drawable/ic_delete"
-            app:layout_constraintBottom_toBottomOf="@+id/bt_item_alarm_sound"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/bt_item_alarm_sound" />
+            <CheckBox
+                android:id="@+id/cb_alarm_item_repeating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/alarm_repeat" />
+
+            <ca.antonious.materialdaypicker.MaterialDayPicker
+                android:id="@+id/dp_alarm_item_picker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/bt_item_alarm_sound"
+                    style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    app:icon="@drawable/ic_bell"
+                    tools:text="SOUND" />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <Button
+                    android:id="@+id/bt_item_alarm_remove"
+                    style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:text="@string/alarm_remove"
+                    app:icon="@drawable/ic_delete" />
+
+            </LinearLayout>
+
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
