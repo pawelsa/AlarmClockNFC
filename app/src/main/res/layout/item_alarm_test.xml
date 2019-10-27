@@ -13,7 +13,7 @@
     </data>
 
     <androidx.constraintlayout.motion.widget.MotionLayout
-        android:id="@+id/ml_item_alarm_base"
+        android:id="@+id/cl_item_alarm_base"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="16dp"

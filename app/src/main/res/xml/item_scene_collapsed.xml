@@ -14,7 +14,7 @@
     </Transition>
 
     <ConstraintSet android:id="@+id/start">
-        <Constraint android:id="@+id/ml_item_alarm_base">
+        <Constraint android:id="@+id/cl_item_alarm_base">
             <Transform android:elevation="0dp" />
             <CustomAttribute
                 motion:attributeName="background"
@@ -35,7 +35,7 @@
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/end">
-        <Constraint android:id="@+id/ml_item_alarm_base">
+        <Constraint android:id="@+id/cl_item_alarm_base">
             <Transform android:elevation="10dp" />
             <CustomAttribute
                 motion:attributeName="background"

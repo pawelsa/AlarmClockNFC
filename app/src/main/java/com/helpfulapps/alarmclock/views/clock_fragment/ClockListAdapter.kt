@@ -1,9 +1,7 @@
 package com.helpfulapps.alarmclock.views.clock_fragment
 
 import android.view.View
-import androidx.constraintlayout.widget.ConstraintSet
 import androidx.recyclerview.widget.RecyclerView
-import androidx.transition.TransitionManager
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.ItemAlarmBinding
 import com.helpfulapps.alarmclock.helpers.layout_helpers.buildEditTitleDialog
@@ -33,42 +31,51 @@ class ClockListAdapter :
 
         with(itemBinding) {
 
-            if (!isExpanded && clAlarmItemContainer.isActivated) {
+            if (!isExpanded && clItemAlarmBase.isActivated) {
                 setCollapsed(this)
             }
             items[position].isExpanded = isExpanded
             alarmData = items[position]
-            clAlarmItemContainer.isActivated = isExpanded
+            clItemAlarmBase.isActivated = isExpanded
 
-            ivAlarmItemExpandingIcon.setOnClickListener {
+            mvItemAlarmExpand.setOnClickListener {
                 expandedPosition = if (isExpanded) -1 else position
                 val shouldBeExpanded = !isExpanded
-                val constraintSet = getConstrainedSet(shouldBeExpanded)
-                TransitionManager.beginDelayedTransition(recyclerView)
-                vsAlarmItemTitleSwitcher.displayedChild = if (isExpanded) 0 else 1
-                clAlarmItemContainer.setConstraintSet(constraintSet)
+//                val constraintSet = getConstrainedSet(shouldBeExpanded)
+//                TransitionManager.beginDelayedTransition(recyclerView)
+//                vsAlarmItemTitleSwitcher.displayedChild = if (isExpanded) 0 else 1
+//                clAlarmItemContainer.setConstraintSet(constraintSet)
                 notifyDataSetChanged()
             }
-
+/*
             incAlarmItemExtension.cbAlarmItemRepeat.setOnCheckedChangeListener { _, isChecked ->
                 incAlarmItemExtension.wpAlarmItemPicker.visibility =
                     if (isChecked) View.VISIBLE else View.GONE
                 TransitionManager.beginDelayedTransition(recyclerView)
                 notifyDataSetChanged()
             }
-
-            tvAlarmItemTitleRename.setOnClickListener {
+*/
+            tvItemAlarmTitle.setOnClickListener {
                 buildEditTitleDialog(
-                    clAlarmItemContainer.context,
-                    tvAlarmItemTitleRename.text.toString()
+                    context,
+                    tvItemAlarmTitle.text.toString()
                 ) { newLabel ->
-                    tvAlarmItemTitleRename.text = newLabel
-                    tvAlarmItemTitle.text = newLabel
+                    tvItemAlarmTitle.text = newLabel
                 }.show()
             }
         }
     }
 
+    private fun setCollapsed(binding: ItemAlarmBinding) {
+        with(binding) {
+            dpAlarmItemPicker.visibility = View.GONE
+            btItemAlarmRemove.visibility = View.GONE
+            btItemAlarmSound.visibility = View.GONE
+            cbAlarmItemRepeating.visibility = View.GONE
+        }
+    }
+
+/*
     private fun setCollapsed(binding: ItemAlarmBinding) {
         with(binding) {
             ivAlarmItemExpandingIcon.showAvdFirst()
@@ -77,13 +84,13 @@ class ClockListAdapter :
             vsAlarmItemTitleSwitcher.displayedChild = 0
             clAlarmItemContainer.setConstraintSet(constraintSet)
         }
-    }
-
+    }*/
+/*
     private fun getConstrainedSet(shouldBeExpanded: Boolean = false) = ConstraintSet().also {
         it.load(
             recyclerView.context,
             if (shouldBeExpanded) R.layout.item_alarm_edit else R.layout.item_alarm
         )
-    }
+    }*/
 
 }
