@@ -19,6 +19,7 @@ data class AlarmEntity(
     var isVibrationOn: Boolean = true,
     var isTurnedOn: Boolean = true,
     var ringtoneId: String = "",
+    var ringtoneTitle: String = "",
     var hour: Int = 0,
     var minute: Int = 0,
     @ForeignKey(saveForeignKeyModel = true)
@@ -37,6 +38,7 @@ data class AlarmEntity(
         this.isVibrationOn = domainAlarm.isVibrationOn
         this.isTurnedOn = domainAlarm.isTurnedOn
         this.ringtoneId = domainAlarm.ringtoneUrl
+        this.ringtoneTitle = domainAlarm.ringtoneTitle
         this.hour = domainAlarm.hour
         this.minute = domainAlarm.minute
         this.daysOfWeek = DaysOfWeekEntry(domainAlarm.repetitionDays)
@@ -49,6 +51,7 @@ data class AlarmEntity(
         isVibrationOn: Boolean,
         isTurnedOn: Boolean,
         ringtoneId: String,
+        ringtoneTitle: String,
         hour: Int,
         minute: Int,
         days: Array<Boolean>
@@ -60,6 +63,7 @@ data class AlarmEntity(
         this.isVibrationOn = isVibrationOn
         this.isTurnedOn = isTurnedOn
         this.ringtoneId = ringtoneId
+        this.ringtoneTitle = ringtoneTitle
         this.hour = hour
         this.minute = minute
         this.daysOfWeek = DaysOfWeekEntry(days)
@@ -73,6 +77,7 @@ data class AlarmEntity(
             isVibrationOn,
             isTurnedOn,
             ringtoneId,
+            ringtoneTitle,
             hour,
             minute,
             daysOfWeek?.toDomain() ?: BooleanArray(7) { false }.toTypedArray()
@@ -93,6 +98,7 @@ data class AlarmEntity(
         if (isTurnedOn != other.isTurnedOn) return false
         if (ringtoneId != other.ringtoneId) return false
         if (hour != other.hour) return false
+        if (ringtoneTitle != other.ringtoneTitle) return false
         if (minute != other.minute) return false
         if (daysOfWeek != other.daysOfWeek) return false
 

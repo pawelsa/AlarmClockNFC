@@ -12,6 +12,7 @@ data class Alarm(
     val isVibrationOn: Boolean = true,
     val isTurnedOn: Boolean = true,
     val ringtoneUrl: String,
+    val ringtoneTitle: String,
     val hour: Int,
     val minute: Int,
     val repetitionDays: Array<Boolean>

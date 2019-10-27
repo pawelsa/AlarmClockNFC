@@ -16,7 +16,6 @@ class ClockViewModel(
     private val TAG = ClockViewModel::class.java.simpleName
 
     lateinit var adapter: ClockListAdapter
-    var isExpanded = false
 
     fun getAlarms() {
         disposables += getAlarmsUseCase()
@@ -30,12 +29,14 @@ class ClockViewModel(
                         title = it.alarm.name,
                         isRepeating = it.alarm.isRepeating,
                         isExpanded = it.alarm.isRepeating,
-                        weatherIcon = android.R.drawable.ic_notification_clear_all
+                        weatherIcon = android.R.drawable.ic_notification_clear_all,
+                        isTurnedOn = it.alarm.isTurnedOn,
+                        ringtoneTile = it.alarm.ringtoneTitle
                     )
                 }
             }
             .subscribeBy {
-                adapter.items = it
+                adapter.itemList = it
             }
     }
 

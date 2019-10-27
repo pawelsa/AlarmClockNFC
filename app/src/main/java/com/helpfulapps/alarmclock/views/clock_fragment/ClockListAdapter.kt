@@ -1,86 +1,43 @@
 package com.helpfulapps.alarmclock.views.clock_fragment
 
-import android.view.View
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.ItemAlarmBinding
-import com.helpfulapps.alarmclock.helpers.layout_helpers.buildEditTitleDialog
-import com.helpfulapps.base.base.BaseAdapter
 
 
-class ClockListAdapter :
-    BaseAdapter<AlarmData, ItemAlarmBinding>() {
+class ClockListAdapter : RecyclerView.Adapter<ClockListAdapter.ClockItemHolder>() {
 
-    private val TAG = ClockListAdapter::class.java.simpleName
-    private lateinit var recyclerView: RecyclerView
-    private var expandedPosition = -1
+    lateinit var itemList: List<AlarmData>
 
-    override val itemView: Int
-        get() = R.layout.item_alarm
-
-    override fun getItemCount(): Int = items.size
-
-    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
-        super.onAttachedToRecyclerView(recyclerView)
-        this.recyclerView = recyclerView
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ClockItemHolder {
+        val layoutInflater = LayoutInflater.from(parent.context)
+        val itemBinding = ItemAlarmBinding.inflate(layoutInflater, parent, false)
+        return ClockItemHolder(itemBinding)
     }
 
-    override fun View.setData(itemBinding: ItemAlarmBinding, item: AlarmData, position: Int) {
+    override fun getItemCount(): Int = itemList.size
 
-        val isExpanded = position == expandedPosition
-
-        with(itemBinding) {
-
-            if (!isExpanded && clItemAlarmBase.isActivated) {
-                setCollapsed(this)
-            }
-            items[position].isExpanded = isExpanded
-            alarmData = items[position]
-            clItemAlarmBase.isActivated = isExpanded
-
-            mvItemAlarmExpand.setOnClickListener {
-                mvItemAlarmExpand.morph()
-                llAlarmItemExpanded.visibility =
-                    if (llAlarmItemExpanded.visibility == View.GONE) View.VISIBLE else View.GONE
-                notifyItemChanged(position)
-            }
-
-            tvItemAlarmTitle.setOnClickListener {
-                buildEditTitleDialog(
-                    context,
-                    tvItemAlarmTitle.text.toString()
-                ) { newLabel ->
-                    tvItemAlarmTitle.text = newLabel
-                }.show()
-            }
-        }
+    override fun onBindViewHolder(holder: ClockItemHolder, position: Int) {
+        holder.bind(itemList[position], position)
     }
 
-    private fun setCollapsed(binding: ItemAlarmBinding) {
-        with(binding) {
-            dpAlarmItemPicker.visibility = View.GONE
-            btItemAlarmRemove.visibility = View.GONE
-            btItemAlarmSound.visibility = View.GONE
-            cbAlarmItemRepeating.visibility = View.GONE
-        }
-    }
+    inner class ClockItemHolder(var binding: ItemAlarmBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
-/*
-    private fun setCollapsed(binding: ItemAlarmBinding) {
-        with(binding) {
-            ivAlarmItemExpandingIcon.showAvdFirst()
-            val constraintSet = getConstrainedSet()
-            TransitionManager.beginDelayedTransition(recyclerView)
-            vsAlarmItemTitleSwitcher.displayedChild = 0
-            clAlarmItemContainer.setConstraintSet(constraintSet)
+        fun bind(item: AlarmData, position: Int) {
+
+            with(binding) {
+                alarmData = item
+                clItemAlarmBase.isActivated = item.isExpanded
+                if (item.isExpanded) mvItemAlarmExpand.showAvdFirst() else mvItemAlarmExpand.showAvdSecond()
+                mvItemAlarmExpand.setOnClickListener {
+                    item.isExpanded = !item.isExpanded
+                    notifyItemChanged(position)
+                }
+            }
         }
-    }*/
-/*
-    private fun getConstrainedSet(shouldBeExpanded: Boolean = false) = ConstraintSet().also {
-        it.load(
-            recyclerView.context,
-            if (shouldBeExpanded) R.layout.item_alarm_edit else R.layout.item_alarm
-        )
-    }*/
+
+    }
 
 }

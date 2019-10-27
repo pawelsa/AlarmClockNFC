@@ -30,6 +30,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:textSize="30sp"
+            android:text="@{alarmData.alarmTime}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="10:40" />
@@ -41,6 +42,7 @@
             android:layout_marginEnd="16dp"
             app:avdFirst="@drawable/ic_expand_more_anim"
             app:avdSecond="@drawable/ic_expand_less_anim"
+            app:iconExpanded="@{alarmData.expanded}"
             app:layout_constraintBottom_toBottomOf="@+id/tv_item_alarm_time"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_item_alarm_time" />
@@ -54,6 +56,7 @@
             android:layout_marginBottom="8dp"
             android:maxLines="1"
             android:textSize="18sp"
+            android:text="@{alarmData.title}"
             app:layout_constraintBottom_toTopOf="@id/extension_barrier"
             app:layout_constraintEnd_toStartOf="@+id/tv_alarm_item_repeating_days"
             app:layout_constraintHorizontal_bias="0.0"
@@ -67,6 +70,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:showText="false"
+            android:checked="@{alarmData.turnedOn}"
             app:layout_constraintBottom_toBottomOf="@+id/tv_item_alarm_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_item_alarm_title" />
@@ -93,6 +97,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:visibility="@{alarmData.expanded ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/extension_barrier">
 
@@ -102,11 +107,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
+                android:checked="@{alarmData.repeating}"
                 android:text="@string/alarm_repeat" />
 
             <ca.antonious.materialdaypicker.MaterialDayPicker
                 android:id="@+id/dp_alarm_item_picker"
                 android:layout_width="wrap_content"
+                android:visibility="@{alarmData.repeating ? View.VISIBLE : View.GONE}"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
@@ -124,6 +131,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
+                    android:text="@{alarmData.title}"
                     app:icon="@drawable/ic_bell"
                     tools:text="SOUND" />
 

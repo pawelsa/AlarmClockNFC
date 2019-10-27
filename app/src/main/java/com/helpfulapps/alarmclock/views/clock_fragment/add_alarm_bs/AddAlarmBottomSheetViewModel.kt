@@ -50,6 +50,7 @@ class AddAlarmBottomSheetViewModel(private val _addAlarmUseCase: AddAlarmUseCase
         get() = Alarm(
             isRepeating = repeating.get(),
             ringtoneUrl = ringtone.second,
+            ringtoneTitle = ringtone.first,
             isVibrationOn = vibrating.get(),
             repetitionDays = repeatingDays,
             hour = time.first,

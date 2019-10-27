@@ -5,5 +5,7 @@ data class AlarmData(
     val title: String,
     val weatherIcon: Int,
     var isExpanded: Boolean = false,
-    var isRepeating: Boolean = false
+    var isRepeating: Boolean = false,
+    var ringtoneTile: String,
+    var isTurnedOn: Boolean
 )
