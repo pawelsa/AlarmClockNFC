@@ -24,7 +24,7 @@ class ClockFragment : BaseFragment<ClockViewModel, FragmentClockBinding>() {
     }
 
     private fun setupViewModel() {
-        viewModel.adapter = ClockListAdapter(
+        viewModel.adapter = NewClockListAdapter(
             changeRingtone = ::changeRingtone,
             changeTime = ::changeTime,
             changeTitle = ::changeTitle,

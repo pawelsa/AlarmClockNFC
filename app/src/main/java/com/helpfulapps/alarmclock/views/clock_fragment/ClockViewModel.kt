@@ -20,7 +20,7 @@ class ClockViewModel(
 ) : BaseViewModel() {
     private val TAG = ClockViewModel::class.java.simpleName
 
-    lateinit var adapter: ClockListAdapter
+    lateinit var adapter: NewClockListAdapter
 
     fun getAlarms() {
         disposables += getAlarmsUseCase()
@@ -45,7 +45,7 @@ class ClockViewModel(
                 }
             }
             .subscribeBy {
-                adapter.itemList = it
+                adapter.submitList(it)
             }
     }
 
@@ -56,11 +56,11 @@ class ClockViewModel(
 
     // TODO this should inform view about successful change
     fun switchAlarm(alarm: Alarm) {
-        disposables += switchAlarmUseCase(SwitchAlarmUseCase.Params(alarm.id))
+        /*disposables += switchAlarmUseCase(SwitchAlarmUseCase.Params(alarm.id))
             .subscribe {
                 Log.d(TAG, "alarm switched")
                 getAlarms()
-            }
+            }*/
     }
 
     // TODO this should inform view about successful change
@@ -72,11 +72,11 @@ class ClockViewModel(
 
     // TODO this should inform view about successful change
     fun removeAlarm(alarm: Alarm) {
-        disposables += removeAlarmUseCase(RemoveAlarmUseCase.Params(alarm.id))
+        /*disposables += removeAlarmUseCase(RemoveAlarmUseCase.Params(alarm.id))
             .subscribe {
                 Log.d(TAG, "removed alarm successfully")
                 getAlarms()
-            }
+            }*/
     }
 
 
