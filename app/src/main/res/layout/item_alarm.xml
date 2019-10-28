@@ -42,7 +42,7 @@
             android:layout_marginEnd="16dp"
             app:avdFirst="@drawable/ic_expand_more_anim"
             app:avdSecond="@drawable/ic_expand_less_anim"
-            app:iconExpanded="@{alarmData.expanded}"
+            android:background="?attr/selectableItemBackgroundBorderless"
             app:layout_constraintBottom_toBottomOf="@+id/tv_item_alarm_time"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_item_alarm_time" />
@@ -101,14 +101,33 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/extension_barrier">
 
-            <CheckBox
-                android:id="@+id/cb_alarm_item_repeating"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:checked="@{alarmData.repeating}"
-                android:text="@string/alarm_repeat" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <CheckBox
+                    android:id="@+id/cb_alarm_item_repeating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:checked="@{alarmData.repeating}"
+                    android:text="@string/alarm_repeat" />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <CheckBox
+                    android:id="@+id/cb_alarm_item_vibrations"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:checked="@{alarmData.vibrationOn}"
+                    android:text="@string/alarm_vibrations" />
+            </LinearLayout>
 
             <ca.antonious.materialdaypicker.MaterialDayPicker
                 android:id="@+id/dp_alarm_item_picker"

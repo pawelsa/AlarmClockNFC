@@ -16,4 +16,5 @@
     <string name="permission_ringtone">This permission is required to select ringtone</string>
     <string name="add_alarm_fail">Could not create alarm</string>
     <string name="alarm_remove">Remove</string>
+    <string name="alarm_vibrations">Vibrations</string>
 </resources>

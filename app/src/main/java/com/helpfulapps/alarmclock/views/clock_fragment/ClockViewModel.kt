@@ -31,7 +31,7 @@ class ClockViewModel(
                         isExpanded = it.alarm.isRepeating,
                         weatherIcon = android.R.drawable.ic_notification_clear_all,
                         isTurnedOn = it.alarm.isTurnedOn,
-                        ringtoneTile = it.alarm.ringtoneTitle
+                        ringtoneTitle = it.alarm.ringtoneTitle
                     )
                 }
             }

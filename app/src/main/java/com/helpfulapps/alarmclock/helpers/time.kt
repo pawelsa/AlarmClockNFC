@@ -17,3 +17,5 @@ fun timeToString(hour: Int, minute: Int): String {
         }
     return SimpleDateFormat("H:mm").format(date)
 }
+
+typealias Time = Pair<Int, Int>

@@ -24,13 +24,45 @@ class ClockFragment : BaseFragment<ClockViewModel, FragmentClockBinding>() {
     }
 
     private fun setupViewModel() {
-        viewModel.adapter = ClockListAdapter()
+        viewModel.adapter = ClockListAdapter(
+            changeRingtone = ::changeRingtone,
+            changeTime = ::changeTime,
+            changeTitle = ::changeTitle,
+            switchAlarm = ::switchAlarm,
+            updateAlarm = ::updateAlarm,
+            removeAlarm = ::removeAlarm
+        )
         binding.viewModel = viewModel
     }
 
     private fun setupData() {
         viewModel.getAlarms()
     }
+
+    private fun changeRingtone(currentRingtoneTitle: String): Pair<String, String> {
+        TODO("implement")
+    }
+
+    private fun changeTime(time: Pair<Int, Int>): Pair<Int, Int> {
+        TODO("implement")
+    }
+
+    private fun changeTitle(currentTitle: String): String {
+        TODO("implement")
+    }
+
+    private fun switchAlarm(alarm: AlarmData) {
+        TODO("implement")
+    }
+
+    private fun updateAlarm(alarmData: AlarmData) {
+        TODO("implement")
+    }
+
+    private fun removeAlarm(alarmData: AlarmData) {
+        TODO("implement")
+    }
+
 
     override fun onResume() {
         super.onResume()

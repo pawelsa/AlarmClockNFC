@@ -5,6 +5,7 @@ import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.akaita.android.morphview.MorphView
 
 
@@ -23,6 +24,7 @@ fun <T : RecyclerView.ViewHolder> setRecyclerViewAdapter(
 ) {
     recyclerView.layoutManager = LinearLayoutManager(recyclerView.context)
     recyclerView.adapter = adapter
+    (recyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
     val itemDecor = DividerItemDecoration(recyclerView.context, LinearLayoutCompat.VERTICAL)
     recyclerView.addItemDecoration(itemDecor)
 }

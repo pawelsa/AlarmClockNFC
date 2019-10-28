@@ -7,13 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import ca.antonious.materialdaypicker.MaterialDayPicker
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.snackbar.Snackbar
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.DialogAddAlarmBinding
 import com.helpfulapps.alarmclock.helpers.ShortPermissionListener
 import com.helpfulapps.alarmclock.helpers.extensions.observe
+import com.helpfulapps.alarmclock.helpers.extensions.toArray
 import com.helpfulapps.alarmclock.helpers.layout_helpers.buildSelectRingtoneDialog
 import com.helpfulapps.alarmclock.views.main_activity.MainActivity
 import com.karumi.dexter.Dexter
@@ -123,13 +123,7 @@ class AddAlarmBottomSheet : BottomSheetDialogFragment() {
     private fun listenToDayPicker() {
         dp_add_alarm_item_picker.setDaySelectionChangedListener { list ->
             with(viewModel) {
-                repeatingDays[0] = list.any { it == MaterialDayPicker.Weekday.MONDAY }
-                repeatingDays[1] = list.any { it == MaterialDayPicker.Weekday.TUESDAY }
-                repeatingDays[2] = list.any { it == MaterialDayPicker.Weekday.WEDNESDAY }
-                repeatingDays[3] = list.any { it == MaterialDayPicker.Weekday.THURSDAY }
-                repeatingDays[4] = list.any { it == MaterialDayPicker.Weekday.FRIDAY }
-                repeatingDays[5] = list.any { it == MaterialDayPicker.Weekday.SATURDAY }
-                repeatingDays[6] = list.any { it == MaterialDayPicker.Weekday.SUNDAY }
+                repeatingDays = list.toArray()
             }
         }
     }
