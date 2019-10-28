@@ -52,15 +52,15 @@ class ClockFragment : BaseFragment<ClockViewModel, FragmentClockBinding>() {
     }
 
     private fun switchAlarm(alarm: AlarmData) {
-        TODO("implement")
+        viewModel.switchAlarm(alarm.toDomain())
     }
 
     private fun updateAlarm(alarmData: AlarmData) {
-        TODO("implement")
+        viewModel.updateAlarm(alarmData.toDomain())
     }
 
     private fun removeAlarm(alarmData: AlarmData) {
-        TODO("implement")
+        viewModel.removeAlarm(alarmData.toDomain())
     }
 
 

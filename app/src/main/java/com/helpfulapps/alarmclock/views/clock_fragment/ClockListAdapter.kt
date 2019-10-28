@@ -17,7 +17,11 @@ class ClockListAdapter(
     val changeRingtone: (String) -> Pair<String, String>
 ) : RecyclerView.Adapter<ClockListAdapter.ClockItemHolder>() {
 
-    lateinit var itemList: List<AlarmData>
+    var itemList: List<AlarmData> = listOf()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ClockItemHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -31,15 +35,6 @@ class ClockListAdapter(
         holder.bind(itemList[position], position)
     }
 
-    /**
-     * changing title -
-     * remove alarm -
-     * change ringtone -
-     * switch alarm -
-     * change days --
-     * change alarm time -
-     * add vibrations -
-     */
     inner class ClockItemHolder(var binding: ItemAlarmBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
@@ -59,9 +54,11 @@ class ClockListAdapter(
                 }
 
                 cbAlarmItemRepeating.setOnCheckedChangeListener { _, isChecked ->
-                    item.isRepeating = isChecked
-                    updateAlarm(item)
-                    notifyItemChanged(position)
+                    if (item.isRepeating != isChecked) {
+                        item.isRepeating = isChecked
+                        updateAlarm(item)
+                        notifyItemChanged(position)
+                    }
                 }
 
                 btItemAlarmRemove.setOnClickListener {
@@ -98,8 +95,10 @@ class ClockListAdapter(
                 }
 
                 cbAlarmItemVibrations.setOnCheckedChangeListener { _, isChecked ->
-                    item.isVibrationOn = isChecked
-                    updateAlarm(item)
+                    if (item.isVibrationOn != isChecked) {
+                        item.isVibrationOn = isChecked
+                        updateAlarm(item)
+                    }
                 }
 
             }
