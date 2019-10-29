@@ -9,21 +9,28 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 
 abstract class BaseListAdapter<ITEM, DB : ViewDataBinding>(diffCallback: DiffUtil.ItemCallback<ITEM>) :
-    ListAdapter<ITEM, BaseListAdapter.ItemViewHolder<ITEM, DB>>(diffCallback) {
+    ListAdapter<ITEM, BaseListAdapter<ITEM, DB>.ItemViewHolder>(diffCallback) {
 
-    abstract val bind: DB.(item: ITEM, position: Int) -> Unit
+    abstract fun bind(): DB.(item: ITEM, position: Int) -> Unit
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder<ITEM, DB> {
+    abstract val itemView: Int
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val itemBinding = DataBindingUtil.inflate<DB>(layoutInflater, viewType, parent, false)
-        return ItemViewHolder(itemBinding)
+        val binding: DB = DataBindingUtil.inflate(
+            layoutInflater,
+            itemView,
+            parent,
+            false
+        )
+        return ItemViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ItemViewHolder<ITEM, DB>, position: Int) {
-        holder.bind(getItem(position), position, bind)
+    override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
+        holder.bind(getItem(position), position, bind())
     }
 
-    class ItemViewHolder<ITEM, DB : ViewDataBinding>(private val binding: DB) :
+    inner class ItemViewHolder(private val binding: DB) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: ITEM, position: Int, bindAction: DB.(item: ITEM, position: Int) -> Unit) {

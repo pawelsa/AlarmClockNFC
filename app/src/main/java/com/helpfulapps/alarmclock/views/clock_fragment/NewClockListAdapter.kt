@@ -1,13 +1,11 @@
 package com.helpfulapps.alarmclock.views.clock_fragment
 
-import android.view.LayoutInflater
-import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
+import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.ItemAlarmBinding
 import com.helpfulapps.alarmclock.helpers.Time
 import com.helpfulapps.alarmclock.helpers.extensions.toArray
+import com.helpfulapps.base.base.BaseListAdapter
 
 class NewClockListAdapter(
     val removeAlarm: (AlarmData) -> Unit,
@@ -16,84 +14,71 @@ class NewClockListAdapter(
     val changeTime: (Time) -> Time,
     val changeTitle: (String) -> String,
     val changeRingtone: (String) -> Pair<String, String>
-) : ListAdapter<AlarmData, NewClockListAdapter.ClockItemHolder>(AlarmDataDiffCallback()) {
+) : BaseListAdapter<AlarmData, ItemAlarmBinding>(AlarmDataDiffCallback()) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ClockItemHolder {
-        val layoutInflater = LayoutInflater.from(parent.context)
-        val itemBinding = ItemAlarmBinding.inflate(layoutInflater, parent, false)
-        return ClockItemHolder(itemBinding)
-    }
+    override val itemView: Int = R.layout.item_alarm
 
-    override fun onBindViewHolder(holder: ClockItemHolder, position: Int) {
-        holder.bind(getItem(position), position)
-    }
+    override fun bind(): ItemAlarmBinding.(item: AlarmData, position: Int) -> Unit =
+        { item, position ->
+            alarmData = item
+            clItemAlarmBase.isActivated = item.isExpanded
 
-    inner class ClockItemHolder(val binding: ItemAlarmBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: AlarmData, position: Int) {
+            if (item.isExpanded) mvItemAlarmExpand.showAvdFirst() else mvItemAlarmExpand.showAvdSecond()
 
-            with(binding) {
+            mvItemAlarmExpand.setOnClickListener {
+                item.isExpanded = !item.isExpanded
+                notifyItemChanged(position)
+            }
 
-                alarmData = item
-                clItemAlarmBase.isActivated = item.isExpanded
-
-                if (item.isExpanded) mvItemAlarmExpand.showAvdFirst() else mvItemAlarmExpand.showAvdSecond()
-
-                mvItemAlarmExpand.setOnClickListener {
-                    item.isExpanded = !item.isExpanded
+            cbAlarmItemRepeating.setOnCheckedChangeListener { _, isChecked ->
+                if (item.isRepeating != isChecked) {
+                    item.isRepeating = isChecked
+                    updateAlarm(item)
                     notifyItemChanged(position)
                 }
+            }
 
-                cbAlarmItemRepeating.setOnCheckedChangeListener { _, isChecked ->
-                    if (item.isRepeating != isChecked) {
-                        item.isRepeating = isChecked
-                        updateAlarm(item)
-                        notifyItemChanged(position)
-                    }
-                }
+            btItemAlarmRemove.setOnClickListener {
+                removeAlarm(item)
+            }
 
-                btItemAlarmRemove.setOnClickListener {
-                    removeAlarm(item)
-                }
+            tvItemAlarmTitle.setOnClickListener {
+                item.title = changeTitle(item.title)
+                updateAlarm(item)
+            }
 
-                tvItemAlarmTitle.setOnClickListener {
-                    item.title = changeTitle(item.title)
+            dpAlarmItemPicker.setDaySelectionChangedListener { dayList ->
+                item.repetitionDays = dayList.toArray()
+                updateAlarm(item)
+            }
+
+            btItemAlarmSound.setOnClickListener {
+                val newRingtone = changeRingtone(item.ringtoneTitle)
+                item.ringtoneTitle = newRingtone.first
+                item.ringtoneUrl = newRingtone.second
+                updateAlarm(item)
+            }
+
+            swItemAlarm.setOnCheckedChangeListener { _, isChecked ->
+                item.isTurnedOn = isChecked
+                switchAlarm(item)
+            }
+
+            tvItemAlarmTime.setOnClickListener {
+                val newTime = changeTime(Time(item.hour, item.minute))
+                item.hour = newTime.first
+                item.minute = newTime.second
+                updateAlarm(item)
+            }
+
+            cbAlarmItemVibrations.setOnCheckedChangeListener { _, isChecked ->
+                if (item.isVibrationOn != isChecked) {
+                    item.isVibrationOn = isChecked
                     updateAlarm(item)
-                }
-
-                dpAlarmItemPicker.setDaySelectionChangedListener { dayList ->
-                    item.repetitionDays = dayList.toArray()
-                    updateAlarm(item)
-                }
-
-                btItemAlarmSound.setOnClickListener {
-                    val newRingtone = changeRingtone(item.ringtoneTitle)
-                    item.ringtoneTitle = newRingtone.first
-                    item.ringtoneUrl = newRingtone.second
-                    updateAlarm(item)
-                }
-
-                swItemAlarm.setOnCheckedChangeListener { _, isChecked ->
-                    item.isTurnedOn = isChecked
-                    switchAlarm(item)
-                }
-
-                tvItemAlarmTime.setOnClickListener {
-                    val newTime = changeTime(Time(item.hour, item.minute))
-                    item.hour = newTime.first
-                    item.minute = newTime.second
-                    updateAlarm(item)
-                }
-
-                cbAlarmItemVibrations.setOnCheckedChangeListener { _, isChecked ->
-                    if (item.isVibrationOn != isChecked) {
-                        item.isVibrationOn = isChecked
-                        updateAlarm(item)
-                    }
                 }
             }
         }
-    }
+
 
     class AlarmDataDiffCallback : DiffUtil.ItemCallback<AlarmData>() {
         override fun areItemsTheSame(oldItem: AlarmData, newItem: AlarmData): Boolean {
