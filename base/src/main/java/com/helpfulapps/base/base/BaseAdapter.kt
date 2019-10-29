@@ -23,8 +23,6 @@ abstract class BaseAdapter<ITEM, DB : ViewDataBinding> :
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        /*val view = LayoutInflater.from(parent.context).inflate(itemView, parent, false)
-        return ViewHolder(view)*/
         return ViewHolder(
             DataBindingUtil.inflate(
                 LayoutInflater.from(parent.context),

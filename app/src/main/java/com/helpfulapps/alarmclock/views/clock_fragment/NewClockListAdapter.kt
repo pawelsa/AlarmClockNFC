@@ -16,7 +16,7 @@ class NewClockListAdapter(
     val changeTime: (Time) -> Time,
     val changeTitle: (String) -> String,
     val changeRingtone: (String) -> Pair<String, String>
-) : ListAdapter<AlarmData, NewClockListAdapter.ClockItemHolder>(DiffCallback()) {
+) : ListAdapter<AlarmData, NewClockListAdapter.ClockItemHolder>(AlarmDataDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ClockItemHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -24,7 +24,7 @@ class NewClockListAdapter(
         return ClockItemHolder(itemBinding)
     }
 
-    override fun onBindViewHolder(holder: NewClockListAdapter.ClockItemHolder, position: Int) {
+    override fun onBindViewHolder(holder: ClockItemHolder, position: Int) {
         holder.bind(getItem(position), position)
     }
 
@@ -95,8 +95,7 @@ class NewClockListAdapter(
         }
     }
 
-
-    class DiffCallback : DiffUtil.ItemCallback<AlarmData>() {
+    class AlarmDataDiffCallback : DiffUtil.ItemCallback<AlarmData>() {
         override fun areItemsTheSame(oldItem: AlarmData, newItem: AlarmData): Boolean {
             return oldItem.id == newItem.id
         }
