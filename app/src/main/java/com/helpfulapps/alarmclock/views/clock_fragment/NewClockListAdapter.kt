@@ -16,6 +16,8 @@ class NewClockListAdapter(
     val changeRingtone: (String) -> Pair<String, String>
 ) : BaseListAdapter<AlarmData, ItemAlarmBinding>(AlarmDataDiffCallback()) {
 
+    private val TAG = NewClockListAdapter::class.java.simpleName
+
     override val itemView: Int = R.layout.item_alarm
 
     override fun bind(): ItemAlarmBinding.(item: AlarmData, position: Int) -> Unit =
@@ -30,8 +32,8 @@ class NewClockListAdapter(
                 notifyItemChanged(position)
             }
 
-            cbAlarmItemRepeating.setOnCheckedChangeListener { _, isChecked ->
-                if (item.isRepeating != isChecked) {
+            cbAlarmItemRepeating.setOnCheckedChangeListener { checkBox, isChecked ->
+                if (checkBox.isPressed && item.isRepeating != isChecked) {
                     item.isRepeating = isChecked
                     updateAlarm(item)
                     notifyItemChanged(position)
@@ -59,9 +61,11 @@ class NewClockListAdapter(
                 updateAlarm(item)
             }
 
-            swItemAlarm.setOnCheckedChangeListener { _, isChecked ->
-                item.isTurnedOn = isChecked
-                switchAlarm(item)
+            swItemAlarm.setOnCheckedChangeListener { checkBox, isChecked ->
+                if (checkBox.isPressed) {
+                    item.isTurnedOn = isChecked
+                    switchAlarm(item)
+                }
             }
 
             tvItemAlarmTime.setOnClickListener {
@@ -71,8 +75,8 @@ class NewClockListAdapter(
                 updateAlarm(item)
             }
 
-            cbAlarmItemVibrations.setOnCheckedChangeListener { _, isChecked ->
-                if (item.isVibrationOn != isChecked) {
+            cbAlarmItemVibrations.setOnCheckedChangeListener { checkBox, isChecked ->
+                if (checkBox.isPressed && item.isVibrationOn != isChecked) {
                     item.isVibrationOn = isChecked
                     updateAlarm(item)
                 }

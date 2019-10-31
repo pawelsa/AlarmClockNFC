@@ -27,6 +27,7 @@ class ClockViewModel(
             .map { list ->
                 list.map {
                     AlarmData(
+                        id = it.alarm.id,
                         alarmTime = timeToString(
                             it.alarm.hour,
                             it.alarm.minute
