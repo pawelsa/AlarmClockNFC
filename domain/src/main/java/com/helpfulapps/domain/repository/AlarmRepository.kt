@@ -14,7 +14,7 @@ interface AlarmRepository {
 
     fun addAlarm(alarm: Alarm): Single<Alarm>
 
-    fun updateAlarm(alarm: Alarm): Completable
+    fun updateAlarm(alarm: Alarm): Single<Alarm>
 }
 
 
