@@ -69,9 +69,10 @@ class ClockViewModel(
 
     // TODO this should inform view about successful change
     fun updateAlarm(alarm: Alarm) {
-        /*disposables += updateAlarmUseCase(UpdateAlarmUseCase.Params(alarm))
+        disposables += updateAlarmUseCase(UpdateAlarmUseCase.Params(alarm))
             .subscribe { Log.d(TAG, "successfully updated alarm")
-            getAlarms()}*/
+                getAlarms()
+            }
     }
 
     // TODO this should inform view about successful change
