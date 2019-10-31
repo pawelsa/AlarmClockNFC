@@ -1,9 +1,9 @@
 package com.helpfulapps.domain.use_cases.alarm
 
 import com.helpfulapps.domain.exceptions.AlarmException
-import com.helpfulapps.domain.models.alarm.Alarm
 import com.helpfulapps.domain.repository.AlarmClockManager
 import com.helpfulapps.domain.repository.AlarmRepository
+import com.helpfulapps.domain.use_cases.mockData.MockData
 import io.mockk.every
 import io.mockk.mockk
 import io.reactivex.Completable
@@ -23,18 +23,12 @@ class SwitchAlarmUseCaseTest {
     @Test
     fun `should switch off alarm`() {
 
-        val alarm = Alarm(
-            isTurnedOn = false,
-            hour = 0,
-            minute = 0,
-            ringtoneUrl = "",
-            repetitionDays = arrayOf()
-        )
+        val alarm = MockData.defaultAlarm
 
         every { alarmRepository.switchAlarm(any()) } returns Single.just(alarm)
         every { clockManager.stopAlarm(any()) } returns Completable.complete()
 
-        useCase(SwitchAlarmUseCase.Params(1))
+        useCase(SwitchAlarmUseCase.Params(alarmId = alarm.id))
             .test()
             .assertComplete()
             .dispose()
@@ -47,7 +41,7 @@ class SwitchAlarmUseCaseTest {
     @Test
     fun `should switch on alarm`() {
 
-        val onAlarm = Alarm(hour = 0, minute = 0, ringtoneUrl = "", repetitionDays = arrayOf())
+        val onAlarm = MockData.defaultAlarm.copy(isTurnedOn = true)
 
         every { alarmRepository.switchAlarm(any()) } returns Single.just(onAlarm)
         every { clockManager.setAlarm(any()) } returns Completable.complete()

@@ -19,7 +19,11 @@ class UpdateAlarmUseCaseImpl(
     override fun invoke(parameter: UpdateAlarmUseCase.Params): Completable =
         _repository.updateAlarm(parameter.alarm)
             .flatMapCompletable {
-                return@flatMapCompletable _clockManager.stopAlarm(it.id)
-                    .mergeWith(_clockManager.setAlarm(parameter.alarm))
+                return@flatMapCompletable Completable.concat(
+                    listOf(
+                        _clockManager.stopAlarm(it.id),
+                        _clockManager.setAlarm(parameter.alarm)
+                    )
+                )
             }
 }
