@@ -10,7 +10,7 @@ interface AlarmRepository {
 
     fun removeAlarm(alarmId: Long): Completable
 
-    fun switchAlarm(alarmId: Long): Completable
+    fun switchAlarm(alarmId: Long): Single<Alarm>
 
     fun addAlarm(alarm: Alarm): Single<Alarm>
 
