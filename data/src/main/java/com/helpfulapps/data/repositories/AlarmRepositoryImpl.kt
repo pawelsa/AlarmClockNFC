@@ -45,19 +45,18 @@ open class AlarmRepositoryImpl(context: Context) : AlarmRepository {
             }
 
 
-    override fun switchAlarm(alarmId: Long): Completable =
+    override fun switchAlarm(alarmId: Long): Single<Alarm> =
         getAlarm(alarmId)
             .map { alarmEntry ->
                 alarmEntry.isTurnedOn = !alarmEntry.isTurnedOn
                 alarmEntry
             }
             .flatMapSingle(AlarmEntity::update)
-            .flatMapCompletable { isUpdated ->
-                isUpdated.checkCompleted(
-                    AlarmException(
-                        "Couldn't update the alarm"
-                    )
-                )
+            .flatMap { isUpdated ->
+                if (isUpdated) {
+                    getAlarmDomain(alarmId)
+                }
+                throw AlarmException("Couldn't update alarm")
             }
 
     override fun addAlarm(alarm: Alarm): Single<Alarm> =
@@ -66,9 +65,7 @@ open class AlarmRepositoryImpl(context: Context) : AlarmRepository {
                 if (alarmId == Model.INVALID_ROW_ID) {
                     throw AlarmException("Couldn't save alarm")
                 }
-                getAlarm(alarmId).map { alarm ->
-                    alarm.toDomain()
-                }.toSingle()
+                getAlarmDomain(alarmId)
             }
 
     override fun updateAlarm(alarm: Alarm): Completable =
@@ -82,6 +79,9 @@ open class AlarmRepositoryImpl(context: Context) : AlarmRepository {
             }
 
     fun getAlarmsQuery() = select.from(AlarmEntity::class.java).rx().queryList()
+
+    private fun getAlarmDomain(alarmId: Long): Single<Alarm> =
+        getAlarm(alarmId).map { it.toDomain() }.toSingle()
 
     private fun getAlarm(alarmId: Long) =
         (select from AlarmEntity::class where AlarmEntity_Table.id.`is`(alarmId)).rx().querySingle()

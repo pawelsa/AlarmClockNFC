@@ -1,15 +1,57 @@
 package com.helpfulapps.domain.use_cases.alarm
 
+import com.helpfulapps.domain.exceptions.AlarmException
+import com.helpfulapps.domain.models.alarm.Alarm
+import com.helpfulapps.domain.repository.AlarmClockManager
+import com.helpfulapps.domain.repository.AlarmRepository
+import io.mockk.every
+import io.mockk.mockk
+import io.reactivex.Completable
+import io.reactivex.Single
+import org.junit.Test
+
 class SwitchAlarmUseCaseTest {
-/*
 
-    val alarmRepository: AlarmClockManager = mockk {}
-    val useCase = SwitchAlarmUseCaseImpl(alarmRepository)
+    private val alarmRepository: AlarmRepository = mockk {}
+    private val clockManager: AlarmClockManager = mockk {}
+    val useCase = SwitchAlarmUseCaseImpl(alarmRepository, clockManager)
 
+    /**
+     * alarm to be switched off, is returned from repository as turnedOff
+     * that is why in constructor I set isTurnedOn to false
+     */
     @Test
-    fun `should switch alarm`() {
+    fun `should switch off alarm`() {
 
-        every { alarmRepository.switchAlarm(any()) } returns Completable.complete()
+        val alarm = Alarm(
+            isTurnedOn = false,
+            hour = 0,
+            minute = 0,
+            ringtoneUrl = "",
+            repetitionDays = arrayOf()
+        )
+
+        every { alarmRepository.switchAlarm(any()) } returns Single.just(alarm)
+        every { clockManager.stopAlarm(any()) } returns Completable.complete()
+
+        useCase(SwitchAlarmUseCase.Params(1))
+            .test()
+            .assertComplete()
+            .dispose()
+    }
+
+    /**
+     * there is the opposite of the @see `should switch off alarm`
+     * that is why alarm is set to isTurnedOn = true
+     */
+    @Test
+    fun `should switch on alarm`() {
+
+        val onAlarm = Alarm(hour = 0, minute = 0, ringtoneUrl = "", repetitionDays = arrayOf())
+
+        every { alarmRepository.switchAlarm(any()) } returns Single.just(onAlarm)
+        every { clockManager.setAlarm(any()) } returns Completable.complete()
+
         useCase(SwitchAlarmUseCase.Params(1))
             .test()
             .assertComplete()
@@ -18,12 +60,13 @@ class SwitchAlarmUseCaseTest {
 
     @Test
     fun `should alarm switch fail`() {
-        every { alarmRepository.switchAlarm(any()) } returns Completable.error(AlarmException("failed"))
+
+        every { alarmRepository.switchAlarm(any()) } returns Single.error(AlarmException("failed"))
+
         useCase(SwitchAlarmUseCase.Params(1))
             .test()
             .assertError(AlarmException::class.java)
             .dispose()
     }
-*/
 
 }
