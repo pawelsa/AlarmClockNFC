@@ -56,11 +56,14 @@ class ClockViewModel(
 
     // TODO this should inform view about successful change
     fun switchAlarm(alarm: Alarm) {
-        /*disposables += switchAlarmUseCase(SwitchAlarmUseCase.Params(alarm.id))
-            .subscribe {
+        disposables += switchAlarmUseCase(SwitchAlarmUseCase.Params(alarm.id))
+            .subscribe({
                 Log.d(TAG, "alarm switched")
                 getAlarms()
-            }*/
+            }, {
+                Log.e(TAG, it.message ?: "")
+                it.printStackTrace()
+            })
     }
 
     // TODO this should inform view about successful change
