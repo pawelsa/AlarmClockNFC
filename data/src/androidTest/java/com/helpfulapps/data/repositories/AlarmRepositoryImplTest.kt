@@ -5,25 +5,23 @@ import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.helpfulapps.data.db.alarm.model.AlarmEntity
+import com.helpfulapps.data.mockData.MockData
 import com.helpfulapps.domain.exceptions.AlarmException
-import com.helpfulapps.domain.models.alarm.Alarm
 import com.raizlabs.android.dbflow.config.FlowManager
 import io.mockk.every
 import io.mockk.spyk
-import io.reactivex.Completable
 import io.reactivex.Single
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.util.*
 
 
 @RunWith(AndroidJUnit4::class)
 class AlarmRepositoryImplTest {
 
-    lateinit var alarmRepositoryImpl: AlarmRepositoryImpl
-    lateinit var context: Context
+    private lateinit var alarmRepositoryImpl: AlarmRepositoryImpl
+    private lateinit var context: Context
 
     @Before
     fun setUp() {
@@ -61,17 +59,7 @@ class AlarmRepositoryImplTest {
     @Test
     fun getAlarmsTest() {
 
-        val alarm = Alarm(
-            0,
-            "",
-            false,
-            true,
-            false,
-            15,
-            0L,
-            15L,
-            arrayOf(true, true, false, false, false, false, false)
-        )
+        val alarm = MockData.defaultAlarm
         val alarmEntry = AlarmEntity(alarm)
 
         val repoMock = spyk(alarmRepositoryImpl)
@@ -88,39 +76,9 @@ class AlarmRepositoryImplTest {
     @Test
     fun getAlarmCountTest() {
 
-        val alarm1 = Alarm(
-            0,
-            "",
-            false,
-            true,
-            false,
-            15,
-            0L,
-            15L,
-            arrayOf(true, true, false, false, false, false, false)
-        )
-        val alarm2 = Alarm(
-            1,
-            "co tam slychac",
-            true,
-            true,
-            false,
-            15,
-            0L,
-            15L,
-            arrayOf(true, true, false, false, false, false, false)
-        )
-        val alarm3 = Alarm(
-            2,
-            "test",
-            false,
-            true,
-            false,
-            15,
-            0L,
-            15L,
-            arrayOf(true, true, false, false, false, false, false)
-        )
+        val alarm1 = MockData.defaultAlarm
+        val alarm2 = MockData.additionalAlarm
+        val alarm3 = MockData.notInDbAlarm
 
         val alarmEntry1 = AlarmEntity(alarm1)
         val alarmEntry2 = AlarmEntity(alarm2)
@@ -153,51 +111,20 @@ class AlarmRepositoryImplTest {
 //        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
 
         val alarm1 = repoMock.addAlarm(
-            Alarm(
-                0,
-                "",
-                false,
-                true,
-                false,
-                15,
-                0L,
-                15L,
-                arrayOf(true, true, false, false, false, false, false)
-            )
+            MockData.defaultAlarm
         )
         val alarm2 = repoMock.addAlarm(
-            Alarm(
-                0,
-                "co tam slychac",
-                true,
-                true,
-                false,
-                15,
-                0L,
-                15L,
-                arrayOf(true, true, false, false, false, false, false)
-            )
+            MockData.notInDbAlarm
         )
-        val alarm3 =
-            repoMock.addAlarm(
-                Alarm(
-                    0,
-                    "test",
-                    false,
-                    true,
-                    false,
-                    15,
-                    0L,
-                    15L,
-                    arrayOf(true, true, false, false, false, false, false)
-                )
-            )
+        val alarm3 = repoMock.addAlarm(
+            MockData.additionalAlarm
+        )
 
         val alarmList = listOf(alarm1, alarm2, alarm3)
 
-        Completable.merge(alarmList)
+        Single.merge(alarmList)
             .test()
-            .assertResult()
+            .assertResult(MockData.defaultAlarm, MockData.notInDbAlarm, MockData.additionalAlarm)
             .dispose()
     }
 
@@ -221,21 +148,13 @@ class AlarmRepositoryImplTest {
 
 //        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
 
-        val alarm1 = repoMock.addAlarm(
-            Alarm(
-                5,
-                "",
-                false,
-                true,
-                false,
-                15,
-                0L,
-                15L,
-                arrayOf(true, true, false, false, false, false, false)
-            )
+        val saveAlarmInDb = repoMock.addAlarm(
+            MockData.defaultAlarm
         )
 
-        alarm1.concatWith(repoMock.removeAlarm(5))
+        saveAlarmInDb.blockingGet()
+
+        repoMock.removeAlarm(5)
             .test()
             .assertResult()
             .dispose()
@@ -248,21 +167,13 @@ class AlarmRepositoryImplTest {
 
 //        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
 
-        val alarm1 = repoMock.addAlarm(
-            Alarm(
-                5,
-                "",
-                false,
-                true,
-                false,
-                15,
-                0L,
-                15L,
-                arrayOf(true, true, false, false, false, false, false)
-            )
+        val saveAlarmInDb = repoMock.addAlarm(
+            MockData.defaultAlarm
         )
 
-        alarm1.concatWith(repoMock.removeAlarm(2))
+        saveAlarmInDb.blockingGet()
+
+        repoMock.removeAlarm(2)
             .test()
             .assertError(NoSuchElementException::class.java)
             .dispose()
@@ -275,23 +186,15 @@ class AlarmRepositoryImplTest {
 
 //        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
 
-        val alarm1 = repoMock.addAlarm(
-            Alarm(
-                5,
-                "",
-                false,
-                true,
-                false,
-                15,
-                0L,
-                15L,
-                arrayOf(true, true, false, false, false, false, false)
-            )
+        val saveAlarmInDb = repoMock.addAlarm(
+            MockData.defaultAlarm
         )
 
-        alarm1.concatWith(repoMock.switchAlarm(5))
+        saveAlarmInDb.blockingGet()
+
+        repoMock.switchAlarm(5)
             .test()
-            .assertResult()
+            .assertResult(MockData.defaultAlarm)
             .dispose()
     }
 
@@ -303,17 +206,7 @@ class AlarmRepositoryImplTest {
 //        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
 
         val alarm1 = repoMock.addAlarm(
-            Alarm(
-                5,
-                "",
-                false,
-                true,
-                false,
-                15,
-                0L,
-                15L,
-                arrayOf(true, true, false, false, false, false, false)
-            )
+            MockData.defaultAlarm
         )
 
         alarm1.concatWith(repoMock.switchAlarm(2))
@@ -341,22 +234,14 @@ class AlarmRepositoryImplTest {
         val repoMock = spyk(alarmRepositoryImpl)
 
 //        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
-        val alarm = Alarm(
-            5,
-            "",
-            false,
-            true,
-            false,
-            15,
-            0L,
-            15L,
-            arrayOf(true, true, false, false, false, false, false)
-        )
-        val alarm1 = repoMock.addAlarm(alarm)
+        val alarm = MockData.defaultAlarm
+        val saveAlarmInDb = repoMock.addAlarm(alarm)
 
-        alarm1.concatWith(repoMock.updateAlarm(alarm))
+        saveAlarmInDb.blockingGet()
+
+        repoMock.updateAlarm(alarm)
             .test()
-            .assertResult()
+            .assertResult(alarm)
             .dispose()
     }
 
@@ -367,17 +252,7 @@ class AlarmRepositoryImplTest {
 
 //        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
 
-        val alarm1 = Alarm(
-            5,
-            "",
-            false,
-            true,
-            false,
-            15,
-            0L,
-            15L,
-            arrayOf(true, true, false, false, false, false, false)
-        )
+        val alarm1 = MockData.defaultAlarm
 
         repoMock.updateAlarm(alarm1)
             .test()
@@ -392,28 +267,8 @@ class AlarmRepositoryImplTest {
 
 //        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
 
-        val alarm = Alarm(
-            5,
-            "",
-            false,
-            true,
-            false,
-            15,
-            0L,
-            15L,
-            arrayOf(true, true, false, false, false, false, false)
-        )
-        val alarmNotInDb = Alarm(
-            7,
-            "",
-            false,
-            true,
-            false,
-            15,
-            0L,
-            15L,
-            arrayOf(true, true, false, false, false, false, false)
-        )
+        val alarm = MockData.defaultAlarm
+        val alarmNotInDb = MockData.notInDbAlarm
         val alarm1 = repoMock.addAlarm(alarm)
 
         alarm1.concatWith(repoMock.updateAlarm(alarmNotInDb))
@@ -427,32 +282,12 @@ class AlarmRepositoryImplTest {
 
         val repoMock = spyk(alarmRepositoryImpl)
 
-        val alarm1 = Alarm(
-            5,
-            "",
-            false,
-            true,
-            false,
-            15,
-            0L,
-            15L,
-            arrayOf(true, true, false, false, false, false, false)
-        )
-        val alarm2 = Alarm(
-            7,
-            "",
-            false,
-            true,
-            false,
-            15,
-            0L,
-            15L,
-            arrayOf(true, true, false, false, false, false, false)
-        )
+        val alarm1 = MockData.defaultAlarm
+        val alarm2 = MockData.notInDbAlarm
 
 //        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
 
-        repoMock.addAlarm(alarm1).concatWith(repoMock.addAlarm(alarm2)).blockingGet()
+        Single.merge(repoMock.addAlarm(alarm1), repoMock.addAlarm(alarm2)).blockingLast()
 
         repoMock.getAlarms().map { alarmList -> alarmList.count() }
             .test()

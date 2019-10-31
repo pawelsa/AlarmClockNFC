@@ -54,7 +54,7 @@ open class AlarmRepositoryImpl(context: Context) : AlarmRepository {
             .flatMapSingle(AlarmEntity::update)
             .flatMap { isUpdated ->
                 if (isUpdated) {
-                    getAlarmDomain(alarmId)
+                    return@flatMap getAlarmDomain(alarmId)
                 }
                 throw AlarmException("Couldn't update alarm")
             }
@@ -68,13 +68,14 @@ open class AlarmRepositoryImpl(context: Context) : AlarmRepository {
                 getAlarmDomain(alarmId)
             }
 
-    override fun updateAlarm(alarm: Alarm): Completable =
+    override fun updateAlarm(alarm: Alarm): Single<Alarm> =
         AlarmEntity(alarm).update()
-            .flatMapCompletable { isUpdated ->
-                isUpdated.checkCompleted(
-                    AlarmException(
-                        "Couldn't update alarm"
-                    )
+            .flatMap { isUpdated ->
+                if (isUpdated) {
+                    return@flatMap getAlarmDomain(alarm.id)
+                }
+                throw AlarmException(
+                    "Couldn't update alarm"
                 )
             }
 
