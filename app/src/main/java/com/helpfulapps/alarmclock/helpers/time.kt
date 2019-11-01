@@ -32,7 +32,6 @@ fun Array<Boolean>.toShortWeekdays(): String {
     if (this@toShortWeekdays[5]) weekdayList.add(formatSymbols.shortWeekdays[Calendar.SATURDAY])
     if (this@toShortWeekdays[6]) weekdayList.add(formatSymbols.shortWeekdays[Calendar.SUNDAY])
 
-
     return buildString {
         weekdayList.forEachIndexed { index, weekDay ->
             if (index != 0) append(", ")

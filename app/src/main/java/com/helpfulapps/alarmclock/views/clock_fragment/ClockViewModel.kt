@@ -1,6 +1,5 @@
 package com.helpfulapps.alarmclock.views.clock_fragment
 
-import android.util.Log
 import com.helpfulapps.base.base.BaseViewModel
 import com.helpfulapps.domain.models.alarm.Alarm
 import com.helpfulapps.domain.use_cases.alarm.GetAlarmsUseCase
@@ -32,18 +31,11 @@ class ClockViewModel(
             }
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        Log.d(TAG, "OnCleared")
-    }
-
     // TODO this should inform view about successful change
     fun switchAlarm(alarm: Alarm) {
         disposables += switchAlarmUseCase(SwitchAlarmUseCase.Params(alarm.id))
-            .subscribe({
-                Log.d(TAG, "alarm switched")
-                getAlarms()
-            }, { it.printStackTrace() })
+            .subscribe({ getAlarms() },
+                { it.printStackTrace() })
     }
 
     // TODO this should inform view about successful change

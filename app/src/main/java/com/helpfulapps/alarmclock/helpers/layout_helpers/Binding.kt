@@ -8,7 +8,6 @@ import androidx.databinding.InverseBindingListener
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.SimpleItemAnimator
 import ca.antonious.materialdaypicker.MaterialDayPicker
 import com.google.android.material.button.MaterialButton
 import com.helpfulapps.alarmclock.helpers.extensions.notEqual
@@ -23,7 +22,6 @@ fun <T : RecyclerView.ViewHolder> setRecyclerViewAdapter(
 ) {
     recyclerView.layoutManager = LinearLayoutManager(recyclerView.context)
     recyclerView.adapter = adapter
-    (recyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
     val itemDecor = DividerItemDecoration(recyclerView.context, LinearLayoutCompat.VERTICAL)
     recyclerView.addItemDecoration(itemDecor)
 }
@@ -50,7 +48,7 @@ fun setDayPickerListener(dayPicker: MaterialDayPicker, listener: InverseBindingL
 @BindingAdapter("app:hintText", "app:currentText")
 fun setTemplateText(button: MaterialButton, hintText: Int, currentText: String?) {
     button.text =
-        if (currentText?.isEmpty() != false) button.context.getString(hintText) else currentText
+        if (currentText?.isBlank() != false) button.context.getString(hintText) else currentText
     button.setTextColor(
         ContextCompat.getColor(
             button.context,

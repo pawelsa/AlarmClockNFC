@@ -17,20 +17,17 @@
         android:id="@+id/cl_item_alarm_base"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:animateLayoutChanges="true"
-        android:background="@drawable/comment_background"
-        android:stateListAnimator="@animator/comment_selection">
+        android:background="@drawable/comment_background">
 
 
         <TextView
             android:id="@+id/tv_item_alarm_time"
+            style="@style/AlarmTimeClockTheme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginStart="@dimen/margin_medium"
+            android:layout_marginTop="@dimen/margin_medium"
             android:text="@{alarmData.alarmTime}"
-            android:textSize="32sp"
-            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="10:40" />
@@ -39,7 +36,7 @@
             android:id="@+id/sw_item_alarm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="@dimen/margin_medium"
             android:checked="@{alarmData.turnedOn}"
             android:showText="false"
             app:layout_constraintBottom_toBottomOf="@+id/tv_item_alarm_time"
@@ -50,10 +47,10 @@
             android:id="@+id/tv_alarm_item_repeating_days"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginStart="@dimen/margin_medium"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:layout_marginEnd="@dimen/margin_medium"
+            android:layout_marginBottom="@dimen/margin_medium"
             android:layout_weight="3"
             android:text="@{alarmData.repetitionDaysShorts + (!alarmData.title.empty &amp;&amp; !alarmData.repetitionDaysShorts.empty ? (`  |  ` ) : ``) + alarmData.title}"
             app:layout_constraintBottom_toBottomOf="parent"

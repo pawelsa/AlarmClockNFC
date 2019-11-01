@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.snackbar.Snackbar
@@ -43,16 +42,8 @@ class AddAlarmBottomSheet(val alarm: Alarm? = null) : BottomSheetDialogFragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.btAddAlarmTitle.setTextColor(
-            ContextCompat.getColor(
-                context!!,
-                android.R.color.darker_gray
-            )
-        )
         alarm?.let {
-            viewModel.setAlarm(it)/*
-            if (alarm.title.isNotBlank())
-            binding.btAddAlarmTitle.setTextColor(ContextCompat.getColor(context!!, android.R.color.black))*/
+            viewModel.setAlarm(it)
         }
 
         binding.model = viewModel
