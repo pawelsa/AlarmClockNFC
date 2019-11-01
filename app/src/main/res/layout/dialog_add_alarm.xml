@@ -92,6 +92,7 @@
                 android:layout_marginEnd="@dimen/margin_big"
                 android:paddingStart="@dimen/margin_medium"
                 android:paddingEnd="@dimen/margin_medium"
+                app:selectedDays="@={model.repeatingDays}"
                 android:visibility="@{model.repeating.get() ? View.VISIBLE : View.GONE}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

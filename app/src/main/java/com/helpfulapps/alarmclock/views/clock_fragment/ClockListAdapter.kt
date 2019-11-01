@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.helpfulapps.alarmclock.databinding.ItemAlarmBinding
 import com.helpfulapps.alarmclock.helpers.Time
-import com.helpfulapps.alarmclock.helpers.extensions.toArray
+import com.helpfulapps.alarmclock.helpers.extensions.toDayArray
 
 // TODO REMOVE IT
 class ClockListAdapter(
@@ -71,7 +71,7 @@ class ClockListAdapter(
                 }
 
                 dpAlarmItemPicker.setDaySelectionChangedListener { dayList ->
-                    item.repetitionDays = dayList.toArray()
+                    item.repetitionDays = dayList.toDayArray()
                     updateAlarm(item)
                 }
 

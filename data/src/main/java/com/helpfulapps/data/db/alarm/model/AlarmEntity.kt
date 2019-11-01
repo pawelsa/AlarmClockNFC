@@ -25,24 +25,24 @@ data class AlarmEntity(
     @ForeignKey(saveForeignKeyModel = true)
     var daysOfWeek: DaysOfWeekEntry? = DaysOfWeekEntry()
 
-    ) :BaseRXModel() {
+) : BaseRXModel() {
 
     companion object {
         const val NAME = "AlarmTable"
     }
 
-    constructor(domainAlarm: Alarm) : this() {
-        this.id = domainAlarm.id
-        this.name = domainAlarm.name
-        this.isRepeating = domainAlarm.isRepeating
-        this.isVibrationOn = domainAlarm.isVibrationOn
-        this.isTurnedOn = domainAlarm.isTurnedOn
-        this.ringtoneId = domainAlarm.ringtoneUrl
-        this.ringtoneTitle = domainAlarm.ringtoneTitle
-        this.hour = domainAlarm.hour
-        this.minute = domainAlarm.minute
-        this.daysOfWeek = DaysOfWeekEntry(domainAlarm.repetitionDays)
-    }
+    constructor(domainAlarm: Alarm) : this(
+        id = domainAlarm.id,
+        name = domainAlarm.name,
+        isRepeating = domainAlarm.isRepeating,
+        isVibrationOn = domainAlarm.isVibrationOn,
+        isTurnedOn = domainAlarm.isTurnedOn,
+        ringtoneId = domainAlarm.ringtoneUrl,
+        ringtoneTitle = domainAlarm.ringtoneTitle,
+        hour = domainAlarm.hour,
+        minute = domainAlarm.minute,
+        daysOfWeek = DaysOfWeekEntry(domainAlarm.repetitionDays)
+    )
 
     constructor(
         id: Long,
@@ -55,7 +55,7 @@ data class AlarmEntity(
         hour: Int,
         minute: Int,
         days: Array<Boolean>
-    ) : this(){
+    ) : this() {
 
         this.id = id
         this.name = name

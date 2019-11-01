@@ -2,17 +2,20 @@ package com.helpfulapps.data.db.alarm.model
 
 import com.helpfulapps.data.AlarmAppDatabase
 import com.helpfulapps.data.db.alarm.model.DaysOfWeekEntry.Companion.NAME
-import com.raizlabs.android.dbflow.annotation.Column
 import com.raizlabs.android.dbflow.annotation.PrimaryKey
 import com.raizlabs.android.dbflow.annotation.Table
 import com.raizlabs.android.dbflow.rx2.structure.BaseRXModel
 
 
-@Table(name = NAME, database = AlarmAppDatabase::class)
-class DaysOfWeekEntry(
+@Table(
+    name = NAME,
+    database = AlarmAppDatabase::class,
+    allFields = true,
+    useBooleanGetterSetters = false
+)
+data class DaysOfWeekEntry(
 
     @PrimaryKey(autoincrement = true)
-    @Column
     var id: Long = 0L,
     var monday: Boolean = false,
     var tuesday: Boolean = false,

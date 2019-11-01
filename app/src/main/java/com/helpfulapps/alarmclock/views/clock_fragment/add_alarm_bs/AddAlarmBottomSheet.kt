@@ -12,9 +12,10 @@ import com.google.android.material.snackbar.Snackbar
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.DialogAddAlarmBinding
 import com.helpfulapps.alarmclock.helpers.ShortPermissionListener
+import com.helpfulapps.alarmclock.helpers.Time
 import com.helpfulapps.alarmclock.helpers.extensions.observe
-import com.helpfulapps.alarmclock.helpers.extensions.toArray
 import com.helpfulapps.alarmclock.helpers.layout_helpers.buildSelectRingtoneDialog
+import com.helpfulapps.alarmclock.views.clock_fragment.AlarmData
 import com.helpfulapps.alarmclock.views.main_activity.MainActivity
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.listener.PermissionDeniedResponse
@@ -22,7 +23,7 @@ import com.karumi.dexter.listener.PermissionGrantedResponse
 import kotlinx.android.synthetic.main.dialog_add_alarm.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
-class AddAlarmBottomSheet : BottomSheetDialogFragment() {
+class AddAlarmBottomSheet(val alarmData: AlarmData? = null) : BottomSheetDialogFragment() {
 
     private val TAG = this::class.java.simpleName
     private lateinit var binding: DialogAddAlarmBinding
@@ -40,6 +41,9 @@ class AddAlarmBottomSheet : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        alarmData?.let {
+            viewModel.setAlarm(it.toDomain())
+        }
         binding.model = viewModel
         listenToView()
         subscribeData()
@@ -68,7 +72,6 @@ class AddAlarmBottomSheet : BottomSheetDialogFragment() {
         listenToCancelButton()
         listenToSaveButton()
         listenToTimePicker()
-        listenToDayPicker()
         listenToChangeSoundButton()
     }
 
@@ -103,27 +106,20 @@ class AddAlarmBottomSheet : BottomSheetDialogFragment() {
 
     private fun listenToSaveButton() {
         bt_add_alarm_save.setOnClickListener {
-            viewModel.saveAlarm()
+            viewModel.saveAlarm(alarmData != null)
         }
     }
 
     private fun listenToTimePicker() {
         tv_add_alarm_time.setOnClickListener {
-            viewModel.let {
+            viewModel.run {
                 TimePickerDialog(
-                    this.context, R.style.TimePickerTheme,
+                    this@AddAlarmBottomSheet.context, R.style.TimePickerTheme,
                     { _, hour, minute ->
-                        it.time = hour to minute
-                    }, it.time.first, it.time.second, true
+                        time = Time(hour, minute)
+                    },
+                    time.first, time.second, true
                 ).show()
-            }
-        }
-    }
-
-    private fun listenToDayPicker() {
-        dp_add_alarm_item_picker.setDaySelectionChangedListener { list ->
-            with(viewModel) {
-                repeatingDays = list.toArray()
             }
         }
     }

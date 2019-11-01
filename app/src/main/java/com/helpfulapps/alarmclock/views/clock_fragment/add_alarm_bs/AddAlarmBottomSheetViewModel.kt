@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.helpfulapps.alarmclock.helpers.Time
 import com.helpfulapps.alarmclock.helpers.getDefaultRingtone
 import com.helpfulapps.alarmclock.helpers.timeToString
 import com.helpfulapps.base.base.BaseViewModel
@@ -11,27 +12,31 @@ import com.helpfulapps.base.extensions.rx.backgroundTask
 import com.helpfulapps.base.extensions.rx.singleOf
 import com.helpfulapps.domain.models.alarm.Alarm
 import com.helpfulapps.domain.use_cases.alarm.AddAlarmUseCase
+import com.helpfulapps.domain.use_cases.alarm.UpdateAlarmUseCase
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy
 
-class AddAlarmBottomSheetViewModel(private val _addAlarmUseCase: AddAlarmUseCase) :
+class AddAlarmBottomSheetViewModel(
+    private val _addAlarmUseCase: AddAlarmUseCase,
+    private val _updateAlarmUseCase: UpdateAlarmUseCase
+) :
     BaseViewModel() {
 
     private val _alarmTime: MutableLiveData<String> = MutableLiveData()
     val alarmTime: LiveData<String>
         get() = _alarmTime
 
-    val vibrating = ObservableBoolean(true)
-
-    var time: Pair<Int, Int> = Pair(8, 30)
-        set(value) {
-            field = value
-            _alarmTime.value = timeToString(value)
-        }
-
     private val _ringtoneTitle: MutableLiveData<String> = MutableLiveData()
     val ringtoneTitle: LiveData<String>
         get() = _ringtoneTitle
+
+    var repeatingDays = MutableLiveData<Array<Boolean>>().apply { value = Array(7) { false } }
+    val vibrating = ObservableBoolean(true)
+    val repeating = ObservableBoolean(false)
+
+    private val _alarmSaved = MutableLiveData<Boolean>()
+    val alarmSaved: LiveData<Boolean>
+        get() = _alarmSaved
 
     var ringtone: Pair<String, String> = Pair("", "")
         set(value) {
@@ -39,26 +44,52 @@ class AddAlarmBottomSheetViewModel(private val _addAlarmUseCase: AddAlarmUseCase
             _ringtoneTitle.value = value.first
         }
 
-    val repeating = ObservableBoolean(false)
-    var repeatingDays: Array<Boolean> = Array(7) { false }
+    var time: Pair<Int, Int> = Pair(8, 30)
+        set(value) {
+            field = value
+            _alarmTime.value = timeToString(value)
+        }
 
-    private val _alarmSaved = MutableLiveData<Boolean>()
-    val alarmSaved: LiveData<Boolean>
-        get() = _alarmSaved
+    private var alarmId = -1L
 
-    val alarm: Alarm
-        get() = Alarm(
-            isRepeating = repeating.get(),
-            ringtoneUrl = ringtone.second,
-            ringtoneTitle = ringtone.first,
+    fun setAlarm(alarm: Alarm) {
+        alarmId = alarm.id
+        repeating.set(alarm.isRepeating)
+        ringtone = alarm.ringtoneTitle to alarm.ringtoneUrl
+        vibrating.set(alarm.isVibrationOn)
+        repeatingDays.value = alarm.repetitionDays
+        time = Time(alarm.hour, alarm.minute)
+    }
+
+
+    fun saveAlarm(isUpdating: Boolean) {
+        val finalAlarm = Alarm(
+            id = alarmId,
             isVibrationOn = vibrating.get(),
-            repetitionDays = repeatingDays,
+            isRepeating = repeating.get(),
+            isTurnedOn = true,
+            ringtoneTitle = ringtone.first,
+            ringtoneUrl = ringtone.second,
             hour = time.first,
-            minute = time.second
+            minute = time.second,
+            repetitionDays = repeatingDays.value ?: Array(7) { false }
         )
+        when {
+            isUpdating -> updateAlarm(finalAlarm)
+            else -> saveAlarm(finalAlarm)
+        }
+    }
 
+    private fun updateAlarm(alarm: Alarm) {
+        disposables += _updateAlarmUseCase(UpdateAlarmUseCase.Params(alarm))
+            .backgroundTask()
+            .subscribeBy(
+                onComplete = { _alarmSaved.value = true },
+                onError = { _alarmSaved.value = false }
+            )
+    }
 
-    fun saveAlarm() {
+    private fun saveAlarm(alarm: Alarm) {
         disposables += _addAlarmUseCase(AddAlarmUseCase.Params(alarm))
             .backgroundTask()
             .subscribeBy(
@@ -80,5 +111,4 @@ class AddAlarmBottomSheetViewModel(private val _addAlarmUseCase: AddAlarmUseCase
     fun setupData() {
         _alarmTime.value = timeToString(time)
     }
-
 }

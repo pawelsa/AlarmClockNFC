@@ -32,7 +32,7 @@ object Modules {
         viewModel { ClockViewModel(get(), get(), get(), get()) }
         viewModel { HourWatchViewModel() }
         viewModel { StopWatchViewModel() }
-        viewModel { AddAlarmBottomSheetViewModel(get()) }
+        viewModel { AddAlarmBottomSheetViewModel(get(), get()) }
         viewModel { RingingAlarmViewModel() }
     }
 

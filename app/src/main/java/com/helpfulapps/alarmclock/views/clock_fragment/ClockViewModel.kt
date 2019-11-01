@@ -1,7 +1,6 @@
 package com.helpfulapps.alarmclock.views.clock_fragment
 
 import android.util.Log
-import com.helpfulapps.alarmclock.helpers.timeToString
 import com.helpfulapps.base.base.BaseViewModel
 import com.helpfulapps.domain.models.alarm.Alarm
 import com.helpfulapps.domain.use_cases.alarm.GetAlarmsUseCase
@@ -18,6 +17,7 @@ class ClockViewModel(
     private val updateAlarmUseCase: UpdateAlarmUseCase,
     private val removeAlarmUseCase: RemoveAlarmUseCase
 ) : BaseViewModel() {
+
     private val TAG = ClockViewModel::class.java.simpleName
 
     lateinit var adapter: NewClockListAdapter
@@ -25,25 +25,7 @@ class ClockViewModel(
     fun getAlarms() {
         disposables += getAlarmsUseCase()
             .map { list ->
-                list.map {
-                    AlarmData(
-                        id = it.alarm.id,
-                        alarmTime = timeToString(
-                            it.alarm.hour,
-                            it.alarm.minute
-                        ),
-                        title = it.alarm.name,
-                        isRepeating = it.alarm.isRepeating,
-                        isExpanded = it.alarm.isRepeating,
-                        weatherIcon = android.R.drawable.ic_notification_clear_all,
-                        isTurnedOn = it.alarm.isTurnedOn,
-                        ringtoneTitle = it.alarm.ringtoneTitle,
-                        hour = it.alarm.hour,
-                        minute = it.alarm.minute,
-                        repetitionDays = it.alarm.repetitionDays,
-                        ringtoneUrl = it.alarm.ringtoneUrl
-                    )
-                }
+                list.map { AlarmData(it) }
             }
             .subscribeBy {
                 adapter.submitList(it)
@@ -61,18 +43,14 @@ class ClockViewModel(
             .subscribe({
                 Log.d(TAG, "alarm switched")
                 getAlarms()
-            }, {
-                Log.e(TAG, it.message ?: "")
-                it.printStackTrace()
-            })
+            }, { it.printStackTrace() })
     }
 
     // TODO this should inform view about successful change
     fun updateAlarm(alarm: Alarm) {
         disposables += updateAlarmUseCase(UpdateAlarmUseCase.Params(alarm))
-            .subscribe { Log.d(TAG, "successfully updated alarm")
-                getAlarms()
-            }
+            .subscribe({ getAlarms() },
+                { it.printStackTrace() })
     }
 
     // TODO this should inform view about successful change

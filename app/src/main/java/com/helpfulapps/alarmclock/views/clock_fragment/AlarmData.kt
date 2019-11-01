@@ -2,6 +2,7 @@ package com.helpfulapps.alarmclock.views.clock_fragment
 
 import com.helpfulapps.alarmclock.helpers.timeToString
 import com.helpfulapps.domain.models.alarm.Alarm
+import com.helpfulapps.domain.models.alarm.WeatherAlarm
 
 data class AlarmData(
     val id: Long = 0,
@@ -9,7 +10,7 @@ data class AlarmData(
     var isTurnedOn: Boolean,
     var isExpanded: Boolean = false,
     var weatherIcon: Int,
-    var isVibrationOn: Boolean = true,
+    var isVibrationOn: Boolean,
     var ringtoneUrl: String,
     var ringtoneTitle: String,
     var hour: Int,
@@ -18,6 +19,25 @@ data class AlarmData(
     var isRepeating: Boolean = false,
     var repetitionDays: Array<Boolean>
 ) {
+
+    constructor(weatherAlarm: WeatherAlarm) : this(
+        id = weatherAlarm.alarm.id,
+        alarmTime = timeToString(
+            weatherAlarm.alarm.hour,
+            weatherAlarm.alarm.minute
+        ),
+        title = weatherAlarm.alarm.name,
+        isRepeating = weatherAlarm.alarm.isRepeating,
+        isExpanded = weatherAlarm.alarm.isRepeating,
+        isVibrationOn = weatherAlarm.alarm.isVibrationOn,
+        weatherIcon = android.R.drawable.ic_notification_clear_all,
+        isTurnedOn = weatherAlarm.alarm.isTurnedOn,
+        ringtoneTitle = weatherAlarm.alarm.ringtoneTitle,
+        hour = weatherAlarm.alarm.hour,
+        minute = weatherAlarm.alarm.minute,
+        repetitionDays = weatherAlarm.alarm.repetitionDays,
+        ringtoneUrl = weatherAlarm.alarm.ringtoneUrl
+    )
 
     fun toDomain(): Alarm {
         return Alarm(

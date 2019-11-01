@@ -14,9 +14,7 @@ class ClockFragment : BaseFragment<ClockViewModel, FragmentClockBinding>() {
     override val layoutId: Int = R.layout.fragment_clock
 
     override val viewModel: ClockViewModel by viewModel()
-    private val modalBottomSheet: AddAlarmBottomSheet by lazy {
-        AddAlarmBottomSheet()
-    }
+    private lateinit var modalBottomSheet: AddAlarmBottomSheet
 
     override fun init() {
         setupViewModel()
@@ -52,7 +50,9 @@ class ClockFragment : BaseFragment<ClockViewModel, FragmentClockBinding>() {
     }
 
     private fun switchAlarm(alarm: AlarmData) {
-        viewModel.switchAlarm(alarm.toDomain())
+//        viewModel.switchAlarm(alarm.toDomain())
+        modalBottomSheet = AddAlarmBottomSheet(alarm)
+        modalBottomSheet.show(fragmentManager!!, AddAlarmBottomSheet::class.java.simpleName)
     }
 
     private fun updateAlarm(alarmData: AlarmData) {
@@ -67,6 +67,7 @@ class ClockFragment : BaseFragment<ClockViewModel, FragmentClockBinding>() {
     override fun onResume() {
         super.onResume()
         (mainActivity as MainActivity).fab_main_fab.setOnClickListener {
+            modalBottomSheet = AddAlarmBottomSheet()
             modalBottomSheet.show(fragmentManager!!, AddAlarmBottomSheet::class.java.simpleName)
         }
     }
