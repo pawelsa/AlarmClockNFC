@@ -8,7 +8,8 @@ import com.helpfulapps.domain.models.alarm.Alarm
 
 class NewClockListAdapter(
     val switchAlarm: (Alarm) -> Unit,
-    val openEditMode: (Alarm) -> Unit
+    val openEditMode: (Alarm) -> Unit,
+    val removeAlarm: (Alarm) -> Unit
 ) : BaseListAdapter<AlarmData, ItemAlarmBinding>(AlarmDataDiffCallback()) {
 
     private val TAG = NewClockListAdapter::class.java.simpleName
@@ -16,16 +17,16 @@ class NewClockListAdapter(
     override val itemView: Int = R.layout.item_alarm
 
     override fun bind(): ItemAlarmBinding.(item: AlarmData, position: Int) -> Unit =
-        { item, position ->
+        { item, _ ->
             alarmData = item
 
             clItemAlarmBase.setOnClickListener {
                 openEditMode(item.toDomain())
             }
 
-            mvItemAlarmExpand.setOnClickListener {
-                item.isExpanded = !item.isExpanded
-                notifyItemChanged(position)
+            clItemAlarmBase.setOnLongClickListener {
+                removeAlarm(item.toDomain())
+                true
             }
 
             swItemAlarm.setOnCheckedChangeListener { checkBox, isChecked ->

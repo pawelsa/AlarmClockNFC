@@ -1,6 +1,7 @@
 package com.helpfulapps.alarmclock.views.clock_fragment
 
 import com.helpfulapps.alarmclock.helpers.timeToString
+import com.helpfulapps.alarmclock.helpers.toShortWeekdays
 import com.helpfulapps.domain.models.alarm.Alarm
 import com.helpfulapps.domain.models.alarm.WeatherAlarm
 
@@ -8,7 +9,6 @@ data class AlarmData(
     val id: Long = 0,
     var title: String = "",
     var isTurnedOn: Boolean,
-    var isExpanded: Boolean = false,
     var weatherIcon: Int,
     var isVibrationOn: Boolean,
     var ringtoneUrl: String,
@@ -17,7 +17,8 @@ data class AlarmData(
     var minute: Int,
     var alarmTime: String = timeToString(hour, minute),
     var isRepeating: Boolean = false,
-    var repetitionDays: Array<Boolean>
+    var repetitionDays: Array<Boolean>,
+    var repetitionDaysShorts: String
 ) {
 
     constructor(weatherAlarm: WeatherAlarm) : this(
@@ -26,17 +27,17 @@ data class AlarmData(
             weatherAlarm.alarm.hour,
             weatherAlarm.alarm.minute
         ),
-        title = weatherAlarm.alarm.name,
+        title = weatherAlarm.alarm.title,
         isRepeating = weatherAlarm.alarm.isRepeating,
-        isExpanded = weatherAlarm.alarm.isRepeating,
         isVibrationOn = weatherAlarm.alarm.isVibrationOn,
         weatherIcon = android.R.drawable.ic_notification_clear_all,
         isTurnedOn = weatherAlarm.alarm.isTurnedOn,
         ringtoneTitle = weatherAlarm.alarm.ringtoneTitle,
+        ringtoneUrl = weatherAlarm.alarm.ringtoneUrl,
         hour = weatherAlarm.alarm.hour,
         minute = weatherAlarm.alarm.minute,
         repetitionDays = weatherAlarm.alarm.repetitionDays,
-        ringtoneUrl = weatherAlarm.alarm.ringtoneUrl
+        repetitionDaysShorts = weatherAlarm.alarm.repetitionDays.toShortWeekdays()
     )
 
     fun toDomain(): Alarm {
@@ -63,7 +64,6 @@ data class AlarmData(
         if (id != other.id) return false
         if (title != other.title) return false
         if (isTurnedOn != other.isTurnedOn) return false
-        if (isExpanded != other.isExpanded) return false
         if (weatherIcon != other.weatherIcon) return false
         if (isVibrationOn != other.isVibrationOn) return false
         if (ringtoneUrl != other.ringtoneUrl) return false
@@ -81,7 +81,6 @@ data class AlarmData(
         var result = id.hashCode()
         result = 31 * result + title.hashCode()
         result = 31 * result + isTurnedOn.hashCode()
-        result = 31 * result + isExpanded.hashCode()
         result = 31 * result + weatherIcon
         result = 31 * result + isVibrationOn.hashCode()
         result = 31 * result + ringtoneUrl.hashCode()

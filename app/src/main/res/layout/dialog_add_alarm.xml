@@ -7,6 +7,8 @@
 
         <import type="android.view.View" />
 
+        <import type="com.helpfulapps.alarmclock.R" />
+
         <variable
             name="model"
             type="com.helpfulapps.alarmclock.views.clock_fragment.add_alarm_bs.AddAlarmBottomSheetViewModel" />
@@ -21,7 +23,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/margin_big">
-
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/bt_add_alarm_save"
@@ -72,16 +73,30 @@
                 app:layout_constraintTop_toBottomOf="@id/b_add_alarm_barrier_top"
                 tools:text="8:30" />
 
-            <CheckBox
-                android:id="@+id/cb_add_alarm_repeat"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/bt_add_alarm_title"
+                style="@style/NewAlarmTitleTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_big"
-                android:layout_marginTop="@dimen/margin_medium"
+                android:textSize="20sp"
+                app:currentText="@{model.alarmTitle}"
+                app:hintText="@{R.string.add_alarm_set_title}"
+                app:icon="@drawable/ic_label"
+                app:layout_constraintStart_toStartOf="@+id/tv_add_alarm_time"
+                app:layout_constraintTop_toBottomOf="@+id/tv_add_alarm_time"
+                tools:text="Alarm title" />
+
+            <CheckBox
+                android:id="@+id/cb_add_alarm_repeat"
+                style="@style/NewAlarmCheckboxTheme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="19dp"
+                android:layout_marginTop="8dp"
                 android:checked="@={model.repeating}"
                 android:text="@string/alarm_repeat"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_add_alarm_time" />
+                app:layout_constraintTop_toBottomOf="@+id/bt_add_alarm_title" />
 
             <ca.antonious.materialdaypicker.MaterialDayPicker
                 android:id="@+id/dp_add_alarm_item_picker"
@@ -92,11 +107,11 @@
                 android:layout_marginEnd="@dimen/margin_big"
                 android:paddingStart="@dimen/margin_medium"
                 android:paddingEnd="@dimen/margin_medium"
-                app:selectedDays="@={model.repeatingDays}"
                 android:visibility="@{model.repeating.get() ? View.VISIBLE : View.GONE}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cb_add_alarm_repeat" />
+                app:layout_constraintTop_toBottomOf="@+id/cb_add_alarm_repeat"
+                app:selectedDays="@={model.repeatingDays}" />
 
 
             <com.google.android.material.button.MaterialButton
@@ -115,6 +130,7 @@
 
             <CheckBox
                 android:id="@+id/cb_add_alarm_vibrations"
+                style="@style/NewAlarmCheckboxTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/margin_big"
@@ -123,6 +139,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/bt_add_alarm_sound"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/bt_add_alarm_sound" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

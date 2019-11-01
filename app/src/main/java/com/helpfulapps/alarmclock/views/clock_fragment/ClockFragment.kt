@@ -25,7 +25,8 @@ class ClockFragment : BaseFragment<ClockViewModel, FragmentClockBinding>() {
     private fun setupViewModel() {
         viewModel.adapter = NewClockListAdapter(
             switchAlarm = ::switchAlarm,
-            openEditMode = ::openEdit
+            openEditMode = ::openEdit,
+            removeAlarm = ::removeAlarm
         )
         binding.viewModel = viewModel
     }
@@ -41,6 +42,10 @@ class ClockFragment : BaseFragment<ClockViewModel, FragmentClockBinding>() {
     private fun openEdit(alarm: Alarm) {
         modalBottomSheet = AddAlarmBottomSheet(alarm)
         modalBottomSheet.show(fragmentManager!!, AddAlarmBottomSheet::class.java.simpleName)
+    }
+
+    private fun removeAlarm(alarm: Alarm) {
+        viewModel.removeAlarm(alarm)
     }
 
     override fun onResume() {

@@ -17,4 +17,5 @@
     <string name="add_alarm_fail">Could not create alarm</string>
     <string name="alarm_remove">Remove</string>
     <string name="alarm_vibrations">Vibrations</string>
+    <string name="add_alarm_set_title">SET TITLE</string>
 </resources>

@@ -23,3 +23,12 @@ fun Array<Boolean>.toDayList(): List<MaterialDayPicker.Weekday> {
     }
     return dayList
 }
+
+fun List<MaterialDayPicker.Weekday>.notEqual(list: List<MaterialDayPicker.Weekday>): Boolean {
+    if (this.size != list.size) return true
+
+    this.forEach { leftList ->
+        if (!list.any { it == leftList }) return true
+    }
+    return false
+}

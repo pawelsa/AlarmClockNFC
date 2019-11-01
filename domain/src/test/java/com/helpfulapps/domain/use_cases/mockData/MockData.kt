@@ -6,7 +6,7 @@ object MockData {
 
     val defaultAlarm = Alarm(
         id = 5,
-        name = "",
+        title = "",
         isRepeating = false,
         isVibrationOn = true,
         isTurnedOn = false,
@@ -18,7 +18,7 @@ object MockData {
 
     val notInDbAlarm = Alarm(
         id = 100,
-        name = "",
+        title = "",
         isRepeating = false,
         isVibrationOn = true,
         isTurnedOn = false,
@@ -30,7 +30,7 @@ object MockData {
 
     val additionalAlarm = Alarm(
         id = 1,
-        name = "test 1",
+        title = "test 1",
         isRepeating = false,
         isVibrationOn = true,
         isTurnedOn = false,

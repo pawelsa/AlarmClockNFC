@@ -33,7 +33,7 @@ data class AlarmEntity(
 
     constructor(domainAlarm: Alarm) : this(
         id = domainAlarm.id,
-        name = domainAlarm.name,
+        name = domainAlarm.title,
         isRepeating = domainAlarm.isRepeating,
         isVibrationOn = domainAlarm.isVibrationOn,
         isTurnedOn = domainAlarm.isTurnedOn,

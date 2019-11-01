@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.snackbar.Snackbar
@@ -14,6 +15,7 @@ import com.helpfulapps.alarmclock.databinding.DialogAddAlarmBinding
 import com.helpfulapps.alarmclock.helpers.ShortPermissionListener
 import com.helpfulapps.alarmclock.helpers.Time
 import com.helpfulapps.alarmclock.helpers.extensions.observe
+import com.helpfulapps.alarmclock.helpers.layout_helpers.buildEditTitleDialog
 import com.helpfulapps.alarmclock.helpers.layout_helpers.buildSelectRingtoneDialog
 import com.helpfulapps.alarmclock.views.main_activity.MainActivity
 import com.helpfulapps.domain.models.alarm.Alarm
@@ -41,16 +43,25 @@ class AddAlarmBottomSheet(val alarm: Alarm? = null) : BottomSheetDialogFragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.btAddAlarmTitle.setTextColor(
+            ContextCompat.getColor(
+                context!!,
+                android.R.color.darker_gray
+            )
+        )
         alarm?.let {
-            viewModel.setAlarm(it)
+            viewModel.setAlarm(it)/*
+            if (alarm.title.isNotBlank())
+            binding.btAddAlarmTitle.setTextColor(ContextCompat.getColor(context!!, android.R.color.black))*/
         }
+
         binding.model = viewModel
         listenToView()
         subscribeData()
     }
 
     private fun subscribeData() {
-        viewModel.getDefaultAlarmTitle(context!!)
+        viewModel.getDefaultRingtoneTitle(context!!)
         viewModel.setupData()
         subscribeSavingAlarm()
     }
@@ -73,6 +84,15 @@ class AddAlarmBottomSheet(val alarm: Alarm? = null) : BottomSheetDialogFragment(
         listenToSaveButton()
         listenToTimePicker()
         listenToChangeSoundButton()
+        listenToChangeTitleButton()
+    }
+
+    private fun listenToChangeTitleButton() {
+        binding.btAddAlarmTitle.setOnClickListener {
+            buildEditTitleDialog(context!!, viewModel.alarmTitle.value ?: "") {
+                viewModel.setAlarmTitle(it)
+            }.show()
+        }
     }
 
     private fun listenToChangeSoundButton() {

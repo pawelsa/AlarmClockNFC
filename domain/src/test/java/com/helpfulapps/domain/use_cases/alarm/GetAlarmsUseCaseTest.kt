@@ -69,7 +69,7 @@ class GetAlarmsUseCaseTest {
             isRepeating = false,
             isTurnedOn = true,
             isVibrationOn = true,
-            name = "Alarm 1",
+            title = "Alarm 1",
             repetitionDays = arrayOf(false, false, false, false, false, false, false),
             ringtoneUrl = "ringtoneUrl",
             hour = 10
@@ -80,7 +80,7 @@ class GetAlarmsUseCaseTest {
             isRepeating = false,
             isTurnedOn = true,
             isVibrationOn = true,
-            name = "Alarm 2",
+            title = "Alarm 2",
             repetitionDays = arrayOf(false, false, false, false, false, false, false),
             ringtoneUrl = "ringtoneUrl",
             hour = 10
@@ -91,7 +91,7 @@ class GetAlarmsUseCaseTest {
             isRepeating = false,
             isTurnedOn = false,
             isVibrationOn = false,
-            name = "Alarm 3",
+            title = "Alarm 3",
             repetitionDays = arrayOf(false, true, false, true, false, false, false),
             ringtoneUrl = "ringtoneUrl",
             hour = 10

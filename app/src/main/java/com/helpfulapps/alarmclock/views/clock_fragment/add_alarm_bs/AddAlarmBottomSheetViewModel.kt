@@ -30,6 +30,10 @@ class AddAlarmBottomSheetViewModel(
     val ringtoneTitle: LiveData<String>
         get() = _ringtoneTitle
 
+    private val _alarmTitle: MutableLiveData<String> = MutableLiveData()
+    val alarmTitle: LiveData<String>
+        get() = _alarmTitle
+
     var repeatingDays = MutableLiveData<Array<Boolean>>().apply { value = Array(7) { false } }
     val vibrating = ObservableBoolean(true)
     val repeating = ObservableBoolean(false)
@@ -55,6 +59,7 @@ class AddAlarmBottomSheetViewModel(
     fun setAlarm(alarm: Alarm) {
         alarmId = alarm.id
         repeating.set(alarm.isRepeating)
+        _alarmTitle.value = alarm.title
         ringtone = alarm.ringtoneTitle to alarm.ringtoneUrl
         vibrating.set(alarm.isVibrationOn)
         repeatingDays.value = alarm.repetitionDays
@@ -65,6 +70,7 @@ class AddAlarmBottomSheetViewModel(
     fun saveAlarm(isUpdating: Boolean) {
         val finalAlarm = Alarm(
             id = alarmId,
+            title = alarmTitle.value ?: "",
             isVibrationOn = vibrating.get(),
             isRepeating = repeating.get(),
             isTurnedOn = true,
@@ -98,14 +104,20 @@ class AddAlarmBottomSheetViewModel(
             )
     }
 
-    fun getDefaultAlarmTitle(context: Context) {
-        disposables += singleOf {
-            getDefaultRingtone(context)
-        }
-            .backgroundTask()
-            .subscribe { defaultRingtone ->
-                ringtone = defaultRingtone
+    fun getDefaultRingtoneTitle(context: Context) {
+        if (ringtone.first.isEmpty() || ringtone.second.isEmpty()) {
+            disposables += singleOf {
+                getDefaultRingtone(context)
             }
+                .backgroundTask()
+                .subscribe { defaultRingtone ->
+                    ringtone = defaultRingtone
+                }
+        }
+    }
+
+    fun setAlarmTitle(newTitle: String) {
+        _alarmTitle.value = newTitle
     }
 
     fun setupData() {
