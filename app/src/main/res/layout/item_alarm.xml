@@ -17,10 +17,9 @@
         android:id="@+id/cl_item_alarm_base"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/comment_background"
         android:animateLayoutChanges="true"
-        android:stateListAnimator="@animator/comment_selection"
-        android:paddingBottom="16dp">
+        android:background="@drawable/comment_background"
+        android:stateListAnimator="@animator/comment_selection">
 
 
         <TextView
@@ -29,20 +28,20 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:textSize="30sp"
             android:text="@{alarmData.alarmTime}"
+            android:textSize="32sp"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="10:40" />
 
-        <com.akaita.android.morphview.MorphView
+        <ImageView
             android:id="@+id/mv_item_alarm_expand"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/Widget.AppCompat.ActionButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_marginEnd="16dp"
-            app:avdFirst="@drawable/ic_expand_more_anim"
-            app:avdSecond="@drawable/ic_expand_less_anim"
-            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_edit"
             app:layout_constraintBottom_toBottomOf="@+id/tv_item_alarm_time"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_item_alarm_time" />
@@ -53,11 +52,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="16dp"
             android:maxLines="1"
-            android:textSize="18sp"
             android:text="@{alarmData.title}"
-            app:layout_constraintBottom_toTopOf="@id/extension_barrier"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/tv_alarm_item_repeating_days"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -69,17 +68,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:showText="false"
             android:checked="@{alarmData.turnedOn}"
+            android:showText="false"
             app:layout_constraintBottom_toBottomOf="@+id/tv_item_alarm_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_item_alarm_title" />
-
-        <androidx.constraintlayout.widget.Barrier
-            android:id="@+id/extension_barrier"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:barrierDirection="top" />
 
         <TextView
             android:id="@+id/tv_alarm_item_repeating_days"
@@ -91,86 +84,6 @@
             app:layout_constraintEnd_toStartOf="@+id/sw_item_alarm"
             app:layout_constraintStart_toEndOf="@+id/tv_item_alarm_title"
             tools:text="pn, wt, sr, nd" />
-
-        <LinearLayout
-            android:id="@+id/ll_alarm_item_expanded"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="@{alarmData.expanded ? View.VISIBLE : View.GONE}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/extension_barrier">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <CheckBox
-                    android:id="@+id/cb_alarm_item_repeating"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
-                    android:checked="@{alarmData.repeating}"
-                    android:text="@string/alarm_repeat" />
-
-                <Space
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-
-                <CheckBox
-                    android:id="@+id/cb_alarm_item_vibrations"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="16dp"
-                    android:checked="@={alarmData.vibrationOn}"
-                    android:text="@string/alarm_vibrations" />
-            </LinearLayout>
-
-            <ca.antonious.materialdaypicker.MaterialDayPicker
-                android:id="@+id/dp_alarm_item_picker"
-                android:layout_width="wrap_content"
-                android:visibility="@{alarmData.repeating ? View.VISIBLE : View.GONE}"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/bt_item_alarm_sound"
-                    style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:text="@{alarmData.title}"
-                    app:icon="@drawable/ic_bell"
-                    tools:text="SOUND" />
-
-                <Space
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-
-                <Button
-                    android:id="@+id/bt_item_alarm_remove"
-                    style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:text="@string/alarm_remove"
-                    app:icon="@drawable/ic_delete" />
-
-            </LinearLayout>
-
-        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

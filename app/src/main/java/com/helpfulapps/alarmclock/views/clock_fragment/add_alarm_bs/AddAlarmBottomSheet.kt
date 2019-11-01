@@ -15,15 +15,15 @@ import com.helpfulapps.alarmclock.helpers.ShortPermissionListener
 import com.helpfulapps.alarmclock.helpers.Time
 import com.helpfulapps.alarmclock.helpers.extensions.observe
 import com.helpfulapps.alarmclock.helpers.layout_helpers.buildSelectRingtoneDialog
-import com.helpfulapps.alarmclock.views.clock_fragment.AlarmData
 import com.helpfulapps.alarmclock.views.main_activity.MainActivity
+import com.helpfulapps.domain.models.alarm.Alarm
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
 import kotlinx.android.synthetic.main.dialog_add_alarm.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
-class AddAlarmBottomSheet(val alarmData: AlarmData? = null) : BottomSheetDialogFragment() {
+class AddAlarmBottomSheet(val alarm: Alarm? = null) : BottomSheetDialogFragment() {
 
     private val TAG = this::class.java.simpleName
     private lateinit var binding: DialogAddAlarmBinding
@@ -41,8 +41,8 @@ class AddAlarmBottomSheet(val alarmData: AlarmData? = null) : BottomSheetDialogF
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        alarmData?.let {
-            viewModel.setAlarm(it.toDomain())
+        alarm?.let {
+            viewModel.setAlarm(it)
         }
         binding.model = viewModel
         listenToView()
@@ -106,7 +106,7 @@ class AddAlarmBottomSheet(val alarmData: AlarmData? = null) : BottomSheetDialogF
 
     private fun listenToSaveButton() {
         bt_add_alarm_save.setOnClickListener {
-            viewModel.saveAlarm(alarmData != null)
+            viewModel.saveAlarm(alarm != null)
         }
     }
 

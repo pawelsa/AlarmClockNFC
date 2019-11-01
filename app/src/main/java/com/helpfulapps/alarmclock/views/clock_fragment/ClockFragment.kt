@@ -5,6 +5,7 @@ import com.helpfulapps.alarmclock.databinding.FragmentClockBinding
 import com.helpfulapps.alarmclock.views.clock_fragment.add_alarm_bs.AddAlarmBottomSheet
 import com.helpfulapps.alarmclock.views.main_activity.MainActivity
 import com.helpfulapps.base.base.BaseFragment
+import com.helpfulapps.domain.models.alarm.Alarm
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -23,12 +24,8 @@ class ClockFragment : BaseFragment<ClockViewModel, FragmentClockBinding>() {
 
     private fun setupViewModel() {
         viewModel.adapter = NewClockListAdapter(
-            changeRingtone = ::changeRingtone,
-            changeTime = ::changeTime,
-            changeTitle = ::changeTitle,
             switchAlarm = ::switchAlarm,
-            updateAlarm = ::updateAlarm,
-            removeAlarm = ::removeAlarm
+            openEditMode = ::openEdit
         )
         binding.viewModel = viewModel
     }
@@ -37,32 +34,14 @@ class ClockFragment : BaseFragment<ClockViewModel, FragmentClockBinding>() {
         viewModel.getAlarms()
     }
 
-    private fun changeRingtone(currentRingtoneTitle: String): Pair<String, String> {
-        TODO("implement")
+    private fun switchAlarm(alarm: Alarm) {
+        viewModel.switchAlarm(alarm)
     }
 
-    private fun changeTime(time: Pair<Int, Int>): Pair<Int, Int> {
-        TODO("implement")
-    }
-
-    private fun changeTitle(currentTitle: String): String {
-        TODO("implement")
-    }
-
-    private fun switchAlarm(alarm: AlarmData) {
-//        viewModel.switchAlarm(alarm.toDomain())
+    private fun openEdit(alarm: Alarm) {
         modalBottomSheet = AddAlarmBottomSheet(alarm)
         modalBottomSheet.show(fragmentManager!!, AddAlarmBottomSheet::class.java.simpleName)
     }
-
-    private fun updateAlarm(alarmData: AlarmData) {
-        viewModel.updateAlarm(alarmData.toDomain())
-    }
-
-    private fun removeAlarm(alarmData: AlarmData) {
-        viewModel.removeAlarm(alarmData.toDomain())
-    }
-
 
     override fun onResume() {
         super.onResume()
