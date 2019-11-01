@@ -7,22 +7,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import ca.antonious.materialdaypicker.MaterialDayPicker
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.snackbar.Snackbar
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.DialogAddAlarmBinding
 import com.helpfulapps.alarmclock.helpers.ShortPermissionListener
+import com.helpfulapps.alarmclock.helpers.Time
 import com.helpfulapps.alarmclock.helpers.extensions.observe
+import com.helpfulapps.alarmclock.helpers.layout_helpers.buildEditTitleDialog
 import com.helpfulapps.alarmclock.helpers.layout_helpers.buildSelectRingtoneDialog
 import com.helpfulapps.alarmclock.views.main_activity.MainActivity
+import com.helpfulapps.domain.models.alarm.Alarm
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
 import kotlinx.android.synthetic.main.dialog_add_alarm.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
-class AddAlarmBottomSheet : BottomSheetDialogFragment() {
+class AddAlarmBottomSheet(val alarm: Alarm? = null) : BottomSheetDialogFragment() {
 
     private val TAG = this::class.java.simpleName
     private lateinit var binding: DialogAddAlarmBinding
@@ -40,13 +42,17 @@ class AddAlarmBottomSheet : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        alarm?.let {
+            viewModel.setAlarm(it)
+        }
+
         binding.model = viewModel
         listenToView()
         subscribeData()
     }
 
     private fun subscribeData() {
-        viewModel.getDefaultAlarmTitle(context!!)
+        viewModel.getDefaultRingtoneTitle(context!!)
         viewModel.setupData()
         subscribeSavingAlarm()
     }
@@ -68,8 +74,16 @@ class AddAlarmBottomSheet : BottomSheetDialogFragment() {
         listenToCancelButton()
         listenToSaveButton()
         listenToTimePicker()
-        listenToDayPicker()
         listenToChangeSoundButton()
+        listenToChangeTitleButton()
+    }
+
+    private fun listenToChangeTitleButton() {
+        binding.btAddAlarmTitle.setOnClickListener {
+            buildEditTitleDialog(context!!, viewModel.alarmTitle.value ?: "") {
+                viewModel.setAlarmTitle(it)
+            }.show()
+        }
     }
 
     private fun listenToChangeSoundButton() {
@@ -103,33 +117,20 @@ class AddAlarmBottomSheet : BottomSheetDialogFragment() {
 
     private fun listenToSaveButton() {
         bt_add_alarm_save.setOnClickListener {
-            viewModel.saveAlarm()
+            viewModel.saveAlarm(alarm != null)
         }
     }
 
     private fun listenToTimePicker() {
         tv_add_alarm_time.setOnClickListener {
-            viewModel.let {
+            viewModel.run {
                 TimePickerDialog(
-                    this.context, R.style.TimePickerTheme,
+                    this@AddAlarmBottomSheet.context, R.style.TimePickerTheme,
                     { _, hour, minute ->
-                        it.time = hour to minute
-                    }, it.time.first, it.time.second, true
+                        time = Time(hour, minute)
+                    },
+                    time.first, time.second, true
                 ).show()
-            }
-        }
-    }
-
-    private fun listenToDayPicker() {
-        dp_add_alarm_item_picker.setDaySelectionChangedListener { list ->
-            with(viewModel) {
-                repeatingDays[0] = list.any { it == MaterialDayPicker.Weekday.MONDAY }
-                repeatingDays[1] = list.any { it == MaterialDayPicker.Weekday.TUESDAY }
-                repeatingDays[2] = list.any { it == MaterialDayPicker.Weekday.WEDNESDAY }
-                repeatingDays[3] = list.any { it == MaterialDayPicker.Weekday.THURSDAY }
-                repeatingDays[4] = list.any { it == MaterialDayPicker.Weekday.FRIDAY }
-                repeatingDays[5] = list.any { it == MaterialDayPicker.Weekday.SATURDAY }
-                repeatingDays[6] = list.any { it == MaterialDayPicker.Weekday.SUNDAY }
             }
         }
     }

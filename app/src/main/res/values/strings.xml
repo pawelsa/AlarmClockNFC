@@ -9,10 +9,13 @@
     <string name="info_popup_menu">Popup menu</string>
     <string name="hint_alarm_name">Alarm name</string>
     <string name="add_alarm_save">Save</string>
-    <string name="add_alarm_repeat">Repeat</string>
+    <string name="alarm_repeat">Repeat</string>
     <string name="add_alarm_vibrations">Vibrations</string>
     <string name="time">%1$d:%2$d</string>
     <string name="select_ringtone_dialog_title">Select ringtone</string>
     <string name="permission_ringtone">This permission is required to select ringtone</string>
     <string name="add_alarm_fail">Could not create alarm</string>
+    <string name="alarm_remove">Remove</string>
+    <string name="alarm_vibrations">Vibrations</string>
+    <string name="add_alarm_set_title">SET TITLE</string>
 </resources>

@@ -26,4 +26,5 @@ class UpdateAlarmUseCaseImpl(
                     )
                 )
             }
+            .doOnComplete { println("UpdateAlarmUseCase, completed") }
 }

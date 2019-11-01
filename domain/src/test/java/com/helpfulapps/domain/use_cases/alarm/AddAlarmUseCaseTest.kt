@@ -31,7 +31,7 @@ class AddAlarmUseCaseTest {
                     isVibrationOn = false,
                     isTurnedOn = true,
                     isRepeating = false,
-                    name = "Alarm 1"
+                    title = "Alarm 1"
                 )
             )
         }
@@ -42,7 +42,7 @@ class AddAlarmUseCaseTest {
                     hour = 1,
                     ringtoneUrl = "ringtoneUrl",
                     repetitionDays = arrayOf(),
-                    name = "Alarm 1",
+                    title = "Alarm 1",
                     isVibrationOn = false,
                     isTurnedOn = true,
                     isRepeating = false,
@@ -66,7 +66,7 @@ class AddAlarmUseCaseTest {
                     id = 1,
                     ringtoneUrl = "ringtoneUrl",
                     repetitionDays = arrayOf(),
-                    name = "Alarm 1",
+                    title = "Alarm 1",
                     isVibrationOn = false,
                     isTurnedOn = true,
                     isRepeating = false,

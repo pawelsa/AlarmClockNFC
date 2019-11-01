@@ -7,11 +7,12 @@ import java.util.*
 
 data class Alarm(
     val id: Long = 0,
-    val name: String = "",
+    val title: String = "",
     val isRepeating: Boolean = false,
     val isVibrationOn: Boolean = true,
     val isTurnedOn: Boolean = true,
     val ringtoneUrl: String,
+    val ringtoneTitle: String,
     val hour: Int,
     val minute: Int,
     val repetitionDays: Array<Boolean>

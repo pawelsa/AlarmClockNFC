@@ -19,28 +19,30 @@ data class AlarmEntity(
     var isVibrationOn: Boolean = true,
     var isTurnedOn: Boolean = true,
     var ringtoneId: String = "",
+    var ringtoneTitle: String = "",
     var hour: Int = 0,
     var minute: Int = 0,
     @ForeignKey(saveForeignKeyModel = true)
     var daysOfWeek: DaysOfWeekEntry? = DaysOfWeekEntry()
 
-    ) :BaseRXModel() {
+) : BaseRXModel() {
 
     companion object {
         const val NAME = "AlarmTable"
     }
 
-    constructor(domainAlarm: Alarm) : this() {
-        this.id = domainAlarm.id
-        this.name = domainAlarm.name
-        this.isRepeating = domainAlarm.isRepeating
-        this.isVibrationOn = domainAlarm.isVibrationOn
-        this.isTurnedOn = domainAlarm.isTurnedOn
-        this.ringtoneId = domainAlarm.ringtoneUrl
-        this.hour = domainAlarm.hour
-        this.minute = domainAlarm.minute
-        this.daysOfWeek = DaysOfWeekEntry(domainAlarm.repetitionDays)
-    }
+    constructor(domainAlarm: Alarm) : this(
+        id = domainAlarm.id,
+        name = domainAlarm.title,
+        isRepeating = domainAlarm.isRepeating,
+        isVibrationOn = domainAlarm.isVibrationOn,
+        isTurnedOn = domainAlarm.isTurnedOn,
+        ringtoneId = domainAlarm.ringtoneUrl,
+        ringtoneTitle = domainAlarm.ringtoneTitle,
+        hour = domainAlarm.hour,
+        minute = domainAlarm.minute,
+        daysOfWeek = DaysOfWeekEntry(domainAlarm.repetitionDays)
+    )
 
     constructor(
         id: Long,
@@ -49,10 +51,11 @@ data class AlarmEntity(
         isVibrationOn: Boolean,
         isTurnedOn: Boolean,
         ringtoneId: String,
+        ringtoneTitle: String,
         hour: Int,
         minute: Int,
         days: Array<Boolean>
-    ) : this(){
+    ) : this() {
 
         this.id = id
         this.name = name
@@ -60,6 +63,7 @@ data class AlarmEntity(
         this.isVibrationOn = isVibrationOn
         this.isTurnedOn = isTurnedOn
         this.ringtoneId = ringtoneId
+        this.ringtoneTitle = ringtoneTitle
         this.hour = hour
         this.minute = minute
         this.daysOfWeek = DaysOfWeekEntry(days)
@@ -73,6 +77,7 @@ data class AlarmEntity(
             isVibrationOn,
             isTurnedOn,
             ringtoneId,
+            ringtoneTitle,
             hour,
             minute,
             daysOfWeek?.toDomain() ?: BooleanArray(7) { false }.toTypedArray()
@@ -93,6 +98,7 @@ data class AlarmEntity(
         if (isTurnedOn != other.isTurnedOn) return false
         if (ringtoneId != other.ringtoneId) return false
         if (hour != other.hour) return false
+        if (ringtoneTitle != other.ringtoneTitle) return false
         if (minute != other.minute) return false
         if (daysOfWeek != other.daysOfWeek) return false
 

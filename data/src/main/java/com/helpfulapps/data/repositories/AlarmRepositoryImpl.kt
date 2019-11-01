@@ -22,6 +22,8 @@ import java.util.concurrent.TimeUnit
 // TODO remove subscribing on bg thread
 open class AlarmRepositoryImpl(context: Context) : AlarmRepository {
 
+    private val TAG = AlarmRepositoryImpl::class.java.simpleName
+
     init {
         FlowManager.init(context)
     }
@@ -44,7 +46,7 @@ open class AlarmRepositoryImpl(context: Context) : AlarmRepository {
                 )
             }
 
-
+    // todo zabezpieczyć przed niepoprawnym id
     override fun switchAlarm(alarmId: Long): Single<Alarm> =
         getAlarm(alarmId)
             .map { alarmEntry ->
@@ -79,7 +81,7 @@ open class AlarmRepositoryImpl(context: Context) : AlarmRepository {
                 )
             }
 
-    fun getAlarmsQuery() = select.from(AlarmEntity::class.java).rx().queryList()
+    private fun getAlarmsQuery() = select.from(AlarmEntity::class.java).rx().queryList()
 
     private fun getAlarmDomain(alarmId: Long): Single<Alarm> =
         getAlarm(alarmId).map { it.toDomain() }.toSingle()
