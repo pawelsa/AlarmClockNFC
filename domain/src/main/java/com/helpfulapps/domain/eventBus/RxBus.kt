@@ -1,4 +1,4 @@
-package com.helpfulapps.base.event
+package com.helpfulapps.domain.eventBus
 
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject

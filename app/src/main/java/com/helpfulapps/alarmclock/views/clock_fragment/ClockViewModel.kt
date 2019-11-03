@@ -2,6 +2,8 @@ package com.helpfulapps.alarmclock.views.clock_fragment
 
 import android.util.Log
 import com.helpfulapps.base.base.BaseViewModel
+import com.helpfulapps.domain.eventBus.DatabaseNotifiers
+import com.helpfulapps.domain.eventBus.RxBus
 import com.helpfulapps.domain.models.alarm.Alarm
 import com.helpfulapps.domain.use_cases.alarm.GetAlarmsUseCase
 import com.helpfulapps.domain.use_cases.alarm.RemoveAlarmUseCase
@@ -30,10 +32,18 @@ class ClockViewModel(
             }
     }
 
+    fun subscribeToDatabaseChanges() {
+        disposables += RxBus.listen(DatabaseNotifiers::class.java)
+            .subscribe {
+                getAlarms()
+            }
+    }
+
     // TODO this should inform view about successful change
     fun switchAlarm(alarm: Alarm) {
         disposables += switchAlarmUseCase(SwitchAlarmUseCase.Params(alarm.id))
-            .subscribe({ getAlarms() },
+            .subscribe(
+                { },
                 { it.printStackTrace() })
     }
 
@@ -42,7 +52,6 @@ class ClockViewModel(
         disposables += removeAlarmUseCase(RemoveAlarmUseCase.Params(alarm.id))
             .subscribe {
                 Log.d(TAG, "removed alarm successfully")
-                getAlarms()
             }
     }
 

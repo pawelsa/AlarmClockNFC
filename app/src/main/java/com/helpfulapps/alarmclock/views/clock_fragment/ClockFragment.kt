@@ -34,6 +34,7 @@ class ClockFragment : BaseFragment<ClockViewModel, FragmentClockBinding>() {
 
     private fun setupData() {
         viewModel.getAlarms()
+        viewModel.subscribeToDatabaseChanges()
     }
 
     private fun switchAlarm(alarm: Alarm) {
