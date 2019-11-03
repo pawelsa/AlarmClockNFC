@@ -12,6 +12,8 @@ import com.helpfulapps.data.extensions.rxQueryListSingle
 import com.helpfulapps.data.extensions.timestampAtMidnight
 import com.helpfulapps.data.helper.NetworkCheck
 import com.helpfulapps.data.helper.Settings
+import com.helpfulapps.domain.eventBus.DatabaseNotifiers
+import com.helpfulapps.domain.eventBus.RxBus
 import com.helpfulapps.domain.exceptions.CouldNotObtainForecast
 import com.helpfulapps.domain.exceptions.WeatherException
 import com.helpfulapps.domain.repository.WeatherRepository
@@ -51,6 +53,7 @@ class WeatherRepositoryImpl(
         networkCheck.isConnectedToNetwork
             .flatMap { apiCalls.downloadForecast(city, settings.units.unit) }
             .convertModelsAndSaveInDb()
+            .doOnComplete { RxBus.publish(DatabaseNotifiers.Saved) }
 
     override fun downloadForecast(lat: Long, lon: Long): Completable =
         networkCheck.isConnectedToNetwork
@@ -62,6 +65,7 @@ class WeatherRepositoryImpl(
                 )
             }
             .convertModelsAndSaveInDb()
+            .doOnComplete { RxBus.publish(DatabaseNotifiers.Saved) }
 
     override fun getForecastForAlarms(): Single<List<DomainDayWeather>> =
         getDayWeatherList()

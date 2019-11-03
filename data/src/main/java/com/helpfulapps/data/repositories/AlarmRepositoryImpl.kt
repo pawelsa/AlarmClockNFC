@@ -4,6 +4,8 @@ import android.content.Context
 import com.helpfulapps.data.db.alarm.model.AlarmEntity
 import com.helpfulapps.data.db.alarm.model.AlarmEntity_Table
 import com.helpfulapps.data.extensions.checkCompleted
+import com.helpfulapps.domain.eventBus.DatabaseNotifiers
+import com.helpfulapps.domain.eventBus.RxBus
 import com.helpfulapps.domain.exceptions.AlarmException
 import com.helpfulapps.domain.models.alarm.Alarm
 import com.helpfulapps.domain.repository.AlarmRepository
@@ -28,15 +30,18 @@ open class AlarmRepositoryImpl(context: Context) : AlarmRepository {
         FlowManager.init(context)
     }
 
-    override fun getAlarms(): Single<List<Alarm>> =
-        getAlarmsQuery()
+    override fun getAlarms(): Single<List<Alarm>> {
+        return getAlarmsQuery()
             .map { list ->
                 list.map { element -> element.toDomain() }
             }
-            .timeout(2L, TimeUnit.SECONDS) { observer -> observer.onSuccess(emptyList()) }
+            .timeout(2L, TimeUnit.SECONDS) { observer ->
+                observer.onSuccess(emptyList())
+            }
+    }
 
-    override fun removeAlarm(alarmId: Long): Completable =
-        getAlarm(alarmId)
+    override fun removeAlarm(alarmId: Long): Completable {
+        return getAlarm(alarmId)
             .flatMapSingle { it.delete() }
             .flatMapCompletable { isDeleted ->
                 isDeleted.checkCompleted(
@@ -44,11 +49,12 @@ open class AlarmRepositoryImpl(context: Context) : AlarmRepository {
                         "Couldn't delete alarm"
                     )
                 )
-            }
+            }.doOnComplete { RxBus.publish(DatabaseNotifiers.Removed) }
+    }
 
     // todo zabezpieczyć przed niepoprawnym id
-    override fun switchAlarm(alarmId: Long): Single<Alarm> =
-        getAlarm(alarmId)
+    override fun switchAlarm(alarmId: Long): Single<Alarm> {
+        return getAlarm(alarmId)
             .map { alarmEntry ->
                 alarmEntry.isTurnedOn = !alarmEntry.isTurnedOn
                 alarmEntry
@@ -60,18 +66,22 @@ open class AlarmRepositoryImpl(context: Context) : AlarmRepository {
                 }
                 throw AlarmException("Couldn't update alarm")
             }
+            .doOnSuccess { RxBus.publish(DatabaseNotifiers.Updated) }
+    }
 
-    override fun addAlarm(alarm: Alarm): Single<Alarm> =
-        AlarmEntity(alarm).insert()
+    override fun addAlarm(alarm: Alarm): Single<Alarm> {
+        return AlarmEntity(alarm).insert()
             .flatMap { alarmId ->
                 if (alarmId == Model.INVALID_ROW_ID) {
                     throw AlarmException("Couldn't save alarm")
                 }
                 getAlarmDomain(alarmId)
             }
+            .doOnSuccess { RxBus.publish(DatabaseNotifiers.Saved) }
+    }
 
-    override fun updateAlarm(alarm: Alarm): Single<Alarm> =
-        AlarmEntity(alarm).update()
+    override fun updateAlarm(alarm: Alarm): Single<Alarm> {
+        return AlarmEntity(alarm).update()
             .flatMap { isUpdated ->
                 if (isUpdated) {
                     return@flatMap getAlarmDomain(alarm.id)
@@ -80,6 +90,8 @@ open class AlarmRepositoryImpl(context: Context) : AlarmRepository {
                     "Couldn't update alarm"
                 )
             }
+            .doOnSuccess { RxBus.publish(DatabaseNotifiers.Updated) }
+    }
 
     private fun getAlarmsQuery() = select.from(AlarmEntity::class.java).rx().queryList()
 
