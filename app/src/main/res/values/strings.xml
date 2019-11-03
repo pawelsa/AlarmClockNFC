@@ -18,4 +18,7 @@
     <string name="alarm_remove">Remove</string>
     <string name="alarm_vibrations">Vibrations</string>
     <string name="add_alarm_set_title">SET TITLE</string>
+    <string name="dialog_remove_title">Are you sure ?</string>
+    <string name="dialog_remove_message">Do you want to remove this alarm ?</string>
+    <string name="dialog_rename_title">Set title of the alarm</string>
 </resources>

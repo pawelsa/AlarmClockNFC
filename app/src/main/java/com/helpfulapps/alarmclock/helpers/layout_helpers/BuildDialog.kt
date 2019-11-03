@@ -24,6 +24,7 @@ fun buildEditTitleDialog(context: Context, oldLabel: String, listener: (String) 
         // set alert_dialog.xml to alertdialog builder
         setView(dialogView)
         setCancelable(false)
+        setTitle(context.getString(R.string.dialog_rename_title))
         setPositiveButton("OK") { dialog, _ ->
             listener(userInput.text.toString())
             dialog.dismiss()
@@ -51,10 +52,11 @@ fun buildSelectRingtoneDialog(
 
     var mp = MediaPlayer.create(context, ringtones[selectedRingtoneIndex].second.toUri())
 
-    val builder = AlertDialog.Builder(context).apply {
+    return AlertDialog.Builder(context).apply {
         setTitle(context.getString(R.string.select_ringtone_dialog_title))
-        setSingleChoiceItems(ringtoneTitles, selectedRingtoneIndex) { _, which ->
-            selectedRingtoneIndex = which
+
+        setSingleChoiceItems(ringtoneTitles, selectedRingtoneIndex) { _, whichPressed ->
+            selectedRingtoneIndex = whichPressed
             mp.stop()
             mp = MediaPlayer.create(context, ringtones[selectedRingtoneIndex].second.toUri())
             mp.isLooping = false
@@ -67,6 +69,18 @@ fun buildSelectRingtoneDialog(
         setNegativeButton(android.R.string.cancel) { _, _ ->
             mp.stop()
         }
-    }
-    return builder.create()
+    }.create()
+}
+
+fun buildRemoveAlarmDialog(context: Context, response: (Boolean) -> Unit): Dialog {
+    return AlertDialog.Builder(context).apply {
+        setTitle(context.getString(R.string.dialog_remove_title))
+        setMessage(context.getString(R.string.dialog_remove_message))
+        setPositiveButton(context.getString(android.R.string.yes)) { _, _ ->
+            response(true)
+        }
+        setNegativeButton(context.getString(android.R.string.no)) { _, _ ->
+            response(false)
+        }
+    }.create()
 }

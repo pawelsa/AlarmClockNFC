@@ -2,6 +2,7 @@ package com.helpfulapps.alarmclock.views.clock_fragment
 
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.FragmentClockBinding
+import com.helpfulapps.alarmclock.helpers.layout_helpers.buildRemoveAlarmDialog
 import com.helpfulapps.alarmclock.views.clock_fragment.add_alarm_bs.AddAlarmBottomSheet
 import com.helpfulapps.alarmclock.views.main_activity.MainActivity
 import com.helpfulapps.base.base.BaseFragment
@@ -45,7 +46,9 @@ class ClockFragment : BaseFragment<ClockViewModel, FragmentClockBinding>() {
     }
 
     private fun removeAlarm(alarm: Alarm) {
-        viewModel.removeAlarm(alarm)
+        buildRemoveAlarmDialog(this.context!!) { shouldRemove ->
+            if (shouldRemove) viewModel.removeAlarm(alarm)
+        }.show()
     }
 
     override fun onResume() {
