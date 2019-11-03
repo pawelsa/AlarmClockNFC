@@ -29,7 +29,7 @@ object Modules {
 
     private val appModules = module {
         viewModel { MainActivityViewModel() }
-        viewModel { ClockViewModel(get(), get(), get(), get()) }
+        viewModel { ClockViewModel(get(), get(), get()) }
         viewModel { HourWatchViewModel() }
         viewModel { StopWatchViewModel() }
         viewModel { AddAlarmBottomSheetViewModel(get(), get()) }
@@ -55,7 +55,7 @@ object Modules {
         single<AddAlarmUseCase> { AddAlarmUseCaseImpl(get(), get()) }
         single<SwitchAlarmUseCase> { SwitchAlarmUseCaseImpl(get(), get()) }
         single<GetAlarmsUseCase> { GetAlarmsUseCaseImpl(get(), get()) }
-        single<RemoveAlarmUseCase> { RemoveAlarmUseCaseImpl(get()) }
+        single<RemoveAlarmUseCase> { RemoveAlarmUseCaseImpl(get(), get()) }
         single<UpdateAlarmUseCase> { UpdateAlarmUseCaseImpl(get(), get()) }
         single<DownloadForecastForCityUseCase> { DownloadForecastForCityUseCaseImpl(get()) }
         single<DownloadForecastForLocalizationUseCase> {
