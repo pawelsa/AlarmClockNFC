@@ -92,19 +92,45 @@ class AlarmClockManagerImpl(private val context: Context, private val manager: A
         }
     }
 
-    private fun getAlarmStartingPoint(alarm: Alarm): Long {
-        val calendar = GregorianCalendar.getInstance()
+    fun getAlarmStartingPoint(alarm: Alarm): Long {
+        var calendar = GregorianCalendar.getInstance()
+
+        val currentHour = calendar.get(Calendar.HOUR_OF_DAY)
+        val currentMinute = calendar.get(Calendar.MINUTE)
+
+        calendar = setupCalendar(calendar, alarm)
+
+        if (alarm.isRepeating) {
+
+            // my mapping is always 2 less than in Calendar, so I am substracting 2,
+            // but sunday is only exception because in my array its index is 6, but in Calendar is 1
+            val currentDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK).let {
+                if (it - 2 < 0) it + 5 else it - 2
+            }
+
+            var index: Int
+            for (x in alarm.repetitionDays.indices) {
+                index = (x + currentDayOfWeek) % alarm.repetitionDays.size
+                if (alarm.repetitionDays[index] && (currentDayOfWeek != index || currentHour > alarm.hour || currentMinute >= alarm.minute)) {
+                    calendar.set(Calendar.DAY_OF_WEEK, index)
+                }
+            }
+        } else {
+            if (calendar.timeInMillis <= System.currentTimeMillis()) {
+                calendar.add(Calendar.HOUR, HOURS_IN_DAY)
+            }
+        }
+        return calendar.timeInMillis
+    }
+
+    private fun setupCalendar(calendar: Calendar, alarm: Alarm): Calendar {
         with(calendar) {
             set(Calendar.HOUR_OF_DAY, alarm.hour)
             set(Calendar.MINUTE, alarm.minute)
             set(Calendar.SECOND, 0)
             set(Calendar.MILLISECOND, 0)
-
-            if (this.timeInMillis <= System.currentTimeMillis()) {
-                add(Calendar.HOUR, HOURS_IN_DAY)
-            }
         }
-        return calendar.timeInMillis
+        return calendar
     }
 
     companion object {
