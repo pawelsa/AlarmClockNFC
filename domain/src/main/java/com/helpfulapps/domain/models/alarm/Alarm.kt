@@ -19,13 +19,25 @@ data class Alarm(
 
 ) {
     override operator fun equals(other: Any?): Boolean {
+
+        if (other is DayWeather) {
+            println("DayWeather id: ${other.id}, dt: ${other.dt}, dayOfWeek: ${other.dt.dayOfWeek}")
+        }
+
         return when (other) {
             this === other -> true
             is Alarm -> this.id == other.id
-            is DayWeather -> this.isTurnedOn &&
-                    ((this.isRepeating && this.repetitionDays[other.dt.dayOfWeek]) ||
-                            (!this.isRepeating &&
-                                    Calendar.getInstance().timeInMillis.dayOfYear == other.dt.dayOfYear))
+            is DayWeather -> {
+
+                val otherDayOfWeek = other.dt.dayOfWeek.let {
+                    if (it == 1) 6 else it - 1
+                }
+
+                this.isTurnedOn &&
+                        ((this.isRepeating && this.repetitionDays[other.dt.dayOfWeek]) ||
+                                (!this.isRepeating &&
+                                        Calendar.getInstance().timeInMillis.dayOfYear == other.dt.dayOfYear))
+            }
             else -> false
         }
     }

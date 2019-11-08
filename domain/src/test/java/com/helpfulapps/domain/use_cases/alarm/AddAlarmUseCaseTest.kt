@@ -1,9 +1,9 @@
 package com.helpfulapps.domain.use_cases.alarm
 
 import com.helpfulapps.domain.exceptions.AlarmException
-import com.helpfulapps.domain.models.alarm.Alarm
 import com.helpfulapps.domain.repository.AlarmClockManager
 import com.helpfulapps.domain.repository.AlarmRepository
+import com.helpfulapps.domain.use_cases.mockData.MockData
 import io.mockk.every
 import io.mockk.mockk
 import io.reactivex.Completable
@@ -12,8 +12,8 @@ import org.junit.Test
 
 class AddAlarmUseCaseTest {
 
-    val alarmRepository: AlarmRepository = mockk {}
-    val alarmManager: AlarmClockManager = mockk {}
+    private val alarmRepository: AlarmRepository = mockk {}
+    private val alarmManager: AlarmClockManager = mockk {}
     val useCase = AddAlarmUseCaseImpl(alarmManager, alarmRepository)
 
     @Test
@@ -22,32 +22,13 @@ class AddAlarmUseCaseTest {
         every { alarmManager.setAlarm(any()) } returns Completable.complete()
         every { alarmRepository.addAlarm(any()) } returns Single.create {
             it.onSuccess(
-                Alarm(
-                    id = 1,
-                    hour = 1,
-                    minute = 2,
-                    ringtoneUrl = "ringtoneUrl",
-                    repetitionDays = arrayOf(),
-                    isVibrationOn = false,
-                    isTurnedOn = true,
-                    isRepeating = false,
-                    title = "Alarm 1"
-                )
+                MockData.defaultAlarm
             )
         }
 
         useCase(
             AddAlarmUseCase.Params(
-                Alarm(
-                    hour = 1,
-                    ringtoneUrl = "ringtoneUrl",
-                    repetitionDays = arrayOf(),
-                    title = "Alarm 1",
-                    isVibrationOn = false,
-                    isTurnedOn = true,
-                    isRepeating = false,
-                    minute = 2
-                )
+                MockData.defaultAlarm
             )
         )
             .test()
@@ -61,17 +42,7 @@ class AddAlarmUseCaseTest {
 
         useCase(
             AddAlarmUseCase.Params(
-                Alarm(
-                    hour = 1,
-                    id = 1,
-                    ringtoneUrl = "ringtoneUrl",
-                    repetitionDays = arrayOf(),
-                    title = "Alarm 1",
-                    isVibrationOn = false,
-                    isTurnedOn = true,
-                    isRepeating = false,
-                    minute = 2
-                )
+                MockData.defaultAlarm
             )
         )
             .test()
