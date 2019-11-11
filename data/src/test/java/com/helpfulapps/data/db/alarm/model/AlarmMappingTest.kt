@@ -1,8 +1,6 @@
 package com.helpfulapps.data.db.alarm.model
 
-import com.helpfulapps.domain.models.alarm.Alarm
-import io.mockk.every
-import io.mockk.spyk
+import com.helpfulapps.data.mockData.MockData
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -10,55 +8,50 @@ import org.junit.Test
 
 class AlarmMappingTest {
 
-    val baseDomainDaysOfWeek = arrayOf(true, true, false, false, false, false, false)
-    val baseDataDaysOfWeek = DaysOfWeekEntry(baseDomainDaysOfWeek)
-    val baseDataAlarm =
-        AlarmEntity(0, "", false, true, false, "ringtoneUrl", 0, 15, baseDomainDaysOfWeek)
-    val baseDomainAlarm = Alarm(
-        0,
-        "",
-        false,
-        true,
-        false,
-        "ringtoneUrl",
-        0,
-        15,
-        baseDomainDaysOfWeek
-    )
 
 
     @Test
-    fun fromDomainToDataMappingTest() {
+    fun `from domain to data mapping test`() {
 
-        val dataAlarm = AlarmEntity(baseDomainAlarm)
-        dataAlarm.daysOfWeek = baseDataDaysOfWeek
+        val domainAlarm = MockData.createDomainAlarm()
+        val dataAlarm = AlarmEntity(domainAlarm)
 
-        baseDataAlarm.daysOfWeek = baseDataDaysOfWeek
+        val expected = MockData.createEntityAlarm()
 
-        assertEquals(baseDataAlarm, dataAlarm)
+        assertEquals(expected, dataAlarm)
     }
 
     @Test
-    fun fromDataToDomainMappingTest() {
-        val domainAlarm = baseDataAlarm.toDomain()
-        val mockedTestedDomainAlarm = spyk(domainAlarm)
-        every { mockedTestedDomainAlarm.repetitionDays } returns baseDomainDaysOfWeek
+    fun `from data to domain mapping test`() {
 
-        assertEquals(baseDomainAlarm, mockedTestedDomainAlarm)
+        val entityAlarm = MockData.createEntityAlarm()
+        val domainAlarm = entityAlarm.toDomain()
+
+        val expected = MockData.createDomainAlarm()
+
+        assertEquals(expected, domainAlarm)
     }
 
     @Test
-    fun fromDomainToDataDaysOfWeekMappingTest() {
-        val dataDaysOfWeek = DaysOfWeekEntry(baseDomainDaysOfWeek)
+    fun `from domain to data days of week mapping test`() {
 
-        assertEquals(baseDataDaysOfWeek, dataDaysOfWeek)
+        val domainDays = Array(7) { false }
+        domainDays[6] = true
+        val dataDaysOfWeek = DaysOfWeekEntry(domainDays)
+
+        val expected = DaysOfWeekEntry(sunday = true)
+        assertEquals(expected, dataDaysOfWeek)
     }
 
     @Test
-    fun fromDataToDomainDaysOfWeekMappingTest() {
-        val domainDaysOfWeek = baseDataDaysOfWeek.toDomain()
+    fun `from data to domain days of week mapping test`() {
 
-        assertArrayEquals(baseDomainDaysOfWeek, domainDaysOfWeek)
+        val dataDaysOfWeekEntry = DaysOfWeekEntry()
+        val domainDaysOfWeek = dataDaysOfWeekEntry.toDomain()
+
+        val expected = Array(7) { false }
+
+        assertArrayEquals(expected, domainDaysOfWeek)
     }
 
 }

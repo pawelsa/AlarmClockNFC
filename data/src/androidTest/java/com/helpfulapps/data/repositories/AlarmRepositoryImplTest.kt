@@ -1,7 +1,22 @@
 
 package com.helpfulapps.data.repositories
 
-/*
+import android.app.Application
+import android.content.Context
+import androidx.test.core.app.ApplicationProvider
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.helpfulapps.data.db.alarm.model.AlarmEntity
+import com.helpfulapps.domain.exceptions.AlarmException
+import com.raizlabs.android.dbflow.config.FlowManager
+import io.mockk.every
+import io.mockk.spyk
+import io.reactivex.Single
+import org.junit.After
+import org.junit.Before
+import org.junit.Test
+import org.junit.runner.RunWith
+import com.helpfulapps.data.mockData.MockDataIns as MockData
+
 @RunWith(AndroidJUnit4::class)
 class AlarmRepositoryImplTest {
 
@@ -62,8 +77,8 @@ class AlarmRepositoryImplTest {
     fun getAlarmCountTest() {
 
         val alarm1 = MockData.defaultAlarm
-        val alarm2 = MockData.additionalAlarm
-        val alarm3 = MockData.notInDbAlarm
+        val alarm2 = MockData.createDomainAlarm(id = 2)
+        val alarm3 = MockData.createDomainAlarm(id = 3)
 
         val alarmEntry1 = AlarmEntity(alarm1)
         val alarmEntry2 = AlarmEntity(alarm2)
@@ -99,17 +114,21 @@ class AlarmRepositoryImplTest {
             MockData.defaultAlarm
         )
         val alarm2 = repoMock.addAlarm(
-            MockData.notInDbAlarm
+            MockData.createDomainAlarm(id = 2)
         )
         val alarm3 = repoMock.addAlarm(
-            MockData.additionalAlarm
+            MockData.createDomainAlarm(id = 3)
         )
 
         val alarmList = listOf(alarm1, alarm2, alarm3)
 
         Single.merge(alarmList)
             .test()
-            .assertResult(MockData.defaultAlarm, MockData.notInDbAlarm, MockData.additionalAlarm)
+            .assertResult(
+                MockData.defaultAlarm,
+                MockData.createDomainAlarm(id = 2),
+                MockData.createDomainAlarm(id = 3)
+            )
             .dispose()
     }
 
@@ -253,7 +272,7 @@ class AlarmRepositoryImplTest {
 //        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
 
         val alarm = MockData.defaultAlarm
-        val alarmNotInDb = MockData.notInDbAlarm
+        val alarmNotInDb = MockData.createDomainAlarm(id = 4)
         val alarm1 = repoMock.addAlarm(alarm)
 
         alarm1.concatWith(repoMock.updateAlarm(alarmNotInDb))
@@ -268,7 +287,7 @@ class AlarmRepositoryImplTest {
         val repoMock = spyk(alarmRepositoryImpl)
 
         val alarm1 = MockData.defaultAlarm
-        val alarm2 = MockData.notInDbAlarm
+        val alarm2 = MockData.createDomainAlarm(id = 4)
 
 //        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
 
@@ -281,4 +300,4 @@ class AlarmRepositoryImplTest {
 
     }
 
-}*/
+}
