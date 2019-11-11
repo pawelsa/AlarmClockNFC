@@ -7,7 +7,7 @@ object MockData {
 
     // THU 06/20/2019 @ 2:00am
     const val BASE_TIMESTAMP = 1560996000000L
-    const val HOUR = 3600
+    const val HOUR = 3600 * 1000
     const val DAY_IN_HOURS = HOUR * 24
 
     val defaultAlarm = createAlarm(id = 5, isTurnedOn = false, hour = 0, minute = 15)

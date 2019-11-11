@@ -39,9 +39,6 @@ class GetAlarmsUseCaseTest {
             .dispose()
     }
 
-    //test what type of timestamp calendar uses
-
-    //TODO write more cases for this test, for repeating alarms, non repeating, turned on & off
     @Test
     fun `should obtain alarms with weather data`() {
 
@@ -66,7 +63,5 @@ class GetAlarmsUseCaseTest {
             .assertResult(expectedResult)
             .dispose()
     }
-
-
 
 }
