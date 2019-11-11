@@ -22,10 +22,16 @@ data class Alarm(
         return when (other) {
             this === other -> true
             is Alarm -> this.id == other.id
-            is DayWeather -> this.isTurnedOn &&
-                    ((this.isRepeating && this.repetitionDays[other.dt.dayOfWeek]) ||
-                            (!this.isRepeating &&
-                                    Calendar.getInstance().timeInMillis.dayOfYear == other.dt.dayOfYear))
+            is DayWeather -> {
+
+                if (!this.isTurnedOn) return false
+                val otherDayOfWeek = other.dt.dayOfWeek.let {
+                    if (it == 1) 6 else it - 2
+                }
+                if (this.isRepeating && this.repetitionDays[otherDayOfWeek]) return true
+                return !this.isRepeating &&
+                        Calendar.getInstance().timeInMillis.dayOfYear == other.dt.dayOfYear
+            }
             else -> false
         }
     }

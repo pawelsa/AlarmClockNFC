@@ -1,10 +1,10 @@
 package com.helpfulapps.domain.use_cases.alarm
 
-import com.helpfulapps.domain.models.alarm.Alarm
 import com.helpfulapps.domain.models.alarm.WeatherAlarm
-import com.helpfulapps.domain.models.weather.*
+import com.helpfulapps.domain.models.weather.DayWeather
 import com.helpfulapps.domain.repository.AlarmRepository
 import com.helpfulapps.domain.repository.WeatherRepository
+import com.helpfulapps.domain.use_cases.mockData.MockData
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import io.mockk.every
@@ -16,8 +16,8 @@ import java.util.*
 
 class GetAlarmsUseCaseTest {
 
-    val mockedWeatherRepository: WeatherRepository = mockk {}
-    val mockedAlarmRepository: AlarmRepository = mockk {}
+    private val mockedWeatherRepository: WeatherRepository = mockk {}
+    private val mockedAlarmRepository: AlarmRepository = mockk {}
     val useCase = GetAlarmsUseCaseImpl(mockedAlarmRepository, mockedWeatherRepository)
 
 
@@ -25,13 +25,13 @@ class GetAlarmsUseCaseTest {
     fun `should get only alarms`() {
 
         val expectedResult = listOf(
-            WeatherAlarm(alarmList[0], DayWeather()),
-            WeatherAlarm(alarmList[1], DayWeather()),
-            WeatherAlarm(alarmList[2], DayWeather())
+            WeatherAlarm(MockData.alarmList[0], DayWeather()),
+            WeatherAlarm(MockData.alarmList[1], DayWeather()),
+            WeatherAlarm(MockData.alarmList[2], DayWeather())
         )
 
         every { mockedWeatherRepository.getForecastForAlarms() } returns Single.just(emptyList())
-        every { mockedAlarmRepository.getAlarms() } returns Single.just(alarmList)
+        every { mockedAlarmRepository.getAlarms() } returns Single.just(MockData.alarmList)
 
         useCase()
             .test()
@@ -39,139 +39,29 @@ class GetAlarmsUseCaseTest {
             .dispose()
     }
 
-    //TODO write more cases for this test, for repeating alarms, non repeating, turned on & off
     @Test
     fun `should obtain alarms with weather data`() {
 
         val expectedResult = listOf(
-            WeatherAlarm(alarmList[0], weatherList[0]),
-//            WeatherAlarm(alarmList[1], weatherList[1]),
-            WeatherAlarm(alarmList[2], DayWeather())
+            WeatherAlarm(MockData.alarmList[0], MockData.shortWeatherList[0]),
+            WeatherAlarm(MockData.alarmList[1], MockData.shortWeatherList[0]),
+            WeatherAlarm(MockData.alarmList[2], DayWeather()),
+            WeatherAlarm(MockData.alarmList[3], DayWeather()),
+            WeatherAlarm(MockData.alarmList[4], MockData.shortWeatherList[3])
         )
         val calendar = mock<Calendar>()
         mockkStatic(Calendar::class)
         every { Calendar.getInstance() } returns calendar
-        whenever(calendar.timeInMillis).thenReturn(1560996000L)
+        whenever(calendar.timeInMillis).thenReturn(1560996000000L)
 
-        every { mockedWeatherRepository.getForecastForAlarms() } returns Single.just(weatherList)
-        every { mockedAlarmRepository.getAlarms() } returns Single.just(alarmList)
+        every { mockedWeatherRepository.getForecastForAlarms() } returns Single.just(MockData.shortWeatherList)
+        every { mockedAlarmRepository.getAlarms() } returns Single.just(MockData.alarmList)
+
 
         useCase()
             .test()
             .assertResult(expectedResult)
             .dispose()
     }
-
-    val alarmList = listOf(
-        Alarm(
-            id = 1,
-            minute = 10,
-            isRepeating = false,
-            isTurnedOn = true,
-            isVibrationOn = true,
-            title = "Alarm 1",
-            repetitionDays = arrayOf(false, false, false, false, false, false, false),
-            ringtoneUrl = "ringtoneUrl",
-            hour = 10
-        ),
-        Alarm(
-            id = 2,
-            minute = 10,
-            isRepeating = false,
-            isTurnedOn = true,
-            isVibrationOn = true,
-            title = "Alarm 2",
-            repetitionDays = arrayOf(false, false, false, false, false, false, false),
-            ringtoneUrl = "ringtoneUrl",
-            hour = 10
-        ),
-        Alarm(
-            id = 3,
-            minute = 10,
-            isRepeating = false,
-            isTurnedOn = false,
-            isVibrationOn = false,
-            title = "Alarm 3",
-            repetitionDays = arrayOf(false, true, false, true, false, false, false),
-            ringtoneUrl = "ringtoneUrl",
-            hour = 10
-        )
-    )
-
-    val weatherList = listOf(
-        DayWeather(
-            id = 1,
-            cityName = "Pszczyna",
-            dt = 1560996000,
-            hourWeatherList = listOf(),
-            weatherInfo = WeatherInfo(
-                rain = Rain.NO_RAIN,
-                snow = Snow.NO_DATA,
-                temperature = Temperature.HOT,
-                wind = Wind.NORMAL
-            )
-        ),
-        DayWeather(
-            id = 2,
-            cityName = "Pszczyna",
-            dt = 1561161600,
-            hourWeatherList = listOf(),
-            weatherInfo = WeatherInfo(
-                rain = Rain.NO_RAIN,
-                snow = Snow.NO_DATA,
-                temperature = Temperature.HOT,
-                wind = Wind.NORMAL
-            )
-        ),
-        DayWeather(
-            id = 3,
-            cityName = "Pszczyna",
-            dt = 1561075400,
-            hourWeatherList = listOf(),
-            weatherInfo = WeatherInfo(
-                rain = Rain.NO_RAIN,
-                snow = Snow.NO_DATA,
-                temperature = Temperature.HOT,
-                wind = Wind.NORMAL
-            )
-        ),
-        DayWeather(
-            id = 4,
-            cityName = "Pszczyna",
-            dt = 1561251600,
-            hourWeatherList = listOf(),
-            weatherInfo = WeatherInfo(
-                rain = Rain.NO_RAIN,
-                snow = Snow.NO_DATA,
-                temperature = Temperature.HOT,
-                wind = Wind.NORMAL
-            )
-        ),
-        DayWeather(
-            id = 5,
-            cityName = "Pszczyna",
-            dt = 1558310400,
-            hourWeatherList = listOf(),
-            weatherInfo = WeatherInfo(
-                rain = Rain.NO_RAIN,
-                snow = Snow.NO_DATA,
-                temperature = Temperature.HOT,
-                wind = Wind.NORMAL
-            )
-        ),
-        DayWeather(
-            id = 6,
-            cityName = "Pszczyna",
-            dt = 1561334600,
-            hourWeatherList = listOf(),
-            weatherInfo = WeatherInfo(
-                rain = Rain.NO_RAIN,
-                snow = Snow.NO_DATA,
-                temperature = Temperature.HOT,
-                wind = Wind.NORMAL
-            )
-        )
-    )
-
 
 }

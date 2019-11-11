@@ -93,7 +93,7 @@ open class AlarmRepositoryImpl(context: Context) : AlarmRepository {
             .doOnSuccess { RxBus.publish(DatabaseNotifiers.Updated) }
     }
 
-    private fun getAlarmsQuery() = select.from(AlarmEntity::class.java).rx().queryList()
+    fun getAlarmsQuery() = select.from(AlarmEntity::class.java).rx().queryList()
 
     private fun getAlarmDomain(alarmId: Long): Single<Alarm> =
         getAlarm(alarmId).map { it.toDomain() }.toSingle()

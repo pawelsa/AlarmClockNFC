@@ -1,7 +1,8 @@
 package com.helpfulapps.domain.use_cases.weather
 
-import com.helpfulapps.domain.models.weather.*
+import com.helpfulapps.domain.models.weather.DayWeather
 import com.helpfulapps.domain.repository.WeatherRepository
+import com.helpfulapps.domain.use_cases.mockData.MockData
 import io.mockk.every
 import io.mockk.mockk
 import io.reactivex.Single
@@ -14,11 +15,11 @@ class GetForecastForAlarmUseCaseImplTest {
 
     @Test
     fun `should obtain forecast for alarm`() {
-        every { weatherRepository.getForecastForAlarm(any()) } returns Single.just(dayWeather)
+        every { weatherRepository.getForecastForAlarm(any()) } returns Single.just(MockData.dayWeather)
 
         useCase(GetForecastForAlarmUseCase.Params(5))
             .test()
-            .assertResult(dayWeather)
+            .assertResult(MockData.dayWeather)
             .dispose()
     }
 
@@ -31,18 +32,5 @@ class GetForecastForAlarmUseCaseImplTest {
             .assertResult(DayWeather(id = -1))
             .dispose()
     }
-
-    val dayWeather = DayWeather(
-        id = 1,
-        cityName = "Pszczyna",
-        dt = 1560996000,
-        hourWeatherList = listOf(),
-        weatherInfo = WeatherInfo(
-            rain = Rain.NO_RAIN,
-            snow = Snow.NO_DATA,
-            temperature = Temperature.HOT,
-            wind = Wind.NORMAL
-        )
-    )
 
 }

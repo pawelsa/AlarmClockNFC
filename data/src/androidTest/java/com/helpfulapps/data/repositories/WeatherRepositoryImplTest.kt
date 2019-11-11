@@ -8,6 +8,7 @@ import com.helpfulapps.data.api.weather.api.ApiCalls
 import com.helpfulapps.data.api.weather.api.Downloader
 import com.helpfulapps.data.helper.NetworkCheck
 import com.helpfulapps.data.helper.Settings
+import com.helpfulapps.data.mockData.MockDataIns
 import com.helpfulapps.data.repositories.WeatherRepositoryImpl.Companion.ONE_AND_HALF_AN_HOUR
 import com.helpfulapps.domain.exceptions.WeatherException
 import com.helpfulapps.domain.models.weather.DayWeather
@@ -23,6 +24,7 @@ import junit.framework.Assert.assertTrue
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import retrofit2.Response
 
 class WeatherRepositoryImplTest {
 
@@ -62,6 +64,15 @@ class WeatherRepositoryImplTest {
 
     @Test
     fun shouldDownloadAndSaveForecastByCityName() {
+        every { networkCheck.isConnectedToNetwork } returns Maybe.create { it.onSuccess(true) }
+        every { apiCalls.downloadForecast(any(), any()) } returns Maybe.create {
+            it.onSuccess(
+                Response.success(
+                    MockDataIns.createApiForecastForCity()
+                )
+            )
+        }
+
         val testObserver = weatherRepository.downloadForecast("Pszczyna")
             .test()
 
@@ -74,6 +85,21 @@ class WeatherRepositoryImplTest {
 
     @Test
     fun shouldDownloadAndSaveForecastByCords() {
+        every { networkCheck.isConnectedToNetwork } returns Maybe.create { it.onSuccess(true) }
+        every {
+            apiCalls.downloadForecastForCoordinates(
+                any(),
+                any(),
+                any(),
+                any()
+            )
+        } returns Maybe.create {
+            it.onSuccess(
+                Response.success(
+                    MockDataIns.createApiForecastForCity()
+                )
+            )
+        }
         val testObserver = weatherRepository.downloadForecast(40, 40)
             .test()
 
@@ -85,20 +111,19 @@ class WeatherRepositoryImplTest {
     }
 
     @Test
-    fun shouldDownloadAndFailToSaveForecast() {
-
-    }
-
-    @Test
     fun shouldDownloadFail() {
-
+/*
         every { networkCheck.isConnectedToNetwork } returns Maybe.just(true)
-        // retrofit response have to be mocked
+        every { apiCalls.downloadForecast(any(), any()) } returns Maybe.create { Response.error<ForecastForCity>() }
+
+        weatherRepository.downloadForecast("Pszczyna")
+            .test()
+            .assertError(CouldNotObtainForecast::class.java)
+            .dispose()*/
     }
 
     @Test
     fun shouldReturnDayWeatherListWithElements() {
-
         every { weatherRepository.getForecastForAlarms() } returns Single.just(listOf())
 
         weatherRepository.getForecastForAlarms()
