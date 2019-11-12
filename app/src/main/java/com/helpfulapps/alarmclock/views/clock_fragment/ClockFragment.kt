@@ -19,6 +19,18 @@ class ClockFragment : BaseFragment<ClockViewModel, FragmentClockBinding>() {
     private lateinit var modalBottomSheet: AddAlarmBottomSheet
 
     override fun init() {
+
+/*
+
+        binding.rvClockList.dispatchApplyWindowInsets()
+        binding.rvClockList.setOnApplyWindowInsetsListener { view, insets ->
+            Log.d(TAG, "hello")
+            view.updatePadding(bottom = insets.systemWindowInsetBottom)
+            insets
+        }
+        binding.rvClockList.requestApplyInsets()
+*/
+
         setupViewModel()
         setupData()
     }

@@ -3,7 +3,11 @@ package com.helpfulapps.alarmclock.views.main_activity
 import android.content.Intent
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.core.view.ViewCompat
+import androidx.core.view.marginBottom
+import androidx.core.view.updatePadding
 import com.google.android.material.snackbar.Snackbar
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.ActivityMainBinding
@@ -44,7 +48,15 @@ class MainActivity : BaseActivity<MainActivityViewModel, ActivityMainBinding>() 
     override fun init() {
         manageFragmentLaunching(intent)
 
-        binding.root.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+        binding.clMainRoot.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
+            view.updatePadding(top = insets.systemWindowInsetTop)
+            (binding.fabMainFab.layoutParams as ViewGroup.MarginLayoutParams).bottomMargin =
+                binding.fabMainFab.marginBottom + insets.systemGestureInsets.bottom
+            insets.consumeSystemWindowInsets()
+        }
 
         ib_main_menu.setOnClickListener {
             popupMenu.show()
@@ -98,3 +110,50 @@ class MainActivity : BaseActivity<MainActivityViewModel, ActivityMainBinding>() 
     }
 
 }
+
+fun View.addSystemWindowInsetToPadding(
+    left: Boolean = false,
+    top: Boolean = false,
+    right: Boolean = false,
+    bottom: Boolean = false
+) {
+    val (initialLeft, initialTop, initialRight, initialBottom) =
+        listOf(paddingLeft, paddingTop, paddingRight, paddingBottom)
+
+    ViewCompat.setOnApplyWindowInsetsListener(this) { view, insets ->
+        view.updatePadding(
+            left = initialLeft + (if (left) insets.systemWindowInsetLeft else 0),
+            top = initialTop + (if (top) insets.systemWindowInsetTop else 0),
+            right = initialRight + (if (right) insets.systemWindowInsetRight else 0),
+            bottom = initialBottom + (if (bottom) insets.systemWindowInsetBottom else 0)
+        )
+
+        insets
+    }
+}
+/*
+
+fun View.addSystemWindowInsetToMargin(
+    left: Boolean = false,
+    top: Boolean = false,
+    right: Boolean = false,
+    bottom: Boolean = false
+) {
+    val (initialLeft, initialTop, initialRight, initialBottom) =
+        listOf(marginLeft, marginTop, marginRight, marginBottom)
+
+    ViewCompat.setOnApplyWindowInsetsListener(this) { view, insets ->
+        view.updateLayoutParams {
+            (this as? ViewGroup.MarginLayoutParams)?.let {
+                updateMargins(
+                    left = initialLeft + (if (left) insets.systemWindowInsetLeft else 0),
+                    top = initialTop + (if (top) insets.systemWindowInsetTop else 0),
+                    right = initialRight + (if (right) insets.systemWindowInsetRight else 0),
+                    bottom = initialBottom + (if (bottom) insets.systemWindowInsetBottom else 0)
+                )
+            }
+        }
+
+        insets
+    }
+}*/
