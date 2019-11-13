@@ -40,6 +40,6 @@ object IntentCreator {
 
     private const val BASE_PACKAGE = "com.helpfulapps.alarmclock"
     private const val PACKAGE_MAIN_ACTIVITY = "$BASE_PACKAGE.views.main_activity.MainActivity"
-    private const val PACKAGE_ALARM_SERVICE = "$BASE_PACKAGE.receivers.AlarmService"
+    private const val PACKAGE_ALARM_SERVICE = "$BASE_PACKAGE.receivers.AlarmReceiver"
 
 }

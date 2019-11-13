@@ -1,8 +1,11 @@
 package com.helpfulapps.alarmclock.views.ringing_alarm
 
+import android.content.Intent
+import android.view.WindowManager
 import com.google.android.material.snackbar.Snackbar
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.ActivityRingingAlarmBinding
+import com.helpfulapps.alarmclock.service.AlarmService
 import com.helpfulapps.base.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_ringing_alarm.*
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -15,11 +18,21 @@ class RingingAlarmActivity : BaseActivity<RingingAlarmViewModel, ActivityRinging
 
 
     override fun init() {
+
+        window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED)
+        window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD)
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
+
         binding.model = viewModel
         viewModel.getAlarm()
 
         fab_ring_end.setOnClickListener {
-            // TODO implement
+            Intent(this, AlarmService::class.java).also {
+                it.action = "STOP"
+                stopService(it)
+            }
+            finish()
         }
 
         fab_ring_snooze.setOnClickListener {
