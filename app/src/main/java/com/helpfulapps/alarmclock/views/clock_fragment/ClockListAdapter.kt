@@ -1,24 +1,29 @@
 package com.helpfulapps.alarmclock.views.clock_fragment
 
+import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.ItemAlarmBinding
 import com.helpfulapps.base.base.BaseListAdapter
 import com.helpfulapps.domain.models.alarm.Alarm
 
-class NewClockListAdapter(
+class ClockListAdapter(
     val switchAlarm: (Alarm) -> Unit,
     val openEditMode: (Alarm) -> Unit,
     val removeAlarm: (Alarm) -> Unit
 ) : BaseListAdapter<AlarmData, ItemAlarmBinding>(AlarmDataDiffCallback()) {
 
-    private val TAG = NewClockListAdapter::class.java.simpleName
+    private val TAG = ClockListAdapter::class.java.simpleName
 
     override val itemView: Int = R.layout.item_alarm
 
     override fun bind(): ItemAlarmBinding.(item: AlarmData, position: Int) -> Unit =
-        { item, _ ->
+        { item, position ->
             alarmData = item
+
+            if (position == itemCount - 1) {
+                (clItemAlarmBase.layoutParams as ViewGroup.MarginLayoutParams).bottomMargin = 450
+            }
 
             clItemAlarmBase.setOnClickListener {
                 openEditMode(item.toDomain())

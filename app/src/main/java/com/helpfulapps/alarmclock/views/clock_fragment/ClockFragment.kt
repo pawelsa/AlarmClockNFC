@@ -36,7 +36,7 @@ class ClockFragment : BaseFragment<ClockViewModel, FragmentClockBinding>() {
     }
 
     private fun setupViewModel() {
-        viewModel.adapter = NewClockListAdapter(
+        viewModel.adapter = ClockListAdapter(
             switchAlarm = ::switchAlarm,
             openEditMode = ::openEdit,
             removeAlarm = ::removeAlarm
