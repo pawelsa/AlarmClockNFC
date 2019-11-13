@@ -20,7 +20,7 @@ class ClockViewModel(
 
     private val TAG = ClockViewModel::class.java.simpleName
 
-    lateinit var adapter: NewClockListAdapter
+    lateinit var adapter: ClockListAdapter
 
     fun getAlarms() {
         disposables += getAlarmsUseCase()

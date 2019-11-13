@@ -2,7 +2,12 @@ package com.helpfulapps.alarmclock.views.main_activity
 
 import android.content.Intent
 import android.util.Log
+import android.view.View
+import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.core.view.ViewCompat
+import androidx.core.view.marginBottom
+import androidx.core.view.updatePadding
 import com.google.android.material.snackbar.Snackbar
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.ActivityMainBinding
@@ -42,6 +47,16 @@ class MainActivity : BaseActivity<MainActivityViewModel, ActivityMainBinding>() 
 
     override fun init() {
         manageFragmentLaunching(intent)
+
+        binding.clMainRoot.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
+            view.updatePadding(top = insets.systemWindowInsetTop)
+            (binding.fabMainFab.layoutParams as ViewGroup.MarginLayoutParams).bottomMargin =
+                binding.fabMainFab.marginBottom + insets.systemGestureInsets.bottom
+            insets.consumeSystemWindowInsets()
+        }
 
         ib_main_menu.setOnClickListener {
             popupMenu.show()
