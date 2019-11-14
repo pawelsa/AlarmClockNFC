@@ -8,6 +8,8 @@ interface AlarmRepository {
 
     fun getAlarms(): Single<List<Alarm>>
 
+    fun getAlarm(id: Long): Single<Alarm>
+
     fun removeAlarm(alarmId: Long): Completable
 
     fun switchAlarm(alarmId: Long): Single<Alarm>

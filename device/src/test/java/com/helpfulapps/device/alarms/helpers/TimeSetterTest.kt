@@ -1,6 +1,7 @@
 package com.helpfulapps.device.alarms.helpers
 
 import com.helpfulapps.device.alarms.Alarm
+import com.helpfulapps.domain.helpers.TimeSetter
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -15,11 +16,12 @@ class TimeSetterTest {
 
     @Before
     fun setUp() {
-        timeSetter = TimeSetter(GregorianCalendar.getInstance().apply {
-            timeInMillis = timestamp
-            timeZone = TimeZone.getTimeZone("GMT+0:00")
-        },
-            currentTime = { timestamp })
+        timeSetter =
+            TimeSetter(GregorianCalendar.getInstance().apply {
+                timeInMillis = timestamp
+                timeZone = TimeZone.getTimeZone("GMT+0:00")
+            },
+                currentTime = { timestamp })
     }
 
     @Test

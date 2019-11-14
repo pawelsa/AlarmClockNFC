@@ -3,13 +3,34 @@ package com.helpfulapps.alarmclock.service
 import android.app.*
 import android.content.Context
 import android.content.Intent
+import android.media.AudioAttributes
+import android.media.AudioManager.STREAM_ALARM
+import android.media.MediaPlayer
+import android.net.Uri
 import android.os.Build
 import android.os.IBinder
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.views.ringing_alarm.RingingAlarmActivity
+import com.helpfulapps.domain.use_cases.alarm.GetAlarmUseCase
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.plusAssign
+import io.reactivex.rxkotlin.subscribeBy
+import org.koin.android.ext.android.inject
+
 
 class AlarmService : Service() {
+
+    private val TAG = AlarmService::class.java.simpleName
+
+    private val getAlarmUseCase: GetAlarmUseCase by inject()
+
+    private val mMediaPlayer: MediaPlayer by lazy {
+        MediaPlayer()
+    }
+    private val disposable = CompositeDisposable()
+
 
     override fun onBind(intent: Intent): IBinder? = null
 
@@ -17,15 +38,42 @@ class AlarmService : Service() {
 
         if (intent?.action == "STOP") {
             stopSelf()
+            mMediaPlayer.stop()
+            mMediaPlayer.release()
         } else {
-            val notification = createNotification()
+            val alarmId = intent?.getIntExtra("ALARM_ID", -1) ?: -1
+
+            disposable += getAlarmUseCase(GetAlarmUseCase.Params(alarmId.toLong())).subscribeBy(
+                onSuccess = {
+                    val alert = Uri.parse(it.alarm.ringtoneUrl)
+                    mMediaPlayer.setDataSource(this, alert)
+
+                    mMediaPlayer.setAudioAttributes(
+                        AudioAttributes.Builder()
+                            .setFlags(AudioAttributes.FLAG_AUDIBILITY_ENFORCED)
+                            .setLegacyStreamType(STREAM_ALARM)
+                            .setUsage(AudioAttributes.USAGE_ALARM)
+                            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                            .build()
+                    )
+                    mMediaPlayer.isLooping = true
+                    mMediaPlayer.prepare()
+                    mMediaPlayer.start()
+                },
+                onError = {
+                    it.printStackTrace()
+                    Log.e(TAG, it.message)
+                }
+            )
+
+            val notification = createNotification(alarmId)
 
             startForeground(1, notification)
         }
         return START_STICKY
     }
 
-    fun createNotification(): Notification {
+    fun createNotification(alarmId: Int): Notification {
         val fullScreenIntent = Intent(this, RingingAlarmActivity::class.java).also {
             it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
@@ -40,7 +88,7 @@ class AlarmService : Service() {
         val notificationBuilder =
             NotificationCompat.Builder(this, "One")
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("Incoming call")
+                .setContentTitle("Incoming call $alarmId")
                 .setContentText("(919) 555-1234")
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setCategory(NotificationCompat.CATEGORY_ALARM)
@@ -67,4 +115,9 @@ class AlarmService : Service() {
         return notificationBuilder.build()
     }
 
+    override fun onDestroy() {
+        mMediaPlayer.release()
+        disposable.clear()
+        super.onDestroy()
+    }
 }

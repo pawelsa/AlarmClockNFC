@@ -1,6 +1,6 @@
-package com.helpfulapps.device.alarms.helpers
+package com.helpfulapps.domain.helpers
 
-import com.helpfulapps.device.alarms.Alarm
+import com.helpfulapps.domain.models.alarm.Alarm
 import java.util.*
 
 class TimeSetter(
@@ -51,7 +51,10 @@ class TimeSetter(
                 return calendar
             }
         }
-        calendar.add(Calendar.HOUR_OF_DAY, HOURS_IN_WEEK)
+        calendar.add(
+            Calendar.HOUR_OF_DAY,
+            HOURS_IN_WEEK
+        )
         return calendar
     }
 
@@ -59,7 +62,10 @@ class TimeSetter(
         val calendar = setHourAndMinute(alarm, calendar)
 
         if (calendar.timeInMillis <= currentTime()) {
-            calendar.add(Calendar.HOUR, HOURS_IN_DAY)
+            calendar.add(
+                Calendar.HOUR,
+                HOURS_IN_DAY
+            )
         }
         return calendar
     }

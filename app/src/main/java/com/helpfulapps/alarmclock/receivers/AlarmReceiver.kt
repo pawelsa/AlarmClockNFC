@@ -14,12 +14,11 @@ class AlarmReceiver : BroadcastReceiver() {
         Log.d("AlarmReceiver", "Opened alarm receiver")
 
 
-        Intent(context, AlarmService::class.java).let { intent ->
+        Intent(context, AlarmService::class.java).let {
+            it.putExtra("ALARM_ID", intent?.getIntExtra("ALARM_ID", -1))
             when {
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.O -> context?.startForegroundService(
-                    intent
-                )
-                else -> context?.startService(intent)
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.O -> context?.startForegroundService(it)
+                else -> context?.startService(it)
             }
         }
     }

@@ -30,6 +30,10 @@ open class AlarmRepositoryImpl(context: Context) : AlarmRepository {
         FlowManager.init(context)
     }
 
+    override fun getAlarm(id: Long): Single<Alarm> {
+        return getSingleAlarm(id).flatMapSingle { Single.just(it.toDomain()) }
+    }
+
     override fun getAlarms(): Single<List<Alarm>> {
         return getAlarmsQuery()
             .map { list ->
@@ -41,7 +45,7 @@ open class AlarmRepositoryImpl(context: Context) : AlarmRepository {
     }
 
     override fun removeAlarm(alarmId: Long): Completable {
-        return getAlarm(alarmId)
+        return getSingleAlarm(alarmId)
             .flatMapSingle { it.delete() }
             .flatMapCompletable { isDeleted ->
                 isDeleted.checkCompleted(
@@ -54,7 +58,7 @@ open class AlarmRepositoryImpl(context: Context) : AlarmRepository {
 
     // todo zabezpieczyć przed niepoprawnym id
     override fun switchAlarm(alarmId: Long): Single<Alarm> {
-        return getAlarm(alarmId)
+        return getSingleAlarm(alarmId)
             .map { alarmEntry ->
                 alarmEntry.isTurnedOn = !alarmEntry.isTurnedOn
                 alarmEntry
@@ -96,9 +100,9 @@ open class AlarmRepositoryImpl(context: Context) : AlarmRepository {
     fun getAlarmsQuery() = select.from(AlarmEntity::class.java).rx().queryList()
 
     private fun getAlarmDomain(alarmId: Long): Single<Alarm> =
-        getAlarm(alarmId).map { it.toDomain() }.toSingle()
+        getSingleAlarm(alarmId).map { it.toDomain() }.toSingle()
 
-    private fun getAlarm(alarmId: Long) =
+    private fun getSingleAlarm(alarmId: Long) =
         (select from AlarmEntity::class where AlarmEntity_Table.id.`is`(alarmId)).rx().querySingle()
 
     fun getSchedulerIO(): Scheduler = Schedulers.io()

@@ -14,6 +14,7 @@ object IntentCreator {
                 BASE_PACKAGE,
                 PACKAGE_ALARM_SERVICE
             )
+            it.putExtra("ALARM_ID", alarmId)
             PendingIntent.getBroadcast(
                 context,
                 alarmId,

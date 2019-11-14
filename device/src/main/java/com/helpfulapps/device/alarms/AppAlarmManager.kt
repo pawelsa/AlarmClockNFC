@@ -6,7 +6,7 @@ import android.content.Context
 import android.os.Build
 import com.helpfulapps.base.extensions.rx.completableOf
 import com.helpfulapps.device.alarms.helpers.IntentCreator
-import com.helpfulapps.device.alarms.helpers.TimeSetter
+import com.helpfulapps.domain.helpers.TimeSetter
 import com.helpfulapps.domain.repository.AlarmClockManager
 import io.reactivex.Completable
 import com.helpfulapps.domain.models.alarm.Alarm as DomainAlarm
@@ -22,7 +22,7 @@ class AlarmClockManagerImpl(private val context: Context, private val manager: A
 
             val alarm = Alarm(domainAlarm)
             val timeSetter = TimeSetter()
-//            val alarmStart = timeSetter.getAlarmStartingPoint(alarm)
+//            val alarmStart = timeSetter.getAlarmStartingPoint(domainAlarm)
             val alarmStart = System.currentTimeMillis() + 10 * 1000
 
             val alarmIntent = IntentCreator.getAlarmIntent(context, alarm.id)
