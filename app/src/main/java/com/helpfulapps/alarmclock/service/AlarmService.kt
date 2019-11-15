@@ -37,32 +37,20 @@ class AlarmService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
         if (intent?.action == "STOP") {
-            stopSelf()
             mMediaPlayer.stop()
             mMediaPlayer.release()
+            stopSelf()
         } else {
             val alarmId = intent?.getIntExtra("ALARM_ID", -1) ?: -1
 
             disposable += getAlarmUseCase(GetAlarmUseCase.Params(alarmId.toLong())).subscribeBy(
                 onSuccess = {
                     val alert = Uri.parse(it.alarm.ringtoneUrl)
-                    mMediaPlayer.setDataSource(this, alert)
-
-                    mMediaPlayer.setAudioAttributes(
-                        AudioAttributes.Builder()
-                            .setFlags(AudioAttributes.FLAG_AUDIBILITY_ENFORCED)
-                            .setLegacyStreamType(STREAM_ALARM)
-                            .setUsage(AudioAttributes.USAGE_ALARM)
-                            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                            .build()
-                    )
-                    mMediaPlayer.isLooping = true
-                    mMediaPlayer.prepare()
-                    mMediaPlayer.start()
+                    setupMediaPlayer(alert)
                 },
                 onError = {
                     it.printStackTrace()
-                    Log.e(TAG, it.message)
+                    Log.e(TAG, it.message ?: "")
                 }
             )
 
@@ -71,6 +59,26 @@ class AlarmService : Service() {
             startForeground(1, notification)
         }
         return START_STICKY
+    }
+
+    fun setupMediaPlayer(ringtoneUri: Uri) {
+        with(mMediaPlayer) {
+            setDataSource(this@AlarmService, ringtoneUri)
+
+            setAudioAttributes(
+                AudioAttributes.Builder()
+                    .setFlags(AudioAttributes.FLAG_AUDIBILITY_ENFORCED)
+                    .setLegacyStreamType(STREAM_ALARM)
+                    .setUsage(AudioAttributes.USAGE_ALARM)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .build()
+            )
+            isLooping = true
+            setOnPreparedListener {
+                it.start()
+            }
+            prepareAsync()
+        }
     }
 
     fun createNotification(alarmId: Int): Notification {
