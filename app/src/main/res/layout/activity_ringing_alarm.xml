@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="com.helpfulapps.alarmclock.helpers.TimeKt" />
+
         <variable
             name="model"
             type="com.helpfulapps.alarmclock.views.ringing_alarm.RingingAlarmViewModel" />
@@ -62,28 +64,28 @@
                 android:id="@+id/tv_ring_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{model.title}"
+                android:text="@{model.weatherAlarm.alarm.title}"
                 android:textSize="@dimen/ringing_title_text_size"
-                tools:text="Tutuł alarmu"
                 app:layout_constraintBottom_toTopOf="@+id/tv_ring_time"
                 app:layout_constraintEnd_toEndOf="@+id/iv_ring_alarm"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="@+id/iv_ring_alarm"
-                app:layout_constraintTop_toBottomOf="@+id/iv_ring_alarm" />
+                app:layout_constraintTop_toBottomOf="@+id/iv_ring_alarm"
+                tools:text="Tutuł alarmu" />
 
             <TextView
                 android:id="@+id/tv_ring_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{model.time}"
+                android:text="@{TimeKt.timeToString(model.weatherAlarm.alarm.hour, model.weatherAlarm.alarm.minute)}"
                 android:textSize="@dimen/ringing_time_text_size"
                 android:textStyle="bold"
-                tools:text="8:30"
                 app:layout_constraintBottom_toTopOf="@+id/fab_ring_snooze"
                 app:layout_constraintEnd_toEndOf="@+id/tv_ring_title"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="@+id/tv_ring_title"
-                app:layout_constraintTop_toBottomOf="@+id/tv_ring_title" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_ring_title"
+                tools:text="8:30" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/gl_ring_fabs"

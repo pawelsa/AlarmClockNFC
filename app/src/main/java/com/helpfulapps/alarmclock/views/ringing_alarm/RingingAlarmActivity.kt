@@ -19,13 +19,17 @@ class RingingAlarmActivity : BaseActivity<RingingAlarmViewModel, ActivityRinging
 
     override fun init() {
 
+        val alarmId = intent.getIntExtra("ALARM_ID", -1)
+        if (alarmId != -1) {
+            viewModel.getAlarm(alarmId.toLong())
+        }
+
         window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED)
         window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
 
         binding.model = viewModel
-        viewModel.getAlarm()
 
         fab_ring_end.setOnClickListener {
             Intent(this, AlarmService::class.java).also {

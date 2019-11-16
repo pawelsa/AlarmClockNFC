@@ -33,7 +33,7 @@ object Modules {
         viewModel { HourWatchViewModel() }
         viewModel { StopWatchViewModel() }
         viewModel { AddAlarmBottomSheetViewModel(get(), get()) }
-        viewModel { RingingAlarmViewModel() }
+        viewModel { RingingAlarmViewModel(get()) }
     }
 
     private val repository = module {

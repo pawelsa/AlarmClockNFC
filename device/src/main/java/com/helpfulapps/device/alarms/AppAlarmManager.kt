@@ -28,8 +28,9 @@ class AlarmClockManagerImpl(private val context: Context, private val manager: A
             val alarmIntent = IntentCreator.getAlarmIntent(context, alarm.id)
             val alarmInfoIntent =
                 IntentCreator.createPendingIntentForAlarmIconPress(context, alarm.id)
+            val alarmWakeup = IntentCreator.getAlarmWakeupIntent(context, alarm.id)
 
-            setAlarmInAlarmManager(alarmStart, alarmInfoIntent, alarmIntent)
+            setAlarmInAlarmManager(alarmStart, alarmInfoIntent, alarmIntent, alarmWakeup)
 
         }
     }
@@ -45,20 +46,32 @@ class AlarmClockManagerImpl(private val context: Context, private val manager: A
     private fun setAlarmInAlarmManager(
         alarmStart: Long,
         alarmInfoIntent: PendingIntent?,
-        alarmIntent: PendingIntent?
+        alarmIntent: PendingIntent?,
+        alarmWakeup: PendingIntent?
     ) {
         when {
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> manager.setAlarmClock(
-                AlarmManager.AlarmClockInfo(
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    manager.setExactAndAllowWhileIdle(
+                        AlarmManager.RTC_WAKEUP,
+                        alarmStart - 3 * 60 * 1000,
+                        alarmWakeup
+                    )
+                }
+                manager.setAlarmClock(
+                    AlarmManager.AlarmClockInfo(
+                        alarmStart,
+                        alarmInfoIntent
+                    ), alarmIntent
+                )
+            }
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
+                manager.setExactAndAllowWhileIdle(
+                    AlarmManager.RTC_WAKEUP,
                     alarmStart,
-                    alarmInfoIntent
-                ), alarmIntent
-            )
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> manager.setExactAndAllowWhileIdle(
-                AlarmManager.RTC_WAKEUP,
-                alarmStart,
-                alarmIntent
-            )
+                    alarmIntent
+                )
+            }
             else -> manager.set(AlarmManager.RTC_WAKEUP, alarmStart, alarmIntent)
         }
     }

@@ -43,20 +43,25 @@ class AlarmService : Service() {
         } else {
             val alarmId = intent?.getIntExtra("ALARM_ID", -1) ?: -1
 
-            disposable += getAlarmUseCase(GetAlarmUseCase.Params(alarmId.toLong())).subscribeBy(
-                onSuccess = {
-                    val alert = Uri.parse(it.alarm.ringtoneUrl)
-                    setupMediaPlayer(alert)
-                },
-                onError = {
-                    it.printStackTrace()
-                    Log.e(TAG, it.message ?: "")
-                }
-            )
+            if (alarmId != -1) {
 
-            val notification = createNotification(alarmId)
+                disposable += getAlarmUseCase(GetAlarmUseCase.Params(alarmId.toLong())).subscribeBy(
+                    onSuccess = {
+                        val alert = Uri.parse(it.alarm.ringtoneUrl)
+                        setupMediaPlayer(alert)
+                    },
+                    onError = {
+                        it.printStackTrace()
+                        Log.e(TAG, it.message ?: "")
+                    }
+                )
 
-            startForeground(1, notification)
+                val notification = createNotification(alarmId)
+
+                startForeground(1, notification)
+            } else {
+                stopSelf()
+            }
         }
         return START_STICKY
     }
@@ -87,6 +92,7 @@ class AlarmService : Service() {
             it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
             it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             it.putExtra("EXIT", true)
+            it.putExtra("ALARM_ID", alarmId)
         }
         val fullScreenPendingIntent = PendingIntent.getActivity(
             this, 0,
