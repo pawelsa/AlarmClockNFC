@@ -1,6 +1,7 @@
 package com.helpfulapps.alarmclock.views.ringing_alarm
 
 import android.content.Intent
+import android.os.Build
 import android.view.WindowManager
 import com.google.android.material.snackbar.Snackbar
 import com.helpfulapps.alarmclock.R
@@ -16,31 +17,53 @@ class RingingAlarmActivity : BaseActivity<RingingAlarmViewModel, ActivityRinging
 
     override val viewModel: RingingAlarmViewModel by viewModel()
 
-
     override fun init() {
+        setupWindowFlags()
 
+        setupAlarmData()
+
+        binding.model = viewModel
+
+        listenToAlarmEndPressed()
+        listenToAlarmSnoozePressed()
+    }
+
+    private fun setupAlarmData() {
         val alarmId = intent.getIntExtra("ALARM_ID", -1)
         if (alarmId != -1) {
             viewModel.getAlarm(alarmId.toLong())
         }
+    }
 
-        window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED)
+    private fun setupWindowFlags() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+            setShowWhenLocked(true)
+        } else {
+            window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED)
+        }
         window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+            setTurnScreenOn(true)
+        } else {
+            window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
+        }
 
-        binding.model = viewModel
+    }
 
+    private fun listenToAlarmSnoozePressed() {
+        fab_ring_snooze.setOnClickListener {
+            // TODO implement
+        }
+    }
+
+    private fun listenToAlarmEndPressed() {
         fab_ring_end.setOnClickListener {
             Intent(this, AlarmService::class.java).also {
                 it.action = "STOP"
                 stopService(it)
             }
             finish()
-        }
-
-        fab_ring_snooze.setOnClickListener {
-            // TODO implement
         }
     }
 

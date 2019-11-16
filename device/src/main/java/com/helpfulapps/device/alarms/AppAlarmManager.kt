@@ -31,7 +31,6 @@ class AlarmClockManagerImpl(private val context: Context, private val manager: A
             val alarmWakeup = IntentCreator.getAlarmWakeupIntent(context, alarm.id)
 
             setAlarmInAlarmManager(alarmStart, alarmInfoIntent, alarmIntent, alarmWakeup)
-
         }
     }
 

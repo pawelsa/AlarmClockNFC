@@ -2,6 +2,10 @@ package com.helpfulapps.alarmclock.di
 
 import android.app.AlarmManager
 import android.content.Context
+import com.helpfulapps.alarmclock.helpers.AlarmPlayer
+import com.helpfulapps.alarmclock.helpers.AlarmPlayerImpl
+import com.helpfulapps.alarmclock.helpers.NotificationBuilder
+import com.helpfulapps.alarmclock.helpers.NotificationBuilderImpl
 import com.helpfulapps.alarmclock.views.clock_fragment.ClockViewModel
 import com.helpfulapps.alarmclock.views.clock_fragment.add_alarm_bs.AddAlarmBottomSheetViewModel
 import com.helpfulapps.alarmclock.views.hourwatch_fragment.HourWatchViewModel
@@ -44,6 +48,8 @@ object Modules {
                 androidContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
             )
         }
+        single<AlarmPlayer> { AlarmPlayerImpl(androidContext()) }
+        single<NotificationBuilder> { NotificationBuilderImpl(androidContext()) }
         single<WeatherRepository> { WeatherRepositoryImpl(androidContext()) }
     }
 
