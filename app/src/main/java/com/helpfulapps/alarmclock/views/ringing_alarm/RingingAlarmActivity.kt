@@ -6,6 +6,7 @@ import android.view.WindowManager
 import com.google.android.material.snackbar.Snackbar
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.ActivityRingingAlarmBinding
+import com.helpfulapps.alarmclock.helpers.NotificationBuilderImpl.Companion.KEY_ALARM_ID
 import com.helpfulapps.alarmclock.service.AlarmService
 import com.helpfulapps.base.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_ringing_alarm.*
@@ -29,7 +30,7 @@ class RingingAlarmActivity : BaseActivity<RingingAlarmViewModel, ActivityRinging
     }
 
     private fun setupAlarmData() {
-        val alarmId = intent.getIntExtra("ALARM_ID", -1)
+        val alarmId = intent.getIntExtra(KEY_ALARM_ID, -1)
         if (alarmId != -1) {
             viewModel.getAlarm(alarmId.toLong())
         }

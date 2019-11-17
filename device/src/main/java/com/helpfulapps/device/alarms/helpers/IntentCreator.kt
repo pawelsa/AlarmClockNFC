@@ -8,6 +8,8 @@ import android.os.Build
 
 object IntentCreator {
 
+    // if changed here, must be changed in notificationbuilder
+    const val KEY_ALARM_ID = "com.helpfulapps.alarmclock.ALARM_ID"
 
     fun getAlarmIntent(context: Context, alarmId: Int): PendingIntent {
         return Intent().let {
@@ -16,7 +18,7 @@ object IntentCreator {
 //                PACKAGE_ALARM_RECEIVER
                 PACKAGE_ALARM_SERVICE
             )
-            it.putExtra("ALARM_ID", alarmId)
+            it.putExtra(KEY_ALARM_ID, alarmId)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 PendingIntent.getForegroundService(
                     context,

@@ -8,6 +8,8 @@ import android.os.IBinder
 import android.util.Log
 import com.helpfulapps.alarmclock.helpers.AlarmPlayer
 import com.helpfulapps.alarmclock.helpers.NotificationBuilder
+import com.helpfulapps.alarmclock.helpers.NotificationBuilderImpl.Companion.KEY_ALARM_ID
+import com.helpfulapps.device.alarms.Alarm
 import com.helpfulapps.domain.use_cases.alarm.GetAlarmUseCase
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
@@ -34,47 +36,51 @@ class AlarmService : Service() {
 
     private fun handleIntent(intent: Intent?) {
         handleIntentAction(intent,
+            start = { alarm ->
+                val ringtoneUri = Uri.parse(alarm.ringtoneUrl)
+                alarmPlayer.startPlaying(ringtoneUri)
+                notificationBuilder.setNotificationType(
+                    NotificationBuilder.NotificationType.TypeAlarm(
+                        alarm
+                    )
+                ).build()
+            },
             stop = {
                 alarmPlayer.stopPlaying()
-            },
-            start = { alarmId ->
-                subscribeToAlarm(alarmId) { ringtoneUrl ->
-                    val ringtoneUri = Uri.parse(ringtoneUrl)
-                    alarmPlayer.startPlaying(ringtoneUri)
-                }
-                notificationBuilder.createNotification(alarmId)
             })
     }
 
-    private fun subscribeToAlarm(alarmId: Int, onSuccess: (ringtoneUrl: String) -> Unit) {
+    private fun handleIntentAction(
+        intent: Intent?,
+        stop: () -> Unit,
+        start: (alarm: Alarm) -> Notification
+    ) {
+        if (intent?.action == "STOP") {
+            stop()
+            stopSelf()
+        } else {
+            val alarmId = intent?.getIntExtra(KEY_ALARM_ID, -1) ?: -1
+            if (alarmId != -1) {
+                subscribeToAlarm(alarmId) {
+                    val notification = start(it)
+                    startForeground(1, notification)
+                }
+            } else {
+                stopSelf()
+            }
+        }
+    }
+
+    private fun subscribeToAlarm(alarmId: Int, onSuccess: (alarm: Alarm) -> Unit) {
         disposable += getAlarmUseCase(GetAlarmUseCase.Params(alarmId.toLong())).subscribeBy(
             onSuccess = {
-                onSuccess(it.alarm.ringtoneUrl)
+                onSuccess(Alarm(it.alarm))
             },
             onError = {
                 it.printStackTrace()
                 Log.e(TAG, it.message ?: "")
             }
         )
-    }
-
-    private fun handleIntentAction(
-        intent: Intent?,
-        stop: () -> Unit,
-        start: (alarmId: Int) -> Notification
-    ) {
-        if (intent?.action == "STOP") {
-            stop()
-            stopSelf()
-        } else {
-            val alarmId = intent?.getIntExtra("ALARM_ID", -1) ?: -1
-            if (alarmId != -1) {
-                val notification = start(alarmId)
-                startForeground(1, notification)
-            } else {
-                stopSelf()
-            }
-        }
     }
 
     override fun onDestroy() {
