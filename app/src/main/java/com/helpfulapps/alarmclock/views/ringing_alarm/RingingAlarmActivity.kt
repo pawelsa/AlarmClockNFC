@@ -62,7 +62,11 @@ class RingingAlarmActivity : BaseActivity<RingingAlarmViewModel, ActivityRinging
         fab_ring_end.setOnClickListener {
             Intent(this, AlarmService::class.java).also {
                 it.action = "STOP"
-                stopService(it)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    startForegroundService(it)
+                } else {
+                    startService(it)
+                }
             }
             finish()
         }

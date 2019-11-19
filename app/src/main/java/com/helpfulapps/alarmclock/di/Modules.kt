@@ -72,6 +72,7 @@ object Modules {
         single<GetAlarmUseCase> { GetAlarmUseCaseImpl(get(), get()) }
         single<GetForecastForAlarmUseCase> { GetForecastForAlarmUseCaseImpl(get()) }
         single<GetForecastForAlarmsUseCase> { GetForecastForAlarmsUseCaseImpl(get()) }
+        single<StopRingingAlarmUseCase> { StopRingingAlarmUseCaseImpl(get(), get()) }
     }
 
 }

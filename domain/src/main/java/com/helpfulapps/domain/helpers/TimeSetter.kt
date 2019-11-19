@@ -41,7 +41,7 @@ class TimeSetter(
         var index: Int
         for (x in alarm.repetitionDays.indices) {
             index = (x + currentDayOfWeek) % alarm.repetitionDays.size
-            if (currentDayOfWeek == index && currentHour < alarm.hour && currentMinute <= alarm.minute) {
+            if (alarm.repetitionDays[index] && currentDayOfWeek == index && currentHour < alarm.hour && currentMinute <= alarm.minute) {
                 return calendar
             } else if (alarm.repetitionDays[index] && currentDayOfWeek != index) {
                 val daysToAdd = (index - currentDayOfWeek).let {

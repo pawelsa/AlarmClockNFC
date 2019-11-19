@@ -10,7 +10,7 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.views.ringing_alarm.RingingAlarmActivity
-import com.helpfulapps.device.alarms.Alarm
+import com.helpfulapps.domain.models.alarm.Alarm
 
 interface NotificationBuilder {
     //    fun createNotification(alarm: Alarm): Notification
@@ -34,19 +34,21 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
     override fun setNotificationType(notificationType: NotificationBuilder.NotificationType) =
         apply {
             when (notificationType) {
-                is NotificationBuilder.NotificationType.TypeAlarm -> setupAlarmType(notificationType.alarm)
+                is NotificationBuilder.NotificationType.TypeAlarm -> setupAlarmType(notificationType)
                 is NotificationBuilder.NotificationType.TypeStopwatch -> setupStopWatchType()
                 is NotificationBuilder.NotificationType.TypeTimer -> setupTimerType()
             }
         }
 
-    private fun setupAlarmType(alarm: Alarm) {
+    private fun setupAlarmType(notificationType: NotificationBuilder.NotificationType) {
+        notificationType as NotificationBuilder.NotificationType.TypeAlarm
+        val alarm = notificationType.alarm
         val fullScreenIntent = Intent(context, RingingAlarmActivity::class.java).also {
             it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
             it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             it.putExtra(KEY_ALARM_EXIT, true)
-            it.putExtra(KEY_ALARM_ID, alarm.id)
+            it.putExtra(KEY_ALARM_ID, alarm.id.toInt())
         }
         val fullScreenPendingIntent = PendingIntent.getActivity(
             context, 0,
@@ -68,7 +70,7 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
                 .setVibrate(LongArray(3) { 500L })
 
 
-        buildNotificationChannel(NotificationBuilder.NotificationType.TypeTimer)
+        buildNotificationChannel(notificationType)
 
         builder.setChannelId(CHANNEL_ALARM_ID)
     }

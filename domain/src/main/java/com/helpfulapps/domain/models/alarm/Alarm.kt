@@ -18,6 +18,7 @@ data class Alarm(
     val repetitionDays: Array<Boolean>
 
 ) {
+
     override operator fun equals(other: Any?): Boolean {
         return when (other) {
             this === other -> true
