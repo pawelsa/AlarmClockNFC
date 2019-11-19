@@ -21,9 +21,8 @@ class ClockListAdapter(
         { item, position ->
             alarmData = item
 
-            if (position == itemCount - 1) {
-                (clItemAlarmBase.layoutParams as ViewGroup.MarginLayoutParams).bottomMargin = 450
-            }
+            (clItemAlarmBase.layoutParams as ViewGroup.MarginLayoutParams).bottomMargin =
+                if (position == itemCount - 1) 450 else 0
 
             clItemAlarmBase.setOnClickListener {
                 openEditMode(item.toDomain())

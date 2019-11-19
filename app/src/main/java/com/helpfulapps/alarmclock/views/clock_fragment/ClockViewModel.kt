@@ -28,6 +28,8 @@ class ClockViewModel(
                 list.map { AlarmData(it) }
             }
             .subscribeBy {
+                //                it[it.size -2].toChange = !it[it.size -2].toChange
+                it[it.size - 1].toChange = !it[it.size - 1].toChange
                 adapter.submitList(it)
             }
     }

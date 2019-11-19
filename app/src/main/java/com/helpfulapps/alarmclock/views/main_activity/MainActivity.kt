@@ -46,6 +46,7 @@ class MainActivity : BaseActivity<MainActivityViewModel, ActivityMainBinding>() 
 
 
     override fun init() {
+        initTabs()
         manageFragmentLaunching(intent)
 
         binding.clMainRoot.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
@@ -62,7 +63,6 @@ class MainActivity : BaseActivity<MainActivityViewModel, ActivityMainBinding>() 
             popupMenu.show()
         }
 
-        initTabs()
     }
 
     private fun initTabs() {
