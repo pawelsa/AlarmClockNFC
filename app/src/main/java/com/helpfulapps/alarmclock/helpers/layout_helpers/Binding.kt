@@ -8,8 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ca.antonious.materialdaypicker.MaterialDayPicker
 import com.google.android.material.button.MaterialButton
-import com.helpfulapps.alarmclock.R
-import com.helpfulapps.alarmclock.helpers.ItemDivider
+import com.helpfulapps.alarmclock.helpers.extensions.DividerItemDecoration
 import com.helpfulapps.alarmclock.helpers.extensions.notEqual
 import com.helpfulapps.alarmclock.helpers.extensions.toDayArray
 import com.helpfulapps.alarmclock.helpers.extensions.toDayList
@@ -22,9 +21,7 @@ fun <T : RecyclerView.ViewHolder> setRecyclerViewAdapter(
 ) {
     recyclerView.layoutManager = LinearLayoutManager(recyclerView.context)
     recyclerView.adapter = adapter
-    val itemDecor =
-        ItemDivider(ContextCompat.getDrawable(recyclerView.context, R.drawable.item_list_divider))
-    recyclerView.addItemDecoration(itemDecor)
+    recyclerView.addItemDecoration(DividerItemDecoration(recyclerView.context, false))
 }
 
 @BindingAdapter("app:selectedDays")
