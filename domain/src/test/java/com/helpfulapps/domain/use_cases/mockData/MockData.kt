@@ -1,6 +1,7 @@
 package com.helpfulapps.domain.use_cases.mockData
 
 import com.helpfulapps.domain.models.alarm.Alarm
+import com.helpfulapps.domain.models.alarm.WeatherAlarm
 import com.helpfulapps.domain.models.weather.*
 
 object MockData {
@@ -92,5 +93,13 @@ object MockData {
         WeatherInfo(
             temperature, rain, wind, snow
         )
+
+    val pairs = listOf(
+        WeatherAlarm(alarmList[0], shortWeatherList[0]),
+        WeatherAlarm(alarmList[1], shortWeatherList[0]),
+        WeatherAlarm(alarmList[2], DayWeather()),
+        WeatherAlarm(alarmList[3], DayWeather()),
+        WeatherAlarm(alarmList[4], shortWeatherList[3])
+    )
 
 }
