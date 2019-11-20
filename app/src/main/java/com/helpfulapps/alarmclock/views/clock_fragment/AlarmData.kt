@@ -21,6 +21,8 @@ data class AlarmData(
     var repetitionDaysShorts: String
 ) {
 
+    var toChange = false
+
     constructor(weatherAlarm: WeatherAlarm) : this(
         id = weatherAlarm.alarm.id,
         alarmTime = timeToString(
@@ -62,6 +64,7 @@ data class AlarmData(
         other as AlarmData
 
         if (id != other.id) return false
+        if (toChange != other.toChange) return false
         if (title != other.title) return false
         if (isTurnedOn != other.isTurnedOn) return false
         if (weatherIcon != other.weatherIcon) return false
