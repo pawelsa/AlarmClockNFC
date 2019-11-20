@@ -1,7 +1,9 @@
 package com.helpfulapps.domain.use_cases.alarm
 
 import com.helpfulapps.domain.helpers.TimeSetter
+import com.helpfulapps.domain.helpers.singleOf
 import com.helpfulapps.domain.models.alarm.WeatherAlarm
+import com.helpfulapps.domain.models.weather.DayWeather
 import com.helpfulapps.domain.repository.AlarmRepository
 import com.helpfulapps.domain.repository.WeatherRepository
 import com.helpfulapps.domain.use_cases.type.SingleUseCaseWithParameter
@@ -11,20 +13,20 @@ interface GetAlarmUseCase : SingleUseCaseWithParameter<GetAlarmUseCase.Params, W
     data class Params(val alarmId: Long)
 }
 
-// TODO WRITE TESTS
 class GetAlarmUseCaseImpl(
     private val alarmRepository: AlarmRepository,
     private val _weatherRepository: WeatherRepository
 ) : GetAlarmUseCase {
     override fun invoke(parameter: GetAlarmUseCase.Params): Single<WeatherAlarm> {
         return alarmRepository.getAlarm(parameter.alarmId)
-            .flatMap {
+            .flatMap { alarm ->
                 val timeSetter = TimeSetter()
-                val startingTime = timeSetter.getAlarmStartingPoint(it)
+                val startingTime = timeSetter.getAlarmStartingPoint(alarm)
                 return@flatMap _weatherRepository.getForecastForAlarm(startingTime)
                     .map { weather ->
-                        WeatherAlarm(it, weather)
+                        WeatherAlarm(alarm, weather)
                     }
+                    .onErrorResumeNext { singleOf { WeatherAlarm(alarm, DayWeather()) } }
             }
     }
 }
