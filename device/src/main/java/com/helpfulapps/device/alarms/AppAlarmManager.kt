@@ -22,8 +22,8 @@ class AlarmClockManagerImpl(private val context: Context, private val manager: A
 
             val alarm = Alarm(domainAlarm)
             val timeSetter = TimeSetter()
-            val alarmStart = timeSetter.getAlarmStartingPoint(domainAlarm)
-//            val alarmStart = System.currentTimeMillis() + 10 * 1000
+//            val alarmStart = timeSetter.getAlarmStartingPoint(domainAlarm)
+            val alarmStart = System.currentTimeMillis() + 10 * 1000
 
             val alarmIntent = IntentCreator.getAlarmIntent(context, alarm.id)
             val alarmInfoIntent =

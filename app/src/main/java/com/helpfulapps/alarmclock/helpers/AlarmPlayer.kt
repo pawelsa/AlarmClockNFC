@@ -14,11 +14,10 @@ interface AlarmPlayer {
 
 class AlarmPlayerImpl(private val context: Context) : AlarmPlayer {
 
-    private val mMediaPlayer: MediaPlayer by lazy {
-        MediaPlayer()
-    }
+    private lateinit var mMediaPlayer: MediaPlayer
 
     override fun startPlaying(ringtoneUri: Uri) {
+        mMediaPlayer = MediaPlayer()
         with(mMediaPlayer) {
             setDataSource(context, ringtoneUri)
 
