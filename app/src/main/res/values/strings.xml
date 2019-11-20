@@ -24,4 +24,6 @@
     <string name="notification_alarm_text">Time to wake up! It is %1$s</string>
     <string name="channel_alarm_name">Current alarms</string>
     <string name="channel_alarm_description">Displays currently ringing alarm</string>
+    <string name="ringing_alarm_snoozed_succesfully">Alarm snoozed</string>
+    <string name="ringing_alarm_snoozed_unsuccesfully">Alarm cannot be snoozed</string>
 </resources>

@@ -37,7 +37,7 @@ object Modules {
         viewModel { HourWatchViewModel() }
         viewModel { StopWatchViewModel() }
         viewModel { AddAlarmBottomSheetViewModel(get(), get()) }
-        viewModel { RingingAlarmViewModel(get()) }
+        viewModel { RingingAlarmViewModel(get(), get()) }
     }
 
     private val repository = module {
@@ -51,6 +51,7 @@ object Modules {
         single<AlarmPlayer> { AlarmPlayerImpl(androidContext()) }
         single<NotificationBuilder> { NotificationBuilderImpl(androidContext()) }
         single<WeatherRepository> { WeatherRepositoryImpl(androidContext()) }
+        single<SnoozeAlarmUseCase> { SnoozeAlarmUseCaseImpl(get(), get()) }
     }
 
     private val data = module {

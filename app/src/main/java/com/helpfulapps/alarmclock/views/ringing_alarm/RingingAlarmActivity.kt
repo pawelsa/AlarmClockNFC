@@ -7,6 +7,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.ActivityRingingAlarmBinding
 import com.helpfulapps.alarmclock.helpers.NotificationBuilderImpl.Companion.KEY_ALARM_ID
+import com.helpfulapps.alarmclock.helpers.extensions.observe
 import com.helpfulapps.alarmclock.helpers.fromBuildVersion
 import com.helpfulapps.alarmclock.helpers.startVersionedService
 import com.helpfulapps.alarmclock.service.AlarmService
@@ -29,6 +30,17 @@ class RingingAlarmActivity : BaseActivity<RingingAlarmViewModel, ActivityRinging
 
         listenToAlarmEndPressed()
         listenToAlarmSnoozePressed()
+
+        subscribeSnoozing()
+    }
+
+    private fun subscribeSnoozing() {
+        viewModel.alarmSnoozed.observe(this) {
+            when {
+                it -> showMessage(getString(R.string.ringing_alarm_snoozed_succesfully))
+                else -> showMessage(getString(R.string.ringing_alarm_snoozed_unsuccesfully))
+            }
+        }
     }
 
     private fun setupAlarmData() {
@@ -53,17 +65,23 @@ class RingingAlarmActivity : BaseActivity<RingingAlarmViewModel, ActivityRinging
 
     private fun listenToAlarmSnoozePressed() {
         fab_ring_snooze.setOnClickListener {
-            // TODO implement
+            viewModel.snoozeAlarm()
+            stopRingingService()
+            finish()
         }
     }
 
     private fun listenToAlarmEndPressed() {
         fab_ring_end.setOnClickListener {
-            Intent(this, AlarmService::class.java).also {
-                it.action = "STOP"
-                startVersionedService(it)
-            }
+            stopRingingService()
             finish()
+        }
+    }
+
+    private fun stopRingingService() {
+        Intent(this, AlarmService::class.java).also {
+            it.action = "STOP"
+            startVersionedService(it)
         }
     }
 

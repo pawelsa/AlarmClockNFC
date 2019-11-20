@@ -76,4 +76,17 @@ class AlarmClockManagerImpl(private val context: Context, private val manager: A
         }
     }
 
+    override fun snoozeAlarm(alarm: DomainAlarm): Completable {
+        return completableOf {
+            val timeSetter = TimeSetter()
+            val snoozeTime = timeSetter.getAlarmSnoozeTime(alarm)
+            if (snoozeTime != -1L) {
+                val alarmIntent = IntentCreator.getAlarmIntent(context, alarm.id.toInt())
+                val alarmInfoIntent =
+                    IntentCreator.createPendingIntentForAlarmIconPress(context, alarm.id.toInt())
+                setAlarmInAlarmManager(snoozeTime, alarmInfoIntent, alarmIntent)
+            }
+        }
+    }
+
 }
