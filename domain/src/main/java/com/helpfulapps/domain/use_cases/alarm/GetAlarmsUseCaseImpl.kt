@@ -1,5 +1,6 @@
 package com.helpfulapps.domain.use_cases.alarm
 
+import com.helpfulapps.domain.helpers.singleOf
 import com.helpfulapps.domain.models.alarm.WeatherAlarm
 import com.helpfulapps.domain.models.weather.DayWeather
 import com.helpfulapps.domain.repository.AlarmRepository
@@ -19,7 +20,7 @@ class GetAlarmsUseCaseImpl(
     override fun invoke(): Single<List<WeatherAlarm>> =
         Single.zip(
             _alarmRepository.getAlarms(),
-            _weatherRepository.getForecastForAlarms(),
+            _weatherRepository.getForecastForAlarms().onErrorResumeNext { singleOf { emptyList<DayWeather>() } },
             BiFunction { alarmList, dayWeatherList ->
                 val weatherAlarmList = arrayListOf<WeatherAlarm>()
 

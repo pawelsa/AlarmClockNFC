@@ -31,7 +31,35 @@ class GetAlarmsUseCaseTest {
         )
 
         every { mockedWeatherRepository.getForecastForAlarms() } returns Single.just(emptyList())
-        every { mockedAlarmRepository.getAlarms() } returns Single.just(MockData.alarmList)
+        every { mockedAlarmRepository.getAlarms() } returns Single.just(
+            MockData.alarmList.subList(
+                0,
+                3
+            )
+        )
+
+        useCase()
+            .test()
+            .assertResult(expectedResult)
+            .dispose()
+    }
+
+    @Test
+    fun `should get only alarms when weather fails`() {
+
+        val expectedResult = listOf(
+            WeatherAlarm(MockData.alarmList[0], DayWeather()),
+            WeatherAlarm(MockData.alarmList[1], DayWeather()),
+            WeatherAlarm(MockData.alarmList[2], DayWeather())
+        )
+
+        every { mockedWeatherRepository.getForecastForAlarms() } returns Single.error(Exception())
+        every { mockedAlarmRepository.getAlarms() } returns Single.just(
+            MockData.alarmList.subList(
+                0,
+                3
+            )
+        )
 
         useCase()
             .test()
