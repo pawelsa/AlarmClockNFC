@@ -8,6 +8,7 @@ data class Alarm(
     val isRepeating: Boolean,
     val hour: Int,
     val minute: Int,
+    val ringtoneUrl: String,
     val repetitionDays: Array<Boolean>
 ) {
 
@@ -16,6 +17,7 @@ data class Alarm(
         isRepeating = domainAlarm.isRepeating,
         hour = domainAlarm.hour,
         minute = domainAlarm.minute,
+        ringtoneUrl = domainAlarm.ringtoneUrl,
         repetitionDays = domainAlarm.repetitionDays
     )
 

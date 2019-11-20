@@ -6,7 +6,8 @@ import android.content.Context
 import android.os.Build
 import com.helpfulapps.base.extensions.rx.completableOf
 import com.helpfulapps.device.alarms.helpers.IntentCreator
-import com.helpfulapps.device.alarms.helpers.TimeSetter
+import com.helpfulapps.device.alarms.helpers.matchesVersionsFrom
+import com.helpfulapps.domain.helpers.TimeSetter
 import com.helpfulapps.domain.repository.AlarmClockManager
 import io.reactivex.Completable
 import com.helpfulapps.domain.models.alarm.Alarm as DomainAlarm
@@ -22,15 +23,15 @@ class AlarmClockManagerImpl(private val context: Context, private val manager: A
 
             val alarm = Alarm(domainAlarm)
             val timeSetter = TimeSetter()
-            val alarmStart = timeSetter.getAlarmStartingPoint(alarm)
-//            val alarmStart = System.currentTimeMillis() + 10 * 1000
+//            val alarmStart = timeSetter.getAlarmStartingPoint(domainAlarm)
+            val alarmStart = System.currentTimeMillis() + 10 * 1000
 
             val alarmIntent = IntentCreator.getAlarmIntent(context, alarm.id)
             val alarmInfoIntent =
                 IntentCreator.createPendingIntentForAlarmIconPress(context, alarm.id)
+//            val alarmWakeup = IntentCreator.getAlarmWakeupIntent(context, alarm.id)
 
-            setAlarmInAlarmManager(alarmStart, alarmInfoIntent, alarmIntent)
-
+            setAlarmInAlarmManager(alarmStart, alarmInfoIntent, alarmIntent/*, alarmWakeup*/)
         }
     }
 
@@ -46,19 +47,31 @@ class AlarmClockManagerImpl(private val context: Context, private val manager: A
         alarmStart: Long,
         alarmInfoIntent: PendingIntent?,
         alarmIntent: PendingIntent?
+//        alarmWakeup: PendingIntent?
     ) {
         when {
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> manager.setAlarmClock(
-                AlarmManager.AlarmClockInfo(
+            matchesVersionsFrom(Build.VERSION_CODES.LOLLIPOP) -> {
+                /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    manager.setExactAndAllowWhileIdle(
+                        AlarmManager.RTC_WAKEUP,
+                        alarmStart - 3 * 60 * 1000,
+                        alarmWakeup
+                    )
+                }*/
+                manager.setAlarmClock(
+                    AlarmManager.AlarmClockInfo(
+                        alarmStart,
+                        alarmInfoIntent
+                    ), alarmIntent
+                )
+            }
+            matchesVersionsFrom(Build.VERSION_CODES.M) -> {
+                manager.setExactAndAllowWhileIdle(
+                    AlarmManager.RTC_WAKEUP,
                     alarmStart,
-                    alarmInfoIntent
-                ), alarmIntent
-            )
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> manager.setExactAndAllowWhileIdle(
-                AlarmManager.RTC_WAKEUP,
-                alarmStart,
-                alarmIntent
-            )
+                    alarmIntent
+                )
+            }
             else -> manager.set(AlarmManager.RTC_WAKEUP, alarmStart, alarmIntent)
         }
     }

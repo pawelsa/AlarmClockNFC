@@ -77,6 +77,7 @@ class WeatherRepositoryImpl(
         getDayWeatherForTime(time)
             .timeout(2L, TimeUnit.SECONDS) { observer -> observer.onSuccess(DayWeather(id = -1)) }
             .map(DayWeather::toDomain)
+            .onErrorResumeNext(Single.just(com.helpfulapps.domain.models.weather.DayWeather()))
 
     fun getDayWeatherList() = (select from DayWeather::class).rx().queryStreamResults()
 
