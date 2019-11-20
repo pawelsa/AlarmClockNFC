@@ -68,17 +68,18 @@ class AddAlarmBottomSheetViewModel(
 
 
     fun saveAlarm(isUpdating: Boolean) {
+        val repetitionDays = repeatingDays.value ?: Array(7) { false }
         val finalAlarm = Alarm(
             id = alarmId,
             title = alarmTitle.value ?: "",
             isVibrationOn = vibrating.get(),
-            isRepeating = repeating.get(),
+            isRepeating = repetitionDays.any { it },
             isTurnedOn = true,
             ringtoneTitle = ringtone.first,
             ringtoneUrl = ringtone.second,
             hour = time.first,
             minute = time.second,
-            repetitionDays = repeatingDays.value ?: Array(7) { false }
+            repetitionDays = repetitionDays
         )
         when {
             isUpdating -> updateAlarm(finalAlarm)
