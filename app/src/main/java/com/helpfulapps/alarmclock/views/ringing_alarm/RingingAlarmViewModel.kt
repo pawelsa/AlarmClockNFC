@@ -1,9 +1,7 @@
 package com.helpfulapps.alarmclock.views.ringing_alarm
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.helpfulapps.alarmclock.helpers.timeToString
 import com.helpfulapps.base.base.BaseViewModel
 import com.helpfulapps.domain.models.alarm.WeatherAlarm
 import com.helpfulapps.domain.use_cases.alarm.GetAlarmUseCase
@@ -24,7 +22,6 @@ class RingingAlarmViewModel(
             .subscribeBy(
                 onSuccess = {
                     _weatherAlarm.value = it
-                    Log.d(TAG, timeToString(it.alarm.hour, it.alarm.minute))
                 },
                 onError = {
                     it.printStackTrace()
