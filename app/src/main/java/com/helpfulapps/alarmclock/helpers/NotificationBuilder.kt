@@ -13,7 +13,7 @@ import com.helpfulapps.alarmclock.views.ringing_alarm.RingingAlarmActivity
 import com.helpfulapps.domain.models.alarm.Alarm
 
 interface NotificationBuilder {
-    //    fun createNotification(alarm: Alarm): Notification
+    
     fun setNotificationType(notificationType: NotificationType): NotificationBuilder
 
     fun build(): Notification

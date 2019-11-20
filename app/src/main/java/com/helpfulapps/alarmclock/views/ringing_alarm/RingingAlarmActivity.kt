@@ -7,6 +7,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.ActivityRingingAlarmBinding
 import com.helpfulapps.alarmclock.helpers.NotificationBuilderImpl.Companion.KEY_ALARM_ID
+import com.helpfulapps.alarmclock.helpers.fromBuildVersion
+import com.helpfulapps.alarmclock.helpers.startVersionedService
 import com.helpfulapps.alarmclock.service.AlarmService
 import com.helpfulapps.base.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_ringing_alarm.*
@@ -37,19 +39,16 @@ class RingingAlarmActivity : BaseActivity<RingingAlarmViewModel, ActivityRinging
     }
 
     private fun setupWindowFlags() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
-            setShowWhenLocked(true)
-        } else {
-            window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED)
-        }
+        fromBuildVersion(Build.VERSION_CODES.O_MR1,
+            matching = {
+                setShowWhenLocked(true)
+                setTurnScreenOn(true)
+            }, otherwise = {
+                window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED)
+                window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
+            })
         window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
-            setTurnScreenOn(true)
-        } else {
-            window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
-        }
-
     }
 
     private fun listenToAlarmSnoozePressed() {
@@ -62,11 +61,7 @@ class RingingAlarmActivity : BaseActivity<RingingAlarmViewModel, ActivityRinging
         fab_ring_end.setOnClickListener {
             Intent(this, AlarmService::class.java).also {
                 it.action = "STOP"
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    startForegroundService(it)
-                } else {
-                    startService(it)
-                }
+                startVersionedService(it)
             }
             finish()
         }

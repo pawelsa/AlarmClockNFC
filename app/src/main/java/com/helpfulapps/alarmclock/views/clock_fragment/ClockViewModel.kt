@@ -28,8 +28,10 @@ class ClockViewModel(
                 list.map { AlarmData(it) }
             }
             .subscribeBy {
-                //                it[it.size -2].toChange = !it[it.size -2].toChange
-                it[it.size - 1].toChange = !it[it.size - 1].toChange
+                val lastButOne = it.size - 1
+                if (lastButOne >= 0) {
+                    it[lastButOne].toChange = !it[lastButOne].toChange
+                }
                 adapter.submitList(it)
             }
     }

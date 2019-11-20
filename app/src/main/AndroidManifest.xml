@@ -17,20 +17,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <receiver
-            android:name=".receivers.AlarmWakeupReceiver"
-            android:enabled="true"
-            android:exported="false"></receiver>
 
         <service
             android:name=".service.AlarmService"
             android:enabled="true"
             android:exported="false" />
-
-        <receiver
-            android:name=".receivers.AlarmReceiver"
-            android:enabled="true"
-            android:exported="true" />
 
         <activity android:name=".views.main_activity.MainActivity">
             <intent-filter>
