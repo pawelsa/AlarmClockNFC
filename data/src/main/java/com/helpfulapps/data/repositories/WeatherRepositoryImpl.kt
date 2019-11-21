@@ -115,7 +115,19 @@ class WeatherRepositoryImpl(
 
     private fun Single<List<DayWeather>>.saveInDatabase() =
         this.flatMapObservable { list -> Observable.fromIterable(list) }
-            .flatMap { dayWeatherList -> dayWeatherList.save().toObservable() }
+            .flatMap { dayWeather ->
+                dayWeather.weatherInfo?.save()?.flatMapObservable {
+                    dayWeather.save()
+                        .flatMapObservable {
+                            Observable.fromIterable(dayWeather.hourWeatherList)
+                                .flatMap { hourWeather ->
+                                    hourWeather.dayWeather = dayWeather
+                                    hourWeather.weatherInfo?.save()?.toObservable()
+                                        ?.flatMap { hourWeather.save().toObservable() }
+                                }
+                        }
+                }
+            }
 
     private fun Single<ForecastForCity>.transformResponseIntoDays(): Single<List<DayWeather>> =
         this.map {

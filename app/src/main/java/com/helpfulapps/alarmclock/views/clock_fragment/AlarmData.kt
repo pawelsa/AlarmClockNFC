@@ -18,7 +18,8 @@ data class AlarmData(
     var alarmTime: String = timeToString(hour, minute),
     var isRepeating: Boolean = false,
     var repetitionDays: Array<Boolean>,
-    var repetitionDaysShorts: String
+    var repetitionDaysShorts: String,
+    var weatherShort: WeatherShort
 ) {
 
     var toChange = false
@@ -39,7 +40,8 @@ data class AlarmData(
         hour = weatherAlarm.alarm.hour,
         minute = weatherAlarm.alarm.minute,
         repetitionDays = weatherAlarm.alarm.repetitionDays,
-        repetitionDaysShorts = weatherAlarm.alarm.repetitionDays.toShortWeekdays()
+        repetitionDaysShorts = weatherAlarm.alarm.repetitionDays.toShortWeekdays(),
+        weatherShort = WeatherShort(weatherAlarm.dayWeather.weatherInfo)
     )
 
     fun toDomain(): Alarm {

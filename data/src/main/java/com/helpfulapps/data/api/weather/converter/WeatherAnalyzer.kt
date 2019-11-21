@@ -1,8 +1,8 @@
 package com.helpfulapps.data.api.weather.converter
 
-import com.helpfulapps.data.helper.Units
 import com.helpfulapps.data.db.converter.DayWeatherConverter
 import com.helpfulapps.data.db.weather.model.DayWeather
+import com.helpfulapps.data.helper.Units
 import io.reactivex.Single
 
 //TODO maybe it should be wrapped in factory pattern ?
@@ -17,11 +17,11 @@ enum class Temperature(
     val celsiusRange: ClosedFloatingPointRange<Double>,
     val fahrenheitRange: ClosedFloatingPointRange<Double>
 ) {
-    VERY_COLD(-2, 30.0..1000.0, 84.2..1000.0),
-    COLD(-1, 22.0..29.9999, 71.6..84.1999),
+    VERY_COLD(-2, -1000.00..3.9999, -1000.0..39.1999),
+    COLD(-1, 4.0..11.9999, 39.2..53.5999),
     NORMAL(0, 12.0..21.9999, 53.6..71.6),
-    HOT(1, 4.0..11.9999, 39.2..53.5999),
-    VERY_HOT(2, -1000.00..3.9999, -1000.0..39.1999),
+    HOT(1, 22.0..29.9999, 71.6..84.1999),
+    VERY_HOT(2, 30.0..1000.0, 84.2..1000.0),
     NO_DATA(-10, 0.0..0.0, 0.0..0.0)
 }
 
@@ -44,7 +44,7 @@ enum class Rain(
     NO_RAIN(0, 0.0..0.09),
     MAY_RAIN(1, 0.1..0.5),
     WILL_RAIN(2, 0.51..1.5),
-    HEAVY_RAIN(2, 1.51..1000.0),
+    HEAVY_RAIN(3, 1.51..1000.0),
     NO_DATA(-10, 0.0..0.0)
 }
 

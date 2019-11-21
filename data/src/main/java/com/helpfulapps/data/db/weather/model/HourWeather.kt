@@ -2,11 +2,11 @@ package com.helpfulapps.data.db.weather.model
 
 import com.helpfulapps.data.AlarmAppDatabase
 import com.helpfulapps.data.db.weather.model.HourWeather.Companion.TABLE_NAME
-import com.helpfulapps.domain.models.weather.HourWeather
 import com.raizlabs.android.dbflow.annotation.ForeignKey
 import com.raizlabs.android.dbflow.annotation.PrimaryKey
 import com.raizlabs.android.dbflow.annotation.Table
 import com.raizlabs.android.dbflow.rx2.structure.BaseRXModel
+import com.helpfulapps.domain.models.weather.HourWeather as DomainHourWeather
 import com.helpfulapps.domain.models.weather.WeatherInfo as DomainWeatherInfo
 
 @Table(database = AlarmAppDatabase::class, name = TABLE_NAME, allFields = true)
@@ -33,8 +33,8 @@ data class HourWeather(
         const val TABLE_NAME = "HourWeather"
     }
 
-    fun toDomain(): HourWeather {
-        return HourWeather(
+    fun toDomain(): DomainHourWeather {
+        return DomainHourWeather(
             id = this.id,
             dt = this.dt,
             clouds = this.clouds,
