@@ -7,13 +7,13 @@ import com.helpfulapps.data.api.weather.converter.Temperature
 import com.helpfulapps.data.api.weather.converter.Wind
 import com.helpfulapps.data.db.converter.WeatherInfoConverter
 import com.helpfulapps.data.db.weather.model.WeatherInfo.Companion.TABLE_NAME
-import com.helpfulapps.domain.models.weather.WeatherInfo
 import com.raizlabs.android.dbflow.annotation.PrimaryKey
 import com.raizlabs.android.dbflow.annotation.Table
 import com.raizlabs.android.dbflow.rx2.structure.BaseRXModel
+import com.helpfulapps.domain.models.weather.WeatherInfo as DomainWeatherInfo
 
 // TODO check if it is saved to database, or it is only overwritten
-@Table(database = AlarmAppDatabase::class, name = TABLE_NAME)
+@Table(database = AlarmAppDatabase::class, name = TABLE_NAME, allFields = true)
 data class WeatherInfo(
     @PrimaryKey(autoincrement = true)
     var id: Long = 0,
@@ -23,8 +23,8 @@ data class WeatherInfo(
     var snow: Int = Snow.NO_DATA.importance
 ) : BaseRXModel() {
 
-    fun toDomain(): WeatherInfo {
-        return WeatherInfo(
+    fun toDomain(): DomainWeatherInfo {
+        return DomainWeatherInfo(
             temperature = WeatherInfoConverter.getTemperature(temperature),
             rain = WeatherInfoConverter.getRain(rain),
             wind = WeatherInfoConverter.getWind(wind),

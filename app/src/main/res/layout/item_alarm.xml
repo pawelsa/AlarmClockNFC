@@ -61,10 +61,10 @@
             android:id="@+id/cg_alarm_item_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginStart="@dimen/margin_medium"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:layout_marginEnd="@dimen/margin_medium"
+            android:layout_marginBottom="@dimen/margin_medium"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -72,43 +72,35 @@
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_alarm_item_temperature"
-                style="@style/Widget.MaterialComponents.Chip.Action"
+                style="@style/WeatherChipTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Will be hot"
-                android:visibility="@{alarmData.weatherShort.temperature != 0 ? View.VISIBLE : View.GONE}"
-                app:chipStrokeColor="@color/chip_color"
-                app:chipStrokeWidth="@dimen/chip_stroke" />
+                android:text="@string/item_alarm_temperature_ok"
+                android:visibility="@{alarmData.weatherShort.temperature != 0 ? View.VISIBLE : View.GONE}" />
 
             <com.google.android.material.chip.Chip
+                style="@style/WeatherChipTheme"
                 android:id="@+id/chip_alarm_item_rain"
-                style="@style/Widget.MaterialComponents.Chip.Action"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Will be raining"
-                android:visibility="@{alarmData.weatherShort.rain != 0 ? View.VISIBLE : View.GONE}"
-                app:chipStrokeColor="@color/chip_color"
-                app:chipStrokeWidth="@dimen/chip_stroke" />
+                android:text="@string/item_alarm_rain_no"
+                android:visibility="@{alarmData.weatherShort.rain != 0 ? View.VISIBLE : View.GONE}" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_alarm_item_wind"
-                style="@style/Widget.MaterialComponents.Chip.Action"
+                style="@style/WeatherChipTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Will be windy"
-                android:visibility="@{alarmData.weatherShort.wind != 0 ? View.VISIBLE : View.GONE}"
-                app:chipStrokeColor="@color/chip_color"
-                app:chipStrokeWidth="@dimen/chip_stroke" />
+                android:text="@string/item_alarm_wind_no"
+                android:visibility="@{alarmData.weatherShort.wind != 0 ? View.VISIBLE : View.GONE}" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_alarm_item_snow"
-                style="@style/Widget.MaterialComponents.Chip.Action"
+                style="@style/WeatherChipTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="May snow"
-                android:visibility="@{alarmData.weatherShort.snow != 0 ? View.VISIBLE : View.GONE}"
-                app:chipStrokeColor="@color/chip_color"
-                app:chipStrokeWidth="@dimen/chip_stroke" />
+                android:text="@string/item_alarm_snow_no"
+                android:visibility="@{alarmData.weatherShort.snow != 0 ? View.VISIBLE : View.GONE}" />
 
         </com.google.android.material.chip.ChipGroup>
 

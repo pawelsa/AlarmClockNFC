@@ -24,4 +24,19 @@
     <string name="notification_alarm_text">Time to wake up! It is %1$s</string>
     <string name="channel_alarm_name">Current alarms</string>
     <string name="channel_alarm_description">Displays currently ringing alarm</string>
+    <string name="item_alarm_temperature_very_cold">Very cold</string>
+    <string name="item_alarm_temperature_cold">Cold</string>
+    <string name="item_alarm_temperature_hot">Hot</string>
+    <string name="item_alarm_temperature_very_hot">Very hot</string>
+    <string name="item_alarm_temperature_ok">Ok</string>
+    <string name="item_alarm_rain_no">No rain</string>
+    <string name="item_alarm_rain_heavy_rain">Heavy rain</string>
+    <string name="item_alarm_rain_will_rain">Raining</string>
+    <string name="item_alarm_rain_may_rain">May rain</string>
+    <string name="item_alarm_snow_no">No snow</string>
+    <string name="item_alarm_snow_heavy_snow">Heavy snow</string>
+    <string name="item_alarm_snow_snowy">Snowy</string>
+    <string name="item_alarm_wind_no">Normal wind</string>
+    <string name="item_alarm_wind_very_windy">Very windy</string>
+    <string name="item_alarm_wind_windy">Windy</string>
 </resources>
