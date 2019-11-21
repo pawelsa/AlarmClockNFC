@@ -39,6 +39,7 @@ class ClockViewModel(
     fun subscribeToDatabaseChanges() {
         disposables += RxBus.listen(DatabaseNotifiers::class.java)
             .subscribe {
+                Log.d(TAG, "Database changed")
                 getAlarms()
             }
     }

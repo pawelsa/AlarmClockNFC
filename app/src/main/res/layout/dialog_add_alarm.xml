@@ -93,6 +93,17 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/bt_add_alarm_title" />
 
+            <CheckBox
+                android:id="@+id/cb_add_alarm_nfc"
+                style="@style/NewAlarmCheckboxTheme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:checked="@={model.usingNfc}"
+                android:text="@string/add_alarm_nfc"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/cb_add_alarm_repeat" />
+
             <ca.antonious.materialdaypicker.MaterialDayPicker
                 android:id="@+id/dp_add_alarm_item_picker"
                 android:layout_width="0dp"

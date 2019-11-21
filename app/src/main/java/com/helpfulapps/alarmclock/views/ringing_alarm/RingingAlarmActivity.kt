@@ -63,7 +63,7 @@ class RingingAlarmActivity : BaseActivity<RingingAlarmViewModel, ActivityRinging
                 it.action = "STOP"
                 startVersionedService(it)
             }
-            finish()
+//            finish()
         }
     }
 

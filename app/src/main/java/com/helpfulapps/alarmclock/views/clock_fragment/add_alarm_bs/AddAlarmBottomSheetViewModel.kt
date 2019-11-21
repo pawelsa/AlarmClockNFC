@@ -37,6 +37,7 @@ class AddAlarmBottomSheetViewModel(
     var repeatingDays = MutableLiveData<Array<Boolean>>().apply { value = Array(7) { false } }
     val vibrating = ObservableBoolean(true)
     val repeating = ObservableBoolean(false)
+    val usingNfc = ObservableBoolean(false)
 
     private val _alarmSaved = MutableLiveData<Boolean>()
     val alarmSaved: LiveData<Boolean>
@@ -64,6 +65,7 @@ class AddAlarmBottomSheetViewModel(
         vibrating.set(alarm.isVibrationOn)
         repeatingDays.value = alarm.repetitionDays
         time = Time(alarm.hour, alarm.minute)
+        usingNfc.set(alarm.isUsingNFC)
     }
 
 
@@ -77,6 +79,7 @@ class AddAlarmBottomSheetViewModel(
             isTurnedOn = true,
             ringtoneTitle = ringtone.first,
             ringtoneUrl = ringtone.second,
+            isUsingNFC = usingNfc.get(),
             hour = time.first,
             minute = time.second,
             repetitionDays = repetitionDays
