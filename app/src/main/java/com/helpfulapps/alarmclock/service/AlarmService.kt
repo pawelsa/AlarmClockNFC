@@ -55,6 +55,9 @@ class AlarmService : Service() {
             disposable += stopRingingAlarmUseCase(StopRingingAlarmUseCase.Param(it))
                 .backgroundTask()
                 .subscribe {
+                    Intent("com.helpfulapps.alarmclock.views.ringing_alarm.close").let { intent ->
+                        sendBroadcast(intent)
+                    }
                     stopSelf()
                 }
         }

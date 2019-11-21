@@ -14,7 +14,7 @@ interface AlarmPlayer {
 
 class AlarmPlayerImpl(private val context: Context) : AlarmPlayer {
 
-    private lateinit var mMediaPlayer: MediaPlayer
+    private var mMediaPlayer: MediaPlayer = MediaPlayer()
 
     override fun startPlaying(ringtoneUri: Uri) {
         mMediaPlayer = MediaPlayer()
