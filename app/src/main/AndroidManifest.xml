@@ -38,6 +38,10 @@
             android:name=".views.ringing_alarm.RingingAlarmActivity"
             android:excludeFromRecents="true"
             android:showOnLockScreen="true" />
+        <activity
+            android:name=".views.ringing_alarm.NfcRingingAlarmActivity"
+            android:excludeFromRecents="true"
+            android:showOnLockScreen="true" />
     </application>
 
 </manifest>

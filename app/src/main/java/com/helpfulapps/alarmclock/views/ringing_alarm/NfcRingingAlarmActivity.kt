@@ -2,12 +2,14 @@ package com.helpfulapps.alarmclock.views.ringing_alarm
 
 import com.google.android.material.snackbar.Snackbar
 import com.helpfulapps.alarmclock.R
-import com.helpfulapps.alarmclock.databinding.ActivityRingingAlarmBinding
+import com.helpfulapps.alarmclock.databinding.ActivityAlarmNfcBinding
+import kotlinx.android.synthetic.main.activity_alarm_nfc.*
 import kotlinx.android.synthetic.main.activity_ringing_alarm.*
 
-class RingingAlarmActivity : BaseRingingAlarmActivity<ActivityRingingAlarmBinding>() {
+class NfcRingingAlarmActivity : BaseRingingAlarmActivity<ActivityAlarmNfcBinding>() {
 
-    override val layoutId: Int = R.layout.activity_ringing_alarm
+    override val layoutId: Int = R.layout.activity_alarm_nfc
+
 
     override fun init() {
         super.init()
@@ -15,13 +17,13 @@ class RingingAlarmActivity : BaseRingingAlarmActivity<ActivityRingingAlarmBindin
     }
 
     override fun listenToAlarmSnooze() {
-        fab_ring_snooze.setOnClickListener {
+        fab_ring_nfc_snooze.setOnClickListener {
             snoozeAlarm()
         }
     }
 
     override fun listenToAlarmStop() {
-        fab_ring_end.setOnClickListener {
+        imageView.setOnClickListener {
             stopAlarm()
         }
     }
@@ -29,5 +31,4 @@ class RingingAlarmActivity : BaseRingingAlarmActivity<ActivityRingingAlarmBindin
     override fun showMessage(text: String) {
         Snackbar.make(cl_ringing_base, text, Snackbar.LENGTH_SHORT).show()
     }
-
 }
