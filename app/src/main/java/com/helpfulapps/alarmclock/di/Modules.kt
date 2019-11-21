@@ -2,17 +2,16 @@ package com.helpfulapps.alarmclock.di
 
 import android.app.AlarmManager
 import android.content.Context
-import com.helpfulapps.alarmclock.helpers.AlarmPlayer
-import com.helpfulapps.alarmclock.helpers.AlarmPlayerImpl
-import com.helpfulapps.alarmclock.helpers.NotificationBuilder
-import com.helpfulapps.alarmclock.helpers.NotificationBuilderImpl
+import com.helpfulapps.alarmclock.helpers.*
 import com.helpfulapps.alarmclock.views.clock_fragment.ClockViewModel
 import com.helpfulapps.alarmclock.views.clock_fragment.add_alarm_bs.AddAlarmBottomSheetViewModel
 import com.helpfulapps.alarmclock.views.hourwatch_fragment.HourWatchViewModel
 import com.helpfulapps.alarmclock.views.main_activity.MainActivityViewModel
 import com.helpfulapps.alarmclock.views.ringing_alarm.RingingAlarmViewModel
 import com.helpfulapps.alarmclock.views.stopwatch_fragment.StopWatchViewModel
+import com.helpfulapps.data.helper.SettingsData
 import com.helpfulapps.data.repositories.AlarmRepositoryImpl
+import com.helpfulapps.data.repositories.SHARED_PREFERENCES_KEY
 import com.helpfulapps.data.repositories.WeatherRepositoryImpl
 import com.helpfulapps.device.alarms.AlarmClockManagerImpl
 import com.helpfulapps.domain.repository.AlarmClockManager
@@ -36,7 +35,7 @@ object Modules {
         viewModel { ClockViewModel(get(), get(), get()) }
         viewModel { HourWatchViewModel() }
         viewModel { StopWatchViewModel() }
-        viewModel { AddAlarmBottomSheetViewModel(get(), get()) }
+        viewModel { AddAlarmBottomSheetViewModel(get(), get(), get()) }
         viewModel { RingingAlarmViewModel(get()) }
     }
 
@@ -50,7 +49,23 @@ object Modules {
         }
         single<AlarmPlayer> { AlarmPlayerImpl(androidContext()) }
         single<NotificationBuilder> { NotificationBuilderImpl(androidContext()) }
-        single<WeatherRepository> { WeatherRepositoryImpl(androidContext()) }
+        single {
+            SettingsData(
+                androidContext().getSharedPreferences(
+                    SHARED_PREFERENCES_KEY,
+                    Context.MODE_PRIVATE
+                )
+            )
+        }
+        single {
+            Settings(
+                androidContext().getSharedPreferences(
+                    SHARED_PREFERENCES_KEY,
+                    Context.MODE_PRIVATE
+                )
+            )
+        }
+        single<WeatherRepository> { WeatherRepositoryImpl(androidContext(), settings = get()) }
     }
 
     private val data = module {

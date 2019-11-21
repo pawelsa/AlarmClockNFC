@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.helpfulapps.alarmclock.helpers.Settings
 import com.helpfulapps.alarmclock.helpers.Time
 import com.helpfulapps.alarmclock.helpers.getDefaultRingtone
 import com.helpfulapps.alarmclock.helpers.timeToString
@@ -18,7 +19,8 @@ import io.reactivex.rxkotlin.subscribeBy
 
 class AddAlarmBottomSheetViewModel(
     private val _addAlarmUseCase: AddAlarmUseCase,
-    private val _updateAlarmUseCase: UpdateAlarmUseCase
+    private val _updateAlarmUseCase: UpdateAlarmUseCase,
+    private val _settings: Settings
 ) :
     BaseViewModel() {
 
@@ -38,6 +40,7 @@ class AddAlarmBottomSheetViewModel(
     val vibrating = ObservableBoolean(true)
     val repeating = ObservableBoolean(false)
     val usingNfc = ObservableBoolean(false)
+    val hasNfc: Boolean = _settings.hasNfc
 
     private val _alarmSaved = MutableLiveData<Boolean>()
     val alarmSaved: LiveData<Boolean>

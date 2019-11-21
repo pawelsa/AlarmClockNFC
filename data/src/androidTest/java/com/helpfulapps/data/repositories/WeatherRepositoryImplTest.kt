@@ -7,7 +7,7 @@ import androidx.test.core.app.ApplicationProvider
 import com.helpfulapps.data.api.weather.api.ApiCalls
 import com.helpfulapps.data.api.weather.api.Downloader
 import com.helpfulapps.data.helper.NetworkCheck
-import com.helpfulapps.data.helper.Settings
+import com.helpfulapps.data.helper.SettingsData
 import com.helpfulapps.data.mockData.MockDataIns
 import com.helpfulapps.data.repositories.WeatherRepositoryImpl.Companion.ONE_AND_HALF_AN_HOUR
 import com.helpfulapps.domain.exceptions.WeatherException
@@ -31,7 +31,7 @@ class WeatherRepositoryImplTest {
     // TODO write tests
 
     lateinit var networkCheck: NetworkCheck
-    lateinit var settings: Settings
+    lateinit var settingsData: SettingsData
     lateinit var apiCalls: ApiCalls
     lateinit var weatherRepository: WeatherRepositoryImpl
     lateinit var context: Context
@@ -43,7 +43,7 @@ class WeatherRepositoryImplTest {
         context = application.applicationContext
 
         apiCalls = mockk { Downloader.create() }
-        settings = Settings(context.getSharedPreferences("Test", MODE_PRIVATE))
+        settingsData = SettingsData(context.getSharedPreferences("Test", MODE_PRIVATE))
         networkCheck = mockk { NetworkCheck(context) }
 
 
@@ -52,7 +52,7 @@ class WeatherRepositoryImplTest {
                 context,
                 networkCheck,
                 apiCalls,
-                settings
+                settingsData
             )
     }
 
