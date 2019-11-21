@@ -71,7 +71,7 @@ class WeatherRepositoryImpl(
         getDayWeatherList()
             .map(DayWeather::toDomain)
             .toList()
-//            .timeout(2L, TimeUnit.SECONDS) { observer -> observer.onSuccess(emptyList()) }
+            .timeout(2L, TimeUnit.SECONDS) { observer -> observer.onSuccess(emptyList()) }
 
     override fun getForecastForAlarm(time: Long): Single<DomainDayWeather> =
         getDayWeatherForTime(time)
