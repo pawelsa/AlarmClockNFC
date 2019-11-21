@@ -32,7 +32,7 @@ object Modules {
         )
 
     private val appModules = module {
-        viewModel { MainActivityViewModel(get()) }
+        viewModel { MainActivityViewModel() }
         viewModel { ClockViewModel(get(), get(), get()) }
         viewModel { HourWatchViewModel() }
         viewModel { StopWatchViewModel() }
