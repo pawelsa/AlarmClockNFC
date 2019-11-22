@@ -40,7 +40,7 @@ class AddAlarmBottomSheetViewModel(
     val vibrating = ObservableBoolean(true)
     val repeating = ObservableBoolean(false)
     val usingNfc = ObservableBoolean(false)
-    val hasNfc: Boolean = _settings.hasNfc
+    val hasNfc = _settings.hasNfc
 
     private val _alarmSaved = MutableLiveData<Boolean>()
     val alarmSaved: LiveData<Boolean>

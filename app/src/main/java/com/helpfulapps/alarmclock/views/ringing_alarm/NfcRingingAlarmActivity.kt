@@ -82,8 +82,4 @@ class NfcRingingAlarmActivity : BaseRingingAlarmActivity<ActivityAlarmNfcBinding
         Snackbar.make(cl_ringing_base, text, Snackbar.LENGTH_SHORT).show()
     }
 
-    companion object {
-        private const val STOP_ALARM_INTENT = "com.helpfulapps.alarmclock.views.ringing_alarm.close"
-    }
-
 }

@@ -45,8 +45,8 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="160dp"
-            android:layout_height="160dp"
+            android:layout_width="@dimen/nfc_icon_size"
+            android:layout_height="@dimen/nfc_icon_size"
             app:layout_constraintBottom_toTopOf="@+id/tv_ring_nfc_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"

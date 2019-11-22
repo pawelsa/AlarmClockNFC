@@ -27,8 +27,6 @@ import retrofit2.Response
 import java.util.concurrent.TimeUnit
 import com.helpfulapps.domain.models.weather.DayWeather as DomainDayWeather
 
-const val SHARED_PREFERENCES_KEY = "AlarmClockSP"
-
 class WeatherRepositoryImpl(
     context: Context,
     private val networkCheck: NetworkCheck = NetworkCheck(context),

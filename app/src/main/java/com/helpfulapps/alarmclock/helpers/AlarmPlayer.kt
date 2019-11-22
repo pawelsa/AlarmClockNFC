@@ -14,11 +14,11 @@ interface AlarmPlayer {
 
 class AlarmPlayerImpl(private val context: Context) : AlarmPlayer {
 
-    private var mMediaPlayer: MediaPlayer = MediaPlayer()
+    private var mediaPlayer: MediaPlayer = MediaPlayer()
 
     override fun startPlaying(ringtoneUri: Uri) {
-        mMediaPlayer = MediaPlayer()
-        with(mMediaPlayer) {
+        mediaPlayer = MediaPlayer()
+        with(mediaPlayer) {
             setDataSource(context, ringtoneUri)
 
             setAudioAttributes(
@@ -42,11 +42,11 @@ class AlarmPlayerImpl(private val context: Context) : AlarmPlayer {
     }
 
     override fun stopPlaying() {
-        mMediaPlayer.stop()
-        mMediaPlayer.release()
+        mediaPlayer.stop()
+        mediaPlayer.release()
     }
 
     override fun destroyPlayer() {
-        mMediaPlayer.release()
+        mediaPlayer.release()
     }
 }

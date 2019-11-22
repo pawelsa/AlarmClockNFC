@@ -11,7 +11,6 @@ import com.helpfulapps.alarmclock.views.ringing_alarm.RingingAlarmViewModel
 import com.helpfulapps.alarmclock.views.stopwatch_fragment.StopWatchViewModel
 import com.helpfulapps.data.helper.SettingsData
 import com.helpfulapps.data.repositories.AlarmRepositoryImpl
-import com.helpfulapps.data.repositories.SHARED_PREFERENCES_KEY
 import com.helpfulapps.data.repositories.WeatherRepositoryImpl
 import com.helpfulapps.device.alarms.AlarmClockManagerImpl
 import com.helpfulapps.domain.repository.AlarmClockManager
@@ -24,6 +23,8 @@ import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 object Modules {
+
+    private const val SHARED_PREFERENCES_KEY = "AlarmClockSP"
 
     val modules
         get() = listOf(

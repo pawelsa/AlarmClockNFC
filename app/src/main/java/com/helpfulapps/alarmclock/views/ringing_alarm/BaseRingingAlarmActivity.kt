@@ -51,7 +51,7 @@ abstract class BaseRingingAlarmActivity<T : ViewDataBinding> :
 
     fun stopAlarm() {
         Intent(this, AlarmService::class.java).also {
-            it.action = "STOP"
+            it.action = STOP_ACTION
             startVersionedService(it)
         }
         finish()
@@ -59,6 +59,11 @@ abstract class BaseRingingAlarmActivity<T : ViewDataBinding> :
 
     fun snoozeAlarm() {
         // TODO implement
+    }
+
+    companion object {
+        const val STOP_ACTION = "com.helpfulapps.alarmclock.views.ringing_alarm.stop"
+        const val STOP_ALARM_INTENT = "com.helpfulapps.alarmclock.views.ringing_alarm.close"
     }
 
 }
