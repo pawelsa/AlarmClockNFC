@@ -21,14 +21,13 @@ class NfcRingingAlarmActivity : BaseRingingAlarmActivity<ActivityAlarmNfcBinding
         NfcAdapter.getDefaultAdapter(this)
     }
 
-    private val nfcPendingIntent: PendingIntent by lazy {
+    private val nfcStopIntent: PendingIntent by lazy {
         Intent(STOP_ALARM_INTENT).let {
             PendingIntent.getBroadcast(this, 0, it, 0)
         }
     }
 
-    // TODO maybe use this receiver to call stopAlarm() ????
-    private val closeReceiver = object : BroadcastReceiver() {
+    private val stopAlarmReceiver = object : BroadcastReceiver() {
         override fun onReceive(p0: Context?, p1: Intent?) {
             stopAlarm()
             finish()
@@ -39,7 +38,7 @@ class NfcRingingAlarmActivity : BaseRingingAlarmActivity<ActivityAlarmNfcBinding
         super.init()
         binding.model = viewModel
         registerReceiver(
-            closeReceiver,
+            stopAlarmReceiver,
             IntentFilter(STOP_ALARM_INTENT)
         )
     }
@@ -58,10 +57,9 @@ class NfcRingingAlarmActivity : BaseRingingAlarmActivity<ActivityAlarmNfcBinding
     }
 
     private fun enableForegroundMode() {
-        val tagDetected =
-            IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED)
-        val writeTagFilters: Array<IntentFilter> = arrayOf(tagDetected)
-        nfcAdapter.enableForegroundDispatch(this, nfcPendingIntent, writeTagFilters, null)
+        val tagDetected = IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED)
+        val nfcTagFilters: Array<IntentFilter> = arrayOf(tagDetected)
+        nfcAdapter.enableForegroundDispatch(this, nfcStopIntent, nfcTagFilters, null)
     }
 
     override fun onPause() {
@@ -75,7 +73,7 @@ class NfcRingingAlarmActivity : BaseRingingAlarmActivity<ActivityAlarmNfcBinding
 
     override fun onDestroy() {
         super.onDestroy()
-        unregisterReceiver(closeReceiver)
+        unregisterReceiver(stopAlarmReceiver)
     }
 
     override fun showMessage(text: String) {
