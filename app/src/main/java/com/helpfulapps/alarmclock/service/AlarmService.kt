@@ -8,6 +8,8 @@ import android.util.Log
 import com.helpfulapps.alarmclock.helpers.AlarmPlayer
 import com.helpfulapps.alarmclock.helpers.NotificationBuilder
 import com.helpfulapps.alarmclock.helpers.NotificationBuilderImpl.Companion.KEY_ALARM_ID
+import com.helpfulapps.alarmclock.helpers.Settings
+import com.helpfulapps.alarmclock.views.ringing_alarm.BaseRingingAlarmActivity.Companion.STOP_ACTION
 import com.helpfulapps.base.extensions.rx.backgroundTask
 import com.helpfulapps.domain.models.alarm.Alarm
 import com.helpfulapps.domain.use_cases.alarm.GetAlarmUseCase
@@ -28,6 +30,7 @@ class AlarmService : Service() {
     private val stopRingingAlarmUseCase: StopRingingAlarmUseCase by inject()
     private val alarmPlayer: AlarmPlayer by inject()
     private val notificationBuilder: NotificationBuilder by inject()
+    private val settings: Settings by inject()
 
     private val disposable = CompositeDisposable()
 
@@ -41,7 +44,7 @@ class AlarmService : Service() {
     private fun handleIntent(intent: Intent?) {
         val alarmId = intent?.getIntExtra(KEY_ALARM_ID, -1) ?: -1
         when {
-            intent?.action == "STOP" -> stopAlarm()
+            intent?.action == STOP_ACTION -> stopAlarm()
             alarmId != -1 -> startAlarm(alarmId)
             else -> stopSelf()
         }
@@ -64,12 +67,14 @@ class AlarmService : Service() {
             alarmPlayer.startPlaying(ringtoneUri)
             val notification = notificationBuilder.setNotificationType(
                 NotificationBuilder.NotificationType.TypeAlarm(
-                    it
+                    it, shouldUseNfc()
                 )
             ).build()
             startForeground(1, notification)
         }
     }
+
+    private fun shouldUseNfc() = settings.hasNfc && alarm?.isUsingNFC ?: false
 
     private fun subscribeToAlarm(alarmId: Int, onSuccess: (alarm: Alarm) -> Unit) {
         if (alarmId == -1) return

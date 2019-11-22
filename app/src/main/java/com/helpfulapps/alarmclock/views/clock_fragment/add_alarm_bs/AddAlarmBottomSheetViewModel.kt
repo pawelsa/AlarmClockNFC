@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.helpfulapps.alarmclock.helpers.Settings
 import com.helpfulapps.alarmclock.helpers.Time
 import com.helpfulapps.alarmclock.helpers.getDefaultRingtone
 import com.helpfulapps.alarmclock.helpers.timeToString
@@ -18,7 +19,8 @@ import io.reactivex.rxkotlin.subscribeBy
 
 class AddAlarmBottomSheetViewModel(
     private val _addAlarmUseCase: AddAlarmUseCase,
-    private val _updateAlarmUseCase: UpdateAlarmUseCase
+    private val _updateAlarmUseCase: UpdateAlarmUseCase,
+    private val _settings: Settings
 ) :
     BaseViewModel() {
 
@@ -37,6 +39,8 @@ class AddAlarmBottomSheetViewModel(
     var repeatingDays = MutableLiveData<Array<Boolean>>().apply { value = Array(7) { false } }
     val vibrating = ObservableBoolean(true)
     val repeating = ObservableBoolean(false)
+    val usingNfc = ObservableBoolean(false)
+    val hasNfc = _settings.hasNfc
 
     private val _alarmSaved = MutableLiveData<Boolean>()
     val alarmSaved: LiveData<Boolean>
@@ -64,6 +68,7 @@ class AddAlarmBottomSheetViewModel(
         vibrating.set(alarm.isVibrationOn)
         repeatingDays.value = alarm.repetitionDays
         time = Time(alarm.hour, alarm.minute)
+        usingNfc.set(alarm.isUsingNFC)
     }
 
 
@@ -77,6 +82,7 @@ class AddAlarmBottomSheetViewModel(
             isTurnedOn = true,
             ringtoneTitle = ringtone.first,
             ringtoneUrl = ringtone.second,
+            isUsingNFC = usingNfc.get(),
             hour = time.first,
             minute = time.second,
             repetitionDays = repetitionDays

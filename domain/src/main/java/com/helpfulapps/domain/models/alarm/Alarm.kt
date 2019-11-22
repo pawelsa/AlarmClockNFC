@@ -13,16 +13,30 @@ data class Alarm(
     val isTurnedOn: Boolean = true,
     val ringtoneUrl: String,
     val ringtoneTitle: String,
+    val isUsingNFC: Boolean,
     val hour: Int,
     val minute: Int,
     val repetitionDays: Array<Boolean>
 
 ) {
 
+
     override operator fun equals(other: Any?): Boolean {
         return when (other) {
             this === other -> true
-            is Alarm -> this.id == other.id
+            is Alarm -> {
+                id == other.id
+                        && title == other.title
+                        && isRepeating == other.isRepeating
+                        && isVibrationOn == other.isVibrationOn
+                        && isTurnedOn == other.isTurnedOn
+                        && ringtoneUrl == other.ringtoneUrl
+                        && ringtoneTitle == other.ringtoneTitle
+                        && isUsingNFC == other.isUsingNFC
+                        && hour == other.hour
+                        && minute == other.minute
+                        && repetitionDays.contentEquals(other.repetitionDays)
+            }
             is DayWeather -> {
 
                 if (!this.isTurnedOn) return false
@@ -40,4 +54,5 @@ data class Alarm(
     override fun hashCode(): Int {
         return id.hashCode()
     }
+
 }

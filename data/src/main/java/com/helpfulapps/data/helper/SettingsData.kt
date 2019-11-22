@@ -3,7 +3,7 @@ package com.helpfulapps.data.helper
 import android.content.SharedPreferences
 import androidx.core.content.edit
 
-class Settings(private val _sharedPreferences: SharedPreferences) {
+class SettingsData(private val _sharedPreferences: SharedPreferences) {
 
     companion object {
         private const val KEY_WEATHER_UNITS = "units"

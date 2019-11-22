@@ -50,14 +50,59 @@
             android:layout_marginStart="@dimen/margin_medium"
             android:layout_marginTop="@dimen/margin_medium"
             android:layout_marginEnd="@dimen/margin_medium"
-            android:layout_marginBottom="@dimen/margin_medium"
             android:layout_weight="3"
             android:text="@{alarmData.repetitionDaysShorts + (!alarmData.title.empty &amp;&amp; !alarmData.repetitionDaysShorts.empty ? (`  |  ` ) : ``) + alarmData.title}"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_item_alarm_time"
             tools:text="pn, wt, sr, nd  |  Alarm title" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/cg_alarm_item_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_medium"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:layout_marginEnd="@dimen/margin_medium"
+            android:layout_marginBottom="@dimen/margin_medium"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_alarm_item_repeating_days">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_alarm_item_temperature"
+                style="@style/WeatherChipTheme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/item_alarm_temperature_ok"
+                android:visibility="@{alarmData.weatherShort.temperature != 0 ? View.VISIBLE : View.GONE}" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_alarm_item_rain"
+                style="@style/WeatherChipTheme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/item_alarm_rain_no"
+                android:visibility="@{alarmData.weatherShort.rain != 0 ? View.VISIBLE : View.GONE}" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_alarm_item_wind"
+                style="@style/WeatherChipTheme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/item_alarm_wind_no"
+                android:visibility="@{alarmData.weatherShort.wind != 0 ? View.VISIBLE : View.GONE}" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_alarm_item_snow"
+                style="@style/WeatherChipTheme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/item_alarm_snow_no"
+                android:visibility="@{alarmData.weatherShort.snow != 0 ? View.VISIBLE : View.GONE}" />
+
+        </com.google.android.material.chip.ChipGroup>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

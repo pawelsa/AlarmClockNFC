@@ -7,7 +7,7 @@ buildscript {
     ext.rxAndroid_version = '2.1.1'
     ext.rxKotlin_version='2.3.0'
     ext.dbflow_version = '4.2.4'
-    ext.gradle_version = '3.5.1'
+    ext.gradle_version = '3.5.2'
     ext.runner_version = '1.1.0'
     ext.junit_version = '4.12'
     ext.esspresso_core_version = '3.2.0'

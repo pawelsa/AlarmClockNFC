@@ -40,4 +40,9 @@
         <item name="android:buttonTint">@color/colorPrimary</item>
     </style>
 
+    <style name="WeatherChipTheme" parent="Widget.MaterialComponents.Chip.Action">
+        <item name="chipStrokeColor">@color/chip_color</item>
+        <item name="chipStrokeWidth">@dimen/chip_stroke</item>
+    </style>
+
 </resources>

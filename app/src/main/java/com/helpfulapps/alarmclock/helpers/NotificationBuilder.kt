@@ -9,17 +9,18 @@ import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.helpfulapps.alarmclock.R
+import com.helpfulapps.alarmclock.views.ringing_alarm.NfcRingingAlarmActivity
 import com.helpfulapps.alarmclock.views.ringing_alarm.RingingAlarmActivity
 import com.helpfulapps.domain.models.alarm.Alarm
 
 interface NotificationBuilder {
-    
+
     fun setNotificationType(notificationType: NotificationType): NotificationBuilder
 
     fun build(): Notification
 
     sealed class NotificationType {
-        class TypeAlarm(val alarm: Alarm) : NotificationType()
+        class TypeAlarm(val alarm: Alarm, val usingNfc: Boolean = false) : NotificationType()
         object TypeStopwatch : NotificationType()
         object TypeTimer : NotificationType()
     }
@@ -42,8 +43,13 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
 
     private fun setupAlarmType(notificationType: NotificationBuilder.NotificationType) {
         notificationType as NotificationBuilder.NotificationType.TypeAlarm
+
         val alarm = notificationType.alarm
-        val fullScreenIntent = Intent(context, RingingAlarmActivity::class.java).also {
+
+        val ringingActivity =
+            if (notificationType.usingNfc) NfcRingingAlarmActivity::class.java else RingingAlarmActivity::class.java
+
+        val fullScreenIntent = Intent(context, ringingActivity).also {
             it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
             it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

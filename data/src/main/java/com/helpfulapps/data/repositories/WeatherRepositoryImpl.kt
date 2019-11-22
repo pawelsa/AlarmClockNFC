@@ -11,7 +11,7 @@ import com.helpfulapps.data.extensions.dayOfMonth
 import com.helpfulapps.data.extensions.rxQueryListSingle
 import com.helpfulapps.data.extensions.timestampAtMidnight
 import com.helpfulapps.data.helper.NetworkCheck
-import com.helpfulapps.data.helper.Settings
+import com.helpfulapps.data.helper.SettingsData
 import com.helpfulapps.domain.eventBus.DatabaseNotifiers
 import com.helpfulapps.domain.eventBus.RxBus
 import com.helpfulapps.domain.exceptions.CouldNotObtainForecast
@@ -27,18 +27,11 @@ import retrofit2.Response
 import java.util.concurrent.TimeUnit
 import com.helpfulapps.domain.models.weather.DayWeather as DomainDayWeather
 
-const val SHARED_PREFERENCES_KEY = "AlarmClockSP"
-
 class WeatherRepositoryImpl(
     context: Context,
     private val networkCheck: NetworkCheck = NetworkCheck(context),
     private val apiCalls: ApiCalls = Downloader.create(),
-    private val settings: Settings = Settings(
-        context.getSharedPreferences(
-            SHARED_PREFERENCES_KEY,
-            Context.MODE_PRIVATE
-        )
-    )
+    private val settings: SettingsData
 ) : WeatherRepository {
 
     init {
@@ -115,7 +108,19 @@ class WeatherRepositoryImpl(
 
     private fun Single<List<DayWeather>>.saveInDatabase() =
         this.flatMapObservable { list -> Observable.fromIterable(list) }
-            .flatMap { dayWeatherList -> dayWeatherList.save().toObservable() }
+            .flatMap { dayWeather ->
+                dayWeather.weatherInfo?.save()?.flatMapObservable {
+                    dayWeather.save()
+                        .flatMapObservable {
+                            Observable.fromIterable(dayWeather.hourWeatherList)
+                                .flatMap { hourWeather ->
+                                    hourWeather.dayWeather = dayWeather
+                                    hourWeather.weatherInfo?.save()?.toObservable()
+                                        ?.flatMap { hourWeather.save().toObservable() }
+                                }
+                        }
+                }
+            }
 
     private fun Single<ForecastForCity>.transformResponseIntoDays(): Single<List<DayWeather>> =
         this.map {

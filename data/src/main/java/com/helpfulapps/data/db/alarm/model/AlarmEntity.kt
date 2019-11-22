@@ -20,6 +20,7 @@ data class AlarmEntity(
     var isTurnedOn: Boolean = true,
     var ringtoneId: String = "",
     var ringtoneTitle: String = "",
+    var isUsingNFC: Boolean = false,
     var hour: Int = 0,
     var minute: Int = 0,
     @ForeignKey(saveForeignKeyModel = true)
@@ -39,6 +40,7 @@ data class AlarmEntity(
         isTurnedOn = domainAlarm.isTurnedOn,
         ringtoneId = domainAlarm.ringtoneUrl,
         ringtoneTitle = domainAlarm.ringtoneTitle,
+        isUsingNFC = domainAlarm.isUsingNFC,
         hour = domainAlarm.hour,
         minute = domainAlarm.minute,
         daysOfWeek = DaysOfWeekEntry(domainAlarm.repetitionDays)
@@ -52,6 +54,7 @@ data class AlarmEntity(
         isTurnedOn: Boolean,
         ringtoneId: String,
         ringtoneTitle: String,
+        usingNFC: Boolean,
         hour: Int,
         minute: Int,
         days: Array<Boolean>
@@ -64,6 +67,7 @@ data class AlarmEntity(
         this.isTurnedOn = isTurnedOn
         this.ringtoneId = ringtoneId
         this.ringtoneTitle = ringtoneTitle
+        this.isUsingNFC = usingNFC
         this.hour = hour
         this.minute = minute
         this.daysOfWeek = DaysOfWeekEntry(days)
@@ -78,6 +82,7 @@ data class AlarmEntity(
             isTurnedOn,
             ringtoneId,
             ringtoneTitle,
+            isUsingNFC,
             hour,
             minute,
             daysOfWeek?.toDomain() ?: BooleanArray(7) { false }.toTypedArray()
@@ -97,6 +102,7 @@ data class AlarmEntity(
         if (isVibrationOn != other.isVibrationOn) return false
         if (isTurnedOn != other.isTurnedOn) return false
         if (ringtoneId != other.ringtoneId) return false
+        if (isUsingNFC != other.isUsingNFC) return false
         if (hour != other.hour) return false
         if (ringtoneTitle != other.ringtoneTitle) return false
         if (minute != other.minute) return false
