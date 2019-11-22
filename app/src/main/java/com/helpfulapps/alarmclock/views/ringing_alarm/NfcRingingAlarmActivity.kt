@@ -9,7 +9,6 @@ import android.nfc.NfcAdapter
 import com.google.android.material.snackbar.Snackbar
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.ActivityAlarmNfcBinding
-import com.helpfulapps.alarmclock.service.AlarmService
 import kotlinx.android.synthetic.main.activity_alarm_nfc.*
 import kotlinx.android.synthetic.main.activity_ringing_alarm.*
 
@@ -23,15 +22,15 @@ class NfcRingingAlarmActivity : BaseRingingAlarmActivity<ActivityAlarmNfcBinding
     }
 
     private val nfcPendingIntent: PendingIntent by lazy {
-        Intent(this, AlarmService::class.java).let {
-            it.action = "STOP"
-            PendingIntent.getService(this, 0, it, 0)
+        Intent(STOP_ALARM_INTENT).let {
+            PendingIntent.getBroadcast(this, 0, it, 0)
         }
     }
 
     // TODO maybe use this receiver to call stopAlarm() ????
     private val closeReceiver = object : BroadcastReceiver() {
         override fun onReceive(p0: Context?, p1: Intent?) {
+            stopAlarm()
             finish()
         }
     }
@@ -41,7 +40,7 @@ class NfcRingingAlarmActivity : BaseRingingAlarmActivity<ActivityAlarmNfcBinding
         binding.model = viewModel
         registerReceiver(
             closeReceiver,
-            IntentFilter("com.helpfulapps.alarmclock.views.ringing_alarm.close")
+            IntentFilter(STOP_ALARM_INTENT)
         )
     }
 
@@ -81,6 +80,10 @@ class NfcRingingAlarmActivity : BaseRingingAlarmActivity<ActivityAlarmNfcBinding
 
     override fun showMessage(text: String) {
         Snackbar.make(cl_ringing_base, text, Snackbar.LENGTH_SHORT).show()
+    }
+
+    companion object {
+        private const val STOP_ALARM_INTENT = "com.helpfulapps.alarmclock.views.ringing_alarm.close"
     }
 
 }
