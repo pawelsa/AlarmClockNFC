@@ -84,3 +84,17 @@ fun buildRemoveAlarmDialog(context: Context, response: (Boolean) -> Unit): Dialo
         }
     }.create()
 }
+
+fun buildEnableNfcAlarmDialog(context: Context, action: () -> Unit): Dialog {
+    return AlertDialog.Builder(context).apply {
+        setTitle(R.string.nfc_enable_dialog_title)
+        setMessage(R.string.nfc_enable_dialog_message)
+        setPositiveButton(context.getString(R.string.nfc_enable_dialog_open_settings)) { dialog, _ ->
+            action()
+            dialog.dismiss()
+        }
+        setNegativeButton(context.getString(android.R.string.no)) { dialog, _ ->
+            dialog.dismiss()
+        }
+    }.create()
+}

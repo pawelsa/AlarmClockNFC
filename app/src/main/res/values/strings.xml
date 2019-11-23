@@ -42,4 +42,7 @@
     <string name="add_alarm_nfc">Use NFC</string>
     <string name="ringing_alarm_snoozed_succesfully">Alarm snoozed</string>
     <string name="ringing_alarm_snoozed_unsuccesfully">Alarm cannot be snoozed</string>
+    <string name="nfc_enable_dialog_title">Turn on NFC</string>
+    <string name="nfc_enable_dialog_message">To turn off alarm you need to turn on NFC in settings. Do you want to open settings?</string>
+    <string name="nfc_enable_dialog_open_settings">OPEN SETTINGS</string>
 </resources>
