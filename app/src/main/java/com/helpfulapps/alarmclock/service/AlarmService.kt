@@ -5,10 +5,12 @@ import android.content.Intent
 import android.net.Uri
 import android.os.IBinder
 import android.util.Log
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.helpfulapps.alarmclock.helpers.AlarmPlayer
 import com.helpfulapps.alarmclock.helpers.NotificationBuilder
 import com.helpfulapps.alarmclock.helpers.NotificationBuilderImpl.Companion.KEY_ALARM_ID
 import com.helpfulapps.alarmclock.helpers.Settings
+import com.helpfulapps.alarmclock.views.ringing_alarm.BaseRingingAlarmActivity.Companion.AUTO_SNOOZE_ALARM
 import com.helpfulapps.alarmclock.views.ringing_alarm.BaseRingingAlarmActivity.Companion.SNOOZE_ACTION
 import com.helpfulapps.alarmclock.views.ringing_alarm.BaseRingingAlarmActivity.Companion.STOP_ACTION
 import com.helpfulapps.base.extensions.rx.backgroundTask
@@ -16,10 +18,12 @@ import com.helpfulapps.domain.models.alarm.Alarm
 import com.helpfulapps.domain.use_cases.alarm.GetAlarmUseCase
 import com.helpfulapps.domain.use_cases.alarm.SnoozeAlarmUseCase
 import com.helpfulapps.domain.use_cases.alarm.StopRingingAlarmUseCase
+import io.reactivex.Completable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy
 import org.koin.android.ext.android.inject
+import java.util.concurrent.TimeUnit
 
 
 class AlarmService : Service() {
@@ -86,7 +90,16 @@ class AlarmService : Service() {
                 )
             ).build()
             startForeground(1, notification)
+            startCountdownToAutoSnooze()
         }
+    }
+
+    private fun startCountdownToAutoSnooze() {
+        disposables += Completable.timer(3L, TimeUnit.MINUTES)
+            .subscribe {
+                LocalBroadcastManager.getInstance(this).sendBroadcast(Intent(AUTO_SNOOZE_ALARM))
+                snoozeAlarm()
+            }
     }
 
     private fun shouldUseNfc() = settings.hasNfc && alarm?.isUsingNFC ?: false
