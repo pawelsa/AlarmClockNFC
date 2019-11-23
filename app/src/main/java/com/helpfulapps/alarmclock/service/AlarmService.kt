@@ -9,10 +9,12 @@ import com.helpfulapps.alarmclock.helpers.AlarmPlayer
 import com.helpfulapps.alarmclock.helpers.NotificationBuilder
 import com.helpfulapps.alarmclock.helpers.NotificationBuilderImpl.Companion.KEY_ALARM_ID
 import com.helpfulapps.alarmclock.helpers.Settings
+import com.helpfulapps.alarmclock.views.ringing_alarm.BaseRingingAlarmActivity.Companion.SNOOZE_ACTION
 import com.helpfulapps.alarmclock.views.ringing_alarm.BaseRingingAlarmActivity.Companion.STOP_ACTION
 import com.helpfulapps.base.extensions.rx.backgroundTask
 import com.helpfulapps.domain.models.alarm.Alarm
 import com.helpfulapps.domain.use_cases.alarm.GetAlarmUseCase
+import com.helpfulapps.domain.use_cases.alarm.SnoozeAlarmUseCase
 import com.helpfulapps.domain.use_cases.alarm.StopRingingAlarmUseCase
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
@@ -28,11 +30,12 @@ class AlarmService : Service() {
 
     private val getAlarmUseCase: GetAlarmUseCase by inject()
     private val stopRingingAlarmUseCase: StopRingingAlarmUseCase by inject()
+    private val snoozeAlarmUseCase: SnoozeAlarmUseCase by inject()
     private val alarmPlayer: AlarmPlayer by inject()
     private val notificationBuilder: NotificationBuilder by inject()
     private val settings: Settings by inject()
 
-    private val disposable = CompositeDisposable()
+    private val disposables = CompositeDisposable()
 
     override fun onBind(intent: Intent): IBinder? = null
 
@@ -45,6 +48,7 @@ class AlarmService : Service() {
         val alarmId = intent?.getIntExtra(KEY_ALARM_ID, -1) ?: -1
         when {
             intent?.action == STOP_ACTION -> stopAlarm()
+            intent?.action == SNOOZE_ACTION -> snoozeAlarm()
             alarmId != -1 -> startAlarm(alarmId)
             else -> stopSelf()
         }
@@ -53,9 +57,20 @@ class AlarmService : Service() {
     private fun stopAlarm() {
         alarm?.let {
             alarmPlayer.stopPlaying()
-            disposable += stopRingingAlarmUseCase(StopRingingAlarmUseCase.Param(it))
+            disposables += stopRingingAlarmUseCase(StopRingingAlarmUseCase.Param(it))
                 .backgroundTask()
                 .subscribe {
+                    stopSelf()
+                }
+        }
+    }
+
+    private fun snoozeAlarm() {
+        alarm?.let {
+            alarmPlayer.stopPlaying()
+            disposables += snoozeAlarmUseCase(SnoozeAlarmUseCase.Param(it.id))
+                .backgroundTask()
+                .subscribeBy {
                     stopSelf()
                 }
         }
@@ -78,7 +93,7 @@ class AlarmService : Service() {
 
     private fun subscribeToAlarm(alarmId: Int, onSuccess: (alarm: Alarm) -> Unit) {
         if (alarmId == -1) return
-        disposable += getAlarmUseCase(GetAlarmUseCase.Params(alarmId.toLong()))
+        disposables += getAlarmUseCase(GetAlarmUseCase.Params(alarmId.toLong()))
             .backgroundTask()
             .subscribeBy(
                 onSuccess = {
@@ -96,7 +111,7 @@ class AlarmService : Service() {
 
     override fun onDestroy() {
         alarmPlayer.destroyPlayer()
-        disposable.clear()
+        disposables.clear()
         super.onDestroy()
     }
 }

@@ -5,9 +5,7 @@ import android.os.Build
 import android.view.WindowManager
 import androidx.databinding.ViewDataBinding
 import com.google.android.material.snackbar.Snackbar
-import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.helpers.NotificationBuilderImpl
-import com.helpfulapps.alarmclock.helpers.extensions.observe
 import com.helpfulapps.alarmclock.helpers.fromBuildVersion
 import com.helpfulapps.alarmclock.helpers.startVersionedService
 import com.helpfulapps.alarmclock.service.AlarmService
@@ -27,7 +25,6 @@ abstract class BaseRingingAlarmActivity<T : ViewDataBinding> :
 
         listenToAlarmStop()
         listenToAlarmSnooze()
-        subscribeSnoozing()
     }
 
     private fun setupWindowFlags() {
@@ -51,29 +48,23 @@ abstract class BaseRingingAlarmActivity<T : ViewDataBinding> :
         }
     }
 
-    private fun subscribeSnoozing() {
-        viewModel.alarmSnoozed.observe(this) {
-            when {
-                it -> showMessage(getString(R.string.ringing_alarm_snoozed_succesfully))
-                else -> showMessage(getString(R.string.ringing_alarm_snoozed_unsuccesfully))
-            }
-        }
-    }
-
     abstract fun listenToAlarmSnooze()
     abstract fun listenToAlarmStop()
 
     fun stopAlarm() {
-        Intent(this, AlarmService::class.java).also {
+        Intent(this, AlarmService::class.java).let {
             it.action = STOP_ACTION
             startVersionedService(it)
         }
         finish()
     }
 
+
     fun snoozeAlarm() {
-        viewModel.snoozeAlarm()
-        stopAlarm()
+        Intent(this, AlarmService::class.java).let {
+            it.action = SNOOZE_ACTION
+            startVersionedService(it)
+        }
         finish()
     }
 
@@ -83,6 +74,7 @@ abstract class BaseRingingAlarmActivity<T : ViewDataBinding> :
 
     companion object {
         const val STOP_ACTION = "com.helpfulapps.alarmclock.views.ringing_alarm.stop"
+        const val SNOOZE_ACTION = "com.helpfulapps.alarmclock.views.ringing_alarm.snooze"
         const val STOP_ALARM_INTENT = "com.helpfulapps.alarmclock.views.ringing_alarm.close"
     }
 
