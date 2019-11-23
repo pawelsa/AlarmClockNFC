@@ -8,13 +8,11 @@ import android.os.Build
 import android.view.WindowManager
 import androidx.databinding.ViewDataBinding
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.google.android.material.snackbar.Snackbar
 import com.helpfulapps.alarmclock.helpers.NotificationBuilderImpl
 import com.helpfulapps.alarmclock.helpers.fromBuildVersion
 import com.helpfulapps.alarmclock.helpers.startVersionedService
 import com.helpfulapps.alarmclock.service.AlarmService
 import com.helpfulapps.base.base.BaseActivity
-import kotlinx.android.synthetic.main.activity_ringing_alarm.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
 abstract class BaseRingingAlarmActivity<T : ViewDataBinding> :
@@ -83,10 +81,6 @@ abstract class BaseRingingAlarmActivity<T : ViewDataBinding> :
             startVersionedService(it)
         }
         finish()
-    }
-
-    override fun showMessage(text: String) {
-        Snackbar.make(cl_ringing_base, text, Snackbar.LENGTH_SHORT).show()
     }
 
     override fun onDestroy() {

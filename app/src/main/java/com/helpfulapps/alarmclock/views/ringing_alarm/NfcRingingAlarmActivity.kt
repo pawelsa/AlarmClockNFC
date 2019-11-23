@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.nfc.NfcAdapter
+import com.google.android.material.snackbar.Snackbar
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.ActivityAlarmNfcBinding
 import kotlinx.android.synthetic.main.activity_alarm_nfc.*
@@ -66,6 +67,10 @@ class NfcRingingAlarmActivity : BaseRingingAlarmActivity<ActivityAlarmNfcBinding
 
     private fun disableForegroundMode() {
         nfcAdapter.disableForegroundDispatch(this)
+    }
+
+    override fun showMessage(text: String) {
+        Snackbar.make(cl_ring_nfc_base, text, Snackbar.LENGTH_SHORT).show()
     }
 
     override fun onDestroy() {
