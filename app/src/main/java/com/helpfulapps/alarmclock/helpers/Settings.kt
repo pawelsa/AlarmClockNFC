@@ -17,10 +17,15 @@ class Settings(private val sharedPreferences: SharedPreferences) {
         set(value) = sharedPreferences.edit { putBoolean(KEY_ASK_FOR_OPTIMIZATIONS, value) }
         get() = sharedPreferences.getBoolean(KEY_ASK_FOR_OPTIMIZATIONS, true)
 
+    var city: String
+        set(value) = sharedPreferences.edit { putString(KEY_CITY, value) }
+        get() = sharedPreferences.getString(KEY_CITY, "-1") ?: "-1"
+
     companion object {
         const val KEY_FIRST_TIME = "com.helpfulapps.alarmclock.first_time"
         const val KEY_HAS_NFC = "com.helpfulapps.alarmclock.has_nfc"
         const val KEY_ASK_FOR_OPTIMIZATIONS = "com.helpfulapps.alarmclock.battery_optimization"
+        const val KEY_CITY = "com.helpfulapps.alarmclock.city"
     }
 
 }

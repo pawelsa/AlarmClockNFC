@@ -124,6 +124,7 @@ class WeatherRepositoryImpl(
 
     private fun Single<ForecastForCity>.transformResponseIntoDays(): Single<List<DayWeather>> =
         this.map {
+            settings.city = it.city.name
             it.list
                 .map { forecast -> forecast.toDbModel().apply { dt *= 1000 } }
                 .groupBy { hourWeather -> hourWeather.dt.dayOfMonth() }
