@@ -1,7 +1,14 @@
 package com.helpfulapps.alarmclock.views.clock_fragment
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
+import android.os.PowerManager
+import android.provider.Settings
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.FragmentClockBinding
+import com.helpfulapps.alarmclock.helpers.fromBuildVersion
 import com.helpfulapps.alarmclock.helpers.layout_helpers.buildRemoveAlarmDialog
 import com.helpfulapps.alarmclock.views.clock_fragment.add_alarm_bs.AddAlarmBottomSheet
 import com.helpfulapps.alarmclock.views.main_activity.MainActivity
@@ -21,6 +28,26 @@ class ClockFragment : BaseFragment<ClockViewModel, FragmentClockBinding>() {
     override fun init() {
         setupViewModel()
         setupData()
+        checkBatteryOptimization()
+    }
+
+    private fun checkBatteryOptimization() {
+        fromBuildVersion(Build.VERSION_CODES.M) {
+            if (viewModel.askForBatteryOptimization) {
+                val intent = Intent()
+                val packageName = context!!.packageName
+                val pm: PowerManager =
+                    context!!.getSystemService(Context.POWER_SERVICE) as PowerManager
+                if (pm.isIgnoringBatteryOptimizations(packageName)) {
+                    intent.action = Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS
+                } else {
+                    intent.action = Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+                    intent.data = Uri.parse("package:$packageName")
+                    viewModel.batteryOptimizationTurnedOff()
+                }
+                context!!.startActivity(intent)
+            }
+        }
     }
 
     private fun setupViewModel() {

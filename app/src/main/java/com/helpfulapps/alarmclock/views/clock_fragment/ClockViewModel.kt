@@ -1,6 +1,7 @@
 package com.helpfulapps.alarmclock.views.clock_fragment
 
 import android.util.Log
+import com.helpfulapps.alarmclock.helpers.Settings
 import com.helpfulapps.base.base.BaseViewModel
 import com.helpfulapps.domain.eventBus.DatabaseNotifiers
 import com.helpfulapps.domain.eventBus.RxBus
@@ -15,12 +16,15 @@ import io.reactivex.rxkotlin.subscribeBy
 class ClockViewModel(
     private val getAlarmsUseCase: GetAlarmsUseCase,
     private val switchAlarmUseCase: SwitchAlarmUseCase,
-    private val removeAlarmUseCase: RemoveAlarmUseCase
+    private val removeAlarmUseCase: RemoveAlarmUseCase,
+    private val settings: Settings
 ) : BaseViewModel() {
 
     private val TAG = ClockViewModel::class.java.simpleName
 
     lateinit var adapter: ClockListAdapter
+
+    val askForBatteryOptimization = settings.askForBatteryOptimization
 
     fun getAlarms() {
         disposables += getAlarmsUseCase()
@@ -34,6 +38,10 @@ class ClockViewModel(
                 }
                 adapter.submitList(it)
             }
+    }
+
+    fun batteryOptimizationTurnedOff() {
+        settings.askForBatteryOptimization = false
     }
 
     fun subscribeToDatabaseChanges() {
