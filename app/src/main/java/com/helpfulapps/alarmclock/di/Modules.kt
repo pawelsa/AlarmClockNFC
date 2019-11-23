@@ -33,7 +33,7 @@ object Modules {
 
     private val appModules = module {
         viewModel { MainActivityViewModel() }
-        viewModel { ClockViewModel(get(), get(), get()) }
+        viewModel { ClockViewModel(get(), get(), get(), get()) }
         viewModel { HourWatchViewModel() }
         viewModel { StopWatchViewModel() }
         viewModel { AddAlarmBottomSheetViewModel(get(), get(), get()) }

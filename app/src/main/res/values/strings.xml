@@ -45,4 +45,7 @@
     <string name="nfc_enable_dialog_title">Turn on NFC</string>
     <string name="nfc_enable_dialog_message">To turn off alarm you need to turn on NFC in settings. Do you want to open settings?</string>
     <string name="nfc_enable_dialog_open_settings">OPEN SETTINGS</string>
+    <string name="battery_optimization_dialog_title">Turn off battery optimization</string>
+    <string name="battery_optimization_dialog_message">To allow this application to start alarm at exact time, this is highly recommended. Otherwise alarm can start after few minutes or never. Do you want to open settings ?</string>
+    <string name="battery_optimization_dialog_open_settings">OPEN SETTINGS</string>
 </resources>

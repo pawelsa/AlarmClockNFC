@@ -8,3 +8,7 @@ inline fun fromBuildVersion(version: Int, matching: () -> Unit, otherwise: () ->
         else -> otherwise()
     }
 }
+
+inline fun fromBuildVersion(version: Int, matching: () -> Unit) {
+    if (Build.VERSION.SDK_INT >= version) matching()
+}
