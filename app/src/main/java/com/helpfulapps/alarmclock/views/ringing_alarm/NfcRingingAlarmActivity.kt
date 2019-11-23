@@ -6,9 +6,11 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.nfc.NfcAdapter
+import android.provider.Settings
 import com.google.android.material.snackbar.Snackbar
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.ActivityAlarmNfcBinding
+import com.helpfulapps.alarmclock.helpers.layout_helpers.buildEnableNfcAlarmDialog
 import kotlinx.android.synthetic.main.activity_alarm_nfc.*
 
 
@@ -52,6 +54,15 @@ class NfcRingingAlarmActivity : BaseRingingAlarmActivity<ActivityAlarmNfcBinding
     override fun onResume() {
         super.onResume()
         enableForegroundMode()
+        checkIfNfcIsTurnedOn()
+    }
+
+    private fun checkIfNfcIsTurnedOn() {
+        if (!nfcAdapter.isEnabled) {
+            buildEnableNfcAlarmDialog(this) {
+                startActivity(Intent(Settings.ACTION_NFC_SETTINGS))
+            }.show()
+        }
     }
 
     private fun enableForegroundMode() {
