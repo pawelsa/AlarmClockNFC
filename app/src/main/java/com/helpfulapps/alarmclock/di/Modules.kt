@@ -67,6 +67,7 @@ object Modules {
             )
         }
         single<WeatherRepository> { WeatherRepositoryImpl(androidContext(), settings = get()) }
+        single<SnoozeAlarmUseCase> { SnoozeAlarmUseCaseImpl(get(), get()) }
     }
 
     private val data = module {

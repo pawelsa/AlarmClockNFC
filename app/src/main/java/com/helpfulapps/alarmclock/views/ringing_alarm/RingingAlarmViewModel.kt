@@ -17,7 +17,10 @@ class RingingAlarmViewModel(
     val weatherAlarm: LiveData<WeatherAlarm>
         get() = _weatherAlarm
 
+    private var alarmId: Long = -1
+
     fun getAlarm(alarmId: Long) {
+        this.alarmId = alarmId
         disposables += getAlarmUseCase(GetAlarmUseCase.Params(alarmId))
             .subscribeBy(
                 onSuccess = {

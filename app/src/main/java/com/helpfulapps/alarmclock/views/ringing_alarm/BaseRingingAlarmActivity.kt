@@ -1,9 +1,13 @@
 package com.helpfulapps.alarmclock.views.ringing_alarm
 
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Build
 import android.view.WindowManager
 import androidx.databinding.ViewDataBinding
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.helpfulapps.alarmclock.helpers.NotificationBuilderImpl
 import com.helpfulapps.alarmclock.helpers.fromBuildVersion
 import com.helpfulapps.alarmclock.helpers.startVersionedService
@@ -16,6 +20,12 @@ abstract class BaseRingingAlarmActivity<T : ViewDataBinding> :
 
     override val viewModel: RingingAlarmViewModel by viewModel()
 
+    private val autoSnoozeBroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            finish()
+        }
+    }
+
     override fun init() {
         setupWindowFlags()
 
@@ -23,6 +33,13 @@ abstract class BaseRingingAlarmActivity<T : ViewDataBinding> :
 
         listenToAlarmStop()
         listenToAlarmSnooze()
+
+        setupReceiver()
+    }
+
+    private fun setupReceiver() {
+        LocalBroadcastManager.getInstance(this)
+            .registerReceiver(autoSnoozeBroadcastReceiver, IntentFilter(AUTO_SNOOZE_ALARM))
     }
 
     private fun setupWindowFlags() {
@@ -50,19 +67,31 @@ abstract class BaseRingingAlarmActivity<T : ViewDataBinding> :
     abstract fun listenToAlarmStop()
 
     fun stopAlarm() {
-        Intent(this, AlarmService::class.java).also {
+        Intent(this, AlarmService::class.java).let {
             it.action = STOP_ACTION
             startVersionedService(it)
         }
         finish()
     }
 
+
     fun snoozeAlarm() {
-        // TODO implement
+        Intent(this, AlarmService::class.java).let {
+            it.action = SNOOZE_ACTION
+            startVersionedService(it)
+        }
+        finish()
+    }
+
+    override fun onDestroy() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(autoSnoozeBroadcastReceiver)
+        super.onDestroy()
     }
 
     companion object {
         const val STOP_ACTION = "com.helpfulapps.alarmclock.views.ringing_alarm.stop"
+        const val SNOOZE_ACTION = "com.helpfulapps.alarmclock.views.ringing_alarm.snooze"
+        const val AUTO_SNOOZE_ALARM = "com.helpfulapps.alarmclock.views.ringing_alarm.auto_snooze"
         const val STOP_ALARM_INTENT = "com.helpfulapps.alarmclock.views.ringing_alarm.close"
     }
 

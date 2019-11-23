@@ -79,8 +79,8 @@
                 android:visibility="@{alarmData.weatherShort.temperature != 0 ? View.VISIBLE : View.GONE}" />
 
             <com.google.android.material.chip.Chip
-                style="@style/WeatherChipTheme"
                 android:id="@+id/chip_alarm_item_rain"
+                style="@style/WeatherChipTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/item_alarm_rain_no"

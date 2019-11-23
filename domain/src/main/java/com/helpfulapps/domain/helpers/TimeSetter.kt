@@ -7,11 +7,27 @@ class TimeSetter(
     private var calendar: Calendar = GregorianCalendar.getInstance(),
     private val currentTime: () -> Long = { System.currentTimeMillis() }
 ) {
-
+    private val TAG = this.javaClass.simpleName
     fun getAlarmStartingPoint(alarm: Alarm): Long {
         val calendar = setStartingPoint(alarm)
 
         return calendar.timeInMillis
+    }
+
+    fun getAlarmSnoozeTime(alarm: Alarm): Long {
+        val baseAlarmStarting =
+            setHourAndMinute(alarm, GregorianCalendar.getInstance()).timeInMillis
+        val currentT = currentTime()
+        var snoozeTime = -1L
+
+        for (timesSnoozed in 1..3) {
+            val nextTime = baseAlarmStarting + (timesSnoozed * FIVE_MINUTES_MILLIS)
+            if (nextTime > currentT) {
+                snoozeTime = nextTime
+                break
+            }
+        }
+        return snoozeTime
     }
 
     private fun setStartingPoint(alarm: Alarm): Calendar {
@@ -85,6 +101,9 @@ class TimeSetter(
 
     companion object {
         private const val HOURS_IN_DAY = 24
+        private const val HOURS_IN_DAY_MILLIS = HOURS_IN_DAY * 3600 * 1000
+        private const val MINUTE_MILLIS = 60 * 1000
+        private const val FIVE_MINUTES_MILLIS = 5 * MINUTE_MILLIS
         const val HOURS_IN_WEEK = HOURS_IN_DAY * 7
     }
 

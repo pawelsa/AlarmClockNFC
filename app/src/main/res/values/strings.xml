@@ -40,4 +40,6 @@
     <string name="item_alarm_wind_very_windy">Very windy</string>
     <string name="item_alarm_wind_windy">Windy</string>
     <string name="add_alarm_nfc">Use NFC</string>
+    <string name="ringing_alarm_snoozed_succesfully">Alarm snoozed</string>
+    <string name="ringing_alarm_snoozed_unsuccesfully">Alarm cannot be snoozed</string>
 </resources>

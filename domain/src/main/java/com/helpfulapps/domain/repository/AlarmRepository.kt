@@ -26,4 +26,5 @@ interface AlarmClockManager {
     ): Completable
 
     fun stopAlarm(alarmId: Long): Completable
+    fun snoozeAlarm(alarm: Alarm): Completable
 }
