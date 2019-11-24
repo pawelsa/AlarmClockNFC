@@ -19,6 +19,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".SettingsActivity"></activity>
 
         <service
             android:name=".service.AlarmService"
@@ -44,9 +45,7 @@
             android:name=".views.ringing_alarm.NfcRingingAlarmActivity"
             android:excludeFromRecents="true"
             android:launchMode="singleTop"
-            android:showOnLockScreen="true">
-
-        </activity>
+            android:showOnLockScreen="true"></activity>
     </application>
 
 </manifest>
