@@ -25,13 +25,13 @@ class Settings(private val sharedPreferences: SharedPreferences) {
         set(value) = sharedPreferences.edit { putBoolean(KEY_USE_MOBILE_DATA, value) }
         get() = sharedPreferences.getBoolean(KEY_USE_MOBILE_DATA, false)
 
-    var snoozeAlarmTime: String
-        set(value) = sharedPreferences.edit { putString(KEY_SNOOZE_ALARM, value) }
-        get() = sharedPreferences.getString(KEY_SNOOZE_ALARM, "3") ?: "3"
+    var snoozeAlarmTime: Int
+        set(value) = sharedPreferences.edit { putString(KEY_SNOOZE_ALARM, value.toString()) }
+        get() = (sharedPreferences.getString(KEY_SNOOZE_ALARM, "3") ?: "3").toInt()
 
-    var alarmTime: String
-        set(value) = sharedPreferences.edit { putString(KEY_ALARM_TIME, value) }
-        get() = sharedPreferences.getString(KEY_ALARM_TIME, "2") ?: "2"
+    var alarmTime: Int
+        set(value) = sharedPreferences.edit { putString(KEY_ALARM_TIME, value.toString()) }
+        get() = (sharedPreferences.getString(KEY_ALARM_TIME, "2") ?: "2").toInt()
 
     companion object {
         const val KEY_FIRST_TIME = "com.helpfulapps.alarmclock.first_time"
