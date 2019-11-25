@@ -39,6 +39,7 @@ dependencies {
 
     implementation project(':domain')
 
+    implementation "androidx.core:core-ktx:$kotlin_core_version"
     // rxJava & rxKotlin
     implementation "io.reactivex.rxjava2:rxjava:$rxJava_version"
     implementation "io.reactivex.rxjava2:rxkotlin:$rxKotlin_version"

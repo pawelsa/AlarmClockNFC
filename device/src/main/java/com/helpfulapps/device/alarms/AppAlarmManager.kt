@@ -6,6 +6,7 @@ import android.content.Context
 import android.os.Build
 import com.helpfulapps.base.extensions.rx.completableOf
 import com.helpfulapps.device.alarms.helpers.IntentCreator
+import com.helpfulapps.device.alarms.helpers.SettingsDevice
 import com.helpfulapps.device.alarms.helpers.matchesVersionsFrom
 import com.helpfulapps.domain.helpers.TimeSetter
 import com.helpfulapps.domain.repository.AlarmClockManager
@@ -13,7 +14,11 @@ import io.reactivex.Completable
 import com.helpfulapps.domain.models.alarm.Alarm as DomainAlarm
 
 
-class AlarmClockManagerImpl(private val context: Context, private val manager: AlarmManager) :
+class AlarmClockManagerImpl(
+    private val context: Context,
+    private val manager: AlarmManager,
+    private val settings: SettingsDevice
+) :
     AlarmClockManager {
 
     private val TAG = AlarmClockManagerImpl::class.java.simpleName
@@ -79,7 +84,7 @@ class AlarmClockManagerImpl(private val context: Context, private val manager: A
     override fun snoozeAlarm(alarm: DomainAlarm): Completable {
         return completableOf {
             val timeSetter = TimeSetter()
-            val snoozeTime = timeSetter.getAlarmSnoozeTime(alarm)
+            val snoozeTime = timeSetter.getAlarmSnoozeTime(alarm, settings.snoozeAlarmTime)
             if (snoozeTime != -1L) {
                 val alarmIntent = IntentCreator.getAlarmIntent(context, alarm.id.toInt())
                 val alarmInfoIntent =

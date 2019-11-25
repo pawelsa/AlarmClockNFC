@@ -14,14 +14,14 @@ class TimeSetter(
         return calendar.timeInMillis
     }
 
-    fun getAlarmSnoozeTime(alarm: Alarm): Long {
+    fun getAlarmSnoozeTime(alarm: Alarm, snoozingTime: Int): Long {
         val baseAlarmStarting =
             setHourAndMinute(alarm, GregorianCalendar.getInstance()).timeInMillis
         val currentT = currentTime()
         var snoozeTime = -1L
 
         for (timesSnoozed in 1..3) {
-            val nextTime = baseAlarmStarting + (timesSnoozed * FIVE_MINUTES_MILLIS)
+            val nextTime = baseAlarmStarting + (timesSnoozed * snoozingTime * MINUTE_MILLIS)
             if (nextTime > currentT) {
                 snoozeTime = nextTime
                 break
