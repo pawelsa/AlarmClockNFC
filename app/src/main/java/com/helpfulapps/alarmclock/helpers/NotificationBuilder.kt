@@ -23,6 +23,7 @@ interface NotificationBuilder {
         class TypeAlarm(val alarm: Alarm, val usingNfc: Boolean = false) : NotificationType()
         object TypeStopwatch : NotificationType()
         object TypeTimer : NotificationType()
+        object TypeLocalization : NotificationType()
     }
 }
 
@@ -38,8 +39,10 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
                 is NotificationBuilder.NotificationType.TypeAlarm -> setupAlarmType(notificationType)
                 is NotificationBuilder.NotificationType.TypeStopwatch -> setupStopWatchType()
                 is NotificationBuilder.NotificationType.TypeTimer -> setupTimerType()
+                is NotificationBuilder.NotificationType.TypeLocalization -> setupLocalizationType()
             }
         }
+
 
     private fun setupAlarmType(notificationType: NotificationBuilder.NotificationType) {
         notificationType as NotificationBuilder.NotificationType.TypeAlarm
@@ -81,6 +84,26 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
         builder.setChannelId(CHANNEL_ALARM_ID)
     }
 
+    private fun setupLocalizationType() {
+        builder =
+            NotificationCompat.Builder(context, CHANNEL_LOCALIZATION_ID)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle(context.getString(R.string.app_name))
+                .setContentText(
+                    context.getString(
+                        R.string.notification_location_text
+                    )
+                )
+                .setPriority(NotificationCompat.PRIORITY_LOW)
+                .setCategory(NotificationCompat.CATEGORY_SERVICE)
+                .setAutoCancel(false)
+
+        buildNotificationChannel(NotificationBuilder.NotificationType.TypeLocalization)
+
+        builder.setChannelId(CHANNEL_LOCALIZATION_ID)
+
+    }
+
     private fun setupStopWatchType() {
         // set builder
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
@@ -99,11 +122,13 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
             var name = ""
             var descriptionText = ""
             var importance = NotificationManager.IMPORTANCE_DEFAULT
+            var channelId = ""
             when (notificationType) {
                 is NotificationBuilder.NotificationType.TypeAlarm -> {
                     name = context.getString(R.string.channel_alarm_name)
                     descriptionText = context.getString(R.string.channel_alarm_description)
                     importance = NotificationManager.IMPORTANCE_HIGH
+                    channelId = CHANNEL_ALARM_ID
                 }
                 is NotificationBuilder.NotificationType.TypeStopwatch -> {
                     TODO("NOT IMPLEMENTED, CHANNEL STOPWATCH")
@@ -111,8 +136,14 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
                 is NotificationBuilder.NotificationType.TypeTimer -> {
                     TODO("NOT IMPLEMENTED, CHANNEL TIMER")
                 }
+                is NotificationBuilder.NotificationType.TypeLocalization -> {
+                    name = context.getString(R.string.channel_location_name)
+                    descriptionText = context.getString(R.string.channel_location_description)
+                    importance = NotificationManager.IMPORTANCE_LOW
+                    channelId = CHANNEL_LOCALIZATION_ID
+                }
             }
-            val mChannel = NotificationChannel(CHANNEL_ALARM_ID, name, importance)
+            val mChannel = NotificationChannel(channelId, name, importance)
             mChannel.description = descriptionText
 
             notificationManager.createNotificationChannel(mChannel)
@@ -124,6 +155,8 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
         // if changed here, must be changed in intentcreator
         const val KEY_ALARM_ID = "com.helpfulapps.alarmclock.ALARM_ID"
         private const val CHANNEL_ALARM_ID = "com.helpfulapps.alarmclock.ALARM_CHANNEL_ID"
+        private const val CHANNEL_LOCALIZATION_ID =
+            "com.helpfulapps.alarmclock.CHANNEL_LOCALIZATION_ID"
     }
 
 }

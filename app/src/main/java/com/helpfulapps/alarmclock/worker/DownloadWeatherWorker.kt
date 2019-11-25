@@ -30,9 +30,9 @@ class DownloadWeatherWorker(
                     Result.success()
                 }
         } else {
-            val longitude = inputData.getLong(KEY_LONGITUDE, 0)
-            val latitude = inputData.getLong(KEY_LATITUDE, 0)
-            return if ((longitude != 0L) and (latitude != 0L)) {
+            val longitude = inputData.getDouble(KEY_LONGITUDE, 0.0)
+            val latitude = inputData.getDouble(KEY_LATITUDE, 0.0)
+            return if ((longitude != 0.0) and (latitude != 0.0)) {
                 downloadForecastForLocalizationUseCase(
                     DownloadForecastForLocalizationUseCase.Params(
                         lat = latitude,

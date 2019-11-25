@@ -48,7 +48,7 @@ class WeatherRepositoryImpl(
             .convertModelsAndSaveInDb()
             .doOnComplete { RxBus.publish(DatabaseNotifiers.Saved) }
 
-    override fun downloadForecast(lat: Long, lon: Long): Completable =
+    override fun downloadForecast(lat: Double, lon: Double): Completable =
         networkCheck.isConnectedToNetwork
             .flatMap {
                 apiCalls.downloadForecastForCoordinates(

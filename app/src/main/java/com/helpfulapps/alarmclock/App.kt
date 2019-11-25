@@ -44,7 +44,7 @@ class App : Application() {
                 .build()
         WorkManager.getInstance(this).enqueueUniquePeriodicWork(
             FORECAST_DOWNLOAD_WORK,
-            ExistingPeriodicWorkPolicy.REPLACE,
+            ExistingPeriodicWorkPolicy.KEEP,
             downloadWeather
         )
     }

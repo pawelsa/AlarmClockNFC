@@ -13,6 +13,11 @@
         android:title="@string/settings_city_title"
         app:useSimpleSummaryProvider="true" />
 
+    <Preference
+        android:key="com.helpfulapps.alarmclock.city_gps"
+        android:summary="Uses your GPS position, and downloads forecast for it"
+        android:title="Get forecast for current localization" />
+
     <ListPreference
         android:defaultValue="metric"
         android:entries="@array/settings_units_titles"

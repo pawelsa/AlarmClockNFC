@@ -98,3 +98,17 @@ fun buildEnableNfcAlarmDialog(context: Context, action: () -> Unit): Dialog {
         }
     }.create()
 }
+
+fun buildGpsEnableAlarmDialog(context: Context, action: () -> Unit): Dialog {
+    return AlertDialog.Builder(context).apply {
+        setTitle(context.getString(R.string.dialog_gps_enable_title))
+        setMessage(context.getString(R.string.dialog_gps_enable_message))
+        setPositiveButton(context.getString(R.string.gps_dialog_open_settings)) { dialog, _ ->
+            action()
+            dialog.dismiss()
+        }
+        setNegativeButton(context.getString(android.R.string.no)) { dialog, _ ->
+            dialog.dismiss()
+        }
+    }.create()
+}

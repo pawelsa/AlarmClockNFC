@@ -50,6 +50,12 @@
     <string name="settings_city_title">Forecast for city</string>
     <string name="settings_mobile_data_title">Use mobile data</string>
     <string name="settings_mobile_data_summary">Mobile data will be used to download forecast</string>
+    <string name="notification_location_text">Obtaining your localization to download forecast</string>
+    <string name="channel_location_name">Obtains your localication</string>
+    <string name="channel_location_description">Only visible when user requests to download forecast for current localization</string>
+    <string name="dialog_gps_enable_title">Enable gps</string>
+    <string name="dialog_gps_enable_message">To obtain your localication you need to enable GPS. Should we open settings?</string>
+    <string name="gps_dialog_open_settings">Open settings</string>
     <string-array name="settings_units_titles">
         <item>Celsius</item>
         <item>Fahrenheit</item>

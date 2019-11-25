@@ -87,6 +87,10 @@ dependencies {
     // Dexter - permissions
     implementation 'com.karumi:dexter:6.0.0'
 
+    // RxGps
+    implementation "com.patloew.rxlocation:rxlocation:$rx_location_version"
+    implementation "com.google.android.gms:play-services-location:15.0.0"
+
     implementation project(path: ':data')
     implementation project(':domain')
     implementation project(path: ':base')
