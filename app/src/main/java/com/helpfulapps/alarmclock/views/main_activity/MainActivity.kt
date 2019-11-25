@@ -11,6 +11,7 @@ import androidx.core.view.updatePadding
 import com.google.android.material.snackbar.Snackbar
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.ActivityMainBinding
+import com.helpfulapps.alarmclock.views.settings.SettingsActivity
 import com.helpfulapps.base.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -29,7 +30,12 @@ class MainActivity : BaseActivity<MainActivityViewModel, ActivityMainBinding>() 
         popup.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.menu_settings -> {
-                    Log.d(TAG, "onMenuClicked: settings")
+                    this@MainActivity.startActivity(
+                        Intent(
+                            this@MainActivity,
+                            SettingsActivity::class.java
+                        )
+                    )
                     true
                 }
                 R.id.menu_help -> {
@@ -49,6 +55,15 @@ class MainActivity : BaseActivity<MainActivityViewModel, ActivityMainBinding>() 
         initTabs()
         manageFragmentLaunching(intent)
 
+        setupWindowInsets()
+
+        ib_main_menu.setOnClickListener {
+            popupMenu.show()
+        }
+
+    }
+
+    private fun setupWindowInsets() {
         binding.clMainRoot.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
                 View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
 
@@ -58,11 +73,6 @@ class MainActivity : BaseActivity<MainActivityViewModel, ActivityMainBinding>() 
                 binding.fabMainFab.marginBottom + insets.systemGestureInsets.bottom
             insets.consumeSystemWindowInsets()
         }
-
-        ib_main_menu.setOnClickListener {
-            popupMenu.show()
-        }
-
     }
 
     private fun initTabs() {

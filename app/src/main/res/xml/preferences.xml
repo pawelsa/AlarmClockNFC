@@ -1,9 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <CheckBoxPreference
         android:defaultValue="false"
-        android:key="key_use_mobile_data"
-        android:summary="Mobile data will be used to download forecast"
-        android:title="Use mobile data" />
+        android:key="com.helpfulapps.alarmclock.use_mobile_data"
+        android:summary="@string/settings_mobile_data_summary"
+        android:title="@string/settings_mobile_data_title" />
+
+    <EditTextPreference
+        android:key="com.helpfulapps.alarmclock.city"
+        android:title="@string/settings_city_title"
+        app:useSimpleSummaryProvider="true" />
+
+    <ListPreference
+        android:defaultValue="metric"
+        android:entries="@array/settings_units_titles"
+        android:entryValues="@array/settings_units_values"
+        android:key="com.helpfulapps.alarmclock.units"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:title="@string/settings_units_title"
+        app:useSimpleSummaryProvider="true" />
+
+
 </PreferenceScreen>

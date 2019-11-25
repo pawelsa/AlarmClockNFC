@@ -24,7 +24,7 @@ import org.koin.dsl.module
 
 object Modules {
 
-    private const val SHARED_PREFERENCES_KEY = "AlarmClockSP"
+    const val SHARED_PREFERENCES_KEY = "AlarmClockSP"
 
     val modules
         get() = listOf(

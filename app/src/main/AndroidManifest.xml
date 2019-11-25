@@ -19,7 +19,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SettingsActivity"></activity>
+        <activity
+            android:name=".views.settings.SettingsActivity"
+            android:label="Settings"
+            android:parentActivityName=".views.main_activity.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".views.main_activity.MainActivity" />
+        </activity>
 
         <service
             android:name=".service.AlarmService"
@@ -40,12 +47,13 @@
         <activity
             android:name=".views.ringing_alarm.RingingAlarmActivity"
             android:excludeFromRecents="true"
+            android:launchMode="singleTop"
             android:showOnLockScreen="true" />
         <activity
             android:name=".views.ringing_alarm.NfcRingingAlarmActivity"
             android:excludeFromRecents="true"
             android:launchMode="singleTop"
-            android:showOnLockScreen="true"></activity>
+            android:showOnLockScreen="true" />
     </application>
 
 </manifest>

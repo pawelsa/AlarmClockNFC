@@ -6,7 +6,7 @@ import androidx.core.content.edit
 class SettingsData(private val _sharedPreferences: SharedPreferences) {
 
     companion object {
-        private const val KEY_WEATHER_UNITS = "units"
+        private const val KEY_WEATHER_UNITS = "com.helpfulapps.alarmclock.units"
         private const val KEY_CITY = "com.helpfulapps.alarmclock.city"
     }
 
