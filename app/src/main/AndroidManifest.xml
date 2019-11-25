@@ -3,6 +3,7 @@
     package="com.helpfulapps.alarmclock">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
@@ -19,11 +20,26 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity
+            android:name=".views.settings.SettingsActivity"
+            android:label="Settings"
+            android:parentActivityName=".views.main_activity.MainActivity"
+            android:theme="@style/SettingsTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".views.main_activity.MainActivity" />
+        </activity>
 
         <service
             android:name=".service.AlarmService"
             android:enabled="true"
             android:exported="false" />
+
+        <service
+            android:name=".service.ForecastForLocalizationService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="location" />
 
         <activity android:name=".views.main_activity.MainActivity">
             <intent-filter>
@@ -39,14 +55,13 @@
         <activity
             android:name=".views.ringing_alarm.RingingAlarmActivity"
             android:excludeFromRecents="true"
+            android:launchMode="singleTop"
             android:showOnLockScreen="true" />
         <activity
             android:name=".views.ringing_alarm.NfcRingingAlarmActivity"
             android:excludeFromRecents="true"
             android:launchMode="singleTop"
-            android:showOnLockScreen="true">
-
-        </activity>
+            android:showOnLockScreen="true" />
     </application>
 
 </manifest>

@@ -8,7 +8,7 @@ interface WeatherRepository {
 
     fun downloadForecast(city: String): Completable
 
-    fun downloadForecast(lat: Long, lon: Long): Completable
+    fun downloadForecast(lat: Double, lon: Double): Completable
 
     fun getForecastForAlarms(): Single<List<DayWeather>>
 

@@ -8,6 +8,7 @@ import com.helpfulapps.alarmclock.views.clock_fragment.add_alarm_bs.AddAlarmBott
 import com.helpfulapps.alarmclock.views.hourwatch_fragment.HourWatchViewModel
 import com.helpfulapps.alarmclock.views.main_activity.MainActivityViewModel
 import com.helpfulapps.alarmclock.views.ringing_alarm.RingingAlarmViewModel
+import com.helpfulapps.alarmclock.views.settings.SettingsViewModel
 import com.helpfulapps.alarmclock.views.stopwatch_fragment.StopWatchViewModel
 import com.helpfulapps.data.helper.SettingsData
 import com.helpfulapps.data.repositories.AlarmRepositoryImpl
@@ -24,7 +25,7 @@ import org.koin.dsl.module
 
 object Modules {
 
-    private const val SHARED_PREFERENCES_KEY = "AlarmClockSP"
+    const val SHARED_PREFERENCES_KEY = "AlarmClockSP"
 
     val modules
         get() = listOf(
@@ -38,6 +39,7 @@ object Modules {
         viewModel { StopWatchViewModel() }
         viewModel { AddAlarmBottomSheetViewModel(get(), get(), get()) }
         viewModel { RingingAlarmViewModel(get()) }
+        viewModel { SettingsViewModel(get()) }
     }
 
     private val repository = module {

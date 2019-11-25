@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="com.helpfulapps.alarmclock.use_mobile_data"
+        android:summary="@string/settings_mobile_data_summary"
+        android:title="@string/settings_mobile_data_title" />
+
+    <EditTextPreference
+        android:key="com.helpfulapps.alarmclock.city"
+        android:title="@string/settings_city_title"
+        app:useSimpleSummaryProvider="true" />
+
+    <Preference
+        android:key="com.helpfulapps.alarmclock.city_gps"
+        android:summary="Uses your GPS position, and downloads forecast for it"
+        android:title="Get forecast for current localization" />
+
+    <ListPreference
+        android:defaultValue="metric"
+        android:entries="@array/settings_units_titles"
+        android:entryValues="@array/settings_units_values"
+        android:key="com.helpfulapps.alarmclock.units"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:title="@string/settings_units_title"
+        app:useSimpleSummaryProvider="true" />
+
+
+</PreferenceScreen>

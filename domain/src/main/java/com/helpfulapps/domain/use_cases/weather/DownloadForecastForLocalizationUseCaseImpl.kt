@@ -8,8 +8,8 @@ interface DownloadForecastForLocalizationUseCase :
     CompletableUseCaseWithParameter<DownloadForecastForLocalizationUseCase.Params> {
 
     data class Params(
-        val lat: Long,
-        val lon: Long
+        val lat: Double,
+        val lon: Double
     )
 }
 
