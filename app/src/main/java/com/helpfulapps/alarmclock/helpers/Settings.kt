@@ -25,6 +25,14 @@ class Settings(private val sharedPreferences: SharedPreferences) {
         set(value) = sharedPreferences.edit { putBoolean(KEY_USE_MOBILE_DATA, value) }
         get() = sharedPreferences.getBoolean(KEY_USE_MOBILE_DATA, false)
 
+    var snoozeAlarmTime: String
+        set(value) = sharedPreferences.edit { putString(KEY_SNOOZE_ALARM, value) }
+        get() = sharedPreferences.getString(KEY_SNOOZE_ALARM, "3") ?: "3"
+
+    var alarmTime: String
+        set(value) = sharedPreferences.edit { putString(KEY_ALARM_TIME, value) }
+        get() = sharedPreferences.getString(KEY_ALARM_TIME, "2") ?: "2"
+
     companion object {
         const val KEY_FIRST_TIME = "com.helpfulapps.alarmclock.first_time"
         const val KEY_HAS_NFC = "com.helpfulapps.alarmclock.has_nfc"
@@ -33,6 +41,8 @@ class Settings(private val sharedPreferences: SharedPreferences) {
 
         // Update in preferences.xml
         const val KEY_USE_MOBILE_DATA = "com.helpfulapps.alarmclock.use_mobile_data"
+        const val KEY_SNOOZE_ALARM = "com.helpfulapps.alarmclock.settings_snooze"
+        const val KEY_ALARM_TIME = "com.helpfulapps.alarmclock.settings_alarm"
     }
 
 }
