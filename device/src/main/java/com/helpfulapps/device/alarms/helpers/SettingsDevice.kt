@@ -1,9 +1,9 @@
-package com.helpfulapps.alarmclock.helpers
+package com.helpfulapps.device.alarms.helpers
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
 
-class Settings(private val sharedPreferences: SharedPreferences) {
+class SettingsDevice(private val sharedPreferences: SharedPreferences) {
 
     var firstRun: Boolean
         set(value) = sharedPreferences.edit { putBoolean(KEY_FIRST_TIME, value) }

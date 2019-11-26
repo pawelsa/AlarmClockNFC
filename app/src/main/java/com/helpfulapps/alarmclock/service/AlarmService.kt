@@ -95,7 +95,7 @@ class AlarmService : Service() {
     }
 
     private fun startCountdownToAutoSnooze() {
-        disposables += Completable.timer(3L, TimeUnit.MINUTES)
+        disposables += Completable.timer(settings.alarmTime.toLong(), TimeUnit.MINUTES)
             .subscribe {
                 LocalBroadcastManager.getInstance(this).sendBroadcast(Intent(AUTO_SNOOZE_ALARM))
                 snoozeAlarm()

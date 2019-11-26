@@ -4,16 +4,19 @@
 
     <CheckBoxPreference
         android:defaultValue="false"
+        android:icon="@drawable/ic_mobile_data"
         android:key="com.helpfulapps.alarmclock.use_mobile_data"
         android:summary="@string/settings_mobile_data_summary"
         android:title="@string/settings_mobile_data_title" />
 
     <EditTextPreference
+        android:icon="@drawable/ic_home"
         android:key="com.helpfulapps.alarmclock.city"
         android:title="@string/settings_city_title"
         app:useSimpleSummaryProvider="true" />
 
     <Preference
+        android:icon="@drawable/ic_location"
         android:key="com.helpfulapps.alarmclock.city_gps"
         android:summary="Uses your GPS position, and downloads forecast for it"
         android:title="Get forecast for current localization" />
@@ -28,5 +31,25 @@
         android:title="@string/settings_units_title"
         app:useSimpleSummaryProvider="true" />
 
+    <ListPreference
+        android:defaultValue="3"
+        android:entries="@array/settings_snooze_time_titles"
+        android:entryValues="@array/settings_snooze_time_values"
+        android:key="com.helpfulapps.alarmclock.settings_snooze"
+        android:negativeButtonText="@null"
+        android:title="@string/settings_snooze_time_title"
+        app:positiveButtonText="@null"
+        app:useSimpleSummaryProvider="true" />
+
+    <ListPreference
+        android:defaultValue="2"
+        android:entries="@array/settings_alarm_time_titles"
+        android:entryValues="@array/settings_alarm_time_values"
+        android:key="com.helpfulapps.alarmclock.settings_alarm"
+        android:negativeButtonText="@null"
+        android:summary="@string/settings_alarm_time_summary"
+        android:title="@string/settings_alarm_time_title"
+        app:positiveButtonText="@null"
+        app:useSimpleSummaryProvider="true" />
 
 </PreferenceScreen>

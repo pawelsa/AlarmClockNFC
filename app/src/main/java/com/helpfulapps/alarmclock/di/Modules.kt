@@ -14,6 +14,7 @@ import com.helpfulapps.data.helper.SettingsData
 import com.helpfulapps.data.repositories.AlarmRepositoryImpl
 import com.helpfulapps.data.repositories.WeatherRepositoryImpl
 import com.helpfulapps.device.alarms.AlarmClockManagerImpl
+import com.helpfulapps.device.alarms.helpers.SettingsDevice
 import com.helpfulapps.domain.repository.AlarmClockManager
 import com.helpfulapps.domain.repository.AlarmRepository
 import com.helpfulapps.domain.repository.WeatherRepository
@@ -47,7 +48,13 @@ object Modules {
         single<AlarmClockManager> {
             AlarmClockManagerImpl(
                 androidContext(),
-                androidContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                androidContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager,
+                SettingsDevice(
+                    androidContext().getSharedPreferences(
+                        SHARED_PREFERENCES_KEY,
+                        Context.MODE_PRIVATE
+                    )
+                )
             )
         }
         single<AlarmPlayer> { AlarmPlayerImpl(androidContext()) }
