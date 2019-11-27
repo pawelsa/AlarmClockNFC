@@ -40,5 +40,3 @@ fun Array<Boolean>.toShortWeekdays(): String {
         }
     }
 }
-
-typealias Time = Pair<Int, Int>

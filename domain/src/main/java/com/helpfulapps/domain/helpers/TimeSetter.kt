@@ -8,6 +8,7 @@ class TimeSetter(
     private val currentTime: () -> Long = { System.currentTimeMillis() }
 ) {
     private val TAG = this.javaClass.simpleName
+
     fun getAlarmStartingPoint(alarm: Alarm): Long {
         val calendar = setStartingPoint(alarm)
 
@@ -41,8 +42,7 @@ class TimeSetter(
     private fun analyzeRepeatingAlarms(alarm: Alarm): Calendar {
 
 
-        val currentHour = calendar.get(Calendar.HOUR_OF_DAY)
-        val currentMinute = calendar.get(Calendar.MINUTE)
+        val currentTime = calendar.get(Calendar.HOUR_OF_DAY) to calendar.get(Calendar.MINUTE)
 
         calendar = setHourAndMinute(alarm, calendar)
 
@@ -55,16 +55,21 @@ class TimeSetter(
         //index is set starting form the currentDayOfWeek,
         // so we can quicker find when the next alarm is starting
         var index: Int
+        val alarmTime = alarm.hour to alarm.minute
+
         for (x in alarm.repetitionDays.indices) {
             index = (x + currentDayOfWeek) % alarm.repetitionDays.size
-            if (alarm.repetitionDays[index] && currentDayOfWeek == index && currentHour < alarm.hour && currentMinute <= alarm.minute) {
-                return calendar
-            } else if (alarm.repetitionDays[index] && currentDayOfWeek != index) {
-                val daysToAdd = (index - currentDayOfWeek).let {
-                    if (it < 0) it + 7 else it
+            if (alarm.repetitionDays[index]) {
+                when {
+                    startsToday(alarmTime, index, currentDayOfWeek, currentTime) -> return calendar
+                    currentDayOfWeek != index -> {
+                        val daysToAdd = (index - currentDayOfWeek).let {
+                            if (it < 0) it + 7 else it
+                        }
+                        calendar.add(Calendar.HOUR_OF_DAY, daysToAdd * HOURS_IN_DAY)
+                        return calendar
+                    }
                 }
-                calendar.add(Calendar.HOUR_OF_DAY, daysToAdd * HOURS_IN_DAY)
-                return calendar
             }
         }
         calendar.add(
@@ -73,6 +78,14 @@ class TimeSetter(
         )
         return calendar
     }
+
+    private fun startsToday(
+        alarmTime: Time,
+        index: Int,
+        currentDayOfWeek: Int,
+        currentTime: Time
+    ) =
+        currentDayOfWeek == index && currentTime.first <= alarmTime.first && currentTime.second < alarmTime.second
 
     private fun analyzeSingleAlarm(alarm: Alarm): Calendar {
         val calendar = setHourAndMinute(alarm, calendar)
