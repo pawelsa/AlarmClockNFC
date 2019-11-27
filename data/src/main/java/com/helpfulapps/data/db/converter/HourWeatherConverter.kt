@@ -6,11 +6,11 @@ import com.helpfulapps.data.api.weather.converter.Temperature
 import com.helpfulapps.data.api.weather.converter.Wind
 import com.helpfulapps.data.db.weather.model.HourWeather
 import com.helpfulapps.data.db.weather.model.WeatherInfo
-import com.helpfulapps.data.helper.Units
+import com.helpfulapps.domain.helpers.Settings
 
 object HourWeatherConverter {
 
-    fun analyzeWeather(hourWeather: HourWeather, units: Units) : WeatherInfo {
+    fun analyzeWeather(hourWeather: HourWeather, units: Settings.Units): WeatherInfo {
         with(hourWeather){
             weatherInfo = WeatherInfo(
                 temperature = getTemperature(
@@ -25,8 +25,8 @@ object HourWeatherConverter {
         return hourWeather.weatherInfo!!
     }
 
-    private fun getTemperature(temperature : Double, units: Units): Int {
-        return if (units == Units.METRIC) {
+    private fun getTemperature(temperature: Double, units: Settings.Units): Int {
+        return if (units == Settings.Units.METRIC) {
             when (temperature) {
                 in Temperature.VERY_HOT.celsiusRange -> Temperature.VERY_HOT.importance
                 in Temperature.HOT.celsiusRange -> Temperature.HOT.importance
@@ -56,8 +56,8 @@ object HourWeatherConverter {
         }
     }
 
-    private fun getWind(wind : Double, units: Units): Int {
-        return if (units == Units.METRIC) {
+    private fun getWind(wind: Double, units: Settings.Units): Int {
+        return if (units == Settings.Units.METRIC) {
             when (wind) {
                 in Wind.NORMAL.metricRange -> Wind.NORMAL.importance
                 in Wind.WINDY.metricRange -> Wind.WINDY.importance

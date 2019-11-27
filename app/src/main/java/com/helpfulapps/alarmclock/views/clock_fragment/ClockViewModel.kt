@@ -1,10 +1,10 @@
 package com.helpfulapps.alarmclock.views.clock_fragment
 
 import android.util.Log
-import com.helpfulapps.alarmclock.helpers.Settings
 import com.helpfulapps.base.base.BaseViewModel
 import com.helpfulapps.domain.eventBus.DatabaseNotifiers
 import com.helpfulapps.domain.eventBus.RxBus
+import com.helpfulapps.domain.helpers.Settings
 import com.helpfulapps.domain.models.alarm.Alarm
 import com.helpfulapps.domain.use_cases.alarm.GetAlarmsUseCase
 import com.helpfulapps.domain.use_cases.alarm.RemoveAlarmUseCase

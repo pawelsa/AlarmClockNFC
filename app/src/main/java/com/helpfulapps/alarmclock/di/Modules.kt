@@ -2,7 +2,10 @@ package com.helpfulapps.alarmclock.di
 
 import android.app.AlarmManager
 import android.content.Context
-import com.helpfulapps.alarmclock.helpers.*
+import com.helpfulapps.alarmclock.helpers.AlarmPlayer
+import com.helpfulapps.alarmclock.helpers.AlarmPlayerImpl
+import com.helpfulapps.alarmclock.helpers.NotificationBuilder
+import com.helpfulapps.alarmclock.helpers.NotificationBuilderImpl
 import com.helpfulapps.alarmclock.views.clock_fragment.ClockViewModel
 import com.helpfulapps.alarmclock.views.clock_fragment.add_alarm_bs.AddAlarmBottomSheetViewModel
 import com.helpfulapps.alarmclock.views.hourwatch_fragment.HourWatchViewModel
@@ -14,7 +17,7 @@ import com.helpfulapps.data.helper.SettingsData
 import com.helpfulapps.data.repositories.AlarmRepositoryImpl
 import com.helpfulapps.data.repositories.WeatherRepositoryImpl
 import com.helpfulapps.device.alarms.AlarmClockManagerImpl
-import com.helpfulapps.device.alarms.helpers.SettingsDevice
+import com.helpfulapps.domain.helpers.Settings
 import com.helpfulapps.domain.repository.AlarmClockManager
 import com.helpfulapps.domain.repository.AlarmRepository
 import com.helpfulapps.domain.repository.WeatherRepository
@@ -49,26 +52,13 @@ object Modules {
             AlarmClockManagerImpl(
                 androidContext(),
                 androidContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager,
-                SettingsDevice(
-                    androidContext().getSharedPreferences(
-                        SHARED_PREFERENCES_KEY,
-                        Context.MODE_PRIVATE
-                    )
-                )
+                get()
             )
         }
         single<AlarmPlayer> { AlarmPlayerImpl(androidContext()) }
         single<NotificationBuilder> { NotificationBuilderImpl(androidContext()) }
-        single {
+        single<Settings> {
             SettingsData(
-                androidContext().getSharedPreferences(
-                    SHARED_PREFERENCES_KEY,
-                    Context.MODE_PRIVATE
-                )
-            )
-        }
-        single {
-            Settings(
                 androidContext().getSharedPreferences(
                     SHARED_PREFERENCES_KEY,
                     Context.MODE_PRIVATE

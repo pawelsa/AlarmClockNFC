@@ -6,12 +6,12 @@ import com.helpfulapps.data.api.weather.converter.Temperature
 import com.helpfulapps.data.api.weather.converter.Wind
 import com.helpfulapps.data.db.weather.model.DayWeather
 import com.helpfulapps.data.db.weather.model.WeatherInfo
-import com.helpfulapps.data.helper.Units
+import com.helpfulapps.domain.helpers.Settings
 import kotlin.math.abs
 
 object DayWeatherConverter {
 
-    fun analyzeWeather(dayWeather: DayWeather, units: Units) : WeatherInfo {
+    fun analyzeWeather(dayWeather: DayWeather, units: Settings.Units): WeatherInfo {
         dayWeather.hourWeatherList.forEach {
             HourWeatherConverter.analyzeWeather(
                 it,

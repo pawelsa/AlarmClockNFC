@@ -4,8 +4,8 @@ import android.app.Application
 import android.nfc.NfcAdapter
 import androidx.work.*
 import com.helpfulapps.alarmclock.di.Modules
-import com.helpfulapps.alarmclock.helpers.Settings
 import com.helpfulapps.alarmclock.worker.DownloadWeatherWorker
+import com.helpfulapps.domain.helpers.Settings
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin

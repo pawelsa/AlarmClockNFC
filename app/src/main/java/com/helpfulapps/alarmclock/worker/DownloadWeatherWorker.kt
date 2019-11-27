@@ -3,7 +3,7 @@ package com.helpfulapps.alarmclock.worker
 import android.content.Context
 import androidx.work.RxWorker
 import androidx.work.WorkerParameters
-import com.helpfulapps.alarmclock.helpers.Settings
+import com.helpfulapps.domain.helpers.Settings
 import com.helpfulapps.domain.helpers.singleOf
 import com.helpfulapps.domain.use_cases.weather.DownloadForecastForCityUseCase
 import com.helpfulapps.domain.use_cases.weather.DownloadForecastForLocalizationUseCase

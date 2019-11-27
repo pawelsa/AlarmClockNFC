@@ -11,11 +11,11 @@ import com.helpfulapps.data.extensions.dayOfMonth
 import com.helpfulapps.data.extensions.rxQueryListSingle
 import com.helpfulapps.data.extensions.timestampAtMidnight
 import com.helpfulapps.data.helper.NetworkCheck
-import com.helpfulapps.data.helper.SettingsData
 import com.helpfulapps.domain.eventBus.DatabaseNotifiers
 import com.helpfulapps.domain.eventBus.RxBus
 import com.helpfulapps.domain.exceptions.CouldNotObtainForecast
 import com.helpfulapps.domain.exceptions.WeatherException
+import com.helpfulapps.domain.helpers.Settings
 import com.helpfulapps.domain.repository.WeatherRepository
 import com.raizlabs.android.dbflow.config.FlowManager
 import com.raizlabs.android.dbflow.kotlinextensions.*
@@ -31,7 +31,7 @@ class WeatherRepositoryImpl(
     context: Context,
     private val networkCheck: NetworkCheck = NetworkCheck(context),
     private val apiCalls: ApiCalls = Downloader.create(),
-    private val settings: SettingsData
+    private val settings: Settings
 ) : WeatherRepository {
 
     init {
