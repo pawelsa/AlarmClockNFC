@@ -24,15 +24,12 @@ class DownloadWeatherWorker(
         var cityName = inputData.getString(KEY_CITY_NAME)
         if (cityName == null) cityName = settings.city
         settings.city = cityName
-        return if (cityName != "-1") {
-            downloadForecastForCityUseCase(DownloadForecastForCityUseCase.Params(settings.city))
-                .toSingle {
-                    Result.success()
-                }
-        } else {
-            val longitude = inputData.getDouble(KEY_LONGITUDE, 0.0)
-            val latitude = inputData.getDouble(KEY_LATITUDE, 0.0)
-            return if ((longitude != 0.0) and (latitude != 0.0)) {
+
+        val longitude = inputData.getDouble(KEY_LONGITUDE, 0.0)
+        val latitude = inputData.getDouble(KEY_LATITUDE, 0.0)
+
+        return when {
+            longitude != 0.0 && latitude != 0.0 -> {
                 downloadForecastForLocalizationUseCase(
                     DownloadForecastForLocalizationUseCase.Params(
                         lat = latitude,
@@ -42,7 +39,15 @@ class DownloadWeatherWorker(
                     .toSingle {
                         Result.success()
                     }
-            } else {
+
+            }
+            cityName != "-1" -> {
+                downloadForecastForCityUseCase(DownloadForecastForCityUseCase.Params(settings.city))
+                    .toSingle {
+                        Result.success()
+                    }
+            }
+            else -> {
                 singleOf { Result.success() }
             }
         }
