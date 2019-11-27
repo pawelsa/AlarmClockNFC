@@ -35,7 +35,12 @@ class App : Application() {
 
     private fun periodicWeatherDownload() {
         val downloadConstraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .apply {
+                if (!settings.useMobileData)
+                    this.setRequiredNetworkType(NetworkType.UNMETERED)
+                else
+                    this.setRequiredNetworkType(NetworkType.CONNECTED)
+            }
             .build()
 
         val downloadWeather =

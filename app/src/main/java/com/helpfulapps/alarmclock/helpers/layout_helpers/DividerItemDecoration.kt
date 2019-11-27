@@ -1,4 +1,4 @@
-package com.helpfulapps.alarmclock.helpers.extensions
+package com.helpfulapps.alarmclock.helpers.layout_helpers
 
 import android.content.Context
 import android.graphics.Canvas
