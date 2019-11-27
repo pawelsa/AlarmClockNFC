@@ -2,10 +2,7 @@ package com.helpfulapps.alarmclock.di
 
 import android.app.AlarmManager
 import android.content.Context
-import com.helpfulapps.alarmclock.helpers.AlarmPlayer
-import com.helpfulapps.alarmclock.helpers.AlarmPlayerImpl
-import com.helpfulapps.alarmclock.helpers.NotificationBuilder
-import com.helpfulapps.alarmclock.helpers.NotificationBuilderImpl
+import com.helpfulapps.alarmclock.helpers.*
 import com.helpfulapps.alarmclock.views.clock_fragment.ClockViewModel
 import com.helpfulapps.alarmclock.views.clock_fragment.add_alarm_bs.AddAlarmBottomSheetViewModel
 import com.helpfulapps.alarmclock.views.hourwatch_fragment.HourWatchViewModel
@@ -65,6 +62,7 @@ object Modules {
                 )
             )
         }
+        single<VibrationController> { VibrationControllerImpl(androidContext()) }
         single<WeatherRepository> { WeatherRepositoryImpl(androidContext(), settings = get()) }
         single<SnoozeAlarmUseCase> { SnoozeAlarmUseCaseImpl(get(), get()) }
     }
