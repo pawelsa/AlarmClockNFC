@@ -34,9 +34,8 @@ class AlarmClockManagerImpl(
             val alarmIntent = IntentCreator.getAlarmIntent(context, alarm.id)
             val alarmInfoIntent =
                 IntentCreator.createPendingIntentForAlarmIconPress(context, alarm.id)
-//            val alarmWakeup = IntentCreator.getAlarmWakeupIntent(context, alarm.id)
 
-            setAlarmInAlarmManager(alarmStart, alarmInfoIntent, alarmIntent/*, alarmWakeup*/)
+            setAlarmInAlarmManager(alarmStart, alarmInfoIntent, alarmIntent)
         }
     }
 
@@ -52,17 +51,9 @@ class AlarmClockManagerImpl(
         alarmStart: Long,
         alarmInfoIntent: PendingIntent?,
         alarmIntent: PendingIntent?
-//        alarmWakeup: PendingIntent?
     ) {
         when {
             matchesVersionsFrom(Build.VERSION_CODES.LOLLIPOP) -> {
-                /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    manager.setExactAndAllowWhileIdle(
-                        AlarmManager.RTC_WAKEUP,
-                        alarmStart - 3 * 60 * 1000,
-                        alarmWakeup
-                    )
-                }*/
                 manager.setAlarmClock(
                     AlarmManager.AlarmClockInfo(
                         alarmStart,
