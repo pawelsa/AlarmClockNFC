@@ -9,6 +9,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.helpfulapps.alarmclock.helpers.AlarmPlayer
 import com.helpfulapps.alarmclock.helpers.NotificationBuilder
 import com.helpfulapps.alarmclock.helpers.NotificationBuilderImpl.Companion.KEY_ALARM_ID
+import com.helpfulapps.alarmclock.helpers.VibrationController
 import com.helpfulapps.alarmclock.views.ringing_alarm.BaseRingingAlarmActivity.Companion.AUTO_SNOOZE_ALARM
 import com.helpfulapps.alarmclock.views.ringing_alarm.BaseRingingAlarmActivity.Companion.SNOOZE_ACTION
 import com.helpfulapps.alarmclock.views.ringing_alarm.BaseRingingAlarmActivity.Companion.STOP_ACTION
@@ -36,6 +37,7 @@ class AlarmService : Service() {
     private val stopRingingAlarmUseCase: StopRingingAlarmUseCase by inject()
     private val snoozeAlarmUseCase: SnoozeAlarmUseCase by inject()
     private val alarmPlayer: AlarmPlayer by inject()
+    private val vibrationController: VibrationController by inject()
     private val notificationBuilder: NotificationBuilder by inject()
     private val settings: Settings by inject()
 
@@ -61,6 +63,7 @@ class AlarmService : Service() {
     private fun stopAlarm() {
         alarm?.let {
             alarmPlayer.stopPlaying()
+            vibrationController.stopVibrating()
             disposables += stopRingingAlarmUseCase(StopRingingAlarmUseCase.Param(it))
                 .backgroundTask()
                 .subscribe {
@@ -72,6 +75,7 @@ class AlarmService : Service() {
     private fun snoozeAlarm() {
         alarm?.let {
             alarmPlayer.stopPlaying()
+            vibrationController.stopVibrating()
             disposables += snoozeAlarmUseCase(SnoozeAlarmUseCase.Param(it.id))
                 .backgroundTask()
                 .subscribeBy {
@@ -84,6 +88,7 @@ class AlarmService : Service() {
         subscribeToAlarm(alarmId) {
             val ringtoneUri = Uri.parse(it.ringtoneUrl)
             alarmPlayer.startPlaying(ringtoneUri)
+            vibrationController.startVibrating(it.isVibrationOn)
             val notification = notificationBuilder.setNotificationType(
                 NotificationBuilder.NotificationType.TypeAlarm(
                     it, shouldUseNfc()
@@ -124,6 +129,7 @@ class AlarmService : Service() {
 
     override fun onDestroy() {
         alarmPlayer.destroyPlayer()
+        vibrationController.stopVibrating()
         disposables.clear()
         super.onDestroy()
     }
