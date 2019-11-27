@@ -11,11 +11,12 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.di.Modules
-import com.helpfulapps.alarmclock.helpers.Settings
 import com.helpfulapps.alarmclock.helpers.ShortPermissionListener
 import com.helpfulapps.alarmclock.helpers.layout_helpers.buildGpsEnableAlarmDialog
 import com.helpfulapps.alarmclock.helpers.startVersionedService
 import com.helpfulapps.alarmclock.service.ForecastForLocalizationService
+import com.helpfulapps.data.helper.SettingsData
+import com.helpfulapps.domain.helpers.Settings
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.listener.PermissionGrantedResponse
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -28,7 +29,8 @@ class SettingsFragment : PreferenceFragmentCompat() {
     private val sharedPreferenceListener: SharedPreferences.OnSharedPreferenceChangeListener =
         SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
             if (key == Settings.KEY_CITY) {
-                val settings = Settings(sharedPreferences)
+                val settings =
+                    SettingsData(sharedPreferences)
                 viewModel.downloadForecast(settings.city)
             }
         }

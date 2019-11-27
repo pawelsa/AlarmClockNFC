@@ -9,11 +9,11 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.helpfulapps.alarmclock.helpers.AlarmPlayer
 import com.helpfulapps.alarmclock.helpers.NotificationBuilder
 import com.helpfulapps.alarmclock.helpers.NotificationBuilderImpl.Companion.KEY_ALARM_ID
-import com.helpfulapps.alarmclock.helpers.Settings
 import com.helpfulapps.alarmclock.views.ringing_alarm.BaseRingingAlarmActivity.Companion.AUTO_SNOOZE_ALARM
 import com.helpfulapps.alarmclock.views.ringing_alarm.BaseRingingAlarmActivity.Companion.SNOOZE_ACTION
 import com.helpfulapps.alarmclock.views.ringing_alarm.BaseRingingAlarmActivity.Companion.STOP_ACTION
 import com.helpfulapps.base.extensions.rx.backgroundTask
+import com.helpfulapps.domain.helpers.Settings
 import com.helpfulapps.domain.models.alarm.Alarm
 import com.helpfulapps.domain.use_cases.alarm.GetAlarmUseCase
 import com.helpfulapps.domain.use_cases.alarm.SnoozeAlarmUseCase

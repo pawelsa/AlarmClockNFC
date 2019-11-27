@@ -4,13 +4,13 @@ import android.content.Context
 import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.helpfulapps.alarmclock.helpers.Settings
 import com.helpfulapps.alarmclock.helpers.Time
 import com.helpfulapps.alarmclock.helpers.getDefaultRingtone
 import com.helpfulapps.alarmclock.helpers.timeToString
 import com.helpfulapps.base.base.BaseViewModel
 import com.helpfulapps.base.extensions.rx.backgroundTask
 import com.helpfulapps.base.extensions.rx.singleOf
+import com.helpfulapps.domain.helpers.Settings
 import com.helpfulapps.domain.models.alarm.Alarm
 import com.helpfulapps.domain.use_cases.alarm.AddAlarmUseCase
 import com.helpfulapps.domain.use_cases.alarm.UpdateAlarmUseCase
@@ -20,7 +20,7 @@ import io.reactivex.rxkotlin.subscribeBy
 class AddAlarmBottomSheetViewModel(
     private val _addAlarmUseCase: AddAlarmUseCase,
     private val _updateAlarmUseCase: UpdateAlarmUseCase,
-    private val _settings: Settings
+    _settings: Settings
 ) :
     BaseViewModel() {
 
