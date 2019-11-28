@@ -3,7 +3,6 @@ package com.helpfulapps.alarmclock.service
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
-import android.util.Log
 import com.google.android.gms.location.LocationRequest
 import com.helpfulapps.alarmclock.helpers.NotificationBuilder
 import com.helpfulapps.alarmclock.helpers.startVersionedForeground
@@ -54,11 +53,9 @@ class ForecastForLocalizationService : Service() {
             .backgroundTask()
             .subscribeBy(
                 onComplete = {
-                    Log.d(TAG, "Download forecast for localization completed")
                     stopSelf()
                 },
                 onError = {
-                    Log.d(TAG, "Download forecast error")
                     it.printStackTrace()
                 }
             )
