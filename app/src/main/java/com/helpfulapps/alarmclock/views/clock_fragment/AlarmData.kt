@@ -62,6 +62,23 @@ data class AlarmData(
         )
     }
 
+    override fun hashCode(): Int {
+        var result = id.hashCode()
+        result = 31 * result + title.hashCode()
+        result = 31 * result + isTurnedOn.hashCode()
+        result = 31 * result + weatherIcon
+        result = 31 * result + isVibrationOn.hashCode()
+        result = 31 * result + ringtoneUrl.hashCode()
+        result = 31 * result + ringtoneTitle.hashCode()
+        result = 31 * result + isUsingNFC.hashCode()
+        result = 31 * result + hour
+        result = 31 * result + minute
+        result = 31 * result + alarmTime.hashCode()
+        result = 31 * result + isRepeating.hashCode()
+        result = 31 * result + repetitionDays.contentHashCode()
+        return result
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -82,25 +99,10 @@ data class AlarmData(
         if (alarmTime != other.alarmTime) return false
         if (isRepeating != other.isRepeating) return false
         if (!repetitionDays.contentEquals(other.repetitionDays)) return false
+        if (repetitionDaysShorts != other.repetitionDaysShorts) return false
+        if (weatherShort != other.weatherShort) return false
 
         return true
-    }
-
-    override fun hashCode(): Int {
-        var result = id.hashCode()
-        result = 31 * result + title.hashCode()
-        result = 31 * result + isTurnedOn.hashCode()
-        result = 31 * result + weatherIcon
-        result = 31 * result + isVibrationOn.hashCode()
-        result = 31 * result + ringtoneUrl.hashCode()
-        result = 31 * result + ringtoneTitle.hashCode()
-        result = 31 * result + isUsingNFC.hashCode()
-        result = 31 * result + hour
-        result = 31 * result + minute
-        result = 31 * result + alarmTime.hashCode()
-        result = 31 * result + isRepeating.hashCode()
-        result = 31 * result + repetitionDays.contentHashCode()
-        return result
     }
 
 }
