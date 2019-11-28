@@ -2,12 +2,13 @@ package com.helpfulapps.alarmclock.helpers.layout_helpers
 
 import android.app.Dialog
 import android.content.Context
-import android.media.MediaPlayer
 import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import androidx.core.net.toUri
 import com.google.android.material.textfield.TextInputEditText
 import com.helpfulapps.alarmclock.R
+import com.helpfulapps.alarmclock.helpers.AlarmPlayer
+import com.helpfulapps.alarmclock.helpers.AlarmPlayerImpl
 import com.helpfulapps.alarmclock.helpers.getRingtones
 
 
@@ -41,6 +42,9 @@ fun buildSelectRingtoneDialog(
     currentRingtoneTitle: String?,
     selectedRingtone: (Pair<String, String>) -> Unit
 ): Dialog {
+
+    val alarmPlayer: AlarmPlayer = AlarmPlayerImpl(context)
+
     val ringtones = getRingtones(context)
     var selectedRingtoneIndex = ringtones
         .indexOfFirst { it.first == currentRingtoneTitle }
@@ -50,24 +54,19 @@ fun buildSelectRingtoneDialog(
 
     val ringtoneTitles = ringtones.map { it.first }.toTypedArray()
 
-    var mp = MediaPlayer.create(context, ringtones[selectedRingtoneIndex].second.toUri())
-
     return AlertDialog.Builder(context).apply {
         setTitle(context.getString(R.string.select_ringtone_dialog_title))
 
         setSingleChoiceItems(ringtoneTitles, selectedRingtoneIndex) { _, whichPressed ->
             selectedRingtoneIndex = whichPressed
-            mp.stop()
-            mp = MediaPlayer.create(context, ringtones[selectedRingtoneIndex].second.toUri())
-            mp.isLooping = false
-            mp.start()
+            alarmPlayer.startPlaying(ringtones[selectedRingtoneIndex].second.toUri())
         }
         setPositiveButton(android.R.string.ok) { _, _ ->
             selectedRingtone(ringtones[selectedRingtoneIndex])
-            mp.stop()
+            alarmPlayer.stopPlaying()
         }
         setNegativeButton(android.R.string.cancel) { _, _ ->
-            mp.stop()
+            alarmPlayer.stopPlaying()
         }
     }.create()
 }

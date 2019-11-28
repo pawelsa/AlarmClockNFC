@@ -17,6 +17,7 @@ class AlarmPlayerImpl(private val context: Context) : AlarmPlayer {
     private var mediaPlayer: MediaPlayer = MediaPlayer()
 
     override fun startPlaying(ringtoneUri: Uri) {
+        stopPlaying()
         mediaPlayer = MediaPlayer()
         with(mediaPlayer) {
             setDataSource(context, ringtoneUri)
