@@ -4,9 +4,9 @@ import android.content.Context
 import androidx.work.RxWorker
 import androidx.work.WorkerParameters
 import com.helpfulapps.domain.helpers.Settings
-import com.helpfulapps.domain.helpers.singleOf
 import com.helpfulapps.domain.use_cases.weather.DownloadForecastForCityUseCase
 import com.helpfulapps.domain.use_cases.weather.DownloadForecastForLocalizationUseCase
+import io.reactivex.Completable
 import io.reactivex.Single
 import org.koin.core.KoinComponent
 import org.koin.core.inject
@@ -21,36 +21,47 @@ class DownloadWeatherWorker(
     private val settings: Settings by inject()
 
     override fun createWork(): Single<Result> {
-        var cityName = inputData.getString(KEY_CITY_NAME)
-        if (cityName == null) cityName = settings.city
-        settings.city = cityName
 
-        val longitude = inputData.getDouble(KEY_LONGITUDE, 0.0)
-        val latitude = inputData.getDouble(KEY_LATITUDE, 0.0)
+        val location = Location(
+            getCityName(),
+            inputData.getDouble(KEY_LONGITUDE, 0.0),
+            inputData.getDouble(KEY_LATITUDE, 0.0)
+        )
 
         return when {
-            longitude != 0.0 && latitude != 0.0 -> {
-                downloadForecastForLocalizationUseCase(
-                    DownloadForecastForLocalizationUseCase.Params(
-                        lat = latitude,
-                        lon = longitude
-                    )
-                )
-                    .toSingle {
-                        Result.success()
-                    }
-
-            }
-            cityName != "-1" -> {
-                downloadForecastForCityUseCase(DownloadForecastForCityUseCase.Params(settings.city))
-                    .toSingle {
-                        Result.success()
-                    }
-            }
-            else -> {
-                singleOf { Result.success() }
-            }
+            location.isLocalizationValid -> prepareDownloaderForLocation(location)
+            location.isCityNameValid -> prepareDownloaderForCityName(location)
+            else -> Completable.complete()
+        }.toSingle {
+            Result.success()
         }
+    }
+
+    private fun prepareDownloaderForCityName(location: Location) =
+        downloadForecastForCityUseCase(DownloadForecastForCityUseCase.Params(location.cityName))
+
+    private fun prepareDownloaderForLocation(location: Location): Completable {
+        return downloadForecastForLocalizationUseCase(
+            DownloadForecastForLocalizationUseCase.Params(
+                lat = location.latitude,
+                lon = location.longitude
+            )
+        )
+    }
+
+    private fun getCityName(): String {
+        val cityName = inputData.getString(KEY_CITY_NAME) ?: settings.city
+        settings.city = cityName
+        return cityName
+    }
+
+    private data class Location(
+        val cityName: String = "-1",
+        val longitude: Double = 0.0,
+        val latitude: Double = 0.0
+    ) {
+        val isLocalizationValid: Boolean = longitude != 0.0 && latitude != 0.0
+        val isCityNameValid: Boolean = cityName != "-1"
     }
 
     companion object {
