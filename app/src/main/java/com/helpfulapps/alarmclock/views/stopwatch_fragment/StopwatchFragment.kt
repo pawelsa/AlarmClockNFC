@@ -1,8 +1,10 @@
 package com.helpfulapps.alarmclock.views.stopwatch_fragment
 
+import android.content.Intent
 import android.widget.Toast
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.FragmentStopwatchBinding
+import com.helpfulapps.alarmclock.service.StopwatchService
 import com.helpfulapps.alarmclock.views.main_activity.MainActivity
 import com.helpfulapps.base.base.BaseFragment
 import kotlinx.android.synthetic.main.activity_main.*
@@ -20,7 +22,11 @@ class StopwatchFragment : BaseFragment<StopWatchViewModel, FragmentStopwatchBind
         super.onResume()
         Toast.makeText(this.context, "StopwatchFragment : $TAG", Toast.LENGTH_SHORT).show()
         (mainActivity as MainActivity).fab_main_fab.setOnClickListener {
-            mainActivity?.showMessage("StopwatchFragment")
+            //            mainActivity?.showMessage("StopwatchFragment")
+            Intent(context, StopwatchService::class.java).let {
+                it.action = StopwatchService.STOPWATCH_START
+                context?.startService(it)
+            }
         }
     }
 }

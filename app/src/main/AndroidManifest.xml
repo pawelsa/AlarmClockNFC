@@ -37,6 +37,11 @@
             android:exported="false" />
 
         <service
+            android:name=".service.StopwatchService"
+            android:enabled="true"
+            android:exported="false" />
+
+        <service
             android:name=".service.ForecastForLocalizationService"
             android:enabled="true"
             android:exported="false"
