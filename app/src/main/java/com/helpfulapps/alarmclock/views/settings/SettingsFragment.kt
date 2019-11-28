@@ -9,21 +9,18 @@ import android.location.LocationManager
 import android.os.Bundle
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
-import androidx.work.*
-import com.helpfulapps.alarmclock.App
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.di.Modules
 import com.helpfulapps.alarmclock.helpers.ShortPermissionListener
 import com.helpfulapps.alarmclock.helpers.layout_helpers.buildGpsEnableAlarmDialog
 import com.helpfulapps.alarmclock.helpers.startVersionedService
 import com.helpfulapps.alarmclock.service.ForecastForLocalizationService
-import com.helpfulapps.alarmclock.worker.DownloadWeatherWorker
+import com.helpfulapps.alarmclock.worker.CreateWork
 import com.helpfulapps.domain.helpers.Settings
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.listener.PermissionGrantedResponse
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
-import java.util.concurrent.TimeUnit
 
 
 class SettingsFragment : PreferenceFragmentCompat() {
@@ -34,33 +31,12 @@ class SettingsFragment : PreferenceFragmentCompat() {
     private val sharedPreferenceListener: SharedPreferences.OnSharedPreferenceChangeListener =
         SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
             if (key == Settings.KEY_CITY) {
-                setupWorkForDownloadingForecast()
+                CreateWork.oneTimeWeatherDownload(context!!, settings.useMobileData)
             }
             if (key == Settings.KEY_USE_MOBILE_DATA) {
-                setupWorkForDownloadingForecast()
+                CreateWork.periodicWeatherDownload(context!!, settings.useMobileData)
             }
         }
-
-    private fun setupWorkForDownloadingForecast() {
-        val downloadConstraints = Constraints.Builder()
-            .apply {
-                if (settings.useMobileData)
-                    setRequiredNetworkType(NetworkType.CONNECTED)
-                else
-                    setRequiredNetworkType(NetworkType.UNMETERED)
-            }
-            .build()
-
-        val downloadWeather =
-            PeriodicWorkRequestBuilder<DownloadWeatherWorker>(24, TimeUnit.HOURS)
-                .setConstraints(downloadConstraints)
-                .build()
-        WorkManager.getInstance(context!!).enqueueUniquePeriodicWork(
-            App.FORECAST_DOWNLOAD_WORK,
-            ExistingPeriodicWorkPolicy.REPLACE,
-            downloadWeather
-        )
-    }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         preferenceManager.sharedPreferencesName = Modules.SHARED_PREFERENCES_KEY
