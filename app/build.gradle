@@ -77,6 +77,7 @@ dependencies {
     // rxJava & rxKotlin
     implementation "io.reactivex.rxjava2:rxjava:$rxJava_version"
     implementation "io.reactivex.rxjava2:rxkotlin:$rxKotlin_version"
+    implementation "io.reactivex.rxjava2:rxandroid:$rxAndroid_version"
 
     // Koin
     implementation "org.koin:koin-core:$koin_version"

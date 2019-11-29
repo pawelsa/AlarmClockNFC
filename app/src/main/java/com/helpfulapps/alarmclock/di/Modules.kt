@@ -63,6 +63,7 @@ object Modules {
             )
         }
         single<VibrationController> { VibrationControllerImpl(androidContext()) }
+        single<Timer> { TimerImpl() }
         single<WeatherRepository> { WeatherRepositoryImpl(androidContext(), settings = get()) }
         single<SnoozeAlarmUseCase> { SnoozeAlarmUseCaseImpl(get(), get()) }
     }
