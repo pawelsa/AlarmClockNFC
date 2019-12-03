@@ -92,6 +92,9 @@ dependencies {
     implementation "com.patloew.rxlocation:rxlocation:$rx_location_version"
     implementation "com.google.android.gms:play-services-location:15.0.0"
 
+    //timepicker timer
+    implementation "com.github.pawelsa:HmsPickerView:0.1.4"
+
     implementation project(path: ':data')
     implementation project(':domain')
     implementation project(path: ':base')

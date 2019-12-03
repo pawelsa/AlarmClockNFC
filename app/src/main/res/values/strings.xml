@@ -95,6 +95,7 @@
 
     <string name="settings_alarm_time_title">Alarm time</string>
     <string name="settings_alarm_time_summary">How long alarm should ring</string>
+    <string name="timer_remove">Remove</string>
     <string-array name="settings_alarm_time_titles">
         <item>1 minute</item>
         <item>2 minutes</item>

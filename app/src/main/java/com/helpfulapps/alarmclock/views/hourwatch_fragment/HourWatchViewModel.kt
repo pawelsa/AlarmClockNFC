@@ -9,6 +9,8 @@ import io.reactivex.rxkotlin.plusAssign
 
 class HourWatchViewModel : BaseViewModel() {
 
+    val isRunning = MutableLiveData<Boolean>(false)
+
     private val _timeLeft: MutableLiveData<Long> = MutableLiveData()
     val timeLeft: LiveData<Long>
         get() = _timeLeft
@@ -17,6 +19,10 @@ class HourWatchViewModel : BaseViewModel() {
         disposables += RxBus.listen(TimerService.TimerUpdate::class.java).subscribe {
             _timeLeft.value = it.currentTime
         }
+    }
+
+    fun fabPressed() {
+        isRunning.value = isRunning.value != true
     }
 
 }

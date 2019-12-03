@@ -9,6 +9,7 @@ import com.helpfulapps.domain.helpers.Settings.Companion.KEY_CITY
 import com.helpfulapps.domain.helpers.Settings.Companion.KEY_FIRST_TIME
 import com.helpfulapps.domain.helpers.Settings.Companion.KEY_HAS_NFC
 import com.helpfulapps.domain.helpers.Settings.Companion.KEY_SNOOZE_ALARM
+import com.helpfulapps.domain.helpers.Settings.Companion.KEY_TIMER_TIME
 import com.helpfulapps.domain.helpers.Settings.Companion.KEY_USE_MOBILE_DATA
 import com.helpfulapps.domain.helpers.Settings.Companion.KEY_WEATHER_UNITS
 
@@ -51,5 +52,7 @@ class SettingsData(private val sharedPreferences: SharedPreferences) : Settings 
                 ) == Settings.Units.METRIC.unit
         ) Settings.Units.METRIC else Settings.Units.IMPERIAL
 
-
+    override var timeLeft: Long
+        set(value) = sharedPreferences.edit { putLong(KEY_TIMER_TIME, value) }
+        get() = sharedPreferences.getLong(KEY_TIMER_TIME, -1L)
 }
