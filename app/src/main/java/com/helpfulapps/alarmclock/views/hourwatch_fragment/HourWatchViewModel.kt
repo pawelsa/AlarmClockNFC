@@ -20,7 +20,13 @@ class HourWatchViewModel(
 
     fun listenToTimer() {
         disposables += RxBus.listen(TimerService.TimerUpdate::class.java).subscribe {
-            timeLeft.value = it.currentTime
+            if (it.currentTime == -1L) {
+                isRunning.value = false
+                isPaused.value = false
+                timeLeft.value = 0L
+            } else {
+                timeLeft.value = it.currentTime
+            }
         }
     }
 

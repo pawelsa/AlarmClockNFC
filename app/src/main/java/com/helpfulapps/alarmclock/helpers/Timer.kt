@@ -1,44 +1,37 @@
 package com.helpfulapps.alarmclock.helpers
 
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.Subject
 import java.util.concurrent.TimeUnit
 
-
-interface Timer {
-    fun setupTimer(time: Long, listener: (Long) -> Unit)
-    fun startTimer()
-    fun stopTimer()
-}
-
-
-class TimerImpl : Timer {
+class Timer {
 
     private var timeLeft: Long = 0
-    private lateinit var emitTime: (Long) -> Unit
+    val emitter: Subject<Long> = BehaviorSubject.create()
     private var disposable: Disposable? = null
 
-    override fun setupTimer(time: Long, listener: (Long) -> Unit) {
+    fun setupTimer(time: Long) {
         timeLeft = time
-        emitTime = listener
     }
 
-    override fun startTimer() {
+    fun startTimer() {
         if (timeLeft != 0L && (disposable == null || disposable?.isDisposed != false)) {
             disposable = Observable.interval(1, TimeUnit.SECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe { emitter.onNext(timeLeft) }
                 .subscribe {
                     timeLeft--
-                    emitTime(timeLeft)
+                    emitter.onNext(timeLeft)
                     if (timeLeft == 0L) {
+                        emitter.onComplete()
                         stopTimer()
                     }
                 }
         }
     }
 
-    override fun stopTimer() {
+    fun stopTimer() {
         disposable?.let {
             if (!it.isDisposed) {
                 it.dispose()

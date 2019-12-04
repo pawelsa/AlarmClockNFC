@@ -5,12 +5,15 @@ import android.content.Intent
 import android.os.IBinder
 import com.helpfulapps.alarmclock.helpers.Timer
 import com.helpfulapps.domain.eventBus.RxBus
-import org.koin.core.KoinComponent
-import org.koin.core.inject
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.plusAssign
+import io.reactivex.rxkotlin.subscribeBy
 
-class TimerService : Service(), KoinComponent {
+class TimerService : Service() {
 
-    private val timer: Timer by inject()
+    private val timer: Timer = Timer()
+    private val disposables = CompositeDisposable()
 
     override fun onBind(intent: Intent?): IBinder? = null
 
@@ -30,9 +33,17 @@ class TimerService : Service(), KoinComponent {
     }
 
     private fun startTimer(time: Long) {
-        timer.setupTimer(time) {
-            RxBus.publish(TimerUpdate(it))
-        }
+        timer.setupTimer(time)
+        disposables += timer.emitter
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onNext = {
+                    RxBus.publish(TimerUpdate(it))
+                },
+                onComplete = {
+                    RxBus.publish(TimerUpdate(-1L))
+                }
+            )
         timer.startTimer()
     }
 

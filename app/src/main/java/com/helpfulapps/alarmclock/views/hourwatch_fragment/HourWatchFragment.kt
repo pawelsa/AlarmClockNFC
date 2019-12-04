@@ -102,7 +102,7 @@ class HourWatchFragment : BaseFragment<HourWatchViewModel, FragmentHourwatchBind
     }
 
     private fun startTimer() {
-        val timeLeft = pk_timer_picker.getTimeInMillis()
+        val timeLeft = pk_timer_picker.getTimeInMillis() / 1000
         Intent(context, TimerService::class.java).let {
             it.action = TimerService.TIMER_START
             it.putExtra(TimerService.TIMER_TIME, timeLeft)
