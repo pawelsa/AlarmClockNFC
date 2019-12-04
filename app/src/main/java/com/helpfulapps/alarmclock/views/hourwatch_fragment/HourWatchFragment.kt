@@ -1,65 +1,40 @@
 package com.helpfulapps.alarmclock.views.hourwatch_fragment
 
 import android.content.Intent
-import android.view.View
-import android.view.animation.AnimationUtils
+import android.util.Log
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.FragmentHourwatchBinding
 import com.helpfulapps.alarmclock.helpers.extensions.observe
 import com.helpfulapps.alarmclock.service.TimerService
 import com.helpfulapps.alarmclock.views.main_activity.MainActivity
 import com.helpfulapps.base.base.BaseFragment
-import com.helpfulapps.domain.helpers.Settings
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_hourwatch.*
-import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
-import xyz.aprildown.hmspickerview.HmsPickerView
 
 class HourWatchFragment : BaseFragment<HourWatchViewModel, FragmentHourwatchBinding>() {
 
     override val layoutId: Int = R.layout.fragment_hourwatch
     override val viewModel: HourWatchViewModel by viewModel()
-    private val settings: Settings by inject()
 
+    private val fab: FloatingActionButton
+        get() = (mainActivity as MainActivity).fab_main_fab
 
     override fun init() {
-        setupInitialState()
-    }
-
-    private fun setupInitialState() {
-        if (settings.timeLeft == -1L) {
-            setupInitialScreen()
-        } else {
-            setupPreviousScreen()
-        }
+        binding.viewModel = viewModel
     }
 
     private fun setupPreviousScreen() {
-        pk_timer_picker.setTimeInMillis(settings.timeLeft)
-        (mainActivity as MainActivity).fab_main_fab.show()
-        bt_reset.visibility = View.VISIBLE
+        fab.show()
     }
 
     private fun setupInitialScreen() {
-        (mainActivity as MainActivity).fab_main_fab.hide()
+        fab.hide()
     }
 
     override fun onResume() {
         super.onResume()
-
-        pk_timer_picker.setListener(object : HmsPickerView.Listener {
-            override fun onHmsPickerViewHasNoInput(hmsPickerView: HmsPickerView) {
-                (mainActivity as MainActivity).fab_main_fab.hide()
-            }
-
-            override fun onHmsPickerViewHasValidInput(hmsPickerView: HmsPickerView) {
-                showFab()
-            }
-
-            override fun onHmsPickerViewInputChanged(hmsPickerView: HmsPickerView, input: Long) =
-                Unit
-        })
 
         // handle when service should go foreground
         // create notification for service
@@ -82,7 +57,7 @@ class HourWatchFragment : BaseFragment<HourWatchViewModel, FragmentHourwatchBind
         // app opened after timer finished, so timer form DB should be shown
 
 
-        (mainActivity as MainActivity).fab_main_fab.setOnClickListener {
+        fab.setOnClickListener {
             viewModel.fabPressed()
 //            startTimer()
         }
@@ -95,17 +70,31 @@ class HourWatchFragment : BaseFragment<HourWatchViewModel, FragmentHourwatchBind
             }
         }
 
-        bt_reset.setOnClickListener {
-            Intent(context, TimerService::class.java).let {
-                it.action = TimerService.TIMER_RESET
-                context?.startService(it)
+        viewModel.isPaused.observe(this) {
+            if (it) {
+                fab.setImageResource(R.drawable.ic_pause)
+            } else {
+                fab.setImageResource(R.drawable.ic_start)
             }
         }
 
-        viewModel.listenToTimer()
         viewModel.timeLeft.observe(this) {
-            tv_time_left.text = it.toString()
+            Log.d(TAG, "timeLeft $it")
+            if (it == 0L) {
+                setupInitialScreen()
+            } else {
+                setupPreviousScreen()
+            }
         }
+
+        /* bt_reset.setOnClickListener {
+             Intent(context, TimerService::class.java).let {
+                 it.action = TimerService.TIMER_RESET
+                 context?.startService(it)
+             }
+         }*/
+
+        viewModel.listenToTimer()
     }
 
     private fun stopTimer() {
@@ -119,49 +108,10 @@ class HourWatchFragment : BaseFragment<HourWatchViewModel, FragmentHourwatchBind
             it.putExtra(TimerService.TIMER_TIME, timeLeft)
             context?.startService(it)
         }
-        saveTimeInSettings(timeLeft)
-        showCountDownTimer()
-        hideTimePicker()
-        showResetButton()
-        setResetListenerToReset()
         changeFabIconToPause()
     }
 
-    private fun saveTimeInSettings(time: Long) {
-        settings.timeLeft = time
-    }
-
     private fun changeFabIconToPause() {
-        (mainActivity as MainActivity).fab_main_fab.setImageResource(R.drawable.ic_pause)
-    }
-
-    private fun setResetListenerToReset() {
-        bt_reset.setOnClickListener {
-            TODO("implement reseting")
-            settings.timeLeft = -1L
-        }
-    }
-
-    private fun showResetButton() {
-        bt_reset.visibility = View.VISIBLE
-    }
-
-    private fun hideTimePicker() {
-        pk_timer_picker.visibility = View.GONE
-    }
-
-    private fun showCountDownTimer() {
-        tv_time_left.visibility = View.VISIBLE
-    }
-
-    private fun showFab() {
-        with((mainActivity as MainActivity).fab_main_fab) {
-            if (!isShown) {
-                show()
-                clearAnimation()
-                val animation = AnimationUtils.loadAnimation(context, R.anim.pop_up)
-                startAnimation(animation)
-            }
-        }
+        fab.setImageResource(R.drawable.ic_pause)
     }
 }

@@ -18,9 +18,13 @@ class TabFragmentChangeListener(
     private var state = SCROLL_STATE_IDLE
     private var isFloatButtonHidden = false
 
+    private var swippingToMiddlePage = false
     private var position = 0
 
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+
+        swippingToMiddlePage =
+            (this.position == 0 && positionOffset > 0.6) || (this.position == 2 && positionOffset < 0.4)
 
         if (!isFloatButtonHidden && state == 1 && positionOffset.toDouble() != 0.0) {
             isFloatButtonHidden = true
@@ -36,6 +40,7 @@ class TabFragmentChangeListener(
         if (state == SCROLL_STATE_SETTLING) {
             //have end in selected tab
             isFloatButtonHidden = false
+            Log.d(TAG, "onPageSelected, page: $position")
             selectedTabs(position)
         }
     }
@@ -69,10 +74,15 @@ class TabFragmentChangeListener(
             else -> R.drawable.ic_start
         }
         floatingActionButton.setImageResource(icon)
+        if (swippingToMiddlePage) return
+        if (tab == 1) return
+
         floatingActionButton.show()
 
         floatingActionButton.clearAnimation()
-        val animation = AnimationUtils.loadAnimation(floatingActionButton.context, R.anim.pop_up)
+        val animation =
+            AnimationUtils.loadAnimation(floatingActionButton.context, R.anim.pop_up)
         floatingActionButton.startAnimation(animation)
+
     }
 }
