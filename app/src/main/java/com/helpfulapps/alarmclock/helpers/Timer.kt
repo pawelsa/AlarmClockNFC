@@ -15,6 +15,9 @@ class Timer {
     val emitter: Subject<Long> = BehaviorSubject.create()
     private var disposable: Disposable? = null
 
+    val isRunning: Boolean
+        get() = disposable?.isDisposed ?: false
+
     fun setupTimer(time: Long) {
         timeLeft = time
     }

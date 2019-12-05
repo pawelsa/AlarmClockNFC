@@ -20,9 +20,9 @@ interface NotificationBuilder {
     fun build(): Notification
 
     sealed class NotificationType {
-        class TypeAlarm(val alarm: Alarm, val usingNfc: Boolean = false) : NotificationType()
+        data class TypeAlarm(val alarm: Alarm, val usingNfc: Boolean = false) : NotificationType()
         object TypeStopwatch : NotificationType()
-        object TypeTimer : NotificationType()
+        data class TypeTimer(val timeLeft: Long) : NotificationType()
         object TypeLocalization : NotificationType()
     }
 }
@@ -38,7 +38,7 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
             when (notificationType) {
                 is NotificationBuilder.NotificationType.TypeAlarm -> setupAlarmType(notificationType)
                 is NotificationBuilder.NotificationType.TypeStopwatch -> setupStopWatchType()
-                is NotificationBuilder.NotificationType.TypeTimer -> setupTimerType()
+                is NotificationBuilder.NotificationType.TypeTimer -> setupTimerType(notificationType)
                 is NotificationBuilder.NotificationType.TypeLocalization -> setupLocalizationType()
             }
         }
@@ -109,9 +109,23 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    private fun setupTimerType() {
-        //set builder
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    private fun setupTimerType(notificationType: NotificationBuilder.NotificationType.TypeTimer) {
+        builder =
+            NotificationCompat.Builder(context, CHANNEL_TIMER_ID)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle(context.getString(R.string.app_name))
+                .setContentText(
+                    context.getString(
+                        R.string.notification_timer_text, notificationType.timeLeft.toString()
+                    )
+                )
+                .setPriority(NotificationCompat.PRIORITY_LOW)
+                .setCategory(NotificationCompat.CATEGORY_SERVICE)
+                .setAutoCancel(false)
+
+        buildNotificationChannel(notificationType)
+
+        builder.setChannelId(CHANNEL_TIMER_ID)
     }
 
     private fun buildNotificationChannel(notificationType: NotificationBuilder.NotificationType) {
@@ -134,7 +148,10 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
                     TODO("NOT IMPLEMENTED, CHANNEL STOPWATCH")
                 }
                 is NotificationBuilder.NotificationType.TypeTimer -> {
-                    TODO("NOT IMPLEMENTED, CHANNEL TIMER")
+                    name = context.getString(R.string.channel_timer_name)
+                    descriptionText = context.getString(R.string.channel_timer_description)
+                    importance = NotificationManager.IMPORTANCE_LOW
+                    channelId = CHANNEL_TIMER_ID
                 }
                 is NotificationBuilder.NotificationType.TypeLocalization -> {
                     name = context.getString(R.string.channel_location_name)
@@ -155,6 +172,7 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
         // if changed here, must be changed in intentcreator
         const val KEY_ALARM_ID = "com.helpfulapps.alarmclock.ALARM_ID"
         private const val CHANNEL_ALARM_ID = "com.helpfulapps.alarmclock.ALARM_CHANNEL_ID"
+        private const val CHANNEL_TIMER_ID = "com.helpfulapps.alarmclock.TIMER_CHANNEL_ID"
         private const val CHANNEL_LOCALIZATION_ID =
             "com.helpfulapps.alarmclock.CHANNEL_LOCALIZATION_ID"
     }

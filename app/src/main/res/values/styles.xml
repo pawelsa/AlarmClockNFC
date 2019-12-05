@@ -26,10 +26,13 @@
         <item name="android:background">@drawable/rounded_dialog</item>
     </style>
 
+    <style name="TimePickerTheme.Button" parent="Widget.MaterialComponents.Button.TextButton" />
+
     <style name="TimePickerTheme" parent="Theme.AppCompat.Light.Dialog">
         <item name="colorAccent">@color/colorPrimary</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="buttonStyle">@style/TimePickerTheme.Button</item>
     </style>
 
     <style name="AlarmTimeClockTheme" parent="AppTheme">
