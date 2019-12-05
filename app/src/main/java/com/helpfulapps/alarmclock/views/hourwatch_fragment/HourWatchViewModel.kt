@@ -1,5 +1,6 @@
 package com.helpfulapps.alarmclock.views.hourwatch_fragment
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.helpfulapps.alarmclock.service.TimerService
 import com.helpfulapps.base.base.BaseViewModel
@@ -13,6 +14,10 @@ class HourWatchViewModel(
 
     val isRunning = MutableLiveData<Boolean>(false)
     val isPaused = MutableLiveData<Boolean>(false)
+
+    private val _timer: MutableLiveData<String> = MutableLiveData()
+    val timer: LiveData<String>
+        get() = _timer
 
     val timeLeft: MutableLiveData<Long> = MutableLiveData<Long>().apply {
         value = if (settings.timeLeft == -1L) 0 else settings.timeLeft
@@ -28,9 +33,9 @@ class HourWatchViewModel(
                 if (it.currentTime == -1L) {
                     isRunning.value = false
                     isPaused.value = false
-                    timeLeft.value = 0L
+                    _timer.value = "0"
                 } else {
-                    timeLeft.value = it.currentTime
+                    _timer.value = "${it.currentTime}"
                 }
             }
     }
