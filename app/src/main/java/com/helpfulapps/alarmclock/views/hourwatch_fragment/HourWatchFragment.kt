@@ -6,6 +6,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.FragmentHourwatchBinding
 import com.helpfulapps.alarmclock.helpers.extensions.observe
+import com.helpfulapps.alarmclock.helpers.extensions.showFab
 import com.helpfulapps.alarmclock.service.TimerService
 import com.helpfulapps.alarmclock.views.main_activity.MainActivity
 import com.helpfulapps.base.base.BaseFragment
@@ -23,19 +24,56 @@ class HourWatchFragment : BaseFragment<HourWatchViewModel, FragmentHourwatchBind
 
     override fun init() {
         binding.viewModel = viewModel
+
+        viewModel.fabPressed = { isPaused ->
+            if (isPaused) {
+                changeFabIconToStart()
+                stopTimer()
+            } else {
+                changeFabIconToPause()
+                restartTimer()
+            }
+        }
+
+        viewModel.startTimer = {
+            startTimer()
+        }
+
+        viewModel.resetPressed = {
+            resetTimer()
+        }
+
+        viewModel.listenToTimer()
     }
 
-    private fun setupPreviousScreen() {
-        fab.show()
+    private fun setupScreen() {
+        viewModel.timeLeft.value?.let {
+            handleFabVisibility(it)
+        }
     }
 
-    private fun setupInitialScreen() {
-        fab.hide()
+    private fun handleFabVisibility(time: Long) {
+        if (time == 0L) {
+            fab.hide()
+            changeFabIconToStart()
+        } else {
+            fab.showFab()
+        }
     }
 
     override fun onResume() {
         super.onResume()
 
+        fab.setOnClickListener {
+            viewModel.fabPressed()
+        }
+
+        setupScreen()
+
+        viewModel.timeLeft.observe(this) {
+            Log.d(TAG, "timeLeft: $it")
+            handleFabVisibility(it)
+        }
         // handle when service should go foreground
         // create notification for service
         // notification should be updated with new time
@@ -57,12 +95,7 @@ class HourWatchFragment : BaseFragment<HourWatchViewModel, FragmentHourwatchBind
         // app opened after timer finished, so timer form DB should be shown
 
 
-        fab.setOnClickListener {
-            viewModel.fabPressed()
-//            startTimer()
-        }
-
-        viewModel.isRunning.observe(this) {
+        /*viewModel.isRunning.observe(this) {
             if (it) {
                 startTimer()
             } else {
@@ -76,29 +109,14 @@ class HourWatchFragment : BaseFragment<HourWatchViewModel, FragmentHourwatchBind
             } else {
                 fab.setImageResource(R.drawable.ic_start)
             }
-        }
-
-        viewModel.timeLeft.observe(this) {
-            Log.d(TAG, "timeLeft $it")
-            if (it == 0L) {
-                setupInitialScreen()
-            } else {
-                setupPreviousScreen()
-            }
-        }
-
-        /* bt_reset.setOnClickListener {
-             Intent(context, TimerService::class.java).let {
-                 it.action = TimerService.TIMER_RESET
-                 context?.startService(it)
-             }
-         }*/
-
-        viewModel.listenToTimer()
+        }*/
     }
 
-    private fun stopTimer() {
-//        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    private fun resetTimer() {
+        Intent(context, TimerService::class.java).let {
+            it.action = TimerService.TIMER_FINISH
+            context?.startService(it)
+        }
     }
 
     private fun startTimer() {
@@ -111,7 +129,27 @@ class HourWatchFragment : BaseFragment<HourWatchViewModel, FragmentHourwatchBind
         changeFabIconToPause()
     }
 
+    private fun restartTimer() {
+        Intent(context, TimerService::class.java).let {
+            it.action = TimerService.TIMER_RESTART
+            context?.startService(it)
+        }
+        changeFabIconToPause()
+    }
+
+    private fun stopTimer() {
+        Intent(context, TimerService::class.java).let {
+            it.action = TimerService.TIMER_STOP
+            context?.startService(it)
+        }
+        changeFabIconToStart()
+    }
+
     private fun changeFabIconToPause() {
         fab.setImageResource(R.drawable.ic_pause)
+    }
+
+    private fun changeFabIconToStart() {
+        fab.setImageResource(R.drawable.ic_start)
     }
 }

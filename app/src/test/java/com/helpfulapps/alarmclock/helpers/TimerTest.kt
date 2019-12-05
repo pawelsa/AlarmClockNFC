@@ -31,7 +31,7 @@ class TimerTest {
 
         Thread.sleep(2008)
 
-        timer.stopTimer()
+        timer.pauseTimer()
 
         Thread.sleep(2000)
 

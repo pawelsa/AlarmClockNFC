@@ -7,6 +7,7 @@ import androidx.viewpager.widget.ViewPager.SCROLL_STATE_IDLE
 import androidx.viewpager.widget.ViewPager.SCROLL_STATE_SETTLING
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.helpfulapps.alarmclock.R
+import com.helpfulapps.alarmclock.helpers.extensions.showFab
 
 class TabFragmentChangeListener(
     private val floatingActionButton: FloatingActionButton
@@ -77,12 +78,6 @@ class TabFragmentChangeListener(
         if (swippingToMiddlePage) return
         if (tab == 1) return
 
-        floatingActionButton.show()
-
-        floatingActionButton.clearAnimation()
-        val animation =
-            AnimationUtils.loadAnimation(floatingActionButton.context, R.anim.pop_up)
-        floatingActionButton.startAnimation(animation)
-
+        floatingActionButton.showFab()
     }
 }

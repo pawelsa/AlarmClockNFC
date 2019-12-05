@@ -18,26 +18,34 @@ class HourWatchViewModel(
         value = if (settings.timeLeft == -1L) 0 else settings.timeLeft
     }
 
+    var fabPressed: ((Boolean) -> Unit)? = null
+    var resetPressed: (() -> Unit)? = null
+    var startTimer: (() -> Unit)? = null
+
     fun listenToTimer() {
-        disposables += RxBus.listen(TimerService.TimerUpdate::class.java).subscribe {
-            if (it.currentTime == -1L) {
-                isRunning.value = false
-                isPaused.value = false
-                timeLeft.value = 0L
-            } else {
-                timeLeft.value = it.currentTime
+        disposables += RxBus.listen(TimerService.TimerUpdate::class.java)
+            .subscribe {
+                if (it.currentTime == -1L) {
+                    isRunning.value = false
+                    isPaused.value = false
+                    timeLeft.value = 0L
+                } else {
+                    timeLeft.value = it.currentTime
+                }
             }
-        }
     }
 
     fun fabPressed() {
+        if (isRunning.value == true) {
+            val isPaused = !(isPaused.value ?: false)
+            this.isPaused.value = isPaused
+            fabPressed?.let { it(isPaused) }
+        }
         if (isRunning.value == false) {
             isRunning.value = true
             isPaused.value = false
             settings.timeLeft = timeLeft.value ?: -1L
-        }
-        if (isRunning.value == true) {
-            isPaused.value = !(isPaused.value ?: false)
+            startTimer?.let { it() }
         }
     }
 
@@ -46,6 +54,7 @@ class HourWatchViewModel(
         isPaused.value = false
         settings.timeLeft = -1L
         timeLeft.value = 0L
+        resetPressed?.let { it() }
     }
 
 }
