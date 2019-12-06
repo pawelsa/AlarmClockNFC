@@ -10,6 +10,7 @@ import com.helpfulapps.alarmclock.helpers.extensions.showFab
 import com.helpfulapps.alarmclock.service.TimerService
 import com.helpfulapps.alarmclock.views.main_activity.MainActivity
 import com.helpfulapps.base.base.BaseFragment
+import com.helpfulapps.domain.eventBus.RxBus
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_hourwatch.*
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -113,10 +114,11 @@ class HourWatchFragment : BaseFragment<HourWatchViewModel, FragmentHourwatchBind
     }
 
     private fun resetTimer() {
-        Intent(context, TimerService::class.java).let {
+        /*Intent(context, TimerService::class.java).let {
             it.action = TimerService.TIMER_FINISH
             context?.startService(it)
-        }
+        }*/
+        RxBus.publish(TimerService.TimerServiceEvent.FinishTimer)
     }
 
     private fun startTimer() {
@@ -130,18 +132,20 @@ class HourWatchFragment : BaseFragment<HourWatchViewModel, FragmentHourwatchBind
     }
 
     private fun restartTimer() {
-        Intent(context, TimerService::class.java).let {
+        /*Intent(context, TimerService::class.java).let {
             it.action = TimerService.TIMER_RESTART
             context?.startService(it)
-        }
+        }*/
+        RxBus.publish(TimerService.TimerServiceEvent.RestartTimer)
         changeFabIconToPause()
     }
 
     private fun stopTimer() {
-        Intent(context, TimerService::class.java).let {
+        /*Intent(context, TimerService::class.java).let {
             it.action = TimerService.TIMER_STOP
             context?.startService(it)
-        }
+        }*/
+        RxBus.publish(TimerService.TimerServiceEvent.StopTimer)
         changeFabIconToStart()
     }
 

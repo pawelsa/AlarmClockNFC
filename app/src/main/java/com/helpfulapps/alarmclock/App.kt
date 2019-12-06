@@ -2,6 +2,7 @@ package com.helpfulapps.alarmclock
 
 import android.app.Application
 import android.nfc.NfcAdapter
+import android.util.Log
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
@@ -17,6 +18,7 @@ import org.koin.core.context.startKoin
 class App : Application(), LifecycleObserver {
 
     private val settings: Settings by inject()
+    private val TAG = this.javaClass.simpleName
 
     override fun onCreate() {
         super.onCreate()
@@ -40,14 +42,19 @@ class App : Application(), LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     fun onAppBackgrounded() {
-        RxBus.publish(AppState(false))
+        Log.d(TAG, "IsBackground")
+        RxBus.publish(AppState.IsBackground::class.java)
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     fun onAppForeground() {
-        RxBus.publish(AppState(true))
+        Log.d(TAG, "IsForeground")
+        RxBus.publish(AppState.IsForeground::class.java)
     }
 
-    data class AppState(val isForeground: Boolean)
+    sealed class AppState {
+        object IsForeground : AppState()
+        object IsBackground : AppState()
+    }
 
 }

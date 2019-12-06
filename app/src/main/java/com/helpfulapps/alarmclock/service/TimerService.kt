@@ -35,45 +35,56 @@ class TimerService : Service(), KoinComponent {
 
     private fun handleIntent(intent: Intent?) {
         when (intent?.action) {
-            TIMER_START -> startTimer(intent.getLongExtra(TIMER_TIME, 0L))
-            TIMER_STOP -> stopTimer()
-            TIMER_RESTART -> restartTimer()
-            TIMER_FINISH -> finishTimer()
+            TIMER_START -> setupTimer(intent.getLongExtra(TIMER_TIME, 0L))
         }
     }
 
-    private fun startTimer(time: Long? = null) {
-        time?.let {
-            if (it != 0L) {
-                timer.setupTimer(it)
-            }
-        }
+    private fun setupTimer(timeLeft: Long) {
+        if (timeLeft != 0L) {
+            timer.setupTimer(timeLeft)
 
-        timer.startTimer()
-        disposables += timer.emitter
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeBy(
-                onNext = {
-                    Log.d(TAG, "onNext")
-                    RxBus.publish(TimerUpdate(it))
-                    if (isForeground) {
+
+            disposables += timer.emitter
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeBy(
+                    onNext = {
+                        Log.d(TAG, "onNext")
+                        RxBus.publish(TimerUpdate(it))
+                        if (isForeground) {
+                            stopForeground(true)
+                        } else {
+                            showNotification(it)
+                        }
+                    },
+                    onComplete = {
+                        Log.d(TAG, "onComplete")
+                        RxBus.publish(TimerUpdate(-1L))
                         stopForeground(true)
-                    } else {
-                        showNotification(it)
+                        stopSelf()
                     }
-                },
-                onComplete = {
-                    Log.d(TAG, "onComplete")
-                    RxBus.publish(TimerUpdate(-1L))
-                    stopForeground(true)
-                    stopSelf()
-                }
-            )
+                )
 
-        disposables += RxBus.listen(App.AppState::class.java)
-            .subscribe {
-                isForeground = it.isForeground
-            }
+            disposables += RxBus.listen(App.AppState::class.java)
+                .subscribe {
+                    // todo check whyy not correctly working, maybe problem is with show notification
+                    isForeground = when (it) {
+                        is App.AppState.IsForeground -> true
+                        is App.AppState.IsBackground -> false
+                    }
+                }
+
+            disposables += RxBus.listen(TimerServiceEvent::class.java)
+                .subscribe {
+                    when (it) {
+                        is TimerServiceEvent.StopTimer -> stopTimer()
+                        is TimerServiceEvent.RestartTimer -> restartTimer()
+                        is TimerServiceEvent.FinishTimer -> finishTimer()
+                    }
+                }
+            timer.startTimer()
+        } else {
+            stopSelf()
+        }
     }
 
     private fun showNotification(timeLeft: Long) {
@@ -88,7 +99,7 @@ class TimerService : Service(), KoinComponent {
         ).build()
 
     private fun restartTimer() {
-        startTimer()
+        timer.startTimer()
     }
 
     private fun stopTimer() {
@@ -105,12 +116,15 @@ class TimerService : Service(), KoinComponent {
         const val TIMER_SERVICE_ID = 5
         const val TIMER_START = "com.helpfulapps.alarmclock.timer_start"
         const val TIMER_TIME = "com.helpfulapps.alarmclock.timer_time"
-        const val TIMER_STOP = "com.helpfulapps.alarmclock.timer_stop"
-        const val TIMER_RESTART = "com.helpfulapps.alarmclock.timer_restart"
-        const val TIMER_FINISH = "com.helpfulapps.alarmclock.timer_finish"
     }
 
     data class TimerUpdate(val currentTime: Long)
+
+    sealed class TimerServiceEvent {
+        object StopTimer : TimerServiceEvent()
+        object RestartTimer : TimerServiceEvent()
+        object FinishTimer : TimerServiceEvent()
+    }
 
     override fun onDestroy() {
         disposables.clear()
