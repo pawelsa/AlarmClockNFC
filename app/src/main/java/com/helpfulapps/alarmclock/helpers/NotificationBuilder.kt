@@ -4,11 +4,14 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.helpfulapps.alarmclock.R
+import com.helpfulapps.alarmclock.service.TimerService
+import com.helpfulapps.alarmclock.service.TimerService.Companion.TIMER_STOP
 import com.helpfulapps.alarmclock.views.ringing_alarm.NfcRingingAlarmActivity
 import com.helpfulapps.alarmclock.views.ringing_alarm.RingingAlarmActivity
 import com.helpfulapps.domain.models.alarm.Alarm
@@ -23,6 +26,7 @@ interface NotificationBuilder {
         data class TypeAlarm(val alarm: Alarm, val usingNfc: Boolean = false) : NotificationType()
         object TypeStopwatch : NotificationType()
         data class TypeTimer(val timeLeft: Long) : NotificationType()
+        object TypeTimerFinished : NotificationType()
         object TypeLocalization : NotificationType()
     }
 }
@@ -39,6 +43,7 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
                 is NotificationBuilder.NotificationType.TypeAlarm -> setupAlarmType(notificationType)
                 is NotificationBuilder.NotificationType.TypeStopwatch -> setupStopWatchType()
                 is NotificationBuilder.NotificationType.TypeTimer -> setupTimerType(notificationType)
+                is NotificationBuilder.NotificationType.TypeTimerFinished -> setupTimerFinished()
                 is NotificationBuilder.NotificationType.TypeLocalization -> setupLocalizationType()
             }
         }
@@ -128,6 +133,27 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
         builder.setChannelId(CHANNEL_TIMER_ID)
     }
 
+    private fun setupTimerFinished() {
+        val stopTimerPendingIntent = Intent(context, TimerService::class.java).let {
+            it.action = TIMER_STOP
+            PendingIntent.getService(context, 0, it, FLAG_UPDATE_CURRENT)
+        }
+
+        builder = NotificationCompat.Builder(context, CHANNEL_TIMER_ID)
+            .setSmallIcon(R.mipmap.ic_launcher)
+            .setContentTitle(context.getString(R.string.app_name))
+            .setPriority(NotificationCompat.PRIORITY_MAX)
+            .setCategory(NotificationCompat.CATEGORY_ALARM)
+            .addAction(
+                R.drawable.ic_stop,
+                context.getString(R.string.timer_stop),
+                stopTimerPendingIntent
+            )
+            .setAutoCancel(false)
+
+        buildNotificationChannel(NotificationBuilder.NotificationType.TypeTimer(0L))
+    }
+
     private fun buildNotificationChannel(notificationType: NotificationBuilder.NotificationType) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationManager =
@@ -150,7 +176,7 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
                 is NotificationBuilder.NotificationType.TypeTimer -> {
                     name = context.getString(R.string.channel_timer_name)
                     descriptionText = context.getString(R.string.channel_timer_description)
-                    importance = NotificationManager.IMPORTANCE_LOW
+                    importance = NotificationManager.IMPORTANCE_HIGH
                     channelId = CHANNEL_TIMER_ID
                 }
                 is NotificationBuilder.NotificationType.TypeLocalization -> {

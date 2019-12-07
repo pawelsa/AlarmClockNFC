@@ -43,13 +43,13 @@ class App : Application(), LifecycleObserver {
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     fun onAppBackgrounded() {
         Log.d(TAG, "IsBackground")
-        RxBus.publish(AppState.IsBackground::class.java)
+        RxBus.publish(AppState.IsBackground)
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     fun onAppForeground() {
         Log.d(TAG, "IsForeground")
-        RxBus.publish(AppState.IsForeground::class.java)
+        RxBus.publish(AppState.IsForeground)
     }
 
     sealed class AppState {

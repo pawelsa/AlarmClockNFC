@@ -5,9 +5,11 @@ import android.media.AudioAttributes
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.net.Uri
+import com.helpfulapps.alarmclock.R
 
 interface AlarmPlayer {
     fun startPlaying(ringtoneUri: Uri)
+    fun startPlayingAlarm()
     fun stopPlaying()
     fun destroyPlayer()
 }
@@ -17,19 +19,34 @@ class AlarmPlayerImpl(private val context: Context) : AlarmPlayer {
     private var mediaPlayer: MediaPlayer = MediaPlayer()
 
     override fun startPlaying(ringtoneUri: Uri) {
-        stopPlaying()
-        mediaPlayer = MediaPlayer()
-        with(mediaPlayer) {
-            setDataSource(context, ringtoneUri)
+        startPlaying(true) {
+            MediaPlayer().apply {
+                setDataSource(context, ringtoneUri)
+            }
+        }
+    }
 
+    override fun startPlayingAlarm() {
+        startPlaying(false) {
+            MediaPlayer.create(context, R.raw.alarm_sound)
+        }
+    }
+
+    private fun startPlaying(needToPrepare: Boolean, createMediaPlayer: () -> MediaPlayer) {
+        stopPlaying()
+        mediaPlayer = createMediaPlayer()
+        with(mediaPlayer) {
             setAudioAttributes(
                 builtAudioAttributes()
             )
             isLooping = true
-            setOnPreparedListener {
-                it.start()
+            if (needToPrepare) {
+                setOnPreparedListener {
+                    it.start()
+                }
+                prepareAsync()
             }
-            prepareAsync()
+            start()
         }
     }
 

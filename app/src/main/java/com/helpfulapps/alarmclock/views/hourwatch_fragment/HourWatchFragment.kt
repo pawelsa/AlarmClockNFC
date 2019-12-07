@@ -145,7 +145,7 @@ class HourWatchFragment : BaseFragment<HourWatchViewModel, FragmentHourwatchBind
             it.action = TimerService.TIMER_STOP
             context?.startService(it)
         }*/
-        RxBus.publish(TimerService.TimerServiceEvent.StopTimer)
+        RxBus.publish(TimerService.TimerServiceEvent.PauseTimer)
         changeFabIconToStart()
     }
 

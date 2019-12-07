@@ -99,6 +99,7 @@
     <string name="notification_timer_text">Left %1$s seconds</string>
     <string name="channel_timer_name">Timer</string>
     <string name="channel_timer_description">It is used when timer is running in the background</string>
+    <string name="timer_stop">Finish alarm</string>
     <string-array name="settings_alarm_time_titles">
         <item>1 minute</item>
         <item>2 minutes</item>

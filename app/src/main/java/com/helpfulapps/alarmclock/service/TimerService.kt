@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.IBinder
 import android.util.Log
 import com.helpfulapps.alarmclock.App
+import com.helpfulapps.alarmclock.helpers.AlarmPlayer
 import com.helpfulapps.alarmclock.helpers.NotificationBuilder
 import com.helpfulapps.alarmclock.helpers.Timer
 import com.helpfulapps.domain.eventBus.RxBus
@@ -22,6 +23,7 @@ class TimerService : Service(), KoinComponent {
     private val timer: Timer = Timer()
     private val disposables = CompositeDisposable()
     private val notificationBuilder: NotificationBuilder by inject()
+    private val alarmPlayer: AlarmPlayer by inject()
     private var isForeground: Boolean = true
 
     override fun onBind(intent: Intent?): IBinder? = null
@@ -36,7 +38,16 @@ class TimerService : Service(), KoinComponent {
     private fun handleIntent(intent: Intent?) {
         when (intent?.action) {
             TIMER_START -> setupTimer(intent.getLongExtra(TIMER_TIME, 0L))
+            TIMER_STOP -> stopTimer()
         }
+    }
+
+    private fun stopTimer() {
+        Log.d(TAG, "timer stop")
+        timer.pauseTimer()
+        alarmPlayer.stopPlaying()
+        stopForeground(true)
+        stopSelf()
     }
 
     private fun setupTimer(timeLeft: Long) {
@@ -46,29 +57,33 @@ class TimerService : Service(), KoinComponent {
 
             disposables += timer.emitter
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnComplete {
+                    timerIsUp()
+                }
                 .subscribeBy(
                     onNext = {
-                        Log.d(TAG, "onNext")
                         RxBus.publish(TimerUpdate(it))
-                        if (isForeground) {
-                            stopForeground(true)
-                        } else {
-                            showNotification(it)
+                        if (!isForeground) {
+                            showRemainingTimeNotification(it)
                         }
                     },
                     onComplete = {
-                        Log.d(TAG, "onComplete")
                         RxBus.publish(TimerUpdate(-1L))
                         stopForeground(true)
-                        stopSelf()
+                        // todo run the alarm till user stops it, so stopForeground and stopSelf should be removed form here
+//                        timerIsUp()
                     }
                 )
 
             disposables += RxBus.listen(App.AppState::class.java)
                 .subscribe {
-                    // todo check whyy not correctly working, maybe problem is with show notification
                     isForeground = when (it) {
-                        is App.AppState.IsForeground -> true
+                        is App.AppState.IsForeground -> {
+                            if (timer.isRunning) {
+                                stopForeground(true)
+                            }
+                            true
+                        }
                         is App.AppState.IsBackground -> false
                     }
                 }
@@ -76,18 +91,29 @@ class TimerService : Service(), KoinComponent {
             disposables += RxBus.listen(TimerServiceEvent::class.java)
                 .subscribe {
                     when (it) {
-                        is TimerServiceEvent.StopTimer -> stopTimer()
+                        is TimerServiceEvent.PauseTimer -> pauseTimer()
                         is TimerServiceEvent.RestartTimer -> restartTimer()
                         is TimerServiceEvent.FinishTimer -> finishTimer()
                     }
                 }
+
             timer.startTimer()
         } else {
+            Log.d(TAG, "setupTimer")
             stopSelf()
         }
     }
 
-    private fun showNotification(timeLeft: Long) {
+    private fun timerIsUp() {
+        val notification = notificationBuilder.setNotificationType(
+            NotificationBuilder.NotificationType.TypeTimerFinished
+        ).build()
+        notification.flags = Notification.FLAG_ONGOING_EVENT
+        alarmPlayer.startPlayingAlarm()
+        startForeground(TIMER_SERVICE_ID, notification)
+    }
+
+    private fun showRemainingTimeNotification(timeLeft: Long) {
         startForeground(TIMER_SERVICE_ID, getNotification(timeLeft))
     }
 
@@ -102,12 +128,13 @@ class TimerService : Service(), KoinComponent {
         timer.startTimer()
     }
 
-    private fun stopTimer() {
+    private fun pauseTimer() {
         timer.pauseTimer()
     }
 
     private fun finishTimer() {
         timer.pauseTimer()
+        Log.d(TAG, "finish timer")
         stopSelf()
     }
 
@@ -116,18 +143,20 @@ class TimerService : Service(), KoinComponent {
         const val TIMER_SERVICE_ID = 5
         const val TIMER_START = "com.helpfulapps.alarmclock.timer_start"
         const val TIMER_TIME = "com.helpfulapps.alarmclock.timer_time"
+        const val TIMER_STOP = "com.helpfulapps.alarmclock.timer_stop"
     }
 
     data class TimerUpdate(val currentTime: Long)
 
     sealed class TimerServiceEvent {
-        object StopTimer : TimerServiceEvent()
+        object PauseTimer : TimerServiceEvent()
         object RestartTimer : TimerServiceEvent()
         object FinishTimer : TimerServiceEvent()
     }
 
     override fun onDestroy() {
         disposables.clear()
+        alarmPlayer.destroyPlayer()
         super.onDestroy()
     }
 }
