@@ -142,6 +142,7 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
         builder = NotificationCompat.Builder(context, CHANNEL_TIMER_ID)
             .setSmallIcon(R.mipmap.ic_launcher)
             .setContentTitle(context.getString(R.string.app_name))
+            .setContentText(context.getString(R.string.notification_timer_text_finished))
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setCategory(NotificationCompat.CATEGORY_ALARM)
             .addAction(

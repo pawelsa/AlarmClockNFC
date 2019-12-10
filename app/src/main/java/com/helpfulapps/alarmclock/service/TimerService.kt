@@ -43,7 +43,6 @@ class TimerService : Service(), KoinComponent {
     }
 
     private fun stopTimer() {
-        Log.d(TAG, "timer stop")
         timer.pauseTimer()
         alarmPlayer.stopPlaying()
         stopForeground(true)
@@ -57,9 +56,6 @@ class TimerService : Service(), KoinComponent {
 
             disposables += timer.emitter
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnComplete {
-                    timerIsUp()
-                }
                 .subscribeBy(
                     onNext = {
                         RxBus.publish(TimerUpdate(it))
@@ -69,9 +65,7 @@ class TimerService : Service(), KoinComponent {
                     },
                     onComplete = {
                         RxBus.publish(TimerUpdate(-1L))
-                        stopForeground(true)
-                        // todo run the alarm till user stops it, so stopForeground and stopSelf should be removed form here
-//                        timerIsUp()
+                        timerIsUp()
                     }
                 )
 
@@ -99,7 +93,6 @@ class TimerService : Service(), KoinComponent {
 
             timer.startTimer()
         } else {
-            Log.d(TAG, "setupTimer")
             stopSelf()
         }
     }

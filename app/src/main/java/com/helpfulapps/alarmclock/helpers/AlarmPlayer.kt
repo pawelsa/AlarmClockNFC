@@ -45,8 +45,9 @@ class AlarmPlayerImpl(private val context: Context) : AlarmPlayer {
                     it.start()
                 }
                 prepareAsync()
+            } else {
+                start()
             }
-            start()
         }
     }
 
@@ -60,7 +61,9 @@ class AlarmPlayerImpl(private val context: Context) : AlarmPlayer {
     }
 
     override fun stopPlaying() {
-        mediaPlayer.stop()
+        if (mediaPlayer.isPlaying) {
+            mediaPlayer.stop()
+        }
         mediaPlayer.release()
     }
 
