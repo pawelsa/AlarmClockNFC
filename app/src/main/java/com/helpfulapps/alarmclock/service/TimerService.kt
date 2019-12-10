@@ -10,6 +10,7 @@ import com.helpfulapps.alarmclock.helpers.AlarmPlayer
 import com.helpfulapps.alarmclock.helpers.NotificationBuilder
 import com.helpfulapps.alarmclock.helpers.Timer
 import com.helpfulapps.domain.eventBus.RxBus
+import com.helpfulapps.domain.eventBus.ServiceBus
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
@@ -56,15 +57,16 @@ class TimerService : Service(), KoinComponent {
 
             disposables += timer.emitter
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe { ServiceBus.publish(TimerServiceEvent.StartTimer) }
                 .subscribeBy(
                     onNext = {
-                        RxBus.publish(TimerUpdate(it))
+                        ServiceBus.publish(TimerServiceEvent.UpdateTimer(it))
                         if (!isForeground) {
                             showRemainingTimeNotification(it)
                         }
                     },
                     onComplete = {
-                        RxBus.publish(TimerUpdate(-1L))
+                        ServiceBus.publish(TimerServiceEvent.UpdateTimer(-1L))
                         timerIsUp()
                     }
                 )
@@ -73,6 +75,7 @@ class TimerService : Service(), KoinComponent {
                 .subscribe {
                     isForeground = when (it) {
                         is App.AppState.IsForeground -> {
+                            Log.d(TAG, "appState ${timer.isRunning}")
                             if (timer.isRunning) {
                                 stopForeground(true)
                             }
@@ -82,7 +85,7 @@ class TimerService : Service(), KoinComponent {
                     }
                 }
 
-            disposables += RxBus.listen(TimerServiceEvent::class.java)
+            disposables += ServiceBus.listen(TimerServiceEvent::class.java)
                 .subscribe {
                     when (it) {
                         is TimerServiceEvent.PauseTimer -> pauseTimer()
@@ -98,6 +101,7 @@ class TimerService : Service(), KoinComponent {
     }
 
     private fun timerIsUp() {
+        ServiceBus.publish(TimerServiceEvent.TimeIsUpTimer)
         val notification = notificationBuilder.setNotificationType(
             NotificationBuilder.NotificationType.TypeTimerFinished
         ).build()
@@ -127,7 +131,6 @@ class TimerService : Service(), KoinComponent {
 
     private fun finishTimer() {
         timer.pauseTimer()
-        Log.d(TAG, "finish timer")
         stopSelf()
     }
 
@@ -139,9 +142,11 @@ class TimerService : Service(), KoinComponent {
         const val TIMER_STOP = "com.helpfulapps.alarmclock.timer_stop"
     }
 
-    data class TimerUpdate(val currentTime: Long)
 
     sealed class TimerServiceEvent {
+        object StartTimer : TimerServiceEvent()
+        data class UpdateTimer(val timeLeft: Long) : TimerServiceEvent()
+        object TimeIsUpTimer : TimerServiceEvent()
         object PauseTimer : TimerServiceEvent()
         object RestartTimer : TimerServiceEvent()
         object FinishTimer : TimerServiceEvent()

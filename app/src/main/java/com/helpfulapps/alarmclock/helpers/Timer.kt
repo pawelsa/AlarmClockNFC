@@ -16,7 +16,7 @@ class Timer {
     private var disposable: Disposable? = null
 
     val isRunning: Boolean
-        get() = disposable?.isDisposed ?: false
+        get() = !(disposable?.isDisposed ?: true)
 
     fun setupTimer(time: Long) {
         timeLeft = time

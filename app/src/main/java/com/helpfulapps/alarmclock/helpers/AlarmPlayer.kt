@@ -61,10 +61,12 @@ class AlarmPlayerImpl(private val context: Context) : AlarmPlayer {
     }
 
     override fun stopPlaying() {
-        if (mediaPlayer.isPlaying) {
+        try {
             mediaPlayer.stop()
+            mediaPlayer.release()
+        } catch (e: Exception) {
+            mediaPlayer.release()
         }
-        mediaPlayer.release()
     }
 
     override fun destroyPlayer() {
