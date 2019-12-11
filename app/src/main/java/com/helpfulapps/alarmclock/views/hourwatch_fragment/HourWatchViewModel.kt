@@ -23,17 +23,6 @@ class HourWatchViewModel(
         Log.d(TAG, "listenToTimer")
         disposables += ServiceBus.listen(TimerService.TimerServiceEvent::class.java)
             .subscribe {
-                /*Log.d(TAG, "timerServiceEvent : ${it.javaClass.simpleName}")
-                when (it) {
-                    is TimerService.TimerServiceEvent.UpdateTimer -> updateTimer(it)
-                    is TimerService.TimerServiceEvent.TimeIsUpTimer -> {
-                        Log.d(TAG, "timerIsUp")
-                        _timer.value = 5000L.toString()
-                    }
-                    is TimerService.TimerServiceEvent.FinishTimer -> clearTimer()
-//                    is TimerService.TimerServiceEvent.RestartTimer -> clearTimer()
-//                    is TimerService.TimerServiceEvent.PauseTimer -> pauseTimer()
-                }*/
                 Log.d(TAG, "timerServiceEvent : ${it.javaClass.simpleName}")
                 when (it) {
                     is TimerService.TimerServiceEvent.StartTimer -> _timerStates.value =
@@ -44,23 +33,22 @@ class HourWatchViewModel(
                         TimerState.TimeIsUp
                     is TimerService.TimerServiceEvent.FinishTimer -> _timerStates.value =
                         TimerState.Finished(settings.timeLeft)
-                    /*is TimerService.TimerServiceEvent.RestartTimer -> {
-                        settings.timeLeft = -1L
-                        _timerStates.value = TimerState.Start(settings.timeLeft)
-                    }*/
                     is TimerService.TimerServiceEvent.PauseTimer -> _timerStates.value =
                         TimerState.Paused
                 }
             }
     }
 
+    fun setNewDefaultTimerValue(time: Long) {
+        settings.timeLeft = time
+    }
+
     sealed class TimerState {
+        data class Start(val time: Long) : TimerState()
         object Paused : TimerState()
-        object Running : TimerState()
         data class Update(val time: Long) : TimerState()
         object TimeIsUp : TimerState()
         data class Finished(val time: Long) : TimerState()
-        data class Start(val time: Long) : TimerState()
     }
 
 }
