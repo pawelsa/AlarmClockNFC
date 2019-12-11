@@ -168,6 +168,7 @@ class HourWatchFragment : BaseFragment<HourWatchViewModel, FragmentHourwatchBind
 
     private fun resetTimer() {
         stopBlinking()
+        tv_time_left.visibility = View.GONE
         ServiceBus.publish(TimerService.TimerServiceEvent.FinishTimer)
     }
 
