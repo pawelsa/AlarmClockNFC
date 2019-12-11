@@ -1,11 +1,13 @@
 package com.helpfulapps.alarmclock.views.hourwatch_fragment
 
+import android.animation.ObjectAnimator
 import android.content.Intent
 import android.view.View
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.FragmentHourwatchBinding
 import com.helpfulapps.alarmclock.helpers.extensions.observe
+import com.helpfulapps.alarmclock.helpers.extensions.showFab
 import com.helpfulapps.alarmclock.helpers.extensions.startBlinking
 import com.helpfulapps.alarmclock.service.TimerService
 import com.helpfulapps.alarmclock.views.main_activity.MainActivity
@@ -14,6 +16,7 @@ import com.helpfulapps.domain.eventBus.ServiceBus
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_hourwatch.*
 import org.koin.android.viewmodel.ext.android.viewModel
+import xyz.aprildown.hmspickerview.HmsPickerView
 
 class HourWatchFragment : BaseFragment<HourWatchViewModel, FragmentHourwatchBinding>() {
 
@@ -22,6 +25,11 @@ class HourWatchFragment : BaseFragment<HourWatchViewModel, FragmentHourwatchBind
 
     private val fab: FloatingActionButton
         get() = (mainActivity as MainActivity).fab_main_fab
+
+    private var currentState: HourWatchViewModel.TimerState =
+        HourWatchViewModel.TimerState.Finished(-1)
+
+    private var animation: ObjectAnimator? = null
 
     override fun init() {
 
@@ -32,11 +40,21 @@ class HourWatchFragment : BaseFragment<HourWatchViewModel, FragmentHourwatchBind
         super.onResume()
 
         fab.setOnClickListener {
-            TODO("implement")
+            when (currentState) {
+                is HourWatchViewModel.TimerState.Paused -> restartTimer()
+                is HourWatchViewModel.TimerState.Update -> pauseTimer()
+                is HourWatchViewModel.TimerState.TimeIsUp -> resetTimer()
+                is HourWatchViewModel.TimerState.Finished -> startTimer()
+            }
         }
 
         bt_reset.setOnClickListener {
-            TODO("implement")
+            if (currentState is HourWatchViewModel.TimerState.Update
+                || currentState is HourWatchViewModel.TimerState.TimeIsUp
+                || currentState is HourWatchViewModel.TimerState.Paused
+            ) {
+                resetTimer()
+            }
         }
         // handle when service should go foreground
         // create notification for service
@@ -64,34 +82,82 @@ class HourWatchFragment : BaseFragment<HourWatchViewModel, FragmentHourwatchBind
         //paused
         //time is up
 
-        viewModel.timerStates.observe(this) {
-            when (it) {
-                is TimerService.TimerServiceEvent.StartTimer -> setupStartedTimer()
-                is TimerService.TimerServiceEvent.UpdateTimer -> updateTimer(it)
-                is TimerService.TimerServiceEvent.TimeIsUpTimer -> setupTimerIsUp()
-                is TimerService.TimerServiceEvent.FinishTimer -> setupFinishTimer()
-//                    is TimerService.TimerServiceEvent.RestartTimer -> clearTimer()
-//                    is TimerService.TimerServiceEvent.PauseTimer -> pauseTimer()
+        viewModel.timerStates.value.let {
+            if (it == null) {
+                setupFinishTimer(HourWatchViewModel.TimerState.Finished(-1))
+            } else {
+                handleState(it)
             }
+        }
+
+        viewModel.timerStates.observe(this) {
+            handleState(it)
+            currentState = it
         }
 
 
     }
 
-    private fun setupFinishTimer() {
+    private fun handleState(it: HourWatchViewModel.TimerState) {
+        when (it) {
+            is HourWatchViewModel.TimerState.Start -> setupStartedTimer()
+            is HourWatchViewModel.TimerState.Update -> updateTimer(it)
+            is HourWatchViewModel.TimerState.TimeIsUp -> setupTimerIsUp()
+            is HourWatchViewModel.TimerState.Finished -> setupFinishTimer(it)
+            is HourWatchViewModel.TimerState.Paused -> setupPauseTimer()
+        }
+    }
+
+    private fun setupPauseTimer() {
+        animation = tv_time_left.startBlinking()
+        animation?.start()
+    }
+
+    private fun setupFinishTimer(finishTimer: HourWatchViewModel.TimerState.Finished) {
+        val time = if (finishTimer.time == -1L) {
+            fab.hide()
+            0
+        } else {
+            fab.showFab()
+            finishTimer.time
+        }
+        pk_timer_picker.setTimeInMillis(time)
         pk_timer_picker.visibility = View.VISIBLE
+        pk_timer_picker.setListener(getPickerListener())
         bt_reset.visibility = View.GONE
         tv_time_left.clearAnimation()
         tv_time_left.visibility = View.GONE
     }
 
-    private fun setupTimerIsUp() {
-        changeFabIconToStop()
-        tv_time_left.startBlinking()
+    private fun getPickerListener(): HmsPickerView.Listener {
+        return object : HmsPickerView.Listener {
+            override fun onHmsPickerViewHasNoInput(hmsPickerView: HmsPickerView) {
+                if (currentState is HourWatchViewModel.TimerState.Finished) {
+                    fab.hide()
+                }
+            }
+
+            override fun onHmsPickerViewHasValidInput(hmsPickerView: HmsPickerView) {
+                if (currentState is HourWatchViewModel.TimerState.Finished) {
+                    fab.showFab()
+                }
+            }
+
+            override fun onHmsPickerViewInputChanged(hmsPickerView: HmsPickerView, input: Long) =
+                Unit
+        }
     }
 
-    private fun updateTimer(updateTimer: TimerService.TimerServiceEvent.UpdateTimer) {
-        tv_time_left.text = updateTimer.timeLeft.toString()
+    private fun setupTimerIsUp() {
+        changeFabIconToStop()
+        tv_time_left.text = "0"
+        animation = tv_time_left.startBlinking()
+        animation?.start()
+    }
+
+    private fun updateTimer(updateTimer: HourWatchViewModel.TimerState.Update) {
+        tv_time_left.clearAnimation()
+        tv_time_left.text = updateTimer.time.toString()
     }
 
     private fun setupStartedTimer() {
@@ -102,6 +168,8 @@ class HourWatchFragment : BaseFragment<HourWatchViewModel, FragmentHourwatchBind
     }
 
     private fun resetTimer() {
+        animation?.end()
+        animation?.cancel()
         ServiceBus.publish(TimerService.TimerServiceEvent.FinishTimer)
     }
 
@@ -116,13 +184,16 @@ class HourWatchFragment : BaseFragment<HourWatchViewModel, FragmentHourwatchBind
     }
 
     private fun restartTimer() {
+        animation?.end()
+        animation?.cancel()
         ServiceBus.publish(TimerService.TimerServiceEvent.RestartTimer)
-        changeFabIconToPause()
+        tv_time_left.clearAnimation()
+        changeFabIconToStart()
     }
 
-    private fun stopTimer() {
+    private fun pauseTimer() {
         ServiceBus.publish(TimerService.TimerServiceEvent.PauseTimer)
-        changeFabIconToStart()
+        changeFabIconToPause()
     }
 
     private fun changeFabIconToStop() {

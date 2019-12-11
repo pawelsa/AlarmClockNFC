@@ -66,7 +66,7 @@ class TimerService : Service(), KoinComponent {
                         }
                     },
                     onComplete = {
-                        ServiceBus.publish(TimerServiceEvent.UpdateTimer(-1L))
+                        //                        ServiceBus.publish(TimerServiceEvent.UpdateTimer(-1L))
                         timerIsUp()
                     }
                 )
@@ -122,6 +122,7 @@ class TimerService : Service(), KoinComponent {
         ).build()
 
     private fun restartTimer() {
+        Log.d(TAG, "restartTimer")
         timer.startTimer()
     }
 

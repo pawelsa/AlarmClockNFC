@@ -17,12 +17,11 @@ fun FloatingActionButton.showFab() {
     startAnimation(animation)
 }
 
-fun View.startBlinking() {
-    ObjectAnimator.ofInt(this, "visibility", View.VISIBLE, View.INVISIBLE, View.VISIBLE)
+fun View.startBlinking(): ObjectAnimator {
+    return ObjectAnimator.ofInt(this, "visibility", View.VISIBLE, View.INVISIBLE, View.VISIBLE)
         .apply {
             duration = 1000
             repeatMode = ValueAnimator.RESTART
             repeatCount = Animation.INFINITE
-            start()
         }
 }
