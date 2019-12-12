@@ -20,6 +20,8 @@ import org.koin.core.inject
 
 class TimerService : Service(), KoinComponent {
 
+    private val TAG = this.javaClass.simpleName
+
     private val timer: Timer = Timer()
     private val disposables = CompositeDisposable()
     private val notificationBuilder: NotificationBuilder by inject()
@@ -42,11 +44,10 @@ class TimerService : Service(), KoinComponent {
             TIMER_ADD_MINUTE -> addMinute()
             TIMER_RESTART -> ServiceBus.publish(TimerServiceEvent.RestartTimer)
             TIMER_FINISH -> ServiceBus.publish(TimerServiceEvent.FinishTimer)
-            TIMER_STOP -> stopTimer()
         }
     }
 
-    private fun stopTimer() {
+    private fun finishTimer() {
         timer.pauseTimer()
         alarmPlayer.stopPlaying()
         stopForeground(true)
@@ -148,17 +149,11 @@ class TimerService : Service(), KoinComponent {
         ).build()
     }
 
-    private fun finishTimer() {
-        timer.pauseTimer()
-        stopSelf()
-    }
-
 
     companion object {
         const val TIMER_SERVICE_ID = 5
         const val TIMER_START = "com.helpfulapps.alarmclock.timer_start"
         const val TIMER_TIME = "com.helpfulapps.alarmclock.timer_time"
-        const val TIMER_STOP = "com.helpfulapps.alarmclock.timer_stop"
         const val TIMER_PAUSE = "com.helpfulapps.alarmclock.timer_pause"
         const val TIMER_ADD_MINUTE = "com.helpfulapps.alarmclock.timer_add"
         const val TIMER_RESTART = "com.helpfulapps.alarmclock.timer_restart"

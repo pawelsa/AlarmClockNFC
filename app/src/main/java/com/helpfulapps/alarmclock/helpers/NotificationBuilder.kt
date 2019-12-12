@@ -12,7 +12,7 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.service.TimerService
-import com.helpfulapps.alarmclock.service.TimerService.Companion.TIMER_STOP
+import com.helpfulapps.alarmclock.service.TimerService.Companion.TIMER_FINISH
 import com.helpfulapps.alarmclock.views.main_activity.MainActivity
 import com.helpfulapps.alarmclock.views.main_activity.MainActivity.Companion.ACTION_OPEN_ALARM
 import com.helpfulapps.alarmclock.views.main_activity.MainActivity.Companion.ACTION_OPEN_TIMER
@@ -214,7 +214,7 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
 
     private fun setupTimerFinished() {
         val stopTimerPendingIntent = Intent(context, TimerService::class.java).let {
-            it.action = TIMER_STOP
+            it.action = TIMER_FINISH
             PendingIntent.getService(context, 0, it, FLAG_UPDATE_CURRENT)
         }
 

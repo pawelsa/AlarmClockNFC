@@ -35,6 +35,8 @@ class HourWatchViewModel(
                         TimerState.Finished(settings.timeLeft)
                     is TimerService.TimerServiceEvent.PauseTimer -> _timerStates.value =
                         TimerState.Paused
+                    is TimerService.TimerServiceEvent.RestartTimer -> _timerStates.value =
+                        TimerState.Restart
                 }
             }
     }
@@ -45,6 +47,7 @@ class HourWatchViewModel(
 
     sealed class TimerState {
         data class Start(val time: Long) : TimerState()
+        object Restart : TimerState()
         object Paused : TimerState()
         data class Update(val time: Long) : TimerState()
         object TimeIsUp : TimerState()
