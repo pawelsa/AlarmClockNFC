@@ -4,15 +4,13 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.app.PendingIntent.FLAG_UPDATE_CURRENT
-import android.app.PendingIntent.getActivity
+import android.app.PendingIntent.*
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.service.TimerService
-import com.helpfulapps.alarmclock.service.TimerService.Companion.TIMER_FINISH
 import com.helpfulapps.alarmclock.views.main_activity.MainActivity
 import com.helpfulapps.alarmclock.views.main_activity.MainActivity.Companion.ACTION_OPEN_ALARM
 import com.helpfulapps.alarmclock.views.main_activity.MainActivity.Companion.ACTION_OPEN_TIMER
@@ -127,12 +125,12 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
 
         val pauseIntent = Intent(context, TimerService::class.java).let {
             it.action = TimerService.TIMER_PAUSE
-            PendingIntent.getService(context, 0, it, FLAG_UPDATE_CURRENT)
+            getService(context, 0, it, FLAG_UPDATE_CURRENT)
         }
 
         val addMinuteIntent = Intent(context, TimerService::class.java).let {
             it.action = TimerService.TIMER_ADD_MINUTE
-            PendingIntent.getService(context, 0, it, FLAG_UPDATE_CURRENT)
+            getService(context, 0, it, FLAG_UPDATE_CURRENT)
         }
 
         builder =
@@ -169,17 +167,17 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
 
         val restartIntent = Intent(context, TimerService::class.java).let {
             it.action = TimerService.TIMER_RESTART
-            PendingIntent.getService(context, 0, it, FLAG_UPDATE_CURRENT)
+            getService(context, 0, it, FLAG_UPDATE_CURRENT)
         }
 
         val addMinuteIntent = Intent(context, TimerService::class.java).let {
             it.action = TimerService.TIMER_ADD_MINUTE
-            PendingIntent.getService(context, 0, it, FLAG_UPDATE_CURRENT)
+            getService(context, 0, it, FLAG_UPDATE_CURRENT)
         }
 
         val finishIntent = Intent(context, TimerService::class.java).let {
             it.action = TimerService.TIMER_FINISH
-            PendingIntent.getService(context, 0, it, FLAG_UPDATE_CURRENT)
+            getService(context, 0, it, FLAG_UPDATE_CURRENT)
         }
 
         builder =
@@ -215,8 +213,8 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
 
     private fun setupTimerFinished() {
         val stopTimerPendingIntent = Intent(context, TimerService::class.java).let {
-            it.action = TIMER_FINISH
-            PendingIntent.getService(context, 0, it, FLAG_UPDATE_CURRENT)
+            it.action = TimerService.TIMER_FINISH
+            getService(context, 0, it, FLAG_UPDATE_CURRENT)
         }
 
         builder = NotificationCompat.Builder(context, CHANNEL_TIMER_ID)

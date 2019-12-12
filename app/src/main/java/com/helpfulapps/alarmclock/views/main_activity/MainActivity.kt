@@ -75,16 +75,6 @@ class MainActivity : BaseActivity<MainActivityViewModel, ActivityMainBinding>() 
         }
     }
 
-    override fun onRestart() {
-        Log.d(TAG, "OnRestart")
-        super.onRestart()
-    }
-
-    override fun onPause() {
-        Log.d(TAG, "OnPause")
-        super.onPause()
-    }
-
     private fun initTabs() {
         setupFragmentChangeListener()
 

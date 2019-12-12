@@ -32,7 +32,8 @@
         <item name="colorAccent">@color/colorPrimary</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="buttonStyle">@style/TimePickerTheme.Button</item>
+        <item name="android:buttonStyle">@style/TimePickerTheme.Button</item>
+        <item name="android:buttonBarButtonStyle">@style/TimePickerTheme.Button</item>
     </style>
 
     <style name="AlarmTimeClockTheme" parent="AppTheme">

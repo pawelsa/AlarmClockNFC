@@ -4,7 +4,6 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter
 import androidx.databinding.InverseBindingListener
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ca.antonious.materialdaypicker.MaterialDayPicker
@@ -12,7 +11,6 @@ import com.google.android.material.button.MaterialButton
 import com.helpfulapps.alarmclock.helpers.extensions.notEqual
 import com.helpfulapps.alarmclock.helpers.extensions.toDayArray
 import com.helpfulapps.alarmclock.helpers.extensions.toDayList
-import xyz.aprildown.hmspickerview.HmsPickerView
 
 
 @BindingAdapter("app:adapter")
@@ -61,32 +59,4 @@ fun setTemplateText(button: MaterialButton, hintText: Int, currentText: String?)
     )
 }
 
-@BindingAdapter("app:pickerTime")
-fun setPickerTime(hmsPickerView: HmsPickerView, time: MutableLiveData<Long>?) {
-    time?.value?.let {
-        if (hmsPickerView.getTimeInMillis() != it) {
-            if (it != -1L) {
-                hmsPickerView.setTimeInMillis(it)
-            } else {
-                hmsPickerView.setTimeInMillis(0L)
-            }
-        }
-    }
-}
-
-@InverseBindingAdapter(attribute = "app:pickerTime")
-fun getPickerTime(hmsPickerView: HmsPickerView): Long = hmsPickerView.getTimeInMillis()
-
-@BindingAdapter("app:pickerTimeAttrChanged")
-fun setPickerTimeListener(hmsPickerView: HmsPickerView, listener: InverseBindingListener?) {
-    hmsPickerView.setListener(object : HmsPickerView.Listener {
-        override fun onHmsPickerViewHasNoInput(hmsPickerView: HmsPickerView) = Unit
-
-        override fun onHmsPickerViewHasValidInput(hmsPickerView: HmsPickerView) = Unit
-
-        override fun onHmsPickerViewInputChanged(hmsPickerView: HmsPickerView, input: Long) {
-            listener?.onChange()
-        }
-    })
-}
 

@@ -43,9 +43,12 @@ class HourWatchFragment : BaseFragment<HourWatchViewModel, FragmentHourwatchBind
         super.onResume()
 
         fabListener()
-
         resetButtonListener()
+        checkInitState()
+        subscribeToStates()
+    }
 
+    private fun checkInitState() {
         viewModel.timerStates.value.let {
             if (it == null) {
                 setupFinishTimer(HourWatchViewModel.TimerState.Finished(-1))
@@ -53,17 +56,17 @@ class HourWatchFragment : BaseFragment<HourWatchViewModel, FragmentHourwatchBind
                 handleState(it)
             }
         }
+    }
 
+    private fun subscribeToStates() {
         viewModel.timerStates.observe(this) {
             handleState(it)
             currentState = it
         }
-
-
     }
 
     private fun resetButtonListener() {
-        bt_reset.setOnClickListener {
+        bt_timer_reset.setOnClickListener {
             if (currentState is HourWatchViewModel.TimerState.Update
                 || currentState is HourWatchViewModel.TimerState.TimeIsUp
                 || currentState is HourWatchViewModel.TimerState.Paused
@@ -120,7 +123,7 @@ class HourWatchFragment : BaseFragment<HourWatchViewModel, FragmentHourwatchBind
         pk_timer_picker.setTimeInMillis(time)
         pk_timer_picker.visibility = View.VISIBLE
         pk_timer_picker.setListener(getPickerListener())
-        bt_reset.visibility = View.GONE
+        bt_timer_reset.visibility = View.GONE
         tv_time_left.visibility = View.GONE
     }
 
@@ -170,7 +173,7 @@ class HourWatchFragment : BaseFragment<HourWatchViewModel, FragmentHourwatchBind
         changeFabIconToPause()
         stopBlinking()
         pk_timer_picker.visibility = View.GONE
-        bt_reset.visibility = View.VISIBLE
+        bt_timer_reset.visibility = View.VISIBLE
         tv_time_left.text = (pk_timer_picker.getTimeInMillis() / 1000).toString()
         tv_time_left.visibility = View.VISIBLE
     }
