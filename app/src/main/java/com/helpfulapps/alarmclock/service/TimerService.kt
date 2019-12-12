@@ -1,13 +1,13 @@
 package com.helpfulapps.alarmclock.service
 
 import android.app.Notification
-import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import com.helpfulapps.alarmclock.App
 import com.helpfulapps.alarmclock.helpers.AlarmPlayer
 import com.helpfulapps.alarmclock.helpers.NotificationBuilder
 import com.helpfulapps.alarmclock.helpers.Timer
+import com.helpfulapps.base.base.BaseService
 import com.helpfulapps.domain.eventBus.RxBus
 import com.helpfulapps.domain.eventBus.ServiceBus
 import com.helpfulapps.domain.extensions.whenFalse
@@ -15,12 +15,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy
-import org.koin.core.KoinComponent
 import org.koin.core.inject
 
-class TimerService : Service(), KoinComponent {
-
-    private val TAG = this.javaClass.simpleName
+class TimerService : BaseService() {
 
     private val timer: Timer = Timer()
     private val disposables = CompositeDisposable()
@@ -58,43 +55,9 @@ class TimerService : Service(), KoinComponent {
         if (timeLeft != 0L) {
             timer.setupTimer(timeLeft)
 
-
-            disposables += timer.emitter
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe { ServiceBus.publish(TimerServiceEvent.StartTimer) }
-                .subscribeBy(
-                    onNext = {
-                        ServiceBus.publish(TimerServiceEvent.UpdateTimer(it))
-                        whenFalse(isForeground) {
-                            showRemainingTimeNotification(it)
-                        }
-                    },
-                    onComplete = {
-                        timerIsUp()
-                    }
-                )
-
-            disposables += RxBus.listen(App.AppState::class.java)
-                .subscribe {
-                    isForeground = when (it) {
-                        is App.AppState.IsForeground -> {
-                            if (timer.isRunning) {
-                                stopForeground(true)
-                            }
-                            true
-                        }
-                        is App.AppState.IsBackground -> false
-                    }
-                }
-
-            disposables += ServiceBus.listen(TimerServiceEvent::class.java)
-                .subscribe {
-                    when (it) {
-                        is TimerServiceEvent.PauseTimer -> pauseTimer()
-                        is TimerServiceEvent.RestartTimer -> restartTimer()
-                        is TimerServiceEvent.FinishTimer -> finishTimer()
-                    }
-                }
+            subscribeEmitter()
+            subscribeAppVisibility()
+            subscribeTimerEvents()
 
             timer.startTimer()
         } else {
@@ -102,26 +65,59 @@ class TimerService : Service(), KoinComponent {
         }
     }
 
+    private fun subscribeTimerEvents() {
+        disposables += ServiceBus.listen(TimerServiceEvent::class.java)
+            .subscribe {
+                when (it) {
+                    is TimerServiceEvent.PauseTimer -> pauseTimer()
+                    is TimerServiceEvent.RestartTimer -> restartTimer()
+                    is TimerServiceEvent.FinishTimer -> finishTimer()
+                }
+            }
+    }
+
+    private fun subscribeAppVisibility() {
+        disposables += RxBus.listen(App.AppState::class.java)
+            .subscribe {
+                isForeground = when (it) {
+                    is App.AppState.IsForeground -> {
+                        if (timer.isRunning) {
+                            stopForeground(true)
+                        }
+                        true
+                    }
+                    is App.AppState.IsBackground -> false
+                }
+            }
+    }
+
+    private fun subscribeEmitter() {
+        disposables += timer.emitter
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe { ServiceBus.publish(TimerServiceEvent.StartTimer) }
+            .subscribeBy(
+                onNext = {
+                    ServiceBus.publish(TimerServiceEvent.UpdateTimer(it))
+                    whenFalse(isForeground) {
+                        showRemainingTimeNotification(it)
+                    }
+                },
+                onComplete = {
+                    timerIsUp()
+                }
+            )
+    }
+
     private fun timerIsUp() {
         ServiceBus.publish(TimerServiceEvent.TimeIsUpTimer)
-        val notification = notificationBuilder.setNotificationType(
-            NotificationBuilder.NotificationType.TypeTimerFinished
-        ).build()
-        notification.flags = Notification.FLAG_ONGOING_EVENT
         alarmPlayer.startPlayingAlarm()
+        val notification = getFinishedNotification()
         startForeground(TIMER_SERVICE_ID, notification)
     }
 
     private fun showRemainingTimeNotification(timeLeft: Long) {
         startForeground(TIMER_SERVICE_ID, getUpdateNotification(timeLeft))
     }
-
-    private fun getUpdateNotification(timeLeft: Long): Notification =
-        notificationBuilder.setNotificationType(
-            NotificationBuilder.NotificationType.TypeTimer(
-                timeLeft
-            )
-        ).build()
 
     private fun restartTimer() {
         timer.startTimer()
@@ -136,8 +132,10 @@ class TimerService : Service(), KoinComponent {
     }
 
     private fun pauseTimer() {
-        val notification = getPauseNotification()
-        startForeground(TIMER_SERVICE_ID, notification)
+        whenFalse(isForeground) {
+            val notification = getPauseNotification()
+            startForeground(TIMER_SERVICE_ID, notification)
+        }
         timer.pauseTimer()
     }
 
@@ -145,6 +143,20 @@ class TimerService : Service(), KoinComponent {
         return notificationBuilder.setNotificationType(
             NotificationBuilder.NotificationType.TypeTimerPaused(
                 timer.timeLeft
+            )
+        ).build()
+    }
+
+    private fun getFinishedNotification(): Notification {
+        return notificationBuilder.setNotificationType(
+            NotificationBuilder.NotificationType.TypeTimerFinished
+        ).build().also { it.flags = Notification.FLAG_ONGOING_EVENT }
+    }
+
+    private fun getUpdateNotification(timeLeft: Long): Notification {
+        return notificationBuilder.setNotificationType(
+            NotificationBuilder.NotificationType.TypeTimer(
+                timeLeft
             )
         ).build()
     }
