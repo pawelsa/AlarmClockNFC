@@ -9,12 +9,14 @@ interface Settings {
     var snoozeAlarmTime: Int
     var alarmTime: Int
     var units: Units
+    var timeLeft: Long
 
 
     companion object {
         const val KEY_FIRST_TIME = "com.helpfulapps.alarmclock.first_time"
         const val KEY_HAS_NFC = "com.helpfulapps.alarmclock.has_nfc"
         const val KEY_ASK_FOR_OPTIMIZATIONS = "com.helpfulapps.alarmclock.battery_optimization"
+        const val KEY_TIMER_TIME = "com.helpfulapps.alarmclock.timer_time"
 
         // Update in preferences.xml
         const val KEY_CITY = "com.helpfulapps.alarmclock.city"

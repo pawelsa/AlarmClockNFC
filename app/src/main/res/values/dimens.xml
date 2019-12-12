@@ -30,4 +30,5 @@
     <dimen name="add_alarm_repeat_left_margin">19dp</dimen>
     <dimen name="chip_stroke">2dp</dimen>
     <dimen name="nfc_icon_size">160dp</dimen>
+    <dimen name="timer_time_size">48sp</dimen>
 </resources>

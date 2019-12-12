@@ -57,7 +57,12 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit:$runner_version"
     androidTestImplementation "androidx.test:runner:$runner_version"
     androidTestImplementation "androidx.test:rules:$runner_version"
+    testImplementation 'android.arch.core:core-testing:1.1.1'
     androidTestImplementation "androidx.test.espresso:espresso-core:$esspresso_core_version"
+
+    // Mockito
+    testImplementation "io.mockk:mockk:$mockk_version"
+    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockito_kotlin_version"
 
     // Modified easy tabs
     implementation 'com.github.pawelsa:ModifiedEasyTabs:1.02'
@@ -77,12 +82,7 @@ dependencies {
     // rxJava & rxKotlin
     implementation "io.reactivex.rxjava2:rxjava:$rxJava_version"
     implementation "io.reactivex.rxjava2:rxkotlin:$rxKotlin_version"
-
-    // Koin
-    implementation "org.koin:koin-core:$koin_version"
-    implementation "org.koin:koin-android:$koin_version"
-    implementation "org.koin:koin-android-scope:$koin_version"
-    implementation "org.koin:koin-android-viewmodel:$koin_version"
+    implementation "io.reactivex.rxjava2:rxandroid:$rxAndroid_version"
 
     // Dexter - permissions
     implementation 'com.karumi:dexter:6.0.0'
@@ -90,6 +90,9 @@ dependencies {
     // RxGps
     implementation "com.patloew.rxlocation:rxlocation:$rx_location_version"
     implementation "com.google.android.gms:play-services-location:15.0.0"
+
+    //timepicker timer
+    implementation "com.github.pawelsa:HmsPickerView:0.1.4"
 
     implementation project(path: ':data')
     implementation project(':domain')

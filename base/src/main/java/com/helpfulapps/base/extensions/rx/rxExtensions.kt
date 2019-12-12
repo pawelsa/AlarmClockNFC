@@ -6,31 +6,6 @@ import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
-fun <T> completableOf(action: () -> T): Completable {
-    return Completable.create {
-        try {
-            action()
-            it.onComplete()
-        } catch (ex: Exception) {
-            if (!it.isDisposed) {
-                it.onError(ex)
-            }
-        }
-    }
-}
-
-fun <T> singleOf(action: () -> T): Single<T> {
-    return Single.create {
-        try {
-            it.onSuccess(action())
-        } catch (ex: Exception) {
-            if (!it.isDisposed) {
-                it.onError(ex)
-            }
-        }
-    }
-}
-
 fun <T> Observable<T>.backgroundTask(): Observable<T> =
     this.subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
