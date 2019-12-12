@@ -5,6 +5,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
+import android.app.PendingIntent.getActivity
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -12,6 +13,9 @@ import androidx.core.app.NotificationCompat
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.service.TimerService
 import com.helpfulapps.alarmclock.service.TimerService.Companion.TIMER_STOP
+import com.helpfulapps.alarmclock.views.main_activity.MainActivity
+import com.helpfulapps.alarmclock.views.main_activity.MainActivity.Companion.ACTION_OPEN_ALARM
+import com.helpfulapps.alarmclock.views.main_activity.MainActivity.Companion.ACTION_OPEN_TIMER
 import com.helpfulapps.alarmclock.views.ringing_alarm.NfcRingingAlarmActivity
 import com.helpfulapps.alarmclock.views.ringing_alarm.RingingAlarmActivity
 import com.helpfulapps.domain.models.alarm.Alarm
@@ -26,6 +30,7 @@ interface NotificationBuilder {
         data class TypeAlarm(val alarm: Alarm, val usingNfc: Boolean = false) : NotificationType()
         object TypeStopwatch : NotificationType()
         data class TypeTimer(val timeLeft: Long) : NotificationType()
+        data class TypeTimerPaused(val timeLeft: Long) : NotificationType()
         object TypeTimerFinished : NotificationType()
         object TypeLocalization : NotificationType()
     }
@@ -43,6 +48,9 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
                 is NotificationBuilder.NotificationType.TypeAlarm -> setupAlarmType(notificationType)
                 is NotificationBuilder.NotificationType.TypeStopwatch -> setupStopWatchType()
                 is NotificationBuilder.NotificationType.TypeTimer -> setupTimerType(notificationType)
+                is NotificationBuilder.NotificationType.TypeTimerPaused -> setupTimerPause(
+                    notificationType
+                )
                 is NotificationBuilder.NotificationType.TypeTimerFinished -> setupTimerFinished()
                 is NotificationBuilder.NotificationType.TypeLocalization -> setupLocalizationType()
             }
@@ -64,9 +72,9 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
             it.putExtra(KEY_ALARM_EXIT, true)
             it.putExtra(KEY_ALARM_ID, alarm.id.toInt())
         }
-        val fullScreenPendingIntent = PendingIntent.getActivity(
+        val fullScreenPendingIntent = getActivity(
             context, 0,
-            fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT
+            fullScreenIntent, FLAG_UPDATE_CURRENT
         )
         builder =
             NotificationCompat.Builder(context, CHANNEL_ALARM_ID)
@@ -78,6 +86,7 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
                         timeToString(alarm.hour, alarm.minute)
                     )
                 )
+                .setContentIntent(buildIntentToStartFragment(ACTION_OPEN_ALARM))
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setCategory(NotificationCompat.CATEGORY_ALARM)
                 .setFullScreenIntent(fullScreenPendingIntent, true)
@@ -115,6 +124,17 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
     }
 
     private fun setupTimerType(notificationType: NotificationBuilder.NotificationType.TypeTimer) {
+
+        val pauseIntent = Intent(context, TimerService::class.java).let {
+            it.action = TimerService.TIMER_PAUSE
+            PendingIntent.getService(context, 0, it, FLAG_UPDATE_CURRENT)
+        }
+
+        val addMinuteIntent = Intent(context, TimerService::class.java).let {
+            it.action = TimerService.TIMER_ADD_MINUTE
+            PendingIntent.getService(context, 0, it, FLAG_UPDATE_CURRENT)
+        }
+
         builder =
             NotificationCompat.Builder(context, CHANNEL_TIMER_ID)
                 .setSmallIcon(R.mipmap.ic_launcher)
@@ -124,11 +144,70 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
                         R.string.notification_timer_text, notificationType.timeLeft.toString()
                     )
                 )
-                .setPriority(NotificationCompat.PRIORITY_LOW)
+                .setContentIntent(buildIntentToStartFragment(ACTION_OPEN_TIMER))
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setCategory(NotificationCompat.CATEGORY_SERVICE)
+                .addAction(
+                    R.drawable.ic_pause,
+                    context.getString(R.string.notification_timer_pause),
+                    pauseIntent
+                )
+                .addAction(
+                    0,
+                    context.getString(R.string.notification_timer_add_minute),
+                    addMinuteIntent
+                )
                 .setAutoCancel(false)
 
         buildNotificationChannel(notificationType)
+
+        builder.setChannelId(CHANNEL_TIMER_ID)
+    }
+
+    private fun setupTimerPause(notificationType: NotificationBuilder.NotificationType.TypeTimerPaused) {
+
+        val restartIntent = Intent(context, TimerService::class.java).let {
+            it.action = TimerService.TIMER_RESTART
+            PendingIntent.getService(context, 0, it, FLAG_UPDATE_CURRENT)
+        }
+
+        val addMinuteIntent = Intent(context, TimerService::class.java).let {
+            it.action = TimerService.TIMER_ADD_MINUTE
+            PendingIntent.getService(context, 0, it, FLAG_UPDATE_CURRENT)
+        }
+
+        val finishIntent = Intent(context, TimerService::class.java).let {
+            it.action = TimerService.TIMER_FINISH
+            PendingIntent.getService(context, 0, it, FLAG_UPDATE_CURRENT)
+        }
+
+        builder =
+            NotificationCompat.Builder(context, CHANNEL_TIMER_ID)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle(context.getString(R.string.app_name))
+                .setContentText(
+                    context.getString(
+                        R.string.notification_timer_paused_text,
+                        notificationType.timeLeft.toString()
+                    )
+                )
+                .setContentIntent(buildIntentToStartFragment(ACTION_OPEN_TIMER))
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setCategory(NotificationCompat.CATEGORY_SERVICE)
+                .addAction(
+                    R.drawable.ic_pause,
+                    context.getString(R.string.notification_timer_restart),
+                    restartIntent
+                )
+                .addAction(
+                    0,
+                    context.getString(R.string.notification_timer_add_minute),
+                    addMinuteIntent
+                )
+                .addAction(0, context.getString(R.string.notification_timer_stop), finishIntent)
+                .setAutoCancel(false)
+
+        buildNotificationChannel(NotificationBuilder.NotificationType.TypeTimer(0L))
 
         builder.setChannelId(CHANNEL_TIMER_ID)
     }
@@ -145,6 +224,7 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
             .setContentText(context.getString(R.string.notification_timer_text_finished))
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setCategory(NotificationCompat.CATEGORY_ALARM)
+            .setContentIntent(buildIntentToStartFragment(ACTION_OPEN_TIMER))
             .addAction(
                 R.drawable.ic_stop,
                 context.getString(R.string.timer_stop),
@@ -191,6 +271,15 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
             mChannel.description = descriptionText
 
             notificationManager.createNotificationChannel(mChannel)
+        }
+    }
+
+    private fun buildIntentToStartFragment(intentAction: String): PendingIntent {
+        return Intent(context, MainActivity::class.java).let {
+            it.action = intentAction
+            it.flags = (Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            getActivity(context, 0, it, 0)
         }
     }
 

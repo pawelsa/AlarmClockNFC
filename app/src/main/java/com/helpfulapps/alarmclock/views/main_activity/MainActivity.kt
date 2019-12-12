@@ -101,9 +101,9 @@ class MainActivity : BaseActivity<MainActivityViewModel, ActivityMainBinding>() 
 
     private fun manageFragmentLaunching(intent: Intent) {
         when (intent.action) {
-            "com.helpfulapps.alarmclock.addAlarm" -> addAlarm()
-            "com.helpfulapps.alarmclock.setHourglass" -> setHourglass()
-            "com.helpfulapps.alarmclock.startStopwatch" -> startStopwatch()
+            ACTION_OPEN_ALARM -> addAlarm()
+            ACTION_OPEN_TIMER -> setHourglass()
+            ACTION_OPEN_STOPWATCH -> startStopwatch()
         }
     }
 
@@ -129,4 +129,9 @@ class MainActivity : BaseActivity<MainActivityViewModel, ActivityMainBinding>() 
         Snackbar.make(l_main_first_layer, text, Snackbar.LENGTH_SHORT).show()
     }
 
+    companion object {
+        const val ACTION_OPEN_ALARM = "com.helpfulapps.alarmclock.addAlarm"
+        const val ACTION_OPEN_TIMER = "com.helpfulapps.alarmclock.setHourglass"
+        const val ACTION_OPEN_STOPWATCH = "com.helpfulapps.alarmclock.startStopwatch"
+    }
 }

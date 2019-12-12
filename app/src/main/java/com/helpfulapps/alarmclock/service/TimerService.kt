@@ -4,13 +4,13 @@ import android.app.Notification
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
-import android.util.Log
 import com.helpfulapps.alarmclock.App
 import com.helpfulapps.alarmclock.helpers.AlarmPlayer
 import com.helpfulapps.alarmclock.helpers.NotificationBuilder
 import com.helpfulapps.alarmclock.helpers.Timer
 import com.helpfulapps.domain.eventBus.RxBus
 import com.helpfulapps.domain.eventBus.ServiceBus
+import com.helpfulapps.domain.extensions.whenFalse
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
@@ -20,7 +20,6 @@ import org.koin.core.inject
 
 class TimerService : Service(), KoinComponent {
 
-    private val TAG = this.javaClass.simpleName
     private val timer: Timer = Timer()
     private val disposables = CompositeDisposable()
     private val notificationBuilder: NotificationBuilder by inject()
@@ -39,6 +38,10 @@ class TimerService : Service(), KoinComponent {
     private fun handleIntent(intent: Intent?) {
         when (intent?.action) {
             TIMER_START -> setupTimer(intent.getLongExtra(TIMER_TIME, 0L))
+            TIMER_PAUSE -> ServiceBus.publish(TimerServiceEvent.PauseTimer)
+            TIMER_ADD_MINUTE -> addMinute()
+            TIMER_RESTART -> ServiceBus.publish(TimerServiceEvent.RestartTimer)
+            TIMER_FINISH -> ServiceBus.publish(TimerServiceEvent.FinishTimer)
             TIMER_STOP -> stopTimer()
         }
     }
@@ -61,12 +64,11 @@ class TimerService : Service(), KoinComponent {
                 .subscribeBy(
                     onNext = {
                         ServiceBus.publish(TimerServiceEvent.UpdateTimer(it))
-                        if (!isForeground) {
+                        whenFalse(isForeground) {
                             showRemainingTimeNotification(it)
                         }
                     },
                     onComplete = {
-                        //                        ServiceBus.publish(TimerServiceEvent.UpdateTimer(-1L))
                         timerIsUp()
                     }
                 )
@@ -75,7 +77,6 @@ class TimerService : Service(), KoinComponent {
                 .subscribe {
                     isForeground = when (it) {
                         is App.AppState.IsForeground -> {
-                            Log.d(TAG, "appState ${timer.isRunning}")
                             if (timer.isRunning) {
                                 stopForeground(true)
                             }
@@ -111,10 +112,10 @@ class TimerService : Service(), KoinComponent {
     }
 
     private fun showRemainingTimeNotification(timeLeft: Long) {
-        startForeground(TIMER_SERVICE_ID, getNotification(timeLeft))
+        startForeground(TIMER_SERVICE_ID, getUpdateNotification(timeLeft))
     }
 
-    private fun getNotification(timeLeft: Long): Notification =
+    private fun getUpdateNotification(timeLeft: Long): Notification =
         notificationBuilder.setNotificationType(
             NotificationBuilder.NotificationType.TypeTimer(
                 timeLeft
@@ -122,12 +123,29 @@ class TimerService : Service(), KoinComponent {
         ).build()
 
     private fun restartTimer() {
-        Log.d(TAG, "restartTimer")
         timer.startTimer()
     }
 
+    private fun addMinute() {
+        timer.addMinute()
+        if (timer.isPaused) {
+            val notification = getPauseNotification()
+            startForeground(TIMER_SERVICE_ID, notification)
+        }
+    }
+
     private fun pauseTimer() {
+        val notification = getPauseNotification()
+        startForeground(TIMER_SERVICE_ID, notification)
         timer.pauseTimer()
+    }
+
+    private fun getPauseNotification(): Notification {
+        return notificationBuilder.setNotificationType(
+            NotificationBuilder.NotificationType.TypeTimerPaused(
+                timer.timeLeft
+            )
+        ).build()
     }
 
     private fun finishTimer() {
@@ -141,6 +159,10 @@ class TimerService : Service(), KoinComponent {
         const val TIMER_START = "com.helpfulapps.alarmclock.timer_start"
         const val TIMER_TIME = "com.helpfulapps.alarmclock.timer_time"
         const val TIMER_STOP = "com.helpfulapps.alarmclock.timer_stop"
+        const val TIMER_PAUSE = "com.helpfulapps.alarmclock.timer_pause"
+        const val TIMER_ADD_MINUTE = "com.helpfulapps.alarmclock.timer_add"
+        const val TIMER_RESTART = "com.helpfulapps.alarmclock.timer_restart"
+        const val TIMER_FINISH = "com.helpfulapps.alarmclock.timer_finish"
     }
 
 

@@ -4,9 +4,9 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.os.Build
-import com.helpfulapps.base.extensions.rx.completableOf
 import com.helpfulapps.device.alarms.helpers.IntentCreator
 import com.helpfulapps.device.alarms.helpers.matchesVersionsFrom
+import com.helpfulapps.domain.extensions.completableOf
 import com.helpfulapps.domain.helpers.Settings
 import com.helpfulapps.domain.helpers.TimeSetter
 import com.helpfulapps.domain.repository.AlarmClockManager

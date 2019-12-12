@@ -1,6 +1,6 @@
 package com.helpfulapps.alarmclock.helpers
 
-import android.util.Log
+import com.helpfulapps.domain.extensions.disposeCheck
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
@@ -9,14 +9,15 @@ import java.util.concurrent.TimeUnit
 
 class Timer {
 
-    private val TAG = this.javaClass.simpleName
-
-    private var timeLeft: Long = 0
+    var timeLeft: Long = 0
+        private set
     val emitter: Subject<Long> = BehaviorSubject.create()
     private var disposable: Disposable? = null
 
     val isRunning: Boolean
         get() = !(disposable?.isDisposed ?: true)
+    val isPaused: Boolean
+        get() = !isRunning
 
     fun setupTimer(time: Long) {
         timeLeft = time
@@ -27,9 +28,7 @@ class Timer {
             disposable = Observable.interval(1, TimeUnit.SECONDS)
                 .doOnSubscribe { emitter.onNext(timeLeft) }
                 .subscribe {
-                    Log.d(TAG, "timer: $it")
-                    timeLeft--
-                    emitter.onNext(timeLeft)
+                    emitter.onNext(--timeLeft)
                     if (timeLeft == 0L) {
                         emitter.onComplete()
                         pauseTimer()
@@ -39,10 +38,10 @@ class Timer {
     }
 
     fun pauseTimer() {
-        disposable?.let {
-            if (!it.isDisposed) {
-                it.dispose()
-            }
-        }
+        disposable.disposeCheck()
+    }
+
+    fun addMinute() {
+        timeLeft += 60
     }
 }
