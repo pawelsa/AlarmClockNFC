@@ -2,7 +2,6 @@ package com.helpfulapps.alarmclock.service
 
 import android.app.Notification
 import android.content.Intent
-import android.os.IBinder
 import com.helpfulapps.alarmclock.App
 import com.helpfulapps.alarmclock.helpers.AlarmPlayer
 import com.helpfulapps.alarmclock.helpers.NotificationBuilder
@@ -24,8 +23,6 @@ class TimerService : BaseService() {
     private val notificationBuilder: NotificationBuilder by inject()
     private val alarmPlayer: AlarmPlayer by inject()
     private var isForeground: Boolean = true
-
-    override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 

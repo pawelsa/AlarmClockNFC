@@ -141,7 +141,8 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
                 .setContentTitle(context.getString(R.string.app_name))
                 .setContentText(
                     context.getString(
-                        R.string.notification_timer_text, notificationType.timeLeft.toString()
+                        R.string.notification_timer_text,
+                        notificationType.timeLeft.secondsToString()
                     )
                 )
                 .setContentIntent(buildIntentToStartFragment(ACTION_OPEN_TIMER))
@@ -188,7 +189,7 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
                 .setContentText(
                     context.getString(
                         R.string.notification_timer_paused_text,
-                        notificationType.timeLeft.toString()
+                        notificationType.timeLeft.secondsToString()
                     )
                 )
                 .setContentIntent(buildIntentToStartFragment(ACTION_OPEN_TIMER))
