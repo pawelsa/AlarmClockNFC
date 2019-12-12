@@ -40,3 +40,17 @@ fun Array<Boolean>.toShortWeekdays(): String {
         }
     }
 }
+
+fun Long.secondsToString(): String {
+    var timeInSeconds = this
+    val hours = timeInSeconds / 3600
+    timeInSeconds -= hours * 3600
+    val minutes = timeInSeconds / 60
+    val seconds = timeInSeconds % 60
+
+    return when {
+        hours > 0 -> String.format("%02d:%02d:%02d", hours, minutes, seconds)
+        minutes > 0 -> String.format("%02d:%02d", minutes, seconds)
+        else -> String.format("%02d", seconds)
+    }
+}

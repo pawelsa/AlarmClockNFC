@@ -8,7 +8,7 @@ import com.helpfulapps.alarmclock.helpers.getDefaultRingtone
 import com.helpfulapps.alarmclock.helpers.timeToString
 import com.helpfulapps.base.base.BaseViewModel
 import com.helpfulapps.base.extensions.rx.backgroundTask
-import com.helpfulapps.base.extensions.rx.singleOf
+import com.helpfulapps.domain.extensions.singleOf
 import com.helpfulapps.domain.helpers.Settings
 import com.helpfulapps.domain.helpers.Time
 import com.helpfulapps.domain.models.alarm.Alarm

@@ -4,11 +4,16 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.app.PendingIntent.*
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.helpfulapps.alarmclock.R
+import com.helpfulapps.alarmclock.service.TimerService
+import com.helpfulapps.alarmclock.views.main_activity.MainActivity
+import com.helpfulapps.alarmclock.views.main_activity.MainActivity.Companion.ACTION_OPEN_ALARM
+import com.helpfulapps.alarmclock.views.main_activity.MainActivity.Companion.ACTION_OPEN_TIMER
 import com.helpfulapps.alarmclock.views.ringing_alarm.NfcRingingAlarmActivity
 import com.helpfulapps.alarmclock.views.ringing_alarm.RingingAlarmActivity
 import com.helpfulapps.domain.models.alarm.Alarm
@@ -20,9 +25,11 @@ interface NotificationBuilder {
     fun build(): Notification
 
     sealed class NotificationType {
-        class TypeAlarm(val alarm: Alarm, val usingNfc: Boolean = false) : NotificationType()
+        data class TypeAlarm(val alarm: Alarm, val usingNfc: Boolean = false) : NotificationType()
         object TypeStopwatch : NotificationType()
-        object TypeTimer : NotificationType()
+        data class TypeTimer(val timeLeft: Long) : NotificationType()
+        data class TypeTimerPaused(val timeLeft: Long) : NotificationType()
+        object TypeTimerFinished : NotificationType()
         object TypeLocalization : NotificationType()
     }
 }
@@ -38,7 +45,11 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
             when (notificationType) {
                 is NotificationBuilder.NotificationType.TypeAlarm -> setupAlarmType(notificationType)
                 is NotificationBuilder.NotificationType.TypeStopwatch -> setupStopWatchType()
-                is NotificationBuilder.NotificationType.TypeTimer -> setupTimerType()
+                is NotificationBuilder.NotificationType.TypeTimer -> setupTimerType(notificationType)
+                is NotificationBuilder.NotificationType.TypeTimerPaused -> setupTimerPause(
+                    notificationType
+                )
+                is NotificationBuilder.NotificationType.TypeTimerFinished -> setupTimerFinished()
                 is NotificationBuilder.NotificationType.TypeLocalization -> setupLocalizationType()
             }
         }
@@ -59,9 +70,9 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
             it.putExtra(KEY_ALARM_EXIT, true)
             it.putExtra(KEY_ALARM_ID, alarm.id.toInt())
         }
-        val fullScreenPendingIntent = PendingIntent.getActivity(
+        val fullScreenPendingIntent = getActivity(
             context, 0,
-            fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT
+            fullScreenIntent, FLAG_UPDATE_CURRENT
         )
         builder =
             NotificationCompat.Builder(context, CHANNEL_ALARM_ID)
@@ -73,6 +84,7 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
                         timeToString(alarm.hour, alarm.minute)
                     )
                 )
+                .setContentIntent(buildIntentToStartFragment(ACTION_OPEN_ALARM))
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setCategory(NotificationCompat.CATEGORY_ALARM)
                 .setFullScreenIntent(fullScreenPendingIntent, true)
@@ -109,9 +121,117 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    private fun setupTimerType() {
-        //set builder
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    private fun setupTimerType(notificationType: NotificationBuilder.NotificationType.TypeTimer) {
+
+        val pauseIntent = Intent(context, TimerService::class.java).let {
+            it.action = TimerService.TIMER_PAUSE
+            getService(context, 0, it, FLAG_UPDATE_CURRENT)
+        }
+
+        val addMinuteIntent = Intent(context, TimerService::class.java).let {
+            it.action = TimerService.TIMER_ADD_MINUTE
+            getService(context, 0, it, FLAG_UPDATE_CURRENT)
+        }
+
+        builder =
+            NotificationCompat.Builder(context, CHANNEL_TIMER_ID)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle(context.getString(R.string.app_name))
+                .setContentText(
+                    context.getString(
+                        R.string.notification_timer_text,
+                        notificationType.timeLeft.secondsToString()
+                    )
+                )
+                .setContentIntent(buildIntentToStartFragment(ACTION_OPEN_TIMER))
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setCategory(NotificationCompat.CATEGORY_SERVICE)
+                .addAction(
+                    R.drawable.ic_pause,
+                    context.getString(R.string.notification_timer_pause),
+                    pauseIntent
+                )
+                .addAction(
+                    0,
+                    context.getString(R.string.notification_timer_add_minute),
+                    addMinuteIntent
+                )
+                .setAutoCancel(false)
+
+        buildNotificationChannel(notificationType)
+
+        builder.setChannelId(CHANNEL_TIMER_ID)
+    }
+
+    private fun setupTimerPause(notificationType: NotificationBuilder.NotificationType.TypeTimerPaused) {
+
+        val restartIntent = Intent(context, TimerService::class.java).let {
+            it.action = TimerService.TIMER_RESTART
+            getService(context, 0, it, FLAG_UPDATE_CURRENT)
+        }
+
+        val addMinuteIntent = Intent(context, TimerService::class.java).let {
+            it.action = TimerService.TIMER_ADD_MINUTE
+            getService(context, 0, it, FLAG_UPDATE_CURRENT)
+        }
+
+        val finishIntent = Intent(context, TimerService::class.java).let {
+            it.action = TimerService.TIMER_FINISH
+            getService(context, 0, it, FLAG_UPDATE_CURRENT)
+        }
+
+        builder =
+            NotificationCompat.Builder(context, CHANNEL_TIMER_ID)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle(context.getString(R.string.app_name))
+                .setContentText(
+                    context.getString(
+                        R.string.notification_timer_paused_text,
+                        notificationType.timeLeft.secondsToString()
+                    )
+                )
+                .setContentIntent(buildIntentToStartFragment(ACTION_OPEN_TIMER))
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setCategory(NotificationCompat.CATEGORY_SERVICE)
+                .addAction(
+                    R.drawable.ic_pause,
+                    context.getString(R.string.notification_timer_restart),
+                    restartIntent
+                )
+                .addAction(
+                    0,
+                    context.getString(R.string.notification_timer_add_minute),
+                    addMinuteIntent
+                )
+                .addAction(0, context.getString(R.string.notification_timer_stop), finishIntent)
+                .setAutoCancel(false)
+
+        buildNotificationChannel(NotificationBuilder.NotificationType.TypeTimer(0L))
+
+        builder.setChannelId(CHANNEL_TIMER_ID)
+    }
+
+    private fun setupTimerFinished() {
+        val stopTimerPendingIntent = Intent(context, TimerService::class.java).let {
+            it.action = TimerService.TIMER_FINISH
+            getService(context, 0, it, FLAG_UPDATE_CURRENT)
+        }
+
+        builder = NotificationCompat.Builder(context, CHANNEL_TIMER_ID)
+            .setSmallIcon(R.mipmap.ic_launcher)
+            .setContentTitle(context.getString(R.string.app_name))
+            .setContentText(context.getString(R.string.notification_timer_text_finished))
+            .setPriority(NotificationCompat.PRIORITY_MAX)
+            .setCategory(NotificationCompat.CATEGORY_ALARM)
+            .setContentIntent(buildIntentToStartFragment(ACTION_OPEN_TIMER))
+            .addAction(
+                R.drawable.ic_stop,
+                context.getString(R.string.timer_stop),
+                stopTimerPendingIntent
+            )
+            .setAutoCancel(false)
+
+        buildNotificationChannel(NotificationBuilder.NotificationType.TypeTimer(0L))
     }
 
     private fun buildNotificationChannel(notificationType: NotificationBuilder.NotificationType) {
@@ -134,7 +254,10 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
                     TODO("NOT IMPLEMENTED, CHANNEL STOPWATCH")
                 }
                 is NotificationBuilder.NotificationType.TypeTimer -> {
-                    TODO("NOT IMPLEMENTED, CHANNEL TIMER")
+                    name = context.getString(R.string.channel_timer_name)
+                    descriptionText = context.getString(R.string.channel_timer_description)
+                    importance = NotificationManager.IMPORTANCE_HIGH
+                    channelId = CHANNEL_TIMER_ID
                 }
                 is NotificationBuilder.NotificationType.TypeLocalization -> {
                     name = context.getString(R.string.channel_location_name)
@@ -150,11 +273,21 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
         }
     }
 
+    private fun buildIntentToStartFragment(intentAction: String): PendingIntent {
+        return Intent(context, MainActivity::class.java).let {
+            it.action = intentAction
+            it.flags = (Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            getActivity(context, 0, it, 0)
+        }
+    }
+
     companion object {
         const val KEY_ALARM_EXIT = "com.helpfulapps.alarmclock.ALARM_EXIT"
         // if changed here, must be changed in intentcreator
         const val KEY_ALARM_ID = "com.helpfulapps.alarmclock.ALARM_ID"
         private const val CHANNEL_ALARM_ID = "com.helpfulapps.alarmclock.ALARM_CHANNEL_ID"
+        private const val CHANNEL_TIMER_ID = "com.helpfulapps.alarmclock.TIMER_CHANNEL_ID"
         private const val CHANNEL_LOCALIZATION_ID =
             "com.helpfulapps.alarmclock.CHANNEL_LOCALIZATION_ID"
     }
