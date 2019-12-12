@@ -5,7 +5,6 @@ import com.helpfulapps.alarmclock.helpers.NotificationBuilder
 import com.helpfulapps.alarmclock.helpers.Stopwatch
 import com.helpfulapps.base.base.BaseService
 import com.helpfulapps.domain.eventBus.ServiceBus
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import org.koin.core.inject
 
@@ -14,7 +13,6 @@ class StopwatchService : BaseService() {
     private val TAG = this.javaClass.simpleName
 
     private val stopwatch = Stopwatch()
-    private val disposables = CompositeDisposable()
     private val notificationBuilder: NotificationBuilder by inject()
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -76,12 +74,14 @@ class StopwatchService : BaseService() {
 
     private fun pauseStopwatch() {
         stopwatch.pauseStopwatch()
+        ServiceBus.publish(StopWatchEvent.Paused)
     }
 
     sealed class StopWatchEvent {
         object Start : StopWatchEvent()
         data class Update(val timeInMillis: Long) : StopWatchEvent()
         object Pause : StopWatchEvent()
+        object Paused : StopWatchEvent()
         object Resume : StopWatchEvent()
         object TakeLap : StopWatchEvent()
         data class Lap(val laps: List<Long>) : StopWatchEvent()

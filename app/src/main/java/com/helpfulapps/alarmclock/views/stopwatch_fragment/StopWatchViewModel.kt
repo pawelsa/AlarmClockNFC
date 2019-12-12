@@ -28,7 +28,7 @@ class StopWatchViewModel : BaseViewModel() {
                         StopWatchState.Started
                     is StopwatchService.StopWatchEvent.Update -> _stopwatchState.value =
                         StopWatchState.Update(it.timeInMillis)
-                    is StopwatchService.StopWatchEvent.Pause -> _stopwatchState.value =
+                    is StopwatchService.StopWatchEvent.Paused -> _stopwatchState.value =
                         StopWatchState.Paused
                     is StopwatchService.StopWatchEvent.Resume -> _stopwatchState.value =
                         StopWatchState.Resumed

@@ -1,6 +1,7 @@
 package com.helpfulapps.alarmclock.views.stopwatch_fragment
 
 import android.content.Intent
+import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -76,6 +77,7 @@ class StopwatchFragment : BaseFragment<StopWatchViewModel, FragmentStopwatchBind
     }
 
     private fun handleState(state: StopWatchViewModel.StopWatchState) {
+        Log.d(TAG, "state: ${state.javaClass.simpleName}")
         when (state) {
             is StopWatchViewModel.StopWatchState.Stopped -> setupStoppedState()
             is StopWatchViewModel.StopWatchState.Started -> setupStartedState()
