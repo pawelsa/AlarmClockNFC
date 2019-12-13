@@ -31,4 +31,9 @@
     <dimen name="chip_stroke">2dp</dimen>
     <dimen name="nfc_icon_size">160dp</dimen>
     <dimen name="timer_time_size">48sp</dimen>
+    <dimen name="padding_medium">8dp</dimen>
+    <dimen name="padding_small">4dp</dimen>
+    <dimen name="stopwatch_bottom_buttons_margin">24dp</dimen>
+    <dimen name="stopwatch_list_padding_bottom">128dp</dimen>
+    <dimen name="stopwatch_time_text_size">48sp</dimen>
 </resources>

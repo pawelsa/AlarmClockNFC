@@ -7,7 +7,7 @@ import android.content.Intent
 import android.content.pm.ServiceInfo
 import android.os.Build
 
-inline fun Context.startVersionedService(intent: Intent) {
+fun Context.startVersionedService(intent: Intent) {
     fromBuildVersion(Build.VERSION_CODES.O, {
         this.startForegroundService(intent)
     }, {
@@ -15,7 +15,7 @@ inline fun Context.startVersionedService(intent: Intent) {
     })
 }
 
-inline fun Service.startVersionedForeground(notification: Notification, id: Int = 1) {
+fun Service.startVersionedForeground(notification: Notification, id: Int = 1) {
     fromBuildVersion(Build.VERSION_CODES.Q, matching = {
         startForeground(id, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION)
     }, otherwise = {

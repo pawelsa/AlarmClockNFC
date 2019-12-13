@@ -11,7 +11,6 @@ import com.helpfulapps.domain.eventBus.RxBus
 import com.helpfulapps.domain.eventBus.ServiceBus
 import com.helpfulapps.domain.extensions.whenFalse
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy
 import org.koin.core.inject
@@ -19,7 +18,6 @@ import org.koin.core.inject
 class TimerService : BaseService() {
 
     private val timer: Timer = Timer()
-    private val disposables = CompositeDisposable()
     private val notificationBuilder: NotificationBuilder by inject()
     private val alarmPlayer: AlarmPlayer by inject()
     private var isForeground: Boolean = true
@@ -76,14 +74,9 @@ class TimerService : BaseService() {
     private fun subscribeAppVisibility() {
         disposables += RxBus.listen(App.AppState::class.java)
             .subscribe {
-                isForeground = when (it) {
-                    is App.AppState.IsForeground -> {
-                        if (timer.isRunning) {
-                            stopForeground(true)
-                        }
-                        true
-                    }
-                    is App.AppState.IsBackground -> false
+                isForeground = it is App.AppState.IsForeground
+                if (isForeground && timer.isRunning) {
+                    stopForeground(true)
                 }
             }
     }
@@ -180,7 +173,6 @@ class TimerService : BaseService() {
     }
 
     override fun onDestroy() {
-        disposables.clear()
         alarmPlayer.destroyPlayer()
         super.onDestroy()
     }
