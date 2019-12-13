@@ -1,7 +1,6 @@
 package com.helpfulapps.alarmclock.views.stopwatch_fragment
 
 import android.content.Intent
-import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -16,7 +15,6 @@ import com.helpfulapps.alarmclock.service.StopwatchService.Companion.STOPWATCH_S
 import com.helpfulapps.alarmclock.views.main_activity.MainActivity
 import com.helpfulapps.base.base.BaseFragment
 import com.helpfulapps.domain.eventBus.ServiceBus
-import com.helpfulapps.domain.extensions.whenFalse
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_stopwatch.*
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -34,7 +32,7 @@ class StopwatchFragment : BaseFragment<StopWatchViewModel, FragmentStopwatchBind
     private var currentState: StopWatchViewModel.StopWatchState =
         StopWatchViewModel.StopWatchState.Stopped
         set(value) {
-            if (field::class != value::class && value is StopWatchViewModel.StopWatchState.Update) {
+            if (field::class != value::class && value is StopWatchViewModel.StopWatchState.Resumed) {
                 setupStartedState()
             }
             field = value
@@ -58,10 +56,17 @@ class StopwatchFragment : BaseFragment<StopWatchViewModel, FragmentStopwatchBind
         checkInitialState()
         subscribeState()
         subscribeLapTimes()
+        subscribeCurrentTime()
 
         setupFabListener()
         setupResetListener()
         setupLapListener()
+    }
+
+    private fun subscribeCurrentTime() {
+        viewModel.currentTime.observe(this) {
+            tv_stopwatch_time.text = it.millisToString()
+        }
     }
 
     private fun setupLapListener() {
@@ -125,13 +130,10 @@ class StopwatchFragment : BaseFragment<StopWatchViewModel, FragmentStopwatchBind
     }
 
     private fun handleState(state: StopWatchViewModel.StopWatchState) {
-        whenFalse(state is StopWatchViewModel.StopWatchState.Update) {
-            Log.d(TAG, "state: ${state.javaClass.simpleName}")
-        }
         when (state) {
             is StopWatchViewModel.StopWatchState.Stopped -> setupStoppedState()
             is StopWatchViewModel.StopWatchState.Started -> setupStartedState()
-            is StopWatchViewModel.StopWatchState.Update -> setupUpdateState(state)
+//            is StopWatchViewModel.StopWatchState.Update -> setupUpdateState(state)
             is StopWatchViewModel.StopWatchState.Paused -> setupPausedState()
             is StopWatchViewModel.StopWatchState.Resumed -> setupResumedState()
         }
@@ -147,10 +149,6 @@ class StopwatchFragment : BaseFragment<StopWatchViewModel, FragmentStopwatchBind
         changeFabIconToStart()
     }
 
-    private fun setupUpdateState(state: StopWatchViewModel.StopWatchState.Update) {
-        tv_stopwatch_time.text = state.time.millisToString()
-    }
-
     private fun setupStartedState() {
         bt_stopwatch_lap.visibility = View.VISIBLE
         bt_stopwatch_reset.visibility = View.VISIBLE
@@ -163,7 +161,7 @@ class StopwatchFragment : BaseFragment<StopWatchViewModel, FragmentStopwatchBind
         bt_stopwatch_reset.visibility = View.GONE
         bt_stopwatch_lap.visibility = View.GONE
         tv_stopwatch_time.clearAnimation()
-        tv_stopwatch_time.text = "0"
+        tv_stopwatch_time.text = "0:00"
         changeFabIconToStart()
     }
 

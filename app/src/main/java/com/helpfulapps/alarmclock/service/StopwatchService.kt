@@ -48,14 +48,10 @@ class StopwatchService : BaseService() {
         disposables += RxBus.listen(App.AppState::class.java)
             .subscribe {
                 isForeground = it is App.AppState.IsForeground
-                if (isForeground) {
-                    stopForeground(true)
-                } else {
-                    if (stopwatch.isRunning) {
-                        showRunningNotification(stopwatch.seconds)
-                    } else {
-                        showPausedNotification(stopwatch.seconds)
-                    }
+                when {
+                    isForeground -> stopForeground(true)
+                    stopwatch.isRunning -> showRunningNotification(stopwatch.seconds)
+                    else -> showPausedNotification(stopwatch.seconds)
                 }
             }
 

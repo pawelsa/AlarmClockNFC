@@ -113,6 +113,8 @@
     <string name="notification_stopwatch_take_lap">Lap</string>
     <string name="notification_stopwatch_resume">Resume</string>
     <string name="notification_stopwatch_reset">Reset</string>
+    <string name="stopwatch_reset">Reset</string>
+    <string name="stopwatch_lap">Lap</string>
     <string-array name="settings_alarm_time_titles">
         <item>1 minute</item>
         <item>2 minutes</item>

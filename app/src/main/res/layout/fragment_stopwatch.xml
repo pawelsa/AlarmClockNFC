@@ -14,21 +14,32 @@
             android:gravity="center"
             android:text="0:00"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textSize="48sp"
+            android:textSize="@dimen/stopwatch_time_text_size"
             app:layout_constraintBottom_toTopOf="@+id/rv_stopwatch_times"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_stopwatch_times"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:overScrollMode="never"
+            android:paddingBottom="@dimen/stopwatch_list_padding_bottom"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_stopwatch_time" />
 
         <Button
             android:id="@+id/bt_stopwatch_lap"
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginBottom="24dp"
-            android:text="lap"
+            android:layout_marginStart="@dimen/margin_big"
+            android:layout_marginBottom="@dimen/stopwatch_bottom_buttons_margin"
+            android:text="@string/stopwatch_lap"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline3" />
@@ -38,9 +49,10 @@
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="24dp"
-            android:text="Reset"
+            android:layout_marginEnd="@dimen/margin_big"
+            android:layout_marginBottom="@dimen/stopwatch_bottom_buttons_margin"
+            android:text="@string/stopwatch_reset"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guideline3"
             app:layout_constraintStart_toStartOf="parent" />
@@ -51,20 +63,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.5" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_stopwatch_times"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginBottom="24dp"
-            android:overScrollMode="never"
-
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/bt_stopwatch_lap"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_stopwatch_time" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

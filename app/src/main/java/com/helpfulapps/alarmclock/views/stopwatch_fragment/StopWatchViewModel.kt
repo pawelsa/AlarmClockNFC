@@ -21,6 +21,10 @@ class StopWatchViewModel : BaseViewModel() {
     val lapTimes: LiveData<List<Long>>
         get() = _lapTimes
 
+    private val _currentTime: MutableLiveData<Long> = MutableLiveData()
+    val currentTime: LiveData<Long>
+        get() = _currentTime
+
     fun observeStopwatch() {
 
         disposables += ServiceBus.listen(StopwatchService.StopWatchEvent::class.java)
@@ -29,8 +33,8 @@ class StopWatchViewModel : BaseViewModel() {
                 when (it) {
                     is StopwatchService.StopWatchEvent.Start -> _stopwatchState.value =
                         StopWatchState.Started
-                    is StopwatchService.StopWatchEvent.Update -> _stopwatchState.value =
-                        StopWatchState.Update(it.timeInMillis)
+                    is StopwatchService.StopWatchEvent.Update -> _currentTime.value =
+                        it.timeInMillis
                     is StopwatchService.StopWatchEvent.Paused -> _stopwatchState.value =
                         StopWatchState.Paused
                     is StopwatchService.StopWatchEvent.Resume -> _stopwatchState.value =
@@ -38,6 +42,7 @@ class StopWatchViewModel : BaseViewModel() {
                     is StopwatchService.StopWatchEvent.Lap -> _lapTimes.value = it.laps
                     is StopwatchService.StopWatchEvent.Stop -> {
                         _lapTimes.value = listOf()
+                        _currentTime.value = 0
                         _stopwatchState.value =
                             StopWatchState.Stopped
                     }
@@ -49,7 +54,6 @@ class StopWatchViewModel : BaseViewModel() {
     sealed class StopWatchState {
         object Stopped : StopWatchState()
         object Started : StopWatchState()
-        data class Update(val time: Long) : StopWatchState()
         object Paused : StopWatchState()
         object Resumed : StopWatchState()
     }
