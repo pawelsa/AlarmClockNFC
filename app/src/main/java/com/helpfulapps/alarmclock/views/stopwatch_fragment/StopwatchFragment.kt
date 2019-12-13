@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.FragmentStopwatchBinding
@@ -32,6 +33,13 @@ class StopwatchFragment : BaseFragment<StopWatchViewModel, FragmentStopwatchBind
     private var currentState: StopWatchViewModel.StopWatchState =
         StopWatchViewModel.StopWatchState.Stopped
 
+    private val adapter: StopwatchTimesAdapter by lazy {
+        StopwatchTimesAdapter().also {
+            rv_stopwatch_times.layoutManager = LinearLayoutManager(context)
+            rv_stopwatch_times.adapter = it
+        }
+    }
+
     override fun init() {
     }
 
@@ -39,18 +47,41 @@ class StopwatchFragment : BaseFragment<StopWatchViewModel, FragmentStopwatchBind
         super.onResume()
 
         viewModel.observeStopwatch()
-        //todo handle initial state
-        //todo check reset state -> not clearing tv
-        //todo after pauseing and pressing fab stopwach not starting
-        subscribeState()
-        /*
-        * in the beginning there is only start button and timer
-        * when button pressed, stoper is running, there is button for pause, reset and lap
-        * when reset pressed, stoper is stopped and returns to initial state
-        * when lap pressed, lap time is displayed and still counting
-        * when pause pressed, the fab icon changes to play, and time is blinking
-        * */
 
+        checkInitialState()
+        subscribeState()
+        subscribeLapTimes()
+
+        setupFabListener()
+        setupResetListener()
+        setupLapListener()
+    }
+
+    private fun setupLapListener() {
+        bt_stopwatch_lap.setOnClickListener {
+            ServiceBus.publish(StopwatchService.StopWatchEvent.TakeLap)
+        }
+    }
+
+    private fun subscribeLapTimes() {
+        viewModel.lapTimes.observe(this) {
+            if (it.isEmpty()) {
+                rv_stopwatch_times.visibility = View.GONE
+            } else {
+                rv_stopwatch_times.visibility = View.VISIBLE
+                // todo convert it to string with time format, use for it resources
+                adapter.submitList(it.mapIndexed { index, lapTime -> LapModel(index + 1, lapTime) })
+            }
+        }
+    }
+
+    private fun setupResetListener() {
+        bt_stopwatch_reset.setOnClickListener {
+            ServiceBus.publish(StopwatchService.StopWatchEvent.Stop)
+        }
+    }
+
+    private fun setupFabListener() {
         fab.setOnClickListener {
             when (currentState) {
                 is StopWatchViewModel.StopWatchState.Stopped -> {
@@ -63,9 +94,15 @@ class StopwatchFragment : BaseFragment<StopWatchViewModel, FragmentStopwatchBind
                 else -> ServiceBus.publish(StopwatchService.StopWatchEvent.Pause)
             }
         }
+    }
 
-        bt_stopwatch_reset.setOnClickListener {
-            ServiceBus.publish(StopwatchService.StopWatchEvent.Stop)
+    private fun checkInitialState() {
+        viewModel.stopwatchState.value.let {
+            if (it == null) {
+                setupStoppedState()
+            } else {
+                handleState(it)
+            }
         }
     }
 
@@ -108,8 +145,10 @@ class StopwatchFragment : BaseFragment<StopWatchViewModel, FragmentStopwatchBind
     }
 
     private fun setupStoppedState() {
+        rv_stopwatch_times.visibility = View.GONE
         bt_stopwatch_reset.visibility = View.GONE
         bt_stopwatch_lap.visibility = View.GONE
+        tv_stopwatch_time.clearAnimation()
         tv_stopwatch_time.text = "0"
         changeFabIconToStart()
     }

@@ -10,7 +10,10 @@ import io.reactivex.rxkotlin.plusAssign
 
 class StopWatchViewModel : BaseViewModel() {
 
-    private val _stopwatchState: MutableLiveData<StopWatchState> = MutableLiveData()
+    private val _stopwatchState: MutableLiveData<StopWatchState> =
+        MutableLiveData<StopWatchState>().apply {
+            value = StopWatchState.Stopped
+        }
     val stopwatchState: LiveData<StopWatchState>
         get() = _stopwatchState
 
@@ -33,8 +36,11 @@ class StopWatchViewModel : BaseViewModel() {
                     is StopwatchService.StopWatchEvent.Resume -> _stopwatchState.value =
                         StopWatchState.Resumed
                     is StopwatchService.StopWatchEvent.Lap -> _lapTimes.value = it.laps
-                    is StopwatchService.StopWatchEvent.Stop -> _stopwatchState.value =
-                        StopWatchState.Stopped
+                    is StopwatchService.StopWatchEvent.Stop -> {
+                        _lapTimes.value = listOf()
+                        _stopwatchState.value =
+                            StopWatchState.Stopped
+                    }
                 }
             }
 
