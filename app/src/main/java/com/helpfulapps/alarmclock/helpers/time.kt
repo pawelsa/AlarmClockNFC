@@ -51,6 +51,23 @@ fun Long.secondsToString(): String {
     return when {
         hours > 0 -> String.format("%02d:%02d:%02d", hours, minutes, seconds)
         minutes > 0 -> String.format("%02d:%02d", minutes, seconds)
-        else -> String.format("%02d", seconds)
+        else -> String.format("00:%02d", seconds)
+    }
+}
+
+fun Long.millisToString(): String {
+    var timeInMillis = this
+    val hours = timeInMillis / 3600000
+    timeInMillis -= hours * 3600000
+    val minutes = timeInMillis / 60000
+    timeInMillis -= minutes * 60000
+    val seconds = timeInMillis / 1000
+    timeInMillis -= seconds * 1000
+    timeInMillis /= 10
+
+    return when {
+        hours > 0 -> String.format("%02d:%02d:%02d:%02d", hours, minutes, seconds, timeInMillis)
+        minutes > 0 -> String.format("%02d:%02d:%02d", minutes, seconds, timeInMillis)
+        else -> String.format("%02d:%02d", seconds, timeInMillis)
     }
 }

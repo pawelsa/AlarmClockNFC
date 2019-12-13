@@ -8,6 +8,7 @@ import org.koin.core.KoinComponent
 
 abstract class BaseService : Service(), KoinComponent {
 
+    protected val TAG = this.javaClass.simpleName
     protected val disposables: CompositeDisposable = CompositeDisposable()
 
     override fun onBind(intent: Intent?): IBinder? = null

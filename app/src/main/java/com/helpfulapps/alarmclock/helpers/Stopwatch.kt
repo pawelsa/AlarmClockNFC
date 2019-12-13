@@ -9,10 +9,16 @@ import java.util.concurrent.TimeUnit
 
 class Stopwatch {
 
-    private var currentTime = 0L
+    var currentTime = 0L
+        private set
+    val seconds: Long
+        get() = currentTime / 1000
     private var disposable: Disposable? = null
     val emitter: Subject<Long> = BehaviorSubject.create()
     val laps = mutableListOf<Long>()
+
+    val isRunning: Boolean
+        get() = !(disposable?.isDisposed ?: true)
 
     fun startStopwatch() {
         if (disposable == null || disposable?.isDisposed != false) {

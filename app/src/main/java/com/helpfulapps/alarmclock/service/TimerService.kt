@@ -74,14 +74,9 @@ class TimerService : BaseService() {
     private fun subscribeAppVisibility() {
         disposables += RxBus.listen(App.AppState::class.java)
             .subscribe {
-                isForeground = when (it) {
-                    is App.AppState.IsForeground -> {
-                        if (timer.isRunning) {
-                            stopForeground(true)
-                        }
-                        true
-                    }
-                    is App.AppState.IsBackground -> false
+                isForeground = it is App.AppState.IsForeground
+                if (isForeground && timer.isRunning) {
+                    stopForeground(true)
                 }
             }
     }

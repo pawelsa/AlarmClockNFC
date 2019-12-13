@@ -107,6 +107,12 @@
     <string name="notification_timer_paused_text">Timer is paused, %1$s seconds left</string>
     <string name="notification_timer_stop">Finish</string>
     <string name="timer_reset">Reset</string>
+    <string name="channel_stopwatch_name">Stopwatch</string>
+    <string name="channel_stopwatch_description">Displays currently running stopwatch</string>
+    <string name="notification_stopwatch_pause">Pause</string>
+    <string name="notification_stopwatch_take_lap">Lap</string>
+    <string name="notification_stopwatch_resume">Resume</string>
+    <string name="notification_stopwatch_reset">Reset</string>
     <string-array name="settings_alarm_time_titles">
         <item>1 minute</item>
         <item>2 minutes</item>

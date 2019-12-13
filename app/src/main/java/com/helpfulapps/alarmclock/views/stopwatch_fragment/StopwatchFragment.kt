@@ -10,12 +10,13 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.FragmentStopwatchBinding
 import com.helpfulapps.alarmclock.helpers.extensions.observe
-import com.helpfulapps.alarmclock.helpers.startVersionedService
+import com.helpfulapps.alarmclock.helpers.millisToString
 import com.helpfulapps.alarmclock.service.StopwatchService
 import com.helpfulapps.alarmclock.service.StopwatchService.Companion.STOPWATCH_START
 import com.helpfulapps.alarmclock.views.main_activity.MainActivity
 import com.helpfulapps.base.base.BaseFragment
 import com.helpfulapps.domain.eventBus.ServiceBus
+import com.helpfulapps.domain.extensions.whenFalse
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_stopwatch.*
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -32,6 +33,12 @@ class StopwatchFragment : BaseFragment<StopWatchViewModel, FragmentStopwatchBind
 
     private var currentState: StopWatchViewModel.StopWatchState =
         StopWatchViewModel.StopWatchState.Stopped
+        set(value) {
+            if (field::class != value::class && value is StopWatchViewModel.StopWatchState.Update) {
+                setupStartedState()
+            }
+            field = value
+        }
 
     private val adapter: StopwatchTimesAdapter by lazy {
         StopwatchTimesAdapter().also {
@@ -69,8 +76,12 @@ class StopwatchFragment : BaseFragment<StopWatchViewModel, FragmentStopwatchBind
                 rv_stopwatch_times.visibility = View.GONE
             } else {
                 rv_stopwatch_times.visibility = View.VISIBLE
-                // todo convert it to string with time format, use for it resources
-                adapter.submitList(it.mapIndexed { index, lapTime -> LapModel(index + 1, lapTime) })
+                adapter.submitList(it.mapIndexed { index, lapTime ->
+                    LapModel(
+                        index + 1,
+                        lapTime.millisToString()
+                    )
+                })
             }
         }
     }
@@ -87,7 +98,7 @@ class StopwatchFragment : BaseFragment<StopWatchViewModel, FragmentStopwatchBind
                 is StopWatchViewModel.StopWatchState.Stopped -> {
                     Intent(context, StopwatchService::class.java).let {
                         it.action = STOPWATCH_START
-                        context?.startVersionedService(it)
+                        context?.startService(it)
                     }
                 }
                 is StopWatchViewModel.StopWatchState.Paused -> ServiceBus.publish(StopwatchService.StopWatchEvent.Resume)
@@ -114,7 +125,9 @@ class StopwatchFragment : BaseFragment<StopWatchViewModel, FragmentStopwatchBind
     }
 
     private fun handleState(state: StopWatchViewModel.StopWatchState) {
-        Log.d(TAG, "state: ${state.javaClass.simpleName}")
+        whenFalse(state is StopWatchViewModel.StopWatchState.Update) {
+            Log.d(TAG, "state: ${state.javaClass.simpleName}")
+        }
         when (state) {
             is StopWatchViewModel.StopWatchState.Stopped -> setupStoppedState()
             is StopWatchViewModel.StopWatchState.Started -> setupStartedState()
@@ -135,12 +148,13 @@ class StopwatchFragment : BaseFragment<StopWatchViewModel, FragmentStopwatchBind
     }
 
     private fun setupUpdateState(state: StopWatchViewModel.StopWatchState.Update) {
-        tv_stopwatch_time.text = state.time.toString()
+        tv_stopwatch_time.text = state.time.millisToString()
     }
 
     private fun setupStartedState() {
         bt_stopwatch_lap.visibility = View.VISIBLE
         bt_stopwatch_reset.visibility = View.VISIBLE
+        tv_stopwatch_time.clearAnimation()
         changeFabIconToPause()
     }
 

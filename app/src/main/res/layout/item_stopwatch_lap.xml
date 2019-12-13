@@ -31,7 +31,7 @@
             android:layout_weight="2"
             android:gravity="start"
             android:padding="@dimen/padding_small"
-            android:text="@{Long.toString(lapTime.time)}"
+            android:text="@{lapTime.time}"
             android:textAlignment="gravity"
             tools:text="0:26:00" />
 
