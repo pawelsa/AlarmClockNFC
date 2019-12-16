@@ -10,7 +10,7 @@ import com.raizlabs.android.dbflow.rx2.structure.BaseRXModel
 
 @Table(database = AlarmAppDatabase::class, name = TABLE_NAME, allFields = true)
 data class AlarmStatsEntity(
-    @PrimaryKey
+    @PrimaryKey(autoincrement = true)
     var id: Long = 0,
     var dayOfWeek: Int = 0,
     var dayOfYear: Int = 0,

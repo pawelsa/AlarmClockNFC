@@ -19,8 +19,8 @@ class StatsRepositoryImpl : StatsRepository {
     }
 
     override fun saveInfo(alarmStats: AlarmStats): Completable {
-        return AlarmStatsEntity(alarmStats).insert().flatMapCompletable {
-            if (it != -1L) {
+        return AlarmStatsEntity(alarmStats).save().flatMapCompletable {
+            if (it) {
                 return@flatMapCompletable Completable.complete()
             }
             return@flatMapCompletable Completable.error(StatsException("Could not save stats"))
