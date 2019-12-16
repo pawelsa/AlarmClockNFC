@@ -17,7 +17,7 @@ class StatisticsActivity : BaseActivity<StatisticsViewModel, ActivityStatisticsB
     override val layoutId: Int = R.layout.activity_statistics
     override val viewModel: StatisticsViewModel by viewModel()
 
-    val labels: List<String> by lazy {
+    private val labels: List<String> by lazy {
         val formatSymbols = DateFormatSymbols.getInstance()
         (1..7).map { day -> formatSymbols.shortWeekdays[day].capitalize() }
     }
