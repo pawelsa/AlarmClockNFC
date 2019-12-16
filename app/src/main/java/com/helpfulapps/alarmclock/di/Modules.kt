@@ -12,13 +12,17 @@ import com.helpfulapps.alarmclock.views.settings.SettingsViewModel
 import com.helpfulapps.alarmclock.views.stopwatch_fragment.StopWatchViewModel
 import com.helpfulapps.data.helper.SettingsData
 import com.helpfulapps.data.repositories.AlarmRepositoryImpl
+import com.helpfulapps.data.repositories.StatsRepositoryImpl
 import com.helpfulapps.data.repositories.WeatherRepositoryImpl
 import com.helpfulapps.device.alarms.AlarmClockManagerImpl
 import com.helpfulapps.domain.helpers.Settings
 import com.helpfulapps.domain.repository.AlarmClockManager
 import com.helpfulapps.domain.repository.AlarmRepository
+import com.helpfulapps.domain.repository.StatsRepository
 import com.helpfulapps.domain.repository.WeatherRepository
 import com.helpfulapps.domain.use_cases.alarm.*
+import com.helpfulapps.domain.use_cases.stats.GetAllStatsUseCase
+import com.helpfulapps.domain.use_cases.stats.GetAllStatsUseCaseImpl
 import com.helpfulapps.domain.use_cases.weather.*
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.viewmodel.dsl.viewModel
@@ -62,6 +66,7 @@ object Modules {
                 )
             )
         }
+        single<StatsRepository> { StatsRepositoryImpl() }
         single<VibrationController> { VibrationControllerImpl(androidContext()) }
         single<WeatherRepository> { WeatherRepositoryImpl(androidContext(), settings = get()) }
         single<SnoozeAlarmUseCase> { SnoozeAlarmUseCaseImpl(get(), get()) }
@@ -87,6 +92,7 @@ object Modules {
         single<GetForecastForAlarmUseCase> { GetForecastForAlarmUseCaseImpl(get()) }
         single<GetForecastForAlarmsUseCase> { GetForecastForAlarmsUseCaseImpl(get()) }
         single<StopRingingAlarmUseCase> { StopRingingAlarmUseCaseImpl(get(), get()) }
+        single<GetAllStatsUseCase> { GetAllStatsUseCaseImpl(get()) }
     }
 
 }
