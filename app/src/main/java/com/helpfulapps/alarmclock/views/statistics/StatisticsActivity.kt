@@ -25,8 +25,24 @@ class StatisticsActivity : BaseActivity<StatisticsViewModel, ActivityStatisticsB
     override fun init() {
         viewModel.getAllStats()
 
+        setupStopTimeChart()
+        setupSnoozeTimeChart()
         subscribeToSnoozesADay()
         subscribeToStopTime()
+    }
+
+    private fun setupStopTimeChart() {
+        bc_stats_stop_time.xAxis.valueFormatter = IndexAxisValueFormatter(labels)
+        bc_stats_stop_time.setTouchEnabled(false)
+        bc_stats_stop_time.xAxis.setDrawGridLines(false)
+        bc_stats_stop_time.description.isEnabled = false
+    }
+
+    private fun setupSnoozeTimeChart() {
+        bc_stats_snoozed.xAxis.valueFormatter = IndexAxisValueFormatter(labels)
+        bc_stats_snoozed.setTouchEnabled(false)
+        bc_stats_snoozed.xAxis.setDrawGridLines(false)
+        bc_stats_snoozed.description.isEnabled = false
     }
 
     private fun subscribeToStopTime() {
@@ -36,10 +52,6 @@ class StatisticsActivity : BaseActivity<StatisticsViewModel, ActivityStatisticsB
             val barData = BarData(dataSet)
 
             bc_stats_stop_time.data = barData
-            bc_stats_stop_time.xAxis.valueFormatter = IndexAxisValueFormatter(labels)
-            bc_stats_stop_time.setTouchEnabled(false)
-            bc_stats_stop_time.xAxis.setDrawGridLines(false)
-            bc_stats_stop_time.description.isEnabled = false
             bc_stats_stop_time.invalidate()
         }
     }
@@ -51,17 +63,13 @@ class StatisticsActivity : BaseActivity<StatisticsViewModel, ActivityStatisticsB
             val barData = BarData(dataSet)
 
             bc_stats_snoozed.data = barData
-            bc_stats_snoozed.xAxis.valueFormatter = IndexAxisValueFormatter(labels)
-            bc_stats_snoozed.setTouchEnabled(false)
-            bc_stats_snoozed.xAxis.setDrawGridLines(false)
-            bc_stats_snoozed.description.isEnabled = false
             bc_stats_snoozed.invalidate()
         }
     }
 
 
     override fun showMessage(text: String) {
-        Snackbar.make(cl_statistics_base, text, Snackbar.LENGTH_LONG).show()
+        Snackbar.make(ll_statistics_base, text, Snackbar.LENGTH_LONG).show()
     }
 
 }

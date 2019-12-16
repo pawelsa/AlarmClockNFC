@@ -1,31 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_statistics_base"
+    <LinearLayout
+        android:id="@+id/ll_statistics_base"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="8"
         tools:context=".views.statistics.StatisticsActivity">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.5" />
 
         <com.github.mikephil.charting.charts.BarChart
             android:id="@+id/bc_stats_snoozed"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="0dp"
             android:layout_marginTop="32dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_weight="3" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
         <com.github.mikephil.charting.charts.BarChart
             android:id="@+id/bc_stats_stop_time"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="0dp"
             android:layout_marginTop="32dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/bc_stats_snoozed" />
+            android:layout_weight="3" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.5" />
+
+    </LinearLayout>
 </layout>
