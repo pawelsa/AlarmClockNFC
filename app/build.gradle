@@ -94,6 +94,9 @@ dependencies {
     //timepicker timer
     implementation "com.github.pawelsa:HmsPickerView:0.1.4"
 
+    // plots
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
     implementation project(path: ':data')
     implementation project(':domain')
     implementation project(path: ':base')

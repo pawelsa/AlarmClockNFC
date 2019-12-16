@@ -12,6 +12,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.ActivityMainBinding
 import com.helpfulapps.alarmclock.views.settings.SettingsActivity
+import com.helpfulapps.alarmclock.views.statistics.StatisticsActivity
 import com.helpfulapps.base.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -35,6 +36,12 @@ class MainActivity : BaseActivity<MainActivityViewModel, ActivityMainBinding>() 
                             this@MainActivity,
                             SettingsActivity::class.java
                         )
+                    )
+                    true
+                }
+                R.id.menu_stats -> {
+                    this@MainActivity.startActivity(
+                        Intent(this@MainActivity, StatisticsActivity::class.java)
                     )
                     true
                 }
