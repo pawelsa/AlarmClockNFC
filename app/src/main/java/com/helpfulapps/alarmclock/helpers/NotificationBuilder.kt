@@ -17,7 +17,6 @@ import com.helpfulapps.alarmclock.service.StopwatchService.Companion.STOPWATCH_R
 import com.helpfulapps.alarmclock.service.StopwatchService.Companion.STOPWATCH_STOP
 import com.helpfulapps.alarmclock.service.TimerService
 import com.helpfulapps.alarmclock.views.main_activity.MainActivity
-import com.helpfulapps.alarmclock.views.main_activity.MainActivity.Companion.ACTION_OPEN_ALARM
 import com.helpfulapps.alarmclock.views.main_activity.MainActivity.Companion.ACTION_OPEN_STOPWATCH
 import com.helpfulapps.alarmclock.views.main_activity.MainActivity.Companion.ACTION_OPEN_TIMER
 import com.helpfulapps.alarmclock.views.ringing_alarm.NfcRingingAlarmActivity
@@ -135,7 +134,6 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
                         timeToString(alarm.hour, alarm.minute)
                     )
                 )
-                .setContentIntent(buildIntentToStartFragment(ACTION_OPEN_ALARM))
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setCategory(NotificationCompat.CATEGORY_ALARM)
                 .setFullScreenIntent(fullScreenPendingIntent, true)

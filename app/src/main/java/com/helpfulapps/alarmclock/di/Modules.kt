@@ -69,7 +69,6 @@ object Modules {
         single<StatsRepository> { StatsRepositoryImpl() }
         single<VibrationController> { VibrationControllerImpl(androidContext()) }
         single<WeatherRepository> { WeatherRepositoryImpl(androidContext(), settings = get()) }
-        single<SnoozeAlarmUseCase> { SnoozeAlarmUseCaseImpl(get(), get()) }
     }
 
     private val data = module {
@@ -91,7 +90,8 @@ object Modules {
         single<GetAlarmUseCase> { GetAlarmUseCaseImpl(get(), get()) }
         single<GetForecastForAlarmUseCase> { GetForecastForAlarmUseCaseImpl(get()) }
         single<GetForecastForAlarmsUseCase> { GetForecastForAlarmsUseCaseImpl(get()) }
-        single<StopRingingAlarmUseCase> { StopRingingAlarmUseCaseImpl(get(), get()) }
+        single<StopRingingAlarmUseCase> { StopRingingAlarmUseCaseImpl(get(), get(), get()) }
+        single<SnoozeAlarmUseCase> { SnoozeAlarmUseCaseImpl(get(), get(), get()) }
         single<GetAllStatsUseCase> { GetAllStatsUseCaseImpl(get()) }
     }
 

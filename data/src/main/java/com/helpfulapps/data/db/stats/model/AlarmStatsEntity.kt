@@ -19,6 +19,14 @@ data class AlarmStatsEntity(
     var timeToStop: Int = 0
 ) : BaseRXModel() {
 
+    constructor(alarmStats: AlarmStats) : this(
+        dayOfWeek = alarmStats.dayOfWeek,
+        dayOfYear = alarmStats.dayOfYear,
+        hour = alarmStats.hour,
+        minute = alarmStats.minute,
+        timeToStop = alarmStats.timeToStop
+    )
+
     fun toDomain(): AlarmStats {
         return AlarmStats(
             dayOfWeek, dayOfYear, hour, minute, timeToStop
