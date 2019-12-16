@@ -99,7 +99,7 @@ class TimeSetter(
         return calendar
     }
 
-    private fun setHourAndMinute(
+    fun setHourAndMinute(
         alarm: Alarm,
         calendar: Calendar
     ): Calendar {
