@@ -1,5 +1,6 @@
 package com.helpfulapps.alarmclock.views.statistics
 
+import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
@@ -35,6 +36,7 @@ class StatisticsActivity : BaseActivity<StatisticsViewModel, ActivityStatisticsB
         bc_stats_stop_time.xAxis.valueFormatter = IndexAxisValueFormatter(labels)
         bc_stats_stop_time.setTouchEnabled(false)
         bc_stats_stop_time.xAxis.setDrawGridLines(false)
+        bc_stats_stop_time.xAxis.position = XAxis.XAxisPosition.BOTTOM
         bc_stats_stop_time.description.isEnabled = false
     }
 
@@ -42,6 +44,7 @@ class StatisticsActivity : BaseActivity<StatisticsViewModel, ActivityStatisticsB
         bc_stats_snoozed.xAxis.valueFormatter = IndexAxisValueFormatter(labels)
         bc_stats_snoozed.setTouchEnabled(false)
         bc_stats_snoozed.xAxis.setDrawGridLines(false)
+        bc_stats_snoozed.xAxis.position = XAxis.XAxisPosition.BOTTOM
         bc_stats_snoozed.description.isEnabled = false
     }
 
