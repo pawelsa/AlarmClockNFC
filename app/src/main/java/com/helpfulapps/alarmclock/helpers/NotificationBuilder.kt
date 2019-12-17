@@ -185,7 +185,7 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
                     notificationType.seconds.secondsToString()
                 )
                 .setContentIntent(buildIntentToStartFragment(ACTION_OPEN_STOPWATCH))
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setPriority(NotificationCompat.PRIORITY_LOW)
                 .setCategory(NotificationCompat.CATEGORY_SERVICE)
                 .addAction(
                     R.drawable.ic_pause,
@@ -227,7 +227,7 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
                     )
                 )
                 .setContentIntent(buildIntentToStartFragment(ACTION_OPEN_TIMER))
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setPriority(NotificationCompat.PRIORITY_MIN)
                 .setCategory(NotificationCompat.CATEGORY_SERVICE)
                 .addAction(
                     R.drawable.ic_pause,

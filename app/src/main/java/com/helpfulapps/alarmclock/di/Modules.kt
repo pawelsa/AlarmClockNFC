@@ -2,6 +2,7 @@ package com.helpfulapps.alarmclock.di
 
 import android.app.AlarmManager
 import android.content.Context
+import com.example.api.other.PrepareDataImpl
 import com.helpfulapps.alarmclock.helpers.*
 import com.helpfulapps.alarmclock.views.clock_fragment.ClockViewModel
 import com.helpfulapps.alarmclock.views.clock_fragment.add_alarm_bs.AddAlarmBottomSheetViewModel
@@ -11,11 +12,20 @@ import com.helpfulapps.alarmclock.views.ringing_alarm.RingingAlarmViewModel
 import com.helpfulapps.alarmclock.views.settings.SettingsViewModel
 import com.helpfulapps.alarmclock.views.statistics.StatisticsViewModel
 import com.helpfulapps.alarmclock.views.stopwatch_fragment.StopWatchViewModel
-import com.helpfulapps.data.helper.SettingsData
+import com.helpfulapps.data.api.PrepareData
+import com.helpfulapps.data.db.alarm.dao.AlarmDao
+import com.helpfulapps.data.db.stats.dao.StatsDao
+import com.helpfulapps.data.db.weather.dao.WeatherDao
 import com.helpfulapps.data.repositories.AlarmRepositoryImpl
 import com.helpfulapps.data.repositories.StatsRepositoryImpl
 import com.helpfulapps.data.repositories.WeatherRepositoryImpl
+import com.helpfulapps.db.alarm.AlarmDaoImpl
+import com.helpfulapps.db.stats.dao.StatsDaoImpl
+import com.helpfulapps.db.weather.dao.WeatherDaoImpl
 import com.helpfulapps.device.alarms.AlarmClockManagerImpl
+import com.helpfulapps.device.alarms.helpers.NetworkCheckImpl
+import com.helpfulapps.device.alarms.helpers.SettingsData
+import com.helpfulapps.domain.helpers.NetworkCheck
 import com.helpfulapps.domain.helpers.Settings
 import com.helpfulapps.domain.repository.AlarmClockManager
 import com.helpfulapps.domain.repository.AlarmRepository
@@ -50,7 +60,7 @@ object Modules {
     }
 
     private val repository = module {
-        single<AlarmRepository> { AlarmRepositoryImpl(androidContext()) }
+        single<AlarmRepository> { AlarmRepositoryImpl(get()) }
         single<AlarmClockManager> {
             AlarmClockManagerImpl(
                 androidContext(),
@@ -68,13 +78,18 @@ object Modules {
                 )
             )
         }
-        single<StatsRepository> { StatsRepositoryImpl() }
+        single<StatsRepository> { StatsRepositoryImpl(get()) }
         single<VibrationController> { VibrationControllerImpl(androidContext()) }
-        single<WeatherRepository> { WeatherRepositoryImpl(androidContext(), settings = get()) }
+        single<WeatherRepository> { WeatherRepositoryImpl(get(), get()) }
     }
 
     private val data = module {
-
+        // todo move DAOs from db to domain
+        single<AlarmDao> { AlarmDaoImpl(androidContext()) }
+        single<WeatherDao> { WeatherDaoImpl(androidContext()) }
+        single<StatsDao> { StatsDaoImpl(androidContext()) }
+        single<PrepareData> { PrepareDataImpl(get(), get()) }
+        single<NetworkCheck> { NetworkCheckImpl(androidContext()) }
     }
 
     private val useCase = module {

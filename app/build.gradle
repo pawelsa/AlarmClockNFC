@@ -101,4 +101,6 @@ dependencies {
     implementation project(':domain')
     implementation project(path: ':base')
     implementation project(path: ':device')
+    implementation project(path: ':db')
+    implementation project(path: ':api')
 }

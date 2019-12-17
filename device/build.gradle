@@ -40,6 +40,7 @@ dependencies {
     implementation project(':domain')
 
     implementation "androidx.core:core-ktx:$kotlin_core_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     // rxJava & rxKotlin
     implementation "io.reactivex.rxjava2:rxjava:$rxJava_version"
     implementation "io.reactivex.rxjava2:rxkotlin:$rxKotlin_version"
@@ -50,7 +51,12 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit:$runner_version"
     androidTestImplementation "androidx.test:runner:$runner_version"
     androidTestImplementation "androidx.test:rules:$runner_version"
+    testImplementation 'android.arch.core:core-testing:1.1.1'
     androidTestImplementation "androidx.test.espresso:espresso-core:$esspresso_core_version"
+
+    // Mockito
+    testImplementation "io.mockk:mockk:$mockk_version"
+    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockito_kotlin_version"
 
     // Mockito
     testImplementation "io.mockk:mockk:$mockk_version"

@@ -1,140 +1,76 @@
 package com.helpfulapps.data.repositories
 
-import android.content.Context
-import com.helpfulapps.data.api.weather.api.ApiCalls
-import com.helpfulapps.data.api.weather.api.Downloader
-import com.helpfulapps.data.api.weather.converter.analyzeWeather
-import com.helpfulapps.data.api.weather.model.ForecastForCity
-import com.helpfulapps.data.db.weather.model.*
+import com.helpfulapps.data.api.PrepareData
+import com.helpfulapps.data.db.weather.dao.WeatherDao
+import com.helpfulapps.data.db.weather.model.DayWeatherData
 import com.helpfulapps.data.extensions.checkCompleted
-import com.helpfulapps.data.extensions.dayOfMonth
-import com.helpfulapps.data.extensions.rxQueryListSingle
-import com.helpfulapps.data.extensions.timestampAtMidnight
-import com.helpfulapps.data.helper.NetworkCheck
 import com.helpfulapps.domain.eventBus.DatabaseNotifiers
 import com.helpfulapps.domain.eventBus.RxBus
-import com.helpfulapps.domain.exceptions.CouldNotObtainForecast
 import com.helpfulapps.domain.exceptions.WeatherException
-import com.helpfulapps.domain.helpers.Settings
 import com.helpfulapps.domain.repository.WeatherRepository
-import com.raizlabs.android.dbflow.config.FlowManager
-import com.raizlabs.android.dbflow.kotlinextensions.*
-import com.raizlabs.android.dbflow.rx2.kotlinextensions.rx
-import com.raizlabs.android.dbflow.sql.language.Delete
-import io.reactivex.*
-import io.reactivex.android.schedulers.AndroidSchedulers
-import retrofit2.Response
+import io.reactivex.Completable
+import io.reactivex.Observable
+import io.reactivex.Single
 import java.util.concurrent.TimeUnit
 import com.helpfulapps.domain.models.weather.DayWeather as DomainDayWeather
 
 class WeatherRepositoryImpl(
-    context: Context,
-    private val networkCheck: NetworkCheck = NetworkCheck(context),
-    private val apiCalls: ApiCalls = Downloader.create(),
-    private val settings: Settings
+    private val prepareData: PrepareData,
+    private val weatherDao: WeatherDao
 ) : WeatherRepository {
-
-    init {
-        FlowManager.init(context)
-    }
 
     companion object {
         const val ONE_AND_HALF_AN_HOUR: Long = 15 * 3600 * 100
     }
 
     override fun downloadForecast(city: String): Completable =
-        networkCheck.isConnectedToNetwork
-            .flatMap { apiCalls.downloadForecast(city, settings.units.unit) }
+        prepareData.downloadForecast(city)
             .convertModelsAndSaveInDb()
             .doOnComplete { RxBus.publish(DatabaseNotifiers.Saved) }
 
     override fun downloadForecast(lat: Double, lon: Double): Completable =
-        networkCheck.isConnectedToNetwork
-            .flatMap {
-                apiCalls.downloadForecastForCoordinates(
-                    lat.toString(),
-                    lon.toString(),
-                    settings.units.unit
-                )
-            }
+        prepareData.downloadForecastForCoordinates(
+            lat,
+            lon
+        )
             .convertModelsAndSaveInDb()
             .doOnComplete { RxBus.publish(DatabaseNotifiers.Saved) }
 
     override fun getForecastForAlarms(): Single<List<DomainDayWeather>> =
         getDayWeatherList()
-            .map(DayWeather::toDomain)
+            .map(DayWeatherData::toDomain)
             .toList()
             .timeout(2L, TimeUnit.SECONDS) { observer -> observer.onSuccess(emptyList()) }
 
     override fun getForecastForAlarm(time: Long): Single<DomainDayWeather> =
         getDayWeatherForTime(time)
-            .timeout(2L, TimeUnit.SECONDS) { observer -> observer.onSuccess(DayWeather(id = -1)) }
-            .map(DayWeather::toDomain)
+            .timeout(
+                2L,
+                TimeUnit.SECONDS
+            ) { observer -> observer.onSuccess(DayWeatherData(id = -1)) }
+            .map(DayWeatherData::toDomain)
             .onErrorResumeNext(Single.just(com.helpfulapps.domain.models.weather.DayWeather()))
 
-    fun getDayWeatherList() = (select from DayWeather::class).rx().queryStreamResults()
-
-    fun getDayWeatherForTime(time: Long) =
-        (select from DayWeather::class where (DayWeather_Table.dt lessThanOrEq time + ONE_AND_HALF_AN_HOUR) and (DayWeather_Table.dt greaterThan time - ONE_AND_HALF_AN_HOUR))
-            .rxQueryListSingle()
-
-    private fun Maybe<Response<ForecastForCity>>.convertModelsAndSaveInDb() =
-        this.clearTables()
-            .getResponseBody()
-            .transformResponseIntoDays()
-            .analyzeWeather(settings.units)
+    private fun Single<List<DayWeatherData>>.convertModelsAndSaveInDb() =
+        clearTables()
             .saveInDatabase()
             .flatMapCompletable { savedInDb ->
                 savedInDb.checkCompleted(WeatherException("Couldn't save forecast in database"))
             }
-            .observeOn(AndroidSchedulers.mainThread())
 
-    private fun Maybe<Response<ForecastForCity>>.clearTables() =
+    private fun Single<List<DayWeatherData>>.clearTables() =
         this.doOnSuccess {
-            Delete.table(DayWeather::class.java)
-            Delete.table(HourWeather::class.java)
+            weatherDao.clearWeatherTables()
         }
 
-    private fun Maybe<Response<ForecastForCity>>.getResponseBody() =
-        this.flatMapSingle { response ->
-            when (response.isSuccessful) {
-                true -> Single.create { emitter: SingleEmitter<ForecastForCity> ->
-                    println(response.raw().request())
-                    emitter.onSuccess(response.body()!!)
-                }
-                else -> Single.error(CouldNotObtainForecast())
-            }
-        }
-
-    private fun Single<List<DayWeather>>.saveInDatabase() =
+    private fun Single<List<DayWeatherData>>.saveInDatabase() =
         this.flatMapObservable { list -> Observable.fromIterable(list) }
-            .flatMap { dayWeather ->
-                dayWeather.weatherInfo?.save()?.flatMapObservable {
-                    dayWeather.save()
-                        .flatMapObservable {
-                            Observable.fromIterable(dayWeather.hourWeatherList)
-                                .flatMap { hourWeather ->
-                                    hourWeather.dayWeather = dayWeather
-                                    hourWeather.weatherInfo?.save()?.toObservable()
-                                        ?.flatMap { hourWeather.save().toObservable() }
-                                }
-                        }
-                }
+            .flatMapSingle { dayWeather ->
+                weatherDao.insert(dayWeather)
             }
 
-    private fun Single<ForecastForCity>.transformResponseIntoDays(): Single<List<DayWeather>> =
-        this.map {
-            settings.city = it.city.name
-            it.list
-                .map { forecast -> forecast.toDbModel().apply { dt *= 1000 } }
-                .groupBy { hourWeather -> hourWeather.dt.dayOfMonth() }
-                .map { hourWeather ->
-                    DayWeather(
-                        dt = hourWeather.value.first().dt.timestampAtMidnight(),
-                        cityName = it.city.name,
-                        hourWeatherList = hourWeather.value
-                    )
-                }
-        }
 
+    fun getDayWeatherList() = weatherDao.streamWeatherList()
+
+    fun getDayWeatherForTime(time: Long) = weatherDao.getWeatherForTime(time)
 }
