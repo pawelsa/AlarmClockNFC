@@ -57,4 +57,28 @@
         <item name="chipStrokeWidth">@dimen/chip_stroke</item>
     </style>
 
+    <style name="AlarmTimeTextTheme" parent="AppTheme">
+        <item name="android:textSize">@dimen/ringing_time_text_size</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="AlarmTitleTextTheme" parent="AppTheme">
+        <item name="android:textSize">@dimen/ringing_title_text_size</item>
+    </style>
+
+    <style name="AlarmImageTheme" parent="AppTheme">
+        <item name="android:layout_width">@dimen/ringing_image_size</item>
+        <item name="android:layout_height">@dimen/ringing_image_size</item>
+    </style>
+
+    <style name="MainTabTheme" parent="AppTheme">
+        <item name="android:layout_width">@dimen/icon_tab_size</item>
+        <item name="android:layout_height">@dimen/icon_tab_size</item>
+        <item name="android:background">?selectableItemBackgroundBorderless</item>
+    </style>
+
+    <style name="CountTimeTextTheme" parent="AppTheme">
+        <item name="android:textSize">@dimen/timer_time_size</item>
+    </style>
+
 </resources>

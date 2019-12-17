@@ -27,7 +27,7 @@ class RingingAlarmActivity : BaseRingingAlarmActivity<ActivityRingingAlarmBindin
     }
 
     override fun showMessage(text: String) {
-        Snackbar.make(cl_ringing_base, text, Snackbar.LENGTH_SHORT).show()
+        Snackbar.make(cl_ring_base, text, Snackbar.LENGTH_SHORT).show()
     }
 
 }

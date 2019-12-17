@@ -107,7 +107,7 @@ class HourWatchFragment : BaseFragment<HourWatchViewModel, FragmentHourwatchBind
             setupStartedTimer()
         }
         changeFabIconToStart()
-        tv_time_left.startAnimation(animation)
+        tv_timer_left.startAnimation(animation)
     }
 
     private fun setupFinishTimer(finishTimer: HourWatchViewModel.TimerState.Finished) {
@@ -124,11 +124,11 @@ class HourWatchFragment : BaseFragment<HourWatchViewModel, FragmentHourwatchBind
         pk_timer_picker.visibility = View.VISIBLE
         pk_timer_picker.setListener(getPickerListener())
         bt_timer_reset.visibility = View.GONE
-        tv_time_left.visibility = View.GONE
+        tv_timer_left.visibility = View.GONE
     }
 
     private fun stopBlinking() {
-        tv_time_left.clearAnimation()
+        tv_timer_left.clearAnimation()
     }
 
     private fun getPickerListener(): HmsPickerView.Listener {
@@ -154,8 +154,8 @@ class HourWatchFragment : BaseFragment<HourWatchViewModel, FragmentHourwatchBind
         changeFabIconToStop()
         pk_timer_picker.visibility = View.GONE
         changeFabIconToStop()
-        tv_time_left.text = "0"
-        tv_time_left.startAnimation(animation)
+        tv_timer_left.text = "0"
+        tv_timer_left.startAnimation(animation)
     }
 
     private fun updateTimer(updateTimer: HourWatchViewModel.TimerState.Update) {
@@ -165,7 +165,7 @@ class HourWatchFragment : BaseFragment<HourWatchViewModel, FragmentHourwatchBind
         stopBlinking()
 
         val toDisplay = updateTimer.time.secondsToString()
-        tv_time_left.text = toDisplay
+        tv_timer_left.text = toDisplay
     }
 
     private fun setupStartedTimer() {
@@ -174,13 +174,13 @@ class HourWatchFragment : BaseFragment<HourWatchViewModel, FragmentHourwatchBind
         stopBlinking()
         pk_timer_picker.visibility = View.GONE
         bt_timer_reset.visibility = View.VISIBLE
-        tv_time_left.text = (pk_timer_picker.getTimeInMillis() / 1000).toString()
-        tv_time_left.visibility = View.VISIBLE
+        tv_timer_left.text = (pk_timer_picker.getTimeInMillis() / 1000).toString()
+        tv_timer_left.visibility = View.VISIBLE
     }
 
     private fun resetTimer() {
         stopBlinking()
-        tv_time_left.visibility = View.GONE
+        tv_timer_left.visibility = View.GONE
         ServiceBus.publish(TimerService.TimerServiceEvent.FinishTimer)
     }
 

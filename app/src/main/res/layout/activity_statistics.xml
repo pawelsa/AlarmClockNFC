@@ -16,7 +16,7 @@
             android:layout_weight="0.5" />
 
         <com.github.mikephil.charting.charts.BarChart
-            android:id="@+id/bc_stats_snoozed"
+            android:id="@+id/bc_statistics_snoozed"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginLeft="@dimen/margin_medium"
@@ -29,7 +29,7 @@
             android:layout_weight="1" />
 
         <com.github.mikephil.charting.charts.BarChart
-            android:id="@+id/bc_stats_stop_time"
+            android:id="@+id/bc_statistics_stop_time"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginLeft="@dimen/margin_medium"

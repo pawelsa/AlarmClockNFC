@@ -28,7 +28,7 @@
     <string name="item_alarm_temperature_cold">Cold</string>
     <string name="item_alarm_temperature_hot">Hot</string>
     <string name="item_alarm_temperature_very_hot">Very hot</string>
-    <string name="item_alarm_temperature_ok">Ok</string>
+    <string name="item_alarm_temperature_ok">OK</string>
     <string name="item_alarm_rain_no">No rain</string>
     <string name="item_alarm_rain_heavy_rain">Heavy rain</string>
     <string name="item_alarm_rain_will_rain">Raining</string>
@@ -116,6 +116,7 @@
     <string name="stopwatch_reset">Reset</string>
     <string name="stopwatch_lap">Lap</string>
     <string name="menu_statistics">Statistics</string>
+
     <string-array name="settings_alarm_time_titles">
         <item>1 minute</item>
         <item>2 minutes</item>

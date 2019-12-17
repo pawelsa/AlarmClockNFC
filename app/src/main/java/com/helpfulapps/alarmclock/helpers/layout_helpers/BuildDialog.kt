@@ -18,7 +18,7 @@ fun buildEditTitleDialog(context: Context, oldLabel: String, listener: (String) 
 
         val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_edit_text_label, null)
 
-        val userInput: TextInputEditText = dialogView.findViewById(R.id.ed_dialog_alarm_name)
+        val userInput: TextInputEditText = dialogView.findViewById(R.id.et_dialog_alarm_name)
         // set dialog message
         userInput.setText(oldLabel)
 

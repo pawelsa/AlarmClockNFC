@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="margin_big">16dp</dimen>
+    <dimen name="margin_medium">8dp</dimen>
+    <dimen name="padding_medium">8dp</dimen>
+    <dimen name="padding_small">4dp</dimen>
+
     <dimen name="indicator_size">50dp</dimen>
     <dimen name="menu_icon_width">30dp</dimen>
     <dimen name="menu_icon_height">0dp</dimen>
@@ -17,11 +22,8 @@
     <dimen name="item_alarm_time_text_size">40sp</dimen>
     <dimen name="item_alarm_time_text_width">80dp</dimen>
     <dimen name="item_alarm_check_box_margin_left">24dp</dimen>
-    <dimen name="alarm_item_time_text_width">120dp</dimen>
-    <dimen name="margin_big">16dp</dimen>
     <dimen name="list_item_spacing">16dp</dimen>
     <dimen name="list_item_spacing_half">8dp</dimen>
-    <dimen name="margin_medium">8dp</dimen>
     <dimen name="ringing_title_text_size">24sp</dimen>
     <dimen name="ringing_time_text_size">64sp</dimen>
     <dimen name="ringing_image_size">200dp</dimen>
@@ -31,9 +33,9 @@
     <dimen name="chip_stroke">2dp</dimen>
     <dimen name="nfc_icon_size">160dp</dimen>
     <dimen name="timer_time_size">48sp</dimen>
-    <dimen name="padding_medium">8dp</dimen>
-    <dimen name="padding_small">4dp</dimen>
     <dimen name="stopwatch_bottom_buttons_margin">24dp</dimen>
     <dimen name="stopwatch_list_padding_bottom">128dp</dimen>
     <dimen name="stopwatch_time_text_size">48sp</dimen>
+    <dimen name="toolbar_elevation">4dp</dimen>
+    <dimen name="toolbar_padding">10dp</dimen>
 </resources>

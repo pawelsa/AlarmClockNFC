@@ -37,7 +37,7 @@ class ClockListAdapter(
                 true
             }
 
-            swItemAlarm.setOnCheckedChangeListener { checkBox, isChecked ->
+            swItemAlarmIsOn.setOnCheckedChangeListener { checkBox, isChecked ->
                 if (checkBox.isPressed) {
                     item.isTurnedOn = isChecked
                     switchAlarm(item.toDomain())
@@ -56,7 +56,7 @@ class ClockListAdapter(
         itemAlarmBinding: ItemAlarmBinding,
         context: Context
     ) {
-        itemAlarmBinding.chipAlarmItemWind.text =
+        itemAlarmBinding.chipItemAlarmWind.text =
             when (itemAlarmBinding.alarmData?.weatherShort?.wind) {
                 1 -> context.getString(R.string.item_alarm_wind_windy)
                 2 -> context.getString(R.string.item_alarm_wind_very_windy)
@@ -68,7 +68,7 @@ class ClockListAdapter(
         itemAlarmBinding: ItemAlarmBinding,
         context: Context
     ) {
-        itemAlarmBinding.chipAlarmItemSnow.text =
+        itemAlarmBinding.chipItemAlarmSnow.text =
             when (itemAlarmBinding.alarmData?.weatherShort?.snow) {
                 1 -> context.getString(R.string.item_alarm_snow_snowy)
                 2 -> context.getString(R.string.item_alarm_snow_heavy_snow)
@@ -80,7 +80,7 @@ class ClockListAdapter(
         itemAlarmBinding: ItemAlarmBinding,
         context: Context
     ) {
-        itemAlarmBinding.chipAlarmItemRain.text =
+        itemAlarmBinding.chipItemAlarmRain.text =
             when (itemAlarmBinding.alarmData?.weatherShort?.rain) {
                 1 -> context.getString(R.string.item_alarm_rain_may_rain)
                 2 -> context.getString(R.string.item_alarm_rain_will_rain)
@@ -93,7 +93,7 @@ class ClockListAdapter(
         itemAlarmBinding: ItemAlarmBinding,
         context: Context
     ) {
-        itemAlarmBinding.chipAlarmItemTemperature.text =
+        itemAlarmBinding.chipItemAlarmTemperature.text =
             when (itemAlarmBinding.alarmData?.weatherShort?.temperature) {
                 -2 -> context.getString(R.string.item_alarm_temperature_very_cold)
                 -1 -> context.getString(R.string.item_alarm_temperature_cold)

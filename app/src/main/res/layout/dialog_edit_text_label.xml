@@ -13,7 +13,7 @@
         android:layout_marginRight="@dimen/dialog_edit_text_margin">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/ed_dialog_alarm_name"
+            android:id="@+id/et_dialog_alarm_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/hint_alarm_name"
