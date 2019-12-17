@@ -1,12 +1,12 @@
 package com.helpfulapps.data.api.weather.converter
 
 import com.helpfulapps.data.db.converter.DayWeatherConverter
-import com.helpfulapps.data.db.weather.model.DayWeather
+import com.helpfulapps.data.db.weather.model.DayWeatherEntity
 import com.helpfulapps.domain.helpers.Settings
 import io.reactivex.Single
 
 //TODO maybe it should be wrapped in factory pattern ?
-fun Single<List<DayWeather>>.analyzeWeather(units: Settings.Units) =
+fun Single<List<DayWeatherEntity>>.analyzeWeather(units: Settings.Units) =
     this.map { dayWeatherList ->
         dayWeatherList.forEach { DayWeatherConverter.analyzeWeather(it, units) }
         dayWeatherList

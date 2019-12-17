@@ -13,8 +13,8 @@ class ForecastApiMappingTest {
         val dayWeather = apiForecastForCity.toDbModel()
 
         val expected = MockData.createDbDayWeather()
-        expected.weatherInfo = null
-        expected.hourWeatherList.forEach { it.weatherInfo = null }
+        expected.weatherInfoEntity = null
+        expected.hourWeatherEntityList.forEach { it.weatherInfoEntity = null }
 
         assertEquals(expected, dayWeather)
     }

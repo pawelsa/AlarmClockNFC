@@ -37,3 +37,12 @@ data class AlarmStatsEntity(
         const val TABLE_NAME = "alarmStats"
     }
 }
+
+data class AlarmStatsData(
+    var id: Long = 0,
+    var dayOfWeek: Int = 0,
+    var dayOfYear: Int = 0,
+    var hour: Int = 0,
+    var minute: Int = 0,
+    var timeToStop: Int = 0
+)

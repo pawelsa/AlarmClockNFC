@@ -1,6 +1,6 @@
 package com.helpfulapps.data.api.weather.model
 
-import com.helpfulapps.data.db.weather.model.HourWeather
+import com.helpfulapps.data.db.weather.model.HourWeatherEntity
 
 data class Forecast(
     val clouds: Clouds?,
@@ -14,7 +14,7 @@ data class Forecast(
     val wind: Wind?
 ) {
     fun toDbModel() =
-        HourWeather(
+        HourWeatherEntity(
             dt = dt,
             clouds = clouds?.all ?: 0,
             rain = rain?._3h ?: 0.0,

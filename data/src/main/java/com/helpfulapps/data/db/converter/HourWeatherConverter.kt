@@ -4,15 +4,18 @@ import com.helpfulapps.data.api.weather.converter.Rain
 import com.helpfulapps.data.api.weather.converter.Snow
 import com.helpfulapps.data.api.weather.converter.Temperature
 import com.helpfulapps.data.api.weather.converter.Wind
-import com.helpfulapps.data.db.weather.model.HourWeather
-import com.helpfulapps.data.db.weather.model.WeatherInfo
+import com.helpfulapps.data.db.weather.model.HourWeatherEntity
+import com.helpfulapps.data.db.weather.model.WeatherInfoEntity
 import com.helpfulapps.domain.helpers.Settings
 
 object HourWeatherConverter {
 
-    fun analyzeWeather(hourWeather: HourWeather, units: Settings.Units): WeatherInfo {
-        with(hourWeather){
-            weatherInfo = WeatherInfo(
+    fun analyzeWeather(
+        hourWeatherEntity: HourWeatherEntity,
+        units: Settings.Units
+    ): WeatherInfoEntity {
+        with(hourWeatherEntity) {
+            weatherInfoEntity = WeatherInfoEntity(
                 temperature = getTemperature(
                     temp,
                     units
@@ -22,7 +25,7 @@ object HourWeatherConverter {
                 rain = getRain(rain)
             )
         }
-        return hourWeather.weatherInfo!!
+        return hourWeatherEntity.weatherInfoEntity!!
     }
 
     private fun getTemperature(temperature: Double, units: Settings.Units): Int {

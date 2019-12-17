@@ -14,9 +14,9 @@ import com.helpfulapps.domain.models.weather.Wind
 import com.helpfulapps.data.api.weather.model.Rain as ApiRain
 import com.helpfulapps.data.api.weather.model.Snow as ApiSnow
 import com.helpfulapps.data.api.weather.model.Wind as ApiWind
-import com.helpfulapps.data.db.weather.model.DayWeather as DbDayWeather
-import com.helpfulapps.data.db.weather.model.HourWeather as DbHourWeather
-import com.helpfulapps.data.db.weather.model.WeatherInfo as DbWeatherInfo
+import com.helpfulapps.data.db.weather.model.DayWeatherEntity as DbDayWeather
+import com.helpfulapps.data.db.weather.model.HourWeatherEntity as DbHourWeather
+import com.helpfulapps.data.db.weather.model.WeatherInfoEntity as DbWeatherInfo
 
 object MockDataIns {
 
@@ -263,6 +263,10 @@ object MockDataIns {
         weatherInfo: DbWeatherInfo = createDbWeatherInfo()
     ) =
         DbDayWeather(
-            id, dt, cityName, hourWeatherList = hourWeatherList, weatherInfo = weatherInfo
+            id,
+            dt,
+            cityName,
+            hourWeatherEntityList = hourWeatherList,
+            weatherInfoEntity = weatherInfo
         )
 }

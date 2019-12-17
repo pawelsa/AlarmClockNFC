@@ -5,7 +5,9 @@ import com.helpfulapps.data.api.weather.api.ApiCalls
 import com.helpfulapps.data.api.weather.api.Downloader
 import com.helpfulapps.data.api.weather.converter.analyzeWeather
 import com.helpfulapps.data.api.weather.model.ForecastForCity
-import com.helpfulapps.data.db.weather.model.*
+import com.helpfulapps.data.db.weather.model.DayWeatherEntity
+import com.helpfulapps.data.db.weather.model.DayWeatherEntity_Table
+import com.helpfulapps.data.db.weather.model.HourWeatherEntity
 import com.helpfulapps.data.extensions.checkCompleted
 import com.helpfulapps.data.extensions.dayOfMonth
 import com.helpfulapps.data.extensions.rxQueryListSingle
@@ -62,14 +64,17 @@ class WeatherRepositoryImpl(
 
     override fun getForecastForAlarms(): Single<List<DomainDayWeather>> =
         getDayWeatherList()
-            .map(DayWeather::toDomain)
+            .map(DayWeatherEntity::toDomain)
             .toList()
             .timeout(2L, TimeUnit.SECONDS) { observer -> observer.onSuccess(emptyList()) }
 
     override fun getForecastForAlarm(time: Long): Single<DomainDayWeather> =
         getDayWeatherForTime(time)
-            .timeout(2L, TimeUnit.SECONDS) { observer -> observer.onSuccess(DayWeather(id = -1)) }
-            .map(DayWeather::toDomain)
+            .timeout(
+                2L,
+                TimeUnit.SECONDS
+            ) { observer -> observer.onSuccess(DayWeatherEntity(id = -1)) }
+            .map(DayWeatherEntity::toDomain)
             .onErrorResumeNext(Single.just(com.helpfulapps.domain.models.weather.DayWeather()))
 
     private fun Maybe<Response<ForecastForCity>>.convertModelsAndSaveInDb() =
@@ -85,8 +90,8 @@ class WeatherRepositoryImpl(
 
     private fun Maybe<Response<ForecastForCity>>.clearTables() =
         this.doOnSuccess {
-            Delete.table(DayWeather::class.java)
-            Delete.table(HourWeather::class.java)
+            Delete.table(DayWeatherEntity::class.java)
+            Delete.table(HourWeatherEntity::class.java)
         }
 
     private fun Maybe<Response<ForecastForCity>>.getResponseBody() =
@@ -100,41 +105,41 @@ class WeatherRepositoryImpl(
             }
         }
 
-    private fun Single<List<DayWeather>>.saveInDatabase() =
+    private fun Single<List<DayWeatherEntity>>.saveInDatabase() =
         this.flatMapObservable { list -> Observable.fromIterable(list) }
             .flatMap { dayWeather ->
-                dayWeather.weatherInfo?.save()?.flatMapObservable {
+                dayWeather.weatherInfoEntity?.save()?.flatMapObservable {
                     dayWeather.save()
                         .flatMapObservable {
-                            Observable.fromIterable(dayWeather.hourWeatherList)
+                            Observable.fromIterable(dayWeather.hourWeatherEntityList)
                                 .flatMap { hourWeather ->
-                                    hourWeather.dayWeather = dayWeather
-                                    hourWeather.weatherInfo?.save()?.toObservable()
+                                    hourWeather.dayWeatherEntity = dayWeather
+                                    hourWeather.weatherInfoEntity?.save()?.toObservable()
                                         ?.flatMap { hourWeather.save().toObservable() }
                                 }
                         }
                 }
             }
 
-    private fun Single<ForecastForCity>.transformResponseIntoDays(): Single<List<DayWeather>> =
+    private fun Single<ForecastForCity>.transformResponseIntoDays(): Single<List<DayWeatherEntity>> =
         this.map {
             settings.city = it.city.name
             it.list
                 .map { forecast -> forecast.toDbModel().apply { dt *= 1000 } }
                 .groupBy { hourWeather -> hourWeather.dt.dayOfMonth() }
                 .map { hourWeather ->
-                    DayWeather(
+                    DayWeatherEntity(
                         dt = hourWeather.value.first().dt.timestampAtMidnight(),
                         cityName = it.city.name,
-                        hourWeatherList = hourWeather.value
+                        hourWeatherEntityList = hourWeather.value
                     )
                 }
         }
 
 
-    fun getDayWeatherList() = (select from DayWeather::class).rx().queryStreamResults()
+    fun getDayWeatherList() = (select from DayWeatherEntity::class).rx().queryStreamResults()
 
     fun getDayWeatherForTime(time: Long) =
-        (select from DayWeather::class where (DayWeather_Table.dt lessThanOrEq time + ONE_AND_HALF_AN_HOUR) and (DayWeather_Table.dt greaterThan time - ONE_AND_HALF_AN_HOUR))
+        (select from DayWeatherEntity::class where (DayWeatherEntity_Table.dt lessThanOrEq time + ONE_AND_HALF_AN_HOUR) and (DayWeatherEntity_Table.dt greaterThan time - ONE_AND_HALF_AN_HOUR))
             .rxQueryListSingle()
 }

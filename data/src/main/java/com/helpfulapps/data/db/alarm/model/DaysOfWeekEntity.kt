@@ -66,3 +66,14 @@ data class DaysOfWeekEntity(
     }
 
 }
+
+data class DaysOfWeekData(
+    var id: Long = 0L,
+    var monday: Boolean = false,
+    var tuesday: Boolean = false,
+    var wednesday: Boolean = false,
+    var thursday: Boolean = false,
+    var friday: Boolean = false,
+    var saturday: Boolean = false,
+    var sunday: Boolean = false
+)

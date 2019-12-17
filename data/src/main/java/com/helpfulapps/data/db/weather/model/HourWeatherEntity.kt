@@ -1,7 +1,7 @@
 package com.helpfulapps.data.db.weather.model
 
 import com.helpfulapps.data.AlarmAppDatabase
-import com.helpfulapps.data.db.weather.model.HourWeather.Companion.TABLE_NAME
+import com.helpfulapps.data.db.weather.model.HourWeatherEntity.Companion.TABLE_NAME
 import com.raizlabs.android.dbflow.annotation.ForeignKey
 import com.raizlabs.android.dbflow.annotation.PrimaryKey
 import com.raizlabs.android.dbflow.annotation.Table
@@ -10,7 +10,7 @@ import com.helpfulapps.domain.models.weather.HourWeather as DomainHourWeather
 import com.helpfulapps.domain.models.weather.WeatherInfo as DomainWeatherInfo
 
 @Table(database = AlarmAppDatabase::class, name = TABLE_NAME, allFields = true)
-data class HourWeather(
+data class HourWeatherEntity(
     @PrimaryKey(autoincrement = true)
     var id: Int = 0,
     var dt: Long = 0,
@@ -24,9 +24,9 @@ data class HourWeather(
     var tempMax: Double = 0.0,
     var tempMin: Double = 0.0,
     @ForeignKey(stubbedRelationship = true)
-    var dayWeather: DayWeather? = null,
+    var dayWeatherEntity: DayWeatherEntity? = null,
     @ForeignKey(stubbedRelationship = true)
-    var weatherInfo: WeatherInfo? = null
+    var weatherInfoEntity: WeatherInfoEntity? = null
 ) : BaseRXModel() {
 
     companion object {
@@ -46,7 +46,23 @@ data class HourWeather(
             temp = this.temp,
             tempMax = this.tempMax,
             tempMin = this.tempMin,
-            weatherInfo = weatherInfo?.toDomain() ?: DomainWeatherInfo()
+            weatherInfo = weatherInfoEntity?.toDomain() ?: DomainWeatherInfo()
         )
     }
 }
+
+data class HourWeatherData(
+    var id: Int = 0,
+    var dt: Long = 0,
+    var clouds: Int = 0,
+    var rain: Double = 0.0,
+    var snow: Double = 0.0,
+    var wind: Double = 0.0,
+    var humidity: Int = 0,
+    var pressure: Double = 0.0,
+    var temp: Double = 0.0,
+    var tempMax: Double = 0.0,
+    var tempMin: Double = 0.0,
+    var dayWeatherEntity: DayWeatherEntity? = null,
+    var weatherInfoEntity: WeatherInfoEntity? = null
+)

@@ -4,42 +4,45 @@ import com.helpfulapps.data.api.weather.converter.Rain
 import com.helpfulapps.data.api.weather.converter.Snow
 import com.helpfulapps.data.api.weather.converter.Temperature
 import com.helpfulapps.data.api.weather.converter.Wind
-import com.helpfulapps.data.db.weather.model.DayWeather
-import com.helpfulapps.data.db.weather.model.WeatherInfo
+import com.helpfulapps.data.db.weather.model.DayWeatherEntity
+import com.helpfulapps.data.db.weather.model.WeatherInfoEntity
 import com.helpfulapps.domain.helpers.Settings
 import kotlin.math.abs
 
 object DayWeatherConverter {
 
-    fun analyzeWeather(dayWeather: DayWeather, units: Settings.Units): WeatherInfo {
-        dayWeather.hourWeatherList.forEach {
+    fun analyzeWeather(
+        dayWeatherEntity: DayWeatherEntity,
+        units: Settings.Units
+    ): WeatherInfoEntity {
+        dayWeatherEntity.hourWeatherEntityList.forEach {
             HourWeatherConverter.analyzeWeather(
                 it,
                 units
             )
         }
-        val temperature = dayWeather.hourWeatherList
-            .mapNotNull { it.weatherInfo?.temperature }
+        val temperature = dayWeatherEntity.hourWeatherEntityList
+            .mapNotNull { it.weatherInfoEntity?.temperature }
             .maxBy { abs(it) }
 
-        val wind = dayWeather.hourWeatherList
-            .mapNotNull { it.weatherInfo?.wind }
+        val wind = dayWeatherEntity.hourWeatherEntityList
+            .mapNotNull { it.weatherInfoEntity?.wind }
             .maxBy { it }
 
-        val rain = dayWeather.hourWeatherList
-            .mapNotNull { it.weatherInfo?.rain }
+        val rain = dayWeatherEntity.hourWeatherEntityList
+            .mapNotNull { it.weatherInfoEntity?.rain }
             .maxBy { it }
 
-        val snow = dayWeather.hourWeatherList
-            .mapNotNull { it.weatherInfo?.snow }
+        val snow = dayWeatherEntity.hourWeatherEntityList
+            .mapNotNull { it.weatherInfoEntity?.snow }
             .maxBy { it }
 
-        dayWeather.weatherInfo = WeatherInfo(
+        dayWeatherEntity.weatherInfoEntity = WeatherInfoEntity(
             temperature = temperature ?: Temperature.NO_DATA.importance,
             wind = wind ?: Wind.NO_DATA.importance,
             rain = rain ?: Rain.NO_DATA.importance,
             snow = snow ?: Snow.NO_DATA.importance
         )
-        return dayWeather.weatherInfo!!
+        return dayWeatherEntity.weatherInfoEntity!!
     }
 }

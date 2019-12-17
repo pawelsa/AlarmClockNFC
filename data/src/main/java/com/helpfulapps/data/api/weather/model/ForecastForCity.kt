@@ -1,6 +1,6 @@
 package com.helpfulapps.data.api.weather.model
 
-import com.helpfulapps.data.db.weather.model.DayWeather
+import com.helpfulapps.data.db.weather.model.DayWeatherEntity
 
 data class ForecastForCity(
     val city: City,
@@ -11,9 +11,9 @@ data class ForecastForCity(
 ) {
 
     fun toDbModel() =
-        DayWeather(
+        DayWeatherEntity(
             dt = list.first().dt,
             cityName = city.name,
-            hourWeatherList = list.map { it.toDbModel() }
+            hourWeatherEntityList = list.map { it.toDbModel() }
         )
 }

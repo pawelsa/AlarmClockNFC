@@ -111,5 +111,19 @@ data class AlarmEntity(
         return true
     }
 
-
 }
+
+data class AlarmData(
+    var id: Long = 0L,
+    var name: String = "",
+    var isRepeating: Boolean = false,
+    var isVibrationOn: Boolean = true,
+    var isTurnedOn: Boolean = true,
+    var ringtoneId: String = "",
+    var ringtoneTitle: String = "",
+    var isUsingNFC: Boolean = false,
+    var hour: Int = 0,
+    var minute: Int = 0,
+    var daysOfWeek: DaysOfWeekData? = DaysOfWeekData()
+
+)
