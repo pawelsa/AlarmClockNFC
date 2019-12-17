@@ -6,7 +6,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
 object Downloader {
-    fun create(): com.example.api.api.ApiCalls {
+    fun create(): ApiCalls {
 
         val retrofit = Retrofit.Builder()
             .addCallAdapterFactory(
@@ -18,6 +18,6 @@ object Downloader {
             .baseUrl("http://api.openweathermap.org/data/2.5/")
             .build()
 
-        return retrofit.create(com.example.api.api.ApiCalls::class.java)
+        return retrofit.create(ApiCalls::class.java)
     }
 }

@@ -14,7 +14,7 @@ data class Forecast(
     val weather: List<Weather>,
     val wind: Wind?
 ) {
-    fun toDbModel() =
+    fun toData() =
         HourWeatherData(
             dt = dt,
             clouds = clouds?.all ?: 0,

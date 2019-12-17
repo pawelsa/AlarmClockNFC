@@ -2,14 +2,12 @@ package com.helpfulapps.data.repositories
 
 import com.helpfulapps.data.db.alarm.dao.AlarmDao
 import com.helpfulapps.data.db.alarm.model.AlarmData
-import com.helpfulapps.data.db.alarm.model.AlarmEntity_Table
 import com.helpfulapps.data.extensions.checkCompleted
 import com.helpfulapps.domain.eventBus.DatabaseNotifiers
 import com.helpfulapps.domain.eventBus.RxBus
 import com.helpfulapps.domain.exceptions.AlarmException
 import com.helpfulapps.domain.models.alarm.Alarm
 import com.helpfulapps.domain.repository.AlarmRepository
-import com.raizlabs.android.dbflow.structure.Model
 import io.reactivex.Completable
 import io.reactivex.Single
 import java.util.concurrent.TimeUnit
@@ -67,7 +65,7 @@ open class AlarmRepositoryImpl(
     override fun addAlarm(alarm: Alarm): Single<Alarm> {
         return alarmDao.insert(AlarmData(alarm))
             .flatMap { alarmId ->
-                if (alarmId == Model.INVALID_ROW_ID) {
+                if (alarmId == INVALID_ROW_ID) {
                     throw AlarmException("Couldn't save alarm")
                 }
                 getAlarmDomain(alarmId)
@@ -97,4 +95,8 @@ open class AlarmRepositoryImpl(
     private fun getAlarmDomain(alarmId: Long): Single<Alarm> =
         getSingleAlarm(alarmId).map { it.toDomain() }
 
+
+    companion object {
+        private const val INVALID_ROW_ID = -1L
+    }
 }

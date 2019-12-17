@@ -1,6 +1,5 @@
 package com.example.api.other.converter
 
-import com.helpfulapps.data.db.weather.converter.DayWeatherConverter
 import com.helpfulapps.data.db.weather.model.DayWeatherData
 import com.helpfulapps.domain.helpers.Settings
 import io.reactivex.Single
@@ -11,6 +10,7 @@ fun Single<List<DayWeatherData>>.analyzeWeather(units: Settings.Units) =
         dayWeatherList.forEach { DayWeatherConverter.analyzeWeather(it, units) }
         dayWeatherList
     }
+
 
 enum class Temperature(
     val importance: Int,

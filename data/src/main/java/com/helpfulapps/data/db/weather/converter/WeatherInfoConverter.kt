@@ -1,42 +1,53 @@
 package com.helpfulapps.data.db.weather.converter
 
+import com.helpfulapps.data.db.weather.model.RainData
+import com.helpfulapps.data.db.weather.model.SnowData
+import com.helpfulapps.data.db.weather.model.TemperatureData
+import com.helpfulapps.data.db.weather.model.WindData
+import com.helpfulapps.domain.models.weather.Rain
+import com.helpfulapps.domain.models.weather.Snow
+import com.helpfulapps.domain.models.weather.Temperature
+import com.helpfulapps.domain.models.weather.Wind
+
+
 object WeatherInfoConverter {
 
-    fun getTemperature(temperature: Int): Temperature {
+
+    fun getTemperature(temperature: TemperatureData): Temperature {
         return when (temperature) {
-            -2 -> Temperature.VERY_COLD
-            -1 -> Temperature.COLD
-            0 -> Temperature.NORMAL
-            1 -> Temperature.HOT
-            2 -> Temperature.VERY_HOT
+            TemperatureData.VERY_COLD -> Temperature.VERY_COLD
+            TemperatureData.COLD -> Temperature.COLD
+            TemperatureData.NORMAL -> Temperature.NORMAL
+            TemperatureData.HOT -> Temperature.HOT
+            TemperatureData.VERY_HOT -> Temperature.VERY_HOT
             else -> Temperature.NO_DATA
         }
     }
 
-    fun getRain(rain: Int): Rain {
-        return when (rain) {
-            0 -> Rain.NO_RAIN
-            1 -> Rain.MAY_RAIN
-            2 -> Rain.WILL_RAIN
-            3 -> Rain.HEAVY_RAIN
-            else -> Rain.NO_DATA
-        }
-    }
-
-    fun getWind(wind: Int): Wind {
+    fun getWind(wind: WindData): Wind {
         return when (wind) {
-            0 -> Wind.NORMAL
-            1 -> Wind.WINDY
-            2 -> Wind.VERY_WINDY
+            WindData.NORMAL -> Wind.NORMAL
+            WindData.WINDY -> Wind.WINDY
+            WindData.VERY_WINDY -> Wind.VERY_WINDY
             else -> Wind.NO_DATA
         }
     }
 
-    fun getSnow(snow: Int): Snow {
+    fun getRain(rain: RainData): Rain {
+        return when (rain) {
+            RainData.NO_RAIN -> Rain.NO_RAIN
+            RainData.MAY_RAIN -> Rain.MAY_RAIN
+            RainData.WILL_RAIN -> Rain.WILL_RAIN
+            RainData.HEAVY_RAIN -> Rain.HEAVY_RAIN
+            else -> Rain.NO_DATA
+        }
+    }
+
+    fun getSnow(snow: SnowData): Snow {
         return when (snow) {
-            0 -> Snow.NORMAL
-            1 -> Snow.SNOWY
-            2 -> Snow.VERY_SNOWY
+            SnowData.NORMAL -> Snow.NORMAL
+            SnowData.SNOWY -> Snow.SNOWY
+            SnowData.VERY_SNOWY -> Snow.VERY_SNOWY
             else -> Snow.NO_DATA
         }
     }

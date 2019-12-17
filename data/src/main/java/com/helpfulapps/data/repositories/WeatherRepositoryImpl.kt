@@ -11,7 +11,6 @@ import com.helpfulapps.domain.repository.WeatherRepository
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
 import java.util.concurrent.TimeUnit
 import com.helpfulapps.domain.models.weather.DayWeather as DomainDayWeather
 
@@ -58,7 +57,6 @@ class WeatherRepositoryImpl(
             .flatMapCompletable { savedInDb ->
                 savedInDb.checkCompleted(WeatherException("Couldn't save forecast in database"))
             }
-            .observeOn(AndroidSchedulers.mainThread())
 
     private fun Single<List<DayWeatherData>>.clearTables() =
         this.doOnSuccess {
