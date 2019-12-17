@@ -19,11 +19,11 @@ class StatsRepositoryImpl(
                 val data = alarmStatsList.groupBy { it.dayOfWeek }
 
                 val snoozesADay =
-                    Array(7) { index -> data[index].size - 1 }.map { if (it < 0) 0 else it }
+                    Array(7) { index -> data[index]?.size ?: 0 }.map { if (it < 0) 0 else it }
                         .toTypedArray()
 
                 val sumOfStopTime = Array(7) { index ->
-                    data[index].map { it.timeToStop }.average().toFloat()
+                    data[index]?.map { it.timeToStop }?.average()?.toFloat() ?: 0f
                 }
 
                 singleOf {
