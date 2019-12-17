@@ -33,19 +33,19 @@ class StatisticsActivity : BaseActivity<StatisticsViewModel, ActivityStatisticsB
     }
 
     private fun setupStopTimeChart() {
-        bc_stats_stop_time.xAxis.valueFormatter = IndexAxisValueFormatter(labels)
-        bc_stats_stop_time.setTouchEnabled(false)
-        bc_stats_stop_time.xAxis.setDrawGridLines(false)
-        bc_stats_stop_time.xAxis.position = XAxis.XAxisPosition.BOTTOM
-        bc_stats_stop_time.description.isEnabled = false
+        bc_statistics_stop_time.xAxis.valueFormatter = IndexAxisValueFormatter(labels)
+        bc_statistics_stop_time.setTouchEnabled(false)
+        bc_statistics_stop_time.xAxis.setDrawGridLines(false)
+        bc_statistics_stop_time.xAxis.position = XAxis.XAxisPosition.BOTTOM
+        bc_statistics_stop_time.description.isEnabled = false
     }
 
     private fun setupSnoozeTimeChart() {
-        bc_stats_snoozed.xAxis.valueFormatter = IndexAxisValueFormatter(labels)
-        bc_stats_snoozed.setTouchEnabled(false)
-        bc_stats_snoozed.xAxis.setDrawGridLines(false)
-        bc_stats_snoozed.xAxis.position = XAxis.XAxisPosition.BOTTOM
-        bc_stats_snoozed.description.isEnabled = false
+        bc_statistics_snoozed.xAxis.valueFormatter = IndexAxisValueFormatter(labels)
+        bc_statistics_snoozed.setTouchEnabled(false)
+        bc_statistics_snoozed.xAxis.setDrawGridLines(false)
+        bc_statistics_snoozed.xAxis.position = XAxis.XAxisPosition.BOTTOM
+        bc_statistics_snoozed.description.isEnabled = false
     }
 
     private fun subscribeToStopTime() {
@@ -54,8 +54,8 @@ class StatisticsActivity : BaseActivity<StatisticsViewModel, ActivityStatisticsB
             val dataSet = BarDataSet(it, "Average time to stop alarm (seconds)")
             val barData = BarData(dataSet)
 
-            bc_stats_stop_time.data = barData
-            bc_stats_stop_time.invalidate()
+            bc_statistics_stop_time.data = barData
+            bc_statistics_stop_time.invalidate()
         }
     }
 
@@ -65,8 +65,8 @@ class StatisticsActivity : BaseActivity<StatisticsViewModel, ActivityStatisticsB
             val dataSet = BarDataSet(it, "Number of snoozes")
             val barData = BarData(dataSet)
 
-            bc_stats_snoozed.data = barData
-            bc_stats_snoozed.invalidate()
+            bc_statistics_snoozed.data = barData
+            bc_statistics_snoozed.invalidate()
         }
     }
 

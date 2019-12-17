@@ -13,7 +13,7 @@
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/cl_ringing_base"
+        android:id="@+id/cl_ring_base"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -21,6 +21,42 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/iv_ring_alarm"
+                style="@style/AlarmImageTheme"
+                app:layout_constraintBottom_toTopOf="@+id/tv_ring_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_alarm" />
+
+            <TextView
+                android:id="@+id/tv_ring_title"
+                style="@style/AlarmTitleTextTheme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{model.weatherAlarm.alarm.title}"
+                app:layout_constraintBottom_toTopOf="@+id/tv_ring_time"
+                app:layout_constraintEnd_toEndOf="@+id/iv_ring_alarm"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="@+id/iv_ring_alarm"
+                app:layout_constraintTop_toBottomOf="@+id/iv_ring_alarm"
+                tools:text="Tutuł alarmu" />
+
+            <TextView
+                android:id="@+id/tv_ring_time"
+                style="@style/AlarmTimeTextTheme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{TimeKt.timeToString(model.weatherAlarm.alarm.hour, model.weatherAlarm.alarm.minute)}"
+                app:layout_constraintBottom_toTopOf="@+id/fab_ring_snooze"
+                app:layout_constraintEnd_toEndOf="@+id/tv_ring_title"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="@+id/tv_ring_title"
+                app:layout_constraintTop_toBottomOf="@+id/tv_ring_title"
+                tools:text="8:30" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_ring_snooze"
@@ -48,44 +84,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/gl_ring_fabs"
                 app:srcCompat="@drawable/ic_cancel" />
-
-            <ImageView
-                android:id="@+id/iv_ring_alarm"
-                android:layout_width="@dimen/ringing_image_size"
-                android:layout_height="200dp"
-                app:layout_constraintBottom_toTopOf="@+id/tv_ring_title"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_alarm" />
-
-            <TextView
-                android:id="@+id/tv_ring_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{model.weatherAlarm.alarm.title}"
-                android:textSize="@dimen/ringing_title_text_size"
-                app:layout_constraintBottom_toTopOf="@+id/tv_ring_time"
-                app:layout_constraintEnd_toEndOf="@+id/iv_ring_alarm"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="@+id/iv_ring_alarm"
-                app:layout_constraintTop_toBottomOf="@+id/iv_ring_alarm"
-                tools:text="Tutuł alarmu" />
-
-            <TextView
-                android:id="@+id/tv_ring_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{TimeKt.timeToString(model.weatherAlarm.alarm.hour, model.weatherAlarm.alarm.minute)}"
-                android:textSize="@dimen/ringing_time_text_size"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/fab_ring_snooze"
-                app:layout_constraintEnd_toEndOf="@+id/tv_ring_title"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="@+id/tv_ring_title"
-                app:layout_constraintTop_toBottomOf="@+id/tv_ring_title"
-                tools:text="8:30" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/gl_ring_fabs"

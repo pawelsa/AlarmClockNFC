@@ -25,7 +25,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/toolbar"
-                android:elevation="4dp"
+                android:elevation="@dimen/toolbar_elevation"
                 android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -40,28 +40,22 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     easytabs:indicator_shape="@drawable/indicator"
-                    easytabs:selected_color="@color/tabActive"
-                    easytabs:selected_padding_bottom="10dp"
-                    easytabs:selected_padding_top="10dp"
+                    easytabs:selected_color="@color/tab_active"
+                    easytabs:selected_padding_bottom="@dimen/toolbar_padding"
+                    easytabs:selected_padding_top="@dimen/toolbar_padding"
                     easytabs:selected_size="@dimen/indicator_size"
-                    easytabs:unselected_color="@color/tabNotActive">
+                    easytabs:unselected_color="@color/tab_not_active">
 
                     <com.loicteillard.easytabs.EasyTabImageView
-                        android:layout_width="@dimen/icon_tab_size"
-                        android:layout_height="@dimen/icon_tab_size"
-                        android:background="?selectableItemBackgroundBorderless"
+                        style="@style/MainTabTheme"
                         android:src="@drawable/ic_alarm" />
-                    <!--style="@style/Widget.AppCompat.ActionButton"-->
+
                     <com.loicteillard.easytabs.EasyTabImageView
-                        android:layout_width="@dimen/icon_tab_size"
-                        android:layout_height="@dimen/icon_tab_size"
-                        android:background="?selectableItemBackgroundBorderless"
+                        style="@style/MainTabTheme"
                         android:src="@drawable/ic_hourglass" />
 
                     <com.loicteillard.easytabs.EasyTabImageView
-                        android:layout_width="@dimen/icon_tab_size"
-                        android:layout_height="@dimen/icon_tab_size"
-                        android:background="?selectableItemBackgroundBorderless"
+                        style="@style/MainTabTheme"
                         android:src="@drawable/ic_stopwatch" />
 
                 </com.loicteillard.easytabs.EasyTabs>
@@ -71,7 +65,7 @@
                     style="@style/Widget.AppCompat.ActionButton"
                     android:layout_width="@dimen/menu_icon_width"
                     android:layout_height="@dimen/menu_icon_height"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginEnd="@dimen/margin_medium"
                     android:contentDescription="@string/info_popup_menu"
                     android:minWidth="0dp"
                     android:minHeight="0dp"

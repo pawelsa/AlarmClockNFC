@@ -5,15 +5,15 @@
     <color name="colorAccent">#D81B60</color>
 
     <color name="toolbar">#008577</color>
-    <color name="tabActive">#D81B60</color>
-    <color name="tabNotActive">#000</color>
-    <color name="menuIcon">#000</color>
+    <color name="tab_active">#D81B60</color>
+    <color name="tab_not_active">#000</color>
+    <color name="menu_icon">#000</color>
     <color name="indicator">#D81B60</color>
 
     <color name="selected_comment_background">#679983</color>
     <color name="comment_background">#678233</color>
 
-    <color name="daySelected">#008577</color>
-    <color name="dayPressed">#00574B</color>
+    <color name="day_selected">#008577</color>
+    <color name="day_pressed">#00574B</color>
     <color name="chip_color">@color/colorAccent</color>
 </resources>

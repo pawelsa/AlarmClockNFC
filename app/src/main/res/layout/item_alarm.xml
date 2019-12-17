@@ -33,7 +33,7 @@
             tools:text="10:40" />
 
         <Switch
-            android:id="@+id/sw_item_alarm"
+            android:id="@+id/sw_item_alarm_is_on"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/margin_medium"
@@ -44,7 +44,7 @@
             app:layout_constraintTop_toTopOf="@+id/tv_item_alarm_time" />
 
         <TextView
-            android:id="@+id/tv_alarm_item_repeating_days"
+            android:id="@+id/tv_item_alarm_repeating_days"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_medium"
@@ -58,7 +58,7 @@
             tools:text="pn, wt, sr, nd  |  Alarm title" />
 
         <com.google.android.material.chip.ChipGroup
-            android:id="@+id/cg_alarm_item_group"
+            android:id="@+id/cg_item_alarm_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_medium"
@@ -68,10 +68,10 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_alarm_item_repeating_days">
+            app:layout_constraintTop_toBottomOf="@+id/tv_item_alarm_repeating_days">
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/chip_alarm_item_temperature"
+                android:id="@+id/chip_item_alarm_temperature"
                 style="@style/WeatherChipTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -79,7 +79,7 @@
                 android:visibility="@{alarmData.weatherShort.temperature != 0 ? View.VISIBLE : View.GONE}" />
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/chip_alarm_item_rain"
+                android:id="@+id/chip_item_alarm_rain"
                 style="@style/WeatherChipTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -87,7 +87,7 @@
                 android:visibility="@{alarmData.weatherShort.rain != 0 ? View.VISIBLE : View.GONE}" />
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/chip_alarm_item_wind"
+                android:id="@+id/chip_item_alarm_wind"
                 style="@style/WeatherChipTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -95,7 +95,7 @@
                 android:visibility="@{alarmData.weatherShort.wind != 0 ? View.VISIBLE : View.GONE}" />
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/chip_alarm_item_snow"
+                android:id="@+id/chip_item_alarm_snow"
                 style="@style/WeatherChipTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

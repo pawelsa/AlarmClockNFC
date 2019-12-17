@@ -18,12 +18,11 @@
         android:layout_height="match_parent">
 
         <TextView
+            style="@style/AlarmTimeTextTheme"
             android:id="@+id/tv_ring_nfc_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{TimeKt.timeToString(model.weatherAlarm.alarm.hour, model.weatherAlarm.alarm.minute)}"
-            android:textSize="@dimen/ringing_time_text_size"
-            android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/fab_ring_nfc_snooze"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -32,11 +31,11 @@
             tools:text="8:30" />
 
         <TextView
+            style="@style/AlarmTitleTextTheme"
             android:id="@+id/tv_ring_nfc_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{model.weatherAlarm.alarm.title}"
-            android:textSize="@dimen/ringing_title_text_size"
             app:layout_constraintBottom_toTopOf="@+id/tv_ring_nfc_time"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -46,8 +45,7 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="@dimen/nfc_icon_size"
-            android:layout_height="@dimen/nfc_icon_size"
+            style="@style/AlarmImageTheme"
             app:layout_constraintBottom_toTopOf="@+id/tv_ring_nfc_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
