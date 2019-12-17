@@ -24,19 +24,18 @@ fun Array<Boolean>.toShortWeekdays(): String {
     val weekdayList = arrayListOf<String>()
 
     val formatSymbols = DateFormatSymbols.getInstance()
-    if (this@toShortWeekdays[0]) weekdayList.add(formatSymbols.shortWeekdays[Calendar.MONDAY])
-    if (this@toShortWeekdays[1]) weekdayList.add(formatSymbols.shortWeekdays[Calendar.TUESDAY])
-    if (this@toShortWeekdays[2]) weekdayList.add(formatSymbols.shortWeekdays[Calendar.WEDNESDAY])
-    if (this@toShortWeekdays[3]) weekdayList.add(formatSymbols.shortWeekdays[Calendar.THURSDAY])
-    if (this@toShortWeekdays[4]) weekdayList.add(formatSymbols.shortWeekdays[Calendar.FRIDAY])
-    if (this@toShortWeekdays[5]) weekdayList.add(formatSymbols.shortWeekdays[Calendar.SATURDAY])
-    if (this@toShortWeekdays[6]) weekdayList.add(formatSymbols.shortWeekdays[Calendar.SUNDAY])
+    if (this@toShortWeekdays[0]) weekdayList.add(formatSymbols.shortWeekdays[Calendar.MONDAY].capitalize())
+    if (this@toShortWeekdays[1]) weekdayList.add(formatSymbols.shortWeekdays[Calendar.TUESDAY].capitalize())
+    if (this@toShortWeekdays[2]) weekdayList.add(formatSymbols.shortWeekdays[Calendar.WEDNESDAY].capitalize())
+    if (this@toShortWeekdays[3]) weekdayList.add(formatSymbols.shortWeekdays[Calendar.THURSDAY].capitalize())
+    if (this@toShortWeekdays[4]) weekdayList.add(formatSymbols.shortWeekdays[Calendar.FRIDAY].capitalize())
+    if (this@toShortWeekdays[5]) weekdayList.add(formatSymbols.shortWeekdays[Calendar.SATURDAY].capitalize())
+    if (this@toShortWeekdays[6]) weekdayList.add(formatSymbols.shortWeekdays[Calendar.SUNDAY].capitalize())
 
     return buildString {
         weekdayList.forEachIndexed { index, weekDay ->
             if (index != 0) append(", ")
             append(weekDay)
-            append(".")
         }
     }
 }

@@ -9,7 +9,7 @@ import com.helpfulapps.domain.eventBus.RxBus
 import com.helpfulapps.domain.eventBus.ServiceBus
 import com.helpfulapps.domain.extensions.whenFalse
 import io.reactivex.rxkotlin.plusAssign
-import org.koin.core.inject
+import org.koin.android.ext.android.inject
 
 class StopwatchService : BaseService() {
 

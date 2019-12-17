@@ -22,6 +22,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".views.statistics.StatisticsActivity"
+            android:label="Statistics"
+            android:parentActivityName=".views.main_activity.MainActivity"
+            android:theme="@style/SettingsTheme" />
+        <activity
             android:name=".views.settings.SettingsActivity"
             android:label="Settings"
             android:parentActivityName=".views.main_activity.MainActivity"
@@ -35,17 +40,14 @@
             android:name=".service.AlarmService"
             android:enabled="true"
             android:exported="false" />
-
         <service
             android:name=".service.TimerService"
             android:enabled="true"
             android:exported="false" />
-
         <service
             android:name=".service.StopwatchService"
             android:enabled="true"
             android:exported="false" />
-
         <service
             android:name=".service.ForecastForLocalizationService"
             android:enabled="true"
