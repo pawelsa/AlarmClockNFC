@@ -4,8 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import androidx.test.core.app.ApplicationProvider
-import com.helpfulapps.data.api.weather.api.ApiCalls
-import com.helpfulapps.data.api.weather.api.Downloader
+import com.example.api.api.ApiCalls
 import com.helpfulapps.data.helper.NetworkCheck
 import com.helpfulapps.data.helper.SettingsData
 import com.helpfulapps.data.mockData.MockDataIns
@@ -32,7 +31,7 @@ class WeatherRepositoryImplTest {
 
     lateinit var networkCheck: NetworkCheck
     lateinit var settingsData: SettingsData
-    lateinit var apiCalls: ApiCalls
+    lateinit var apiCalls: com.example.api.api.ApiCalls
     lateinit var weatherRepository: WeatherRepositoryImpl
     lateinit var context: Context
 

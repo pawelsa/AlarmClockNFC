@@ -4,7 +4,7 @@ buildscript {
     ext.rx_location_version = '1.0.5'
     ext.preferences_version = '1.1.0'
     ext.work_manager_version = '2.2.0'
-    ext.kotlin_version = '1.3.50'
+    ext.kotlin_version = '1.3.61'
     ext.retrofit_version = '2.6.0'
     ext.rxJava_version = '2.2.8'
     ext.rxAndroid_version = '2.1.1'

@@ -1,19 +1,12 @@
 package com.helpfulapps.data.mockData
 
-import com.helpfulapps.data.api.weather.model.*
 import com.helpfulapps.data.db.alarm.model.AlarmEntity
 import com.helpfulapps.data.db.alarm.model.DaysOfWeekEntity
 import com.helpfulapps.domain.models.alarm.Alarm
-import com.helpfulapps.domain.models.weather.DayWeather
-import com.helpfulapps.domain.models.weather.HourWeather
-import com.helpfulapps.domain.models.weather.Rain
-import com.helpfulapps.domain.models.weather.Snow
-import com.helpfulapps.domain.models.weather.Temperature
-import com.helpfulapps.domain.models.weather.WeatherInfo
-import com.helpfulapps.domain.models.weather.Wind
-import com.helpfulapps.data.api.weather.model.Rain as ApiRain
-import com.helpfulapps.data.api.weather.model.Snow as ApiSnow
-import com.helpfulapps.data.api.weather.model.Wind as ApiWind
+import com.helpfulapps.domain.models.weather.*
+import com.example.api.models.Rain as ApiRain
+import com.example.api.models.Snow as ApiSnow
+import com.example.api.models.Wind as ApiWind
 import com.helpfulapps.data.db.weather.model.DayWeatherEntity as DbDayWeather
 import com.helpfulapps.data.db.weather.model.HourWeatherEntity as DbHourWeather
 import com.helpfulapps.data.db.weather.model.WeatherInfoEntity as DbWeatherInfo
@@ -169,8 +162,8 @@ object MockData {
         icon: String = "icon1",
         id: Int = 1,
         main: String = "main1"
-    ): Weather {
-        return Weather(
+    ): com.example.api.models.Weather {
+        return com.example.api.models.Weather(
             description, icon, id, main
         )
     }
@@ -178,18 +171,31 @@ object MockData {
     val apiWeatherList = listOf(createApiWeather())
 
     fun createApiForecast(
-        clouds: Clouds = Clouds(80),
+        clouds: com.example.api.models.Clouds = com.example.api.models.Clouds(
+            80
+        ),
         rain: ApiRain = ApiRain(2.0),
         snow: ApiSnow = ApiSnow(2.0),
         // using BASE_TIMESTAMP because we multiply timestamp provided by api by 1000, so it works with Calendar.class
         timestamp: Long = BASE_TIMESTAMP,
         timestampText: String = "1",
-        main: Main = Main(100.0, 100, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0),
-        sys: Sys = Sys("sys"),
-        weathers: List<Weather> = apiWeatherList,
+        main: com.example.api.models.Main = com.example.api.models.Main(
+            100.0,
+            100,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0
+        ),
+        sys: com.example.api.models.Sys = com.example.api.models.Sys(
+            "sys"
+        ),
+        weathers: List<com.example.api.models.Weather> = apiWeatherList,
         wind: ApiWind = ApiWind(80.0, 200.0)
-    ): Forecast {
-        return Forecast(
+    ): com.example.api.models.Forecast {
+        return com.example.api.models.Forecast(
             clouds, rain, snow, timestamp, timestampText, main, sys, weathers, wind
         )
     }
@@ -199,26 +205,29 @@ object MockData {
     )
 
     fun createCity(
-        coord: Coord = Coord(1.0, 1.0),
+        coord: com.example.api.models.Coord = com.example.api.models.Coord(
+            1.0,
+            1.0
+        ),
         country: String = "PL",
         id: Int = 1,
         name: String = "Pszczyna",
         population: Int = 50000,
         timezone: Int = 5
-    ): City {
-        return City(
+    ): com.example.api.models.City {
+        return com.example.api.models.City(
             coord, country, id, name, population, timezone
         )
     }
 
     fun createApiForecastForCity(
-        city: City = createCity(),
+        city: com.example.api.models.City = createCity(),
         cnt: Int = 1,
         cod: String = "cod",
-        list: List<Forecast> = forecasts,
+        list: List<com.example.api.models.Forecast> = forecasts,
         message: Double = 200.0
-    ): ForecastForCity {
-        return ForecastForCity(
+    ): com.example.api.models.ForecastForCity {
+        return com.example.api.models.ForecastForCity(
             city, cnt, cod, list, message
         )
     }
