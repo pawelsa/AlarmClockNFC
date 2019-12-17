@@ -37,16 +37,16 @@ class AlarmMappingTest {
 
         val domainDays = Array(7) { false }
         domainDays[6] = true
-        val dataDaysOfWeek = DaysOfWeekEntry(domainDays)
+        val dataDaysOfWeek = DaysOfWeekEntity(domainDays)
 
-        val expected = DaysOfWeekEntry(sunday = true)
+        val expected = DaysOfWeekEntity(sunday = true)
         assertEquals(expected, dataDaysOfWeek)
     }
 
     @Test
     fun `from data to domain days of week mapping test`() {
 
-        val dataDaysOfWeekEntry = DaysOfWeekEntry()
+        val dataDaysOfWeekEntry = DaysOfWeekEntity()
         val domainDaysOfWeek = dataDaysOfWeekEntry.toDomain()
 
         val expected = Array(7) { false }

@@ -24,7 +24,7 @@ data class AlarmEntity(
     var hour: Int = 0,
     var minute: Int = 0,
     @ForeignKey(saveForeignKeyModel = true)
-    var daysOfWeek: DaysOfWeekEntry? = DaysOfWeekEntry()
+    var daysOfWeek: DaysOfWeekEntity? = DaysOfWeekEntity()
 
 ) : BaseRXModel() {
 
@@ -43,7 +43,7 @@ data class AlarmEntity(
         isUsingNFC = domainAlarm.isUsingNFC,
         hour = domainAlarm.hour,
         minute = domainAlarm.minute,
-        daysOfWeek = DaysOfWeekEntry(domainAlarm.repetitionDays)
+        daysOfWeek = DaysOfWeekEntity(domainAlarm.repetitionDays)
     )
 
     constructor(
@@ -70,7 +70,7 @@ data class AlarmEntity(
         this.isUsingNFC = usingNFC
         this.hour = hour
         this.minute = minute
-        this.daysOfWeek = DaysOfWeekEntry(days)
+        this.daysOfWeek = DaysOfWeekEntity(days)
     }
 
     fun toDomain(): Alarm =

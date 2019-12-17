@@ -16,9 +16,7 @@ import com.raizlabs.android.dbflow.kotlinextensions.where
 import com.raizlabs.android.dbflow.rx2.kotlinextensions.rx
 import com.raizlabs.android.dbflow.structure.Model
 import io.reactivex.Completable
-import io.reactivex.Scheduler
 import io.reactivex.Single
-import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
 // TODO remove subscribing on bg thread
@@ -97,7 +95,8 @@ open class AlarmRepositoryImpl(context: Context) : AlarmRepository {
             .doOnSuccess { RxBus.publish(DatabaseNotifiers.Updated) }
     }
 
-    fun getAlarmsQuery() = select.from(AlarmEntity::class.java).rx().queryList()
+    fun getAlarmsQuery(): Single<MutableList<AlarmEntity>> =
+        select.from(AlarmEntity::class.java).rx().queryList()
 
     private fun getAlarmDomain(alarmId: Long): Single<Alarm> =
         getSingleAlarm(alarmId).map { it.toDomain() }.toSingle()
@@ -105,5 +104,4 @@ open class AlarmRepositoryImpl(context: Context) : AlarmRepository {
     private fun getSingleAlarm(alarmId: Long) =
         (select from AlarmEntity::class where AlarmEntity_Table.id.`is`(alarmId)).rx().querySingle()
 
-    fun getSchedulerIO(): Scheduler = Schedulers.io()
 }

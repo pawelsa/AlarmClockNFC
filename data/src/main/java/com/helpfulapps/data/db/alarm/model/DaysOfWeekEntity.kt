@@ -1,7 +1,7 @@
 package com.helpfulapps.data.db.alarm.model
 
 import com.helpfulapps.data.AlarmAppDatabase
-import com.helpfulapps.data.db.alarm.model.DaysOfWeekEntry.Companion.NAME
+import com.helpfulapps.data.db.alarm.model.DaysOfWeekEntity.Companion.NAME
 import com.raizlabs.android.dbflow.annotation.PrimaryKey
 import com.raizlabs.android.dbflow.annotation.Table
 import com.raizlabs.android.dbflow.rx2.structure.BaseRXModel
@@ -13,7 +13,7 @@ import com.raizlabs.android.dbflow.rx2.structure.BaseRXModel
     allFields = true,
     useBooleanGetterSetters = false
 )
-data class DaysOfWeekEntry(
+data class DaysOfWeekEntity(
 
     @PrimaryKey(autoincrement = true)
     var id: Long = 0L,
@@ -51,7 +51,7 @@ data class DaysOfWeekEntry(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as DaysOfWeekEntry
+        other as DaysOfWeekEntity
 
         if (id != other.id) return false
         if (monday != other.monday) return false
@@ -64,6 +64,5 @@ data class DaysOfWeekEntry(
 
         return true
     }
-
 
 }

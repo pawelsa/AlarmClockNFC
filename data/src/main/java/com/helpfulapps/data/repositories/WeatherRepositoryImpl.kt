@@ -72,12 +72,6 @@ class WeatherRepositoryImpl(
             .map(DayWeather::toDomain)
             .onErrorResumeNext(Single.just(com.helpfulapps.domain.models.weather.DayWeather()))
 
-    fun getDayWeatherList() = (select from DayWeather::class).rx().queryStreamResults()
-
-    fun getDayWeatherForTime(time: Long) =
-        (select from DayWeather::class where (DayWeather_Table.dt lessThanOrEq time + ONE_AND_HALF_AN_HOUR) and (DayWeather_Table.dt greaterThan time - ONE_AND_HALF_AN_HOUR))
-            .rxQueryListSingle()
-
     private fun Maybe<Response<ForecastForCity>>.convertModelsAndSaveInDb() =
         this.clearTables()
             .getResponseBody()
@@ -137,4 +131,10 @@ class WeatherRepositoryImpl(
                 }
         }
 
+
+    fun getDayWeatherList() = (select from DayWeather::class).rx().queryStreamResults()
+
+    fun getDayWeatherForTime(time: Long) =
+        (select from DayWeather::class where (DayWeather_Table.dt lessThanOrEq time + ONE_AND_HALF_AN_HOUR) and (DayWeather_Table.dt greaterThan time - ONE_AND_HALF_AN_HOUR))
+            .rxQueryListSingle()
 }

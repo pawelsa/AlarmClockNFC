@@ -2,7 +2,7 @@ package com.helpfulapps.data.mockData
 
 import com.helpfulapps.data.api.weather.model.*
 import com.helpfulapps.data.db.alarm.model.AlarmEntity
-import com.helpfulapps.data.db.alarm.model.DaysOfWeekEntry
+import com.helpfulapps.data.db.alarm.model.DaysOfWeekEntity
 import com.helpfulapps.domain.models.alarm.Alarm
 import com.helpfulapps.domain.models.weather.DayWeather
 import com.helpfulapps.domain.models.weather.HourWeather
@@ -79,7 +79,7 @@ object MockData {
         ringtoneTitle: String = "ringtoneTitle",
         hour: Int = 10,
         minute: Int = 10,
-        daysOfWeek: DaysOfWeekEntry = DaysOfWeekEntry()
+        daysOfWeek: DaysOfWeekEntity = DaysOfWeekEntity()
     ): AlarmEntity {
         return AlarmEntity(
             id,
