@@ -3,7 +3,6 @@ package com.helpfulapps.data.repositories
 import com.helpfulapps.data.api.PrepareData
 import com.helpfulapps.data.db.weather.dao.WeatherDao
 import com.helpfulapps.data.db.weather.model.DayWeatherData
-import com.helpfulapps.data.extensions.checkCompleted
 import com.helpfulapps.domain.eventBus.DatabaseNotifiers
 import com.helpfulapps.domain.eventBus.RxBus
 import com.helpfulapps.domain.exceptions.WeatherException

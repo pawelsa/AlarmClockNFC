@@ -2,7 +2,6 @@ package com.helpfulapps.data.repositories
 
 import com.helpfulapps.data.db.alarm.dao.AlarmDao
 import com.helpfulapps.data.db.alarm.model.AlarmData
-import com.helpfulapps.data.extensions.checkCompleted
 import com.helpfulapps.domain.eventBus.DatabaseNotifiers
 import com.helpfulapps.domain.eventBus.RxBus
 import com.helpfulapps.domain.exceptions.AlarmException

@@ -17,7 +17,6 @@
             <option value="$PROJECT_DIR$/db" />
             <option value="$PROJECT_DIR$/device" />
             <option value="$PROJECT_DIR$/domain" />
-            <option value="$PROJECT_DIR$/lib" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
