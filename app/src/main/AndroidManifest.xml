@@ -22,10 +22,20 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".views.timer_finished_activity.TimerFinishedActivity"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTop"
+            android:showOnLockScreen="true" />
+        <activity
             android:name=".views.statistics.StatisticsActivity"
             android:label="Statistics"
             android:parentActivityName=".views.main_activity.MainActivity"
-            android:theme="@style/SettingsTheme" />
+            android:theme="@style/SettingsTheme">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".views.main_activity.MainActivity" />
+        </activity>
         <activity
             android:name=".views.settings.SettingsActivity"
             android:label="Settings"

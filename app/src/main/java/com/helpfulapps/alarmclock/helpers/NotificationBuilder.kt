@@ -21,6 +21,7 @@ import com.helpfulapps.alarmclock.views.main_activity.MainActivity.Companion.ACT
 import com.helpfulapps.alarmclock.views.main_activity.MainActivity.Companion.ACTION_OPEN_TIMER
 import com.helpfulapps.alarmclock.views.ringing_alarm.NfcRingingAlarmActivity
 import com.helpfulapps.alarmclock.views.ringing_alarm.RingingAlarmActivity
+import com.helpfulapps.alarmclock.views.timer_finished_activity.TimerFinishedActivity
 import com.helpfulapps.domain.models.alarm.Alarm
 
 interface NotificationBuilder {
@@ -30,6 +31,7 @@ interface NotificationBuilder {
     fun build(): Notification
 
     sealed class NotificationType {
+        object HighPriority : NotificationType()
         data class TypeAlarm(val alarm: Alarm, val usingNfc: Boolean = false) : NotificationType()
         data class TypeStopwatchRunning(val seconds: Long) : NotificationType()
         data class TypeStopwatchPaused(val seconds: Long) : NotificationType()
@@ -105,9 +107,7 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
     }
 
 
-    private fun setupAlarmType(notificationType: NotificationBuilder.NotificationType) {
-        notificationType as NotificationBuilder.NotificationType.TypeAlarm
-
+    private fun setupAlarmType(notificationType: NotificationBuilder.NotificationType.TypeAlarm) {
         val alarm = notificationType.alarm
 
         val ringingActivity =
@@ -125,7 +125,7 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
             fullScreenIntent, FLAG_UPDATE_CURRENT
         )
         builder =
-            NotificationCompat.Builder(context, CHANNEL_ALARM_ID)
+            NotificationCompat.Builder(context, CHANNEL_PRIORITY_ID)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle(context.getString(R.string.app_name))
                 .setContentText(
@@ -140,9 +140,9 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
                 .setVibrate(LongArray(3) { 500L })
 
 
-        buildNotificationChannel(notificationType)
+        buildNotificationChannel(NotificationBuilder.NotificationType.HighPriority)
 
-        builder.setChannelId(CHANNEL_ALARM_ID)
+        builder.setChannelId(CHANNEL_PRIORITY_ID)
     }
 
     private fun setupLocalizationType() {
@@ -197,7 +197,7 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
                     context.getString(R.string.notification_stopwatch_take_lap),
                     takeLapIntent
                 )
-                .setAutoCancel(false)
+                .setAutoCancel(true)
 
         buildNotificationChannel(notificationType)
 
@@ -239,7 +239,7 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
                     context.getString(R.string.notification_timer_add_minute),
                     addMinuteIntent
                 )
-                .setAutoCancel(false)
+                .setAutoCancel(true)
 
         buildNotificationChannel(notificationType)
 
@@ -287,7 +287,7 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
                     addMinuteIntent
                 )
                 .addAction(0, context.getString(R.string.notification_timer_stop), finishIntent)
-                .setAutoCancel(false)
+                .setAutoCancel(true)
 
         buildNotificationChannel(NotificationBuilder.NotificationType.TypeTimer(0L))
 
@@ -297,16 +297,26 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
     private fun setupTimerFinished() {
         val stopTimerPendingIntent = Intent(context, TimerService::class.java).let {
             it.action = TimerService.TIMER_FINISH
-            getService(context, 0, it, FLAG_UPDATE_CURRENT)
+            getService(context, 0, it, FLAG_CANCEL_CURRENT)
         }
 
-        builder = NotificationCompat.Builder(context, CHANNEL_TIMER_ID)
+        val fullScreenIntent = Intent(context, TimerFinishedActivity::class.java).also {
+            it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+        val fullScreenPendingIntent = getActivity(
+            context, 0,
+            fullScreenIntent, FLAG_UPDATE_CURRENT
+        )
+
+        builder = NotificationCompat.Builder(context, CHANNEL_PRIORITY_ID)
             .setSmallIcon(R.mipmap.ic_launcher)
             .setContentTitle(context.getString(R.string.app_name))
             .setContentText(context.getString(R.string.notification_timer_text_finished))
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setCategory(NotificationCompat.CATEGORY_ALARM)
-            .setContentIntent(buildIntentToStartFragment(ACTION_OPEN_TIMER))
+            .setFullScreenIntent(fullScreenPendingIntent, true)
             .addAction(
                 R.drawable.ic_stop,
                 context.getString(R.string.timer_stop),
@@ -314,7 +324,7 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
             )
             .setAutoCancel(false)
 
-        buildNotificationChannel(NotificationBuilder.NotificationType.TypeTimer(0L))
+        buildNotificationChannel(NotificationBuilder.NotificationType.HighPriority)
     }
 
     private fun buildNotificationChannel(notificationType: NotificationBuilder.NotificationType) {
@@ -327,11 +337,11 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
             var importance = NotificationManager.IMPORTANCE_DEFAULT
             var channelId = ""
             when (notificationType) {
-                is NotificationBuilder.NotificationType.TypeAlarm -> {
-                    name = context.getString(R.string.channel_alarm_name)
-                    descriptionText = context.getString(R.string.channel_alarm_description)
+                is NotificationBuilder.NotificationType.HighPriority -> {
+                    name = context.getString(R.string.channel_priority_name)
+                    descriptionText = context.getString(R.string.channel_priority_description)
                     importance = NotificationManager.IMPORTANCE_HIGH
-                    channelId = CHANNEL_ALARM_ID
+                    channelId = CHANNEL_PRIORITY_ID
                 }
                 is NotificationBuilder.NotificationType.TypeStopwatchRunning -> {
                     name = context.getString(R.string.channel_stopwatch_name)
@@ -342,7 +352,7 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
                 is NotificationBuilder.NotificationType.TypeTimer -> {
                     name = context.getString(R.string.channel_timer_name)
                     descriptionText = context.getString(R.string.channel_timer_description)
-                    importance = NotificationManager.IMPORTANCE_HIGH
+                    importance = NotificationManager.IMPORTANCE_LOW
                     channelId = CHANNEL_TIMER_ID
                 }
                 is NotificationBuilder.NotificationType.TypeLocalization -> {
@@ -372,7 +382,7 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
         const val KEY_ALARM_EXIT = "com.helpfulapps.alarmclock.ALARM_EXIT"
         // if changed here, must be changed in intentcreator
         const val KEY_ALARM_ID = "com.helpfulapps.alarmclock.ALARM_ID"
-        private const val CHANNEL_ALARM_ID = "com.helpfulapps.alarmclock.ALARM_CHANNEL_ID"
+        private const val CHANNEL_PRIORITY_ID = "com.helpfulapps.alarmclock.ALARM_PRIORITY_ID"
         private const val CHANNEL_TIMER_ID = "com.helpfulapps.alarmclock.TIMER_CHANNEL_ID"
         private const val CHANNEL_STOPWATCH_ID = "com.helpfulapps.alarmclock.STOPWATCH_CHANNEL_ID"
         private const val CHANNEL_LOCALIZATION_ID =

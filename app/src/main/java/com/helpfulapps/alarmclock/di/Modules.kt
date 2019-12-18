@@ -11,6 +11,7 @@ import com.helpfulapps.alarmclock.views.ringing_alarm.RingingAlarmViewModel
 import com.helpfulapps.alarmclock.views.settings.SettingsViewModel
 import com.helpfulapps.alarmclock.views.statistics.StatisticsViewModel
 import com.helpfulapps.alarmclock.views.stopwatch_fragment.StopWatchViewModel
+import com.helpfulapps.alarmclock.views.timer_finished_activity.TimerFinishedViewModel
 import com.helpfulapps.alarmclock.views.timer_fragment.TimerViewModel
 import com.helpfulapps.data.api.PrepareData
 import com.helpfulapps.data.db.alarm.dao.AlarmDao
@@ -57,6 +58,7 @@ object Modules {
         viewModel { RingingAlarmViewModel(get()) }
         viewModel { SettingsViewModel(get()) }
         viewModel { StatisticsViewModel(get()) }
+        viewModel { TimerFinishedViewModel() }
     }
 
     private val repository = module {
