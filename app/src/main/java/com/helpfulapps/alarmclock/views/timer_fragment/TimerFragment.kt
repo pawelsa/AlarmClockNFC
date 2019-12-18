@@ -2,13 +2,13 @@ package com.helpfulapps.alarmclock.views.timer_fragment
 
 import android.content.Intent
 import android.view.View
-import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.core.view.marginBottom
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.FragmentTimerBinding
+import com.helpfulapps.alarmclock.helpers.extensions.marginParams
 import com.helpfulapps.alarmclock.helpers.extensions.observe
 import com.helpfulapps.alarmclock.helpers.extensions.showFab
 import com.helpfulapps.alarmclock.helpers.secondsToString
@@ -48,19 +48,19 @@ class TimerFragment : BaseFragment<TimerViewModel, FragmentTimerBinding>() {
     override fun onResume() {
         super.onResume()
 
-        setupInsets()
+        setupWindowInsets()
         fabListener()
         resetButtonListener()
         checkInitState()
         subscribeToStates()
     }
 
-    private fun setupInsets() {
+    private fun setupWindowInsets() {
         val dimensionInDp = 4 * binding.root.context.resources.displayMetrics.density.toInt()
-        (binding.btTimerReset.layoutParams as ViewGroup.MarginLayoutParams).bottomMargin =
+        binding.btTimerReset.marginParams().bottomMargin =
             resetBottomMargin + (activity as MainActivity).systemBottomInsets + dimensionInDp
 
-        (binding.tvTimerLeft.layoutParams as ViewGroup.MarginLayoutParams).bottomMargin =
+        binding.tvTimerLeft.marginParams().bottomMargin =
             (activity as MainActivity).systemBottomInsets
     }
 

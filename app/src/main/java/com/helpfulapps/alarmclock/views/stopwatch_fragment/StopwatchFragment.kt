@@ -2,7 +2,6 @@ package com.helpfulapps.alarmclock.views.stopwatch_fragment
 
 import android.content.Intent
 import android.view.View
-import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.core.view.marginBottom
@@ -10,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.FragmentStopwatchBinding
+import com.helpfulapps.alarmclock.helpers.extensions.marginParams
 import com.helpfulapps.alarmclock.helpers.extensions.observe
 import com.helpfulapps.alarmclock.helpers.millisToString
 import com.helpfulapps.alarmclock.service.StopwatchService
@@ -69,13 +69,13 @@ class StopwatchFragment : BaseFragment<StopWatchViewModel, FragmentStopwatchBind
 
     private fun setupWindowInsets() {
         val dimensionInDp = 4 * binding.root.context.resources.displayMetrics.density.toInt()
-        (binding.btStopwatchLap.layoutParams as ViewGroup.MarginLayoutParams).bottomMargin =
+        binding.btStopwatchLap.marginParams().bottomMargin =
             resetBottomMargin + (activity as MainActivity).systemBottomInsets + dimensionInDp
 
-        (binding.btStopwatchReset.layoutParams as ViewGroup.MarginLayoutParams).bottomMargin =
+        binding.btStopwatchReset.marginParams().bottomMargin =
             resetBottomMargin + (activity as MainActivity).systemBottomInsets + dimensionInDp
 
-        (binding.tvStopwatchTime.layoutParams as ViewGroup.MarginLayoutParams).bottomMargin =
+        binding.tvStopwatchTime.marginParams().bottomMargin =
             (activity as MainActivity).systemBottomInsets
     }
 

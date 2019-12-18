@@ -3,7 +3,6 @@ package com.helpfulapps.alarmclock.views.main_activity
 import android.content.Intent
 import android.util.Log
 import android.view.View
-import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.core.view.ViewCompat
 import androidx.core.view.marginBottom
@@ -11,6 +10,7 @@ import androidx.core.view.updatePadding
 import com.google.android.material.snackbar.Snackbar
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.ActivityMainBinding
+import com.helpfulapps.alarmclock.helpers.extensions.marginParams
 import com.helpfulapps.alarmclock.views.settings.SettingsActivity
 import com.helpfulapps.alarmclock.views.statistics.StatisticsActivity
 import com.helpfulapps.base.base.BaseActivity
@@ -80,7 +80,7 @@ class MainActivity : BaseActivity<MainActivityViewModel, ActivityMainBinding>() 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
             view.updatePadding(top = insets.systemWindowInsetTop)
             systemBottomInsets = insets.systemGestureInsets.bottom
-            (binding.fabMainFab.layoutParams as ViewGroup.MarginLayoutParams).bottomMargin =
+            binding.fabMainFab.marginParams().bottomMargin =
                 fabBottomPadding + systemBottomInsets
             insets
         }
