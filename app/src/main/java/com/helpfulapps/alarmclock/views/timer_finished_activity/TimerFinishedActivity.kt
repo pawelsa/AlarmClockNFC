@@ -33,6 +33,7 @@ class TimerFinishedActivity : BaseActivity<TimerFinishedViewModel, ActivityTimer
 
         setupFabListener()
         setupWindowInsets()
+        ViewCompat.requestApplyInsets(binding.root)
     }
 
     private fun setupFabListener() {
