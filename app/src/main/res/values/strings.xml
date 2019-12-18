@@ -22,8 +22,8 @@
     <string name="dialog_remove_message">Do you want to remove this alarm ?</string>
     <string name="dialog_rename_title">Set title of the alarm</string>
     <string name="notification_alarm_text">Time to wake up! It is %1$s</string>
-    <string name="channel_alarm_name">Current alarms</string>
-    <string name="channel_alarm_description">Displays currently ringing alarm</string>
+    <string name="channel_priority_name">Current alarms or timer</string>
+    <string name="channel_priority_description">Displays currently ringing alarm or timer</string>
     <string name="item_alarm_temperature_very_cold">Very cold</string>
     <string name="item_alarm_temperature_cold">Cold</string>
     <string name="item_alarm_temperature_hot">Hot</string>

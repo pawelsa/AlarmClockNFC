@@ -1,4 +1,4 @@
-package com.helpfulapps.alarmclock.views.hourwatch_fragment
+package com.helpfulapps.alarmclock.views.timer_fragment
 
 import com.helpfulapps.alarmclock.BaseViewModelTest
 import com.helpfulapps.alarmclock.service.TimerService
@@ -8,12 +8,12 @@ import io.mockk.every
 import io.mockk.mockk
 import org.junit.Test
 
-class HourWatchViewModelTest : BaseViewModelTest<HourWatchViewModel>() {
+class HourWatchViewModelTest : BaseViewModelTest<TimerViewModel>() {
     private val settings: Settings = mockk<Settings> {}.also {
         every { it.timeLeft } returns -1L
     }
 
-    override val viewModel = HourWatchViewModel(settings)
+    override val viewModel = TimerViewModel(settings)
 
 
     @Test

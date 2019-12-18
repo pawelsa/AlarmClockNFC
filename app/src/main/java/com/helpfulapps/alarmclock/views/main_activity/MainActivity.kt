@@ -3,7 +3,6 @@ package com.helpfulapps.alarmclock.views.main_activity
 import android.content.Intent
 import android.util.Log
 import android.view.View
-import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.core.view.ViewCompat
 import androidx.core.view.marginBottom
@@ -11,6 +10,7 @@ import androidx.core.view.updatePadding
 import com.google.android.material.snackbar.Snackbar
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.ActivityMainBinding
+import com.helpfulapps.alarmclock.helpers.extensions.marginParams
 import com.helpfulapps.alarmclock.views.settings.SettingsActivity
 import com.helpfulapps.alarmclock.views.statistics.StatisticsActivity
 import com.helpfulapps.base.base.BaseActivity
@@ -24,6 +24,9 @@ class MainActivity : BaseActivity<MainActivityViewModel, ActivityMainBinding>() 
     override val layoutId: Int = R.layout.activity_main
 
     private val pager: TabFragmentChangeListener by lazy { TabFragmentChangeListener(fab_main_fab) }
+
+    private val fabBottomPadding by lazy { binding.fabMainFab.marginBottom }
+    var systemBottomInsets: Int = 0
 
     private val popupMenu by lazy {
         val popup = PopupMenu(applicationContext, ib_main_menu)
@@ -76,9 +79,10 @@ class MainActivity : BaseActivity<MainActivityViewModel, ActivityMainBinding>() 
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
             view.updatePadding(top = insets.systemWindowInsetTop)
-            (binding.fabMainFab.layoutParams as ViewGroup.MarginLayoutParams).bottomMargin =
-                binding.fabMainFab.marginBottom + insets.systemGestureInsets.bottom
-            insets.consumeSystemWindowInsets()
+            systemBottomInsets = insets.systemGestureInsets.bottom
+            binding.fabMainFab.marginParams().bottomMargin =
+                fabBottomPadding + systemBottomInsets
+            insets
         }
     }
 
@@ -130,5 +134,6 @@ class MainActivity : BaseActivity<MainActivityViewModel, ActivityMainBinding>() 
         const val ACTION_OPEN_ALARM = "com.helpfulapps.alarmclock.addAlarm"
         const val ACTION_OPEN_TIMER = "com.helpfulapps.alarmclock.setHourglass"
         const val ACTION_OPEN_STOPWATCH = "com.helpfulapps.alarmclock.startStopwatch"
+        const val HALF_OF_DIFFERENCE_BETWEEN_SIZE_OF_FAB_AND_VIEW = 4
     }
 }

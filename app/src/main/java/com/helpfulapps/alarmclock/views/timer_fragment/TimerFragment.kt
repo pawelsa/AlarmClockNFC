@@ -1,12 +1,14 @@
-package com.helpfulapps.alarmclock.views.hourwatch_fragment
+package com.helpfulapps.alarmclock.views.timer_fragment
 
 import android.content.Intent
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import androidx.core.view.marginBottom
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.helpfulapps.alarmclock.R
-import com.helpfulapps.alarmclock.databinding.FragmentHourwatchBinding
+import com.helpfulapps.alarmclock.databinding.FragmentTimerBinding
+import com.helpfulapps.alarmclock.helpers.extensions.marginParams
 import com.helpfulapps.alarmclock.helpers.extensions.observe
 import com.helpfulapps.alarmclock.helpers.extensions.showFab
 import com.helpfulapps.alarmclock.helpers.secondsToString
@@ -16,42 +18,57 @@ import com.helpfulapps.base.base.BaseFragment
 import com.helpfulapps.domain.eventBus.ServiceBus
 import com.helpfulapps.domain.extensions.whenFalse
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_hourwatch.*
+import kotlinx.android.synthetic.main.fragment_timer.*
 import org.koin.android.viewmodel.ext.android.viewModel
 import xyz.aprildown.hmspickerview.HmsPickerView
 
-class HourWatchFragment : BaseFragment<HourWatchViewModel, FragmentHourwatchBinding>() {
 
-    override val layoutId: Int = R.layout.fragment_hourwatch
-    override val viewModel: HourWatchViewModel by viewModel()
+class TimerFragment : BaseFragment<TimerViewModel, FragmentTimerBinding>() {
+
+    override val layoutId: Int = R.layout.fragment_timer
+    override val viewModel: TimerViewModel by viewModel()
 
     private val fab: FloatingActionButton
         get() = (mainActivity as MainActivity).fab_main_fab
 
-    private var currentState: HourWatchViewModel.TimerState =
-        HourWatchViewModel.TimerState.Finished(-1)
+    private var currentState: TimerViewModel.TimerState =
+        TimerViewModel.TimerState.Finished(-1)
 
     private val animation: Animation by lazy { AnimationUtils.loadAnimation(context, R.anim.blink) }
     private var wasStarted = false
+    private val resetBottomMargin by lazy { binding.btTimerReset.marginBottom }
+
 
     override fun init() {
 
         viewModel.listenToTimer()
+
     }
 
     override fun onResume() {
         super.onResume()
 
+        setupWindowInsets()
         fabListener()
         resetButtonListener()
         checkInitState()
         subscribeToStates()
     }
 
+    private fun setupWindowInsets() {
+        val dimensionInDp =
+            MainActivity.HALF_OF_DIFFERENCE_BETWEEN_SIZE_OF_FAB_AND_VIEW * binding.root.context.resources.displayMetrics.density.toInt()
+        binding.btTimerReset.marginParams().bottomMargin =
+            resetBottomMargin + (activity as MainActivity).systemBottomInsets + dimensionInDp
+
+        binding.tvTimerLeft.marginParams().bottomMargin =
+            (activity as MainActivity).systemBottomInsets
+    }
+
     private fun checkInitState() {
         viewModel.timerStates.value.let {
             if (it == null) {
-                setupFinishTimer(HourWatchViewModel.TimerState.Finished(-1))
+                setupFinishTimer(TimerViewModel.TimerState.Finished(-1))
             } else {
                 handleState(it)
             }
@@ -67,9 +84,9 @@ class HourWatchFragment : BaseFragment<HourWatchViewModel, FragmentHourwatchBind
 
     private fun resetButtonListener() {
         bt_timer_reset.setOnClickListener {
-            if (currentState is HourWatchViewModel.TimerState.Update
-                || currentState is HourWatchViewModel.TimerState.TimeIsUp
-                || currentState is HourWatchViewModel.TimerState.Paused
+            if (currentState is TimerViewModel.TimerState.Update
+                || currentState is TimerViewModel.TimerState.TimeIsUp
+                || currentState is TimerViewModel.TimerState.Paused
             ) {
                 resetTimer()
             }
@@ -79,22 +96,22 @@ class HourWatchFragment : BaseFragment<HourWatchViewModel, FragmentHourwatchBind
     private fun fabListener() {
         fab.setOnClickListener {
             when (currentState) {
-                is HourWatchViewModel.TimerState.Paused -> restartTimer()
-                is HourWatchViewModel.TimerState.Update -> pauseTimer()
-                is HourWatchViewModel.TimerState.TimeIsUp -> resetTimer()
-                is HourWatchViewModel.TimerState.Finished -> startTimer()
+                is TimerViewModel.TimerState.Paused -> restartTimer()
+                is TimerViewModel.TimerState.Update -> pauseTimer()
+                is TimerViewModel.TimerState.TimeIsUp -> resetTimer()
+                is TimerViewModel.TimerState.Finished -> startTimer()
             }
         }
     }
 
-    private fun handleState(it: HourWatchViewModel.TimerState) {
+    private fun handleState(it: TimerViewModel.TimerState) {
         when (it) {
-            is HourWatchViewModel.TimerState.Start -> setupStartedTimer()
-            is HourWatchViewModel.TimerState.Update -> updateTimer(it)
-            is HourWatchViewModel.TimerState.TimeIsUp -> setupTimerIsUp()
-            is HourWatchViewModel.TimerState.Finished -> setupFinishTimer(it)
-            is HourWatchViewModel.TimerState.Paused -> setupPauseTimer()
-            is HourWatchViewModel.TimerState.Restart -> setupRestartTimer()
+            is TimerViewModel.TimerState.Start -> setupStartedTimer()
+            is TimerViewModel.TimerState.Update -> updateTimer(it)
+            is TimerViewModel.TimerState.TimeIsUp -> setupTimerIsUp()
+            is TimerViewModel.TimerState.Finished -> setupFinishTimer(it)
+            is TimerViewModel.TimerState.Paused -> setupPauseTimer()
+            is TimerViewModel.TimerState.Restart -> setupRestartTimer()
         }
     }
 
@@ -110,7 +127,7 @@ class HourWatchFragment : BaseFragment<HourWatchViewModel, FragmentHourwatchBind
         tv_timer_left.startAnimation(animation)
     }
 
-    private fun setupFinishTimer(finishTimer: HourWatchViewModel.TimerState.Finished) {
+    private fun setupFinishTimer(finishTimer: TimerViewModel.TimerState.Finished) {
         stopBlinking()
         val time = if (finishTimer.time == -1L) {
             fab.hide()
@@ -134,13 +151,13 @@ class HourWatchFragment : BaseFragment<HourWatchViewModel, FragmentHourwatchBind
     private fun getPickerListener(): HmsPickerView.Listener {
         return object : HmsPickerView.Listener {
             override fun onHmsPickerViewHasNoInput(hmsPickerView: HmsPickerView) {
-                if (currentState is HourWatchViewModel.TimerState.Finished) {
+                if (currentState is TimerViewModel.TimerState.Finished) {
                     fab.hide()
                 }
             }
 
             override fun onHmsPickerViewHasValidInput(hmsPickerView: HmsPickerView) {
-                if (currentState is HourWatchViewModel.TimerState.Finished) {
+                if (currentState is TimerViewModel.TimerState.Finished) {
                     fab.showFab()
                 }
             }
@@ -158,7 +175,7 @@ class HourWatchFragment : BaseFragment<HourWatchViewModel, FragmentHourwatchBind
         tv_timer_left.startAnimation(animation)
     }
 
-    private fun updateTimer(updateTimer: HourWatchViewModel.TimerState.Update) {
+    private fun updateTimer(updateTimer: TimerViewModel.TimerState.Update) {
         whenFalse(wasStarted) {
             setupStartedTimer()
         }

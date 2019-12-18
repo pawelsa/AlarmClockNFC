@@ -1,4 +1,4 @@
-package com.helpfulapps.alarmclock.views.hourwatch_fragment
+package com.helpfulapps.alarmclock.views.timer_fragment
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,7 +8,7 @@ import com.helpfulapps.domain.eventBus.ServiceBus
 import com.helpfulapps.domain.helpers.Settings
 import io.reactivex.rxkotlin.plusAssign
 
-class HourWatchViewModel(
+class TimerViewModel(
     private val settings: Settings
 ) : BaseViewModel() {
 

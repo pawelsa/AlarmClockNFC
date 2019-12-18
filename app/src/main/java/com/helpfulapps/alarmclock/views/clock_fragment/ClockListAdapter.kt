@@ -1,10 +1,10 @@
 package com.helpfulapps.alarmclock.views.clock_fragment
 
 import android.content.Context
-import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.ItemAlarmBinding
+import com.helpfulapps.alarmclock.helpers.extensions.marginParams
 import com.helpfulapps.base.base.BaseListAdapter
 import com.helpfulapps.domain.models.alarm.Alarm
 
@@ -25,7 +25,7 @@ class ClockListAdapter(
             val context = this.root.context
             setupChips(context)
 
-            (clItemAlarmBase.layoutParams as ViewGroup.MarginLayoutParams).bottomMargin =
+            clItemAlarmBase.marginParams().bottomMargin =
                 if (position == itemCount - 1) 450 else 0
 
             clItemAlarmBase.setOnClickListener {

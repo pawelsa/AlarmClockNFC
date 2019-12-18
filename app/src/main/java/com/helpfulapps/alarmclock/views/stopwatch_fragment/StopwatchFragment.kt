@@ -4,10 +4,12 @@ import android.content.Intent
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import androidx.core.view.marginBottom
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.FragmentStopwatchBinding
+import com.helpfulapps.alarmclock.helpers.extensions.marginParams
 import com.helpfulapps.alarmclock.helpers.extensions.observe
 import com.helpfulapps.alarmclock.helpers.millisToString
 import com.helpfulapps.alarmclock.service.StopwatchService
@@ -28,6 +30,7 @@ class StopwatchFragment : BaseFragment<StopWatchViewModel, FragmentStopwatchBind
         get() = (mainActivity as MainActivity).fab_main_fab
 
     private val animation: Animation by lazy { AnimationUtils.loadAnimation(context, R.anim.blink) }
+    private val resetBottomMargin by lazy { binding.btStopwatchReset.marginBottom }
 
     private var currentState: StopWatchViewModel.StopWatchState =
         StopWatchViewModel.StopWatchState.Stopped
@@ -53,6 +56,7 @@ class StopwatchFragment : BaseFragment<StopWatchViewModel, FragmentStopwatchBind
 
         viewModel.observeStopwatch()
 
+        setupWindowInsets()
         checkInitialState()
         subscribeState()
         subscribeLapTimes()
@@ -61,6 +65,19 @@ class StopwatchFragment : BaseFragment<StopWatchViewModel, FragmentStopwatchBind
         setupFabListener()
         setupResetListener()
         setupLapListener()
+    }
+
+    private fun setupWindowInsets() {
+        val dimensionInDp =
+            MainActivity.HALF_OF_DIFFERENCE_BETWEEN_SIZE_OF_FAB_AND_VIEW * binding.root.context.resources.displayMetrics.density.toInt()
+        binding.btStopwatchLap.marginParams().bottomMargin =
+            resetBottomMargin + (activity as MainActivity).systemBottomInsets + dimensionInDp
+
+        binding.btStopwatchReset.marginParams().bottomMargin =
+            resetBottomMargin + (activity as MainActivity).systemBottomInsets + dimensionInDp
+
+        binding.tvStopwatchTime.marginParams().bottomMargin =
+            (activity as MainActivity).systemBottomInsets
     }
 
     private fun subscribeCurrentTime() {
