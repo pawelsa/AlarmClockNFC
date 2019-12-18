@@ -2,7 +2,6 @@ package com.helpfulapps.alarmclock.service
 
 import android.app.Notification
 import android.content.Intent
-import android.util.Log
 import com.helpfulapps.alarmclock.App
 import com.helpfulapps.alarmclock.helpers.AlarmPlayer
 import com.helpfulapps.alarmclock.helpers.NotificationBuilder
@@ -76,7 +75,6 @@ class TimerService : BaseService() {
         disposables += RxBus.listen(App.AppState::class.java)
             .subscribe {
                 isForeground = it is App.AppState.IsForeground
-                Log.d(TAG, "Is foreground: $isForeground")
                 if (isForeground && timer.isRunning) {
                     stopForeground(true)
                 }
