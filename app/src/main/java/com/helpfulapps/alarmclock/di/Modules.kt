@@ -6,12 +6,12 @@ import com.example.api.other.PrepareDataImpl
 import com.helpfulapps.alarmclock.helpers.*
 import com.helpfulapps.alarmclock.views.clock_fragment.ClockViewModel
 import com.helpfulapps.alarmclock.views.clock_fragment.add_alarm_bs.AddAlarmBottomSheetViewModel
-import com.helpfulapps.alarmclock.views.hourwatch_fragment.HourWatchViewModel
 import com.helpfulapps.alarmclock.views.main_activity.MainActivityViewModel
 import com.helpfulapps.alarmclock.views.ringing_alarm.RingingAlarmViewModel
 import com.helpfulapps.alarmclock.views.settings.SettingsViewModel
 import com.helpfulapps.alarmclock.views.statistics.StatisticsViewModel
 import com.helpfulapps.alarmclock.views.stopwatch_fragment.StopWatchViewModel
+import com.helpfulapps.alarmclock.views.timer_fragment.TimerViewModel
 import com.helpfulapps.data.api.PrepareData
 import com.helpfulapps.data.db.alarm.dao.AlarmDao
 import com.helpfulapps.data.db.stats.dao.StatsDao
@@ -51,7 +51,7 @@ object Modules {
     private val appModules = module {
         viewModel { MainActivityViewModel() }
         viewModel { ClockViewModel(get(), get(), get(), get()) }
-        viewModel { HourWatchViewModel(get()) }
+        viewModel { TimerViewModel(get()) }
         viewModel { StopWatchViewModel() }
         viewModel { AddAlarmBottomSheetViewModel(get(), get(), get()) }
         viewModel { RingingAlarmViewModel(get()) }
