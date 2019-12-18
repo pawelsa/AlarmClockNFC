@@ -2,8 +2,10 @@ package com.helpfulapps.alarmclock.views.stopwatch_fragment
 
 import android.content.Intent
 import android.view.View
+import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import androidx.core.view.marginBottom
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.helpfulapps.alarmclock.R
@@ -28,6 +30,7 @@ class StopwatchFragment : BaseFragment<StopWatchViewModel, FragmentStopwatchBind
         get() = (mainActivity as MainActivity).fab_main_fab
 
     private val animation: Animation by lazy { AnimationUtils.loadAnimation(context, R.anim.blink) }
+    private val resetBottomMargin by lazy { binding.btStopwatchReset.marginBottom }
 
     private var currentState: StopWatchViewModel.StopWatchState =
         StopWatchViewModel.StopWatchState.Stopped
@@ -53,6 +56,7 @@ class StopwatchFragment : BaseFragment<StopWatchViewModel, FragmentStopwatchBind
 
         viewModel.observeStopwatch()
 
+        setupWindowInsets()
         checkInitialState()
         subscribeState()
         subscribeLapTimes()
@@ -61,6 +65,18 @@ class StopwatchFragment : BaseFragment<StopWatchViewModel, FragmentStopwatchBind
         setupFabListener()
         setupResetListener()
         setupLapListener()
+    }
+
+    private fun setupWindowInsets() {
+        val dimensionInDp = 4 * binding.root.context.resources.displayMetrics.density.toInt()
+        (binding.btStopwatchLap.layoutParams as ViewGroup.MarginLayoutParams).bottomMargin =
+            resetBottomMargin + (activity as MainActivity).systemBottomInsets + dimensionInDp
+
+        (binding.btStopwatchReset.layoutParams as ViewGroup.MarginLayoutParams).bottomMargin =
+            resetBottomMargin + (activity as MainActivity).systemBottomInsets + dimensionInDp
+
+        (binding.tvStopwatchTime.layoutParams as ViewGroup.MarginLayoutParams).bottomMargin =
+            (activity as MainActivity).systemBottomInsets
     }
 
     private fun subscribeCurrentTime() {

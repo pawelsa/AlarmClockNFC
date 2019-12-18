@@ -25,6 +25,9 @@ class MainActivity : BaseActivity<MainActivityViewModel, ActivityMainBinding>() 
 
     private val pager: TabFragmentChangeListener by lazy { TabFragmentChangeListener(fab_main_fab) }
 
+    private val fabBottomPadding by lazy { binding.fabMainFab.marginBottom }
+    var systemBottomInsets: Int = 0
+
     private val popupMenu by lazy {
         val popup = PopupMenu(applicationContext, ib_main_menu)
         popup.menuInflater.inflate(R.menu.clock_menu, popup.menu)
@@ -76,9 +79,10 @@ class MainActivity : BaseActivity<MainActivityViewModel, ActivityMainBinding>() 
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
             view.updatePadding(top = insets.systemWindowInsetTop)
+            systemBottomInsets = insets.systemGestureInsets.bottom
             (binding.fabMainFab.layoutParams as ViewGroup.MarginLayoutParams).bottomMargin =
-                binding.fabMainFab.marginBottom + insets.systemGestureInsets.bottom
-            insets.consumeSystemWindowInsets()
+                fabBottomPadding + systemBottomInsets
+            insets
         }
     }
 

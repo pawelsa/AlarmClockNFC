@@ -2,8 +2,10 @@ package com.helpfulapps.alarmclock.views.timer_fragment
 
 import android.content.Intent
 import android.view.View
+import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import androidx.core.view.marginBottom
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.FragmentTimerBinding
@@ -20,6 +22,7 @@ import kotlinx.android.synthetic.main.fragment_timer.*
 import org.koin.android.viewmodel.ext.android.viewModel
 import xyz.aprildown.hmspickerview.HmsPickerView
 
+
 class TimerFragment : BaseFragment<TimerViewModel, FragmentTimerBinding>() {
 
     override val layoutId: Int = R.layout.fragment_timer
@@ -33,19 +36,32 @@ class TimerFragment : BaseFragment<TimerViewModel, FragmentTimerBinding>() {
 
     private val animation: Animation by lazy { AnimationUtils.loadAnimation(context, R.anim.blink) }
     private var wasStarted = false
+    private val resetBottomMargin by lazy { binding.btTimerReset.marginBottom }
+
 
     override fun init() {
 
         viewModel.listenToTimer()
+
     }
 
     override fun onResume() {
         super.onResume()
 
+        setupInsets()
         fabListener()
         resetButtonListener()
         checkInitState()
         subscribeToStates()
+    }
+
+    private fun setupInsets() {
+        val dimensionInDp = 4 * binding.root.context.resources.displayMetrics.density.toInt()
+        (binding.btTimerReset.layoutParams as ViewGroup.MarginLayoutParams).bottomMargin =
+            resetBottomMargin + (activity as MainActivity).systemBottomInsets + dimensionInDp
+
+        (binding.tvTimerLeft.layoutParams as ViewGroup.MarginLayoutParams).bottomMargin =
+            (activity as MainActivity).systemBottomInsets
     }
 
     private fun checkInitState() {

@@ -1,7 +1,11 @@
 package com.helpfulapps.alarmclock.views.timer_finished_activity
 
+import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import androidx.core.view.ViewCompat
+import androidx.core.view.marginBottom
+import androidx.core.view.updatePadding
 import com.google.android.material.snackbar.Snackbar
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.ActivityTimerFinishedBinding
@@ -21,14 +25,29 @@ class TimerFinishedActivity : BaseActivity<TimerFinishedViewModel, ActivityTimer
             R.anim.blink
         )
     }
+    private val fabBottomPadding by lazy { binding.fabTimerFinishedTimer.marginBottom }
 
     override fun init() {
 
         tv_timer_finished_time.startAnimation(blinkingAnimation)
 
+        setupFabListener()
+        setupWindowInsets()
+    }
+
+    private fun setupFabListener() {
         fab_timer_finished_timer.setOnClickListener {
             ServiceBus.publish(TimerService.TimerServiceEvent.FinishTimer)
             finish()
+        }
+    }
+
+    private fun setupWindowInsets() {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
+            view.updatePadding(top = insets.systemWindowInsetTop)
+            (binding.fabTimerFinishedTimer.layoutParams as ViewGroup.MarginLayoutParams).bottomMargin =
+                fabBottomPadding + insets.systemGestureInsets.bottom
+            insets
         }
     }
 
