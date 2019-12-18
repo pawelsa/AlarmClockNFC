@@ -56,7 +56,8 @@ class TimerFragment : BaseFragment<TimerViewModel, FragmentTimerBinding>() {
     }
 
     private fun setupWindowInsets() {
-        val dimensionInDp = 4 * binding.root.context.resources.displayMetrics.density.toInt()
+        val dimensionInDp =
+            MainActivity.HALF_OF_DIFFERENCE_BETWEEN_SIZE_OF_FAB_AND_VIEW * binding.root.context.resources.displayMetrics.density.toInt()
         binding.btTimerReset.marginParams().bottomMargin =
             resetBottomMargin + (activity as MainActivity).systemBottomInsets + dimensionInDp
 

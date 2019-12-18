@@ -134,5 +134,6 @@ class MainActivity : BaseActivity<MainActivityViewModel, ActivityMainBinding>() 
         const val ACTION_OPEN_ALARM = "com.helpfulapps.alarmclock.addAlarm"
         const val ACTION_OPEN_TIMER = "com.helpfulapps.alarmclock.setHourglass"
         const val ACTION_OPEN_STOPWATCH = "com.helpfulapps.alarmclock.startStopwatch"
+        const val HALF_OF_DIFFERENCE_BETWEEN_SIZE_OF_FAB_AND_VIEW = 4
     }
 }
