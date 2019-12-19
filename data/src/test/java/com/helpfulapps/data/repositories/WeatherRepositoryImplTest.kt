@@ -10,9 +10,9 @@ import io.mockk.mockk
 import io.mockk.spyk
 import io.reactivex.Flowable
 import io.reactivex.Single
-import junit.framework.Assert.assertFalse
-import junit.framework.Assert.assertTrue
 import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 
 class WeatherRepositoryImplTest {
 

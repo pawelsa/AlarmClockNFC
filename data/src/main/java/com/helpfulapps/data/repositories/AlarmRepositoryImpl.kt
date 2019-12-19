@@ -37,7 +37,7 @@ open class AlarmRepositoryImpl(
         return getSingleAlarm(alarmId)
             .flatMap(alarmDao::delete)
             .flatMapCompletable { isDeleted ->
-                isDeleted.checkCompleted(
+                return@flatMapCompletable isDeleted.checkCompleted(
                     AlarmException(
                         "Couldn't delete alarm"
                     )
