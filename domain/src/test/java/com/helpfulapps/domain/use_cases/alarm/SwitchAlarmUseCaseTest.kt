@@ -8,7 +8,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.reactivex.Completable
 import io.reactivex.Single
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 class SwitchAlarmUseCaseTest {
 

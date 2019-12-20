@@ -5,7 +5,7 @@ import com.helpfulapps.domain.repository.WeatherRepository
 import io.mockk.every
 import io.mockk.mockk
 import io.reactivex.Completable
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 class DownloadForecastForCityUseCaseTest {
 

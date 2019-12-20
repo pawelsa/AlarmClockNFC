@@ -9,7 +9,7 @@ import com.helpfulapps.domain.use_cases.mockData.MockData
 import io.mockk.every
 import io.mockk.mockk
 import io.reactivex.Single
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 class GetAlarmUseCaseTest {
 

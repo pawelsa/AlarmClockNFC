@@ -38,6 +38,7 @@ object MockData {
         isVibrationOn: Boolean = true,
         ringtoneUrl: String = "ringtoneUrl",
         ringtoneTitle: String = "ringtoneTitle",
+        isNfcUsed: Boolean = false,
         isRepeating: Boolean = false,
         repetitionDays: Array<Boolean> = arrayOf(false, false, false, false, false, false, false)
     ): Alarm {
@@ -49,6 +50,7 @@ object MockData {
             isTurnedOn,
             ringtoneUrl,
             ringtoneTitle,
+            isNfcUsed,
             hour,
             minute,
             repetitionDays

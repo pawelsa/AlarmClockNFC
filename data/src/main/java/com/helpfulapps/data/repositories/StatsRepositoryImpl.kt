@@ -2,7 +2,6 @@ package com.helpfulapps.data.repositories
 
 import com.helpfulapps.data.db.stats.dao.StatsDao
 import com.helpfulapps.data.db.stats.model.AlarmStatsData
-import com.helpfulapps.domain.exceptions.StatsException
 import com.helpfulapps.domain.helpers.singleOf
 import com.helpfulapps.domain.models.stats.AlarmStats
 import com.helpfulapps.domain.models.stats.AnalysedAlarmStats
@@ -41,10 +40,7 @@ class StatsRepositoryImpl(
 
         return statsDao.save(AlarmStatsData(alarmStats))
             .flatMapCompletable {
-                if (it) {
-                    return@flatMapCompletable Completable.complete()
-                }
-                return@flatMapCompletable Completable.error(StatsException("Could not save stats"))
-            }
+                return@flatMapCompletable Completable.complete()
+            }.onErrorComplete()
     }
 }

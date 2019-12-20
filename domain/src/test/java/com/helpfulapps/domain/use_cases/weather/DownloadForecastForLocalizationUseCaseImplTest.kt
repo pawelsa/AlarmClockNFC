@@ -5,7 +5,7 @@ import com.helpfulapps.domain.repository.WeatherRepository
 import io.mockk.every
 import io.mockk.mockk
 import io.reactivex.Completable
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 class DownloadForecastForLocalizationUseCaseImplTest {
 
@@ -16,7 +16,7 @@ class DownloadForecastForLocalizationUseCaseImplTest {
     fun `should download succeed`() {
         every { weatherRepository.downloadForecast(any(), any()) } returns Completable.complete()
 
-        useCase(DownloadForecastForLocalizationUseCase.Params(5, 5))
+        useCase(DownloadForecastForLocalizationUseCase.Params(5.0, 5.0))
             .test()
             .assertComplete()
             .dispose()
@@ -28,7 +28,7 @@ class DownloadForecastForLocalizationUseCaseImplTest {
             WeatherException("failed")
         )
 
-        useCase(DownloadForecastForLocalizationUseCase.Params(5, 5))
+        useCase(DownloadForecastForLocalizationUseCase.Params(5.0, 5.0))
             .test()
             .assertError(WeatherException::class.java)
             .dispose()

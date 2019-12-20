@@ -1,8 +1,8 @@
 package com.helpfulapps.domain.use_cases.extensions
 
 import com.helpfulapps.domain.extensions.dayOfWeek
-import org.junit.Assert.assertEquals
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 
 class GetDayOfWeekTest {
 

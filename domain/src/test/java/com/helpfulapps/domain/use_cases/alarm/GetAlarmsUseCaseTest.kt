@@ -11,7 +11,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.reactivex.Single
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import java.util.*
 
 class GetAlarmsUseCaseTest {
