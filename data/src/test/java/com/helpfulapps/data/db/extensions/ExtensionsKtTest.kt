@@ -5,7 +5,7 @@ import com.helpfulapps.domain.exceptions.AlarmException
 import io.reactivex.Completable
 import io.reactivex.CompletableSource
 import io.reactivex.observers.TestObserver
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 class ExtensionsKtTest {
 
