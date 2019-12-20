@@ -142,7 +142,7 @@ object MockData {
         id: Int = 0,
         dt: Long = BASE_TIMESTAMP,
         cityName: String = "Pszczyna",
-        hourWeatherList: List<HourWeather> = listOf(),
+        hourWeatherList: List<HourWeather> = listOf(createHourWeather()),
         weatherInfo: WeatherInfo = createWeatherInfo()
     ) =
         DayWeather(
@@ -180,10 +180,10 @@ object MockData {
     }
 
     fun createWeatherInfo(
-        rain: Rain = Rain.NO_RAIN,
+        rain: Rain = Rain.NO_DATA,
         snow: Snow = Snow.NO_DATA,
-        temperature: Temperature = Temperature.HOT,
-        wind: Wind = Wind.NORMAL
+        temperature: Temperature = Temperature.NO_DATA,
+        wind: Wind = Wind.NO_DATA
     ): WeatherInfo {
         return WeatherInfo(
             temperature, rain, wind, snow
@@ -191,7 +191,7 @@ object MockData {
     }
 
 
-    fun createDbHourWeather(
+    fun createDataHourWeather(
         id: Int = 0,
         dt: Long = BASE_TIMESTAMP,
         clouds: Int = 80,
@@ -209,11 +209,11 @@ object MockData {
         )
     }
 
-    fun createDbWeatherInfo(
-        rain: RainData = RainData.NO_RAIN,
+    fun createDataWeatherInfo(
+        rain: RainData = RainData.NO_DATA,
         snow: SnowData = SnowData.NO_DATA,
-        temperature: TemperatureData = TemperatureData.HOT,
-        wind: WindData = WindData.NORMAL
+        temperature: TemperatureData = TemperatureData.NO_DATA,
+        wind: WindData = WindData.NO_DATA
     ): WeatherInfoData {
         return WeatherInfoData(
             temperature = temperature,
@@ -223,12 +223,12 @@ object MockData {
         )
     }
 
-    fun createDbDayWeather(
+    fun createDataDayWeather(
         id: Int = 0,
         dt: Long = BASE_TIMESTAMP,
         cityName: String = "Pszczyna",
-        hourWeatherList: List<HourWeatherData> = listOf(createDbHourWeather()),
-        weatherInfo: WeatherInfoData = createDbWeatherInfo()
+        hourWeatherList: List<HourWeatherData> = listOf(createDataHourWeather()),
+        weatherInfo: WeatherInfoData = createDataWeatherInfo()
     ) =
         DayWeatherData(
             id,
@@ -237,4 +237,17 @@ object MockData {
             hourWeatherList = hourWeatherList,
             weatherInfo = weatherInfo
         )
+
+    val weatherDataList = listOf(
+        createDataDayWeather(id = 1, dt = BASE_TIMESTAMP + 3600),
+        createDataDayWeather(id = 2, dt = BASE_TIMESTAMP + 3600 * 2),
+        createDataDayWeather(id = 3, dt = BASE_TIMESTAMP + 3600 * 3)
+    )
+
+    val weatherDomainList = listOf(
+        createDomainDayWeather(id = 1, dt = BASE_TIMESTAMP + 3600),
+        createDomainDayWeather(id = 2, dt = BASE_TIMESTAMP + 3600 * 2),
+        createDomainDayWeather(id = 3, dt = BASE_TIMESTAMP + 3600 * 3)
+    )
+
 }

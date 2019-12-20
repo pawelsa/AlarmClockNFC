@@ -40,7 +40,7 @@ class WeatherRepositoryImpl(
         getDayWeatherList()
             .map(DayWeatherData::toDomain)
             .toList()
-            .timeout(2L, TimeUnit.SECONDS) { observer -> observer.onSuccess(emptyList()) }
+            .timeout(2L, TimeUnit.SECONDS) { observer -> observer.onSuccess(listOf()) }
 
     override fun getForecastForAlarm(time: Long): Single<DomainDayWeather> =
         getDayWeatherForTime(time)
@@ -70,7 +70,7 @@ class WeatherRepositoryImpl(
             }
 
 
-    fun getDayWeatherList() = weatherDao.streamWeatherList()
+    private fun getDayWeatherList() = weatherDao.streamWeatherList()
 
-    fun getDayWeatherForTime(time: Long) = weatherDao.getWeatherForTime(time)
+    private fun getDayWeatherForTime(time: Long) = weatherDao.getWeatherForTime(time)
 }
