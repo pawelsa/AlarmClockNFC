@@ -109,6 +109,7 @@ class StopwatchService : BaseService() {
         object Start : StopWatchEvent()
         data class Update(val timeInMillis: Long) : StopWatchEvent()
         object Pause : StopWatchEvent()
+        // used only to inform UI about its paused state
         object Paused : StopWatchEvent()
         object Resume : StopWatchEvent()
         object TakeLap : StopWatchEvent()
