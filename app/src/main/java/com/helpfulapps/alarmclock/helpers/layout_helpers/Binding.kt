@@ -28,6 +28,7 @@ fun <T : RecyclerView.ViewHolder> setRecyclerViewAdapter(
     )
 }
 
+
 @BindingAdapter("app:selectedDays")
 fun setSelectedDays(dayPicker: MaterialDayPicker, days: Array<Boolean>) {
     if (dayPicker.selectedDays.notEqual(days.toDayList())) {
