@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.IBinder
 import com.google.android.gms.location.LocationRequest
 import com.helpfulapps.alarmclock.helpers.NotificationBuilder
-import com.helpfulapps.alarmclock.helpers.startVersionedForeground
+import com.helpfulapps.alarmclock.helpers.extensions.startVersionedForeground
 import com.helpfulapps.alarmclock.worker.CreateWork
 import com.helpfulapps.base.extensions.rx.backgroundTask
 import com.helpfulapps.domain.helpers.Settings

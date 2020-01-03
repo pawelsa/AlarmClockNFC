@@ -1,11 +1,14 @@
-package com.helpfulapps.alarmclock.helpers
+package com.helpfulapps.alarmclock.helpers.extensions
 
 import java.text.DateFormatSymbols
 import java.text.SimpleDateFormat
 import java.util.*
 
 fun timeToString(time: Pair<Int, Int>): String {
-    return timeToString(time.first, time.second)
+    return timeToString(
+        time.first,
+        time.second
+    )
 }
 
 fun timeToString(hour: Int, minute: Int): String {

@@ -1,7 +1,7 @@
 package com.helpfulapps.alarmclock.views.clock_fragment
 
-import com.helpfulapps.alarmclock.helpers.timeToString
-import com.helpfulapps.alarmclock.helpers.toShortWeekdays
+import com.helpfulapps.alarmclock.helpers.extensions.timeToString
+import com.helpfulapps.alarmclock.helpers.extensions.toShortWeekdays
 import com.helpfulapps.domain.models.alarm.Alarm
 import com.helpfulapps.domain.models.alarm.WeatherAlarm
 
@@ -16,7 +16,10 @@ data class AlarmData(
     var isUsingNFC: Boolean,
     var hour: Int,
     var minute: Int,
-    var alarmTime: String = timeToString(hour, minute),
+    var alarmTime: String = timeToString(
+        hour,
+        minute
+    ),
     var isRepeating: Boolean = false,
     var repetitionDays: Array<Boolean>,
     var repetitionDaysShorts: String,

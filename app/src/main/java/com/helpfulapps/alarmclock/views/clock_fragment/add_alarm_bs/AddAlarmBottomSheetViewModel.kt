@@ -4,8 +4,8 @@ import android.content.Context
 import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.helpfulapps.alarmclock.helpers.extensions.timeToString
 import com.helpfulapps.alarmclock.helpers.getDefaultRingtone
-import com.helpfulapps.alarmclock.helpers.timeToString
 import com.helpfulapps.base.base.BaseViewModel
 import com.helpfulapps.base.extensions.rx.backgroundTask
 import com.helpfulapps.domain.extensions.singleOf
@@ -54,7 +54,8 @@ class AddAlarmBottomSheetViewModel(
     var time: Pair<Int, Int> = Pair(8, 30)
         set(value) {
             field = value
-            _alarmTime.value = timeToString(value)
+            _alarmTime.value =
+                timeToString(value)
         }
 
     private var alarmId = -1L
@@ -127,6 +128,7 @@ class AddAlarmBottomSheetViewModel(
     }
 
     fun setupData() {
-        _alarmTime.value = timeToString(time)
+        _alarmTime.value =
+            timeToString(time)
     }
 }

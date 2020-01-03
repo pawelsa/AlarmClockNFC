@@ -10,8 +10,8 @@ import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.FragmentTimerBinding
 import com.helpfulapps.alarmclock.helpers.extensions.marginParams
 import com.helpfulapps.alarmclock.helpers.extensions.observe
+import com.helpfulapps.alarmclock.helpers.extensions.secondsToString
 import com.helpfulapps.alarmclock.helpers.extensions.showFab
-import com.helpfulapps.alarmclock.helpers.secondsToString
 import com.helpfulapps.alarmclock.service.TimerService
 import com.helpfulapps.alarmclock.views.main_activity.MainActivity
 import com.helpfulapps.base.base.BaseFragment

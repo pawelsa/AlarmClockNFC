@@ -9,8 +9,8 @@ import android.view.WindowManager
 import androidx.databinding.ViewDataBinding
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.helpfulapps.alarmclock.helpers.NotificationBuilderImpl
+import com.helpfulapps.alarmclock.helpers.extensions.startVersionedService
 import com.helpfulapps.alarmclock.helpers.fromBuildVersion
-import com.helpfulapps.alarmclock.helpers.startVersionedService
 import com.helpfulapps.alarmclock.service.AlarmService
 import com.helpfulapps.base.base.BaseActivity
 import org.koin.android.viewmodel.ext.android.viewModel

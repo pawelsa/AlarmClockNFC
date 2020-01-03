@@ -13,8 +13,8 @@ interface VibrationController {
 
 class VibrationControllerImpl(context: Context) : VibrationController {
 
-    val vibrator: Vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-    val scheme = LongArray(2) { 500L }
+    private val vibrator: Vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+    private val scheme = LongArray(2) { 500L }
 
     override fun startVibrating(shouldPlay: Boolean) {
         if (shouldPlay) {
