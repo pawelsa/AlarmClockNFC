@@ -1,6 +1,6 @@
 package com.helpfulapps.alarmclock.views
 
-import com.helpfulapps.alarmclock.BaseViewModelTest
+import com.helpfulapps.alarmclock.base.BaseViewModelTest
 import com.helpfulapps.alarmclock.service.TimerService
 import com.helpfulapps.alarmclock.views.timer_fragment.TimerViewModel
 import com.helpfulapps.domain.eventBus.ServiceBus

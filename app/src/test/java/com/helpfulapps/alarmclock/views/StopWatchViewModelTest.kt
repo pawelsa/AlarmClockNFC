@@ -1,6 +1,6 @@
 package com.helpfulapps.alarmclock.views
 
-import com.helpfulapps.alarmclock.BaseViewModelTest
+import com.helpfulapps.alarmclock.base.BaseViewModelTest
 import com.helpfulapps.alarmclock.service.StopwatchService
 import com.helpfulapps.alarmclock.views.stopwatch_fragment.StopWatchViewModel
 import com.helpfulapps.domain.eventBus.ServiceBus
@@ -21,10 +21,8 @@ class StopWatchViewModelTest : BaseViewModelTest<StopWatchViewModel>() {
     @Test
     fun `should start, pause and restart`() {
 
-
         val testObserver = viewModel.stopwatchState
             .test()
-
 
         ServiceBus.publish(StopwatchService.StopWatchEvent.Start)
         ServiceBus.publish(StopwatchService.StopWatchEvent.Paused)

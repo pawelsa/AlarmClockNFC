@@ -1,4 +1,4 @@
-package com.helpfulapps.alarmclock
+package com.helpfulapps.alarmclock.base
 
 import androidx.arch.core.executor.ArchTaskExecutor
 import androidx.arch.core.executor.TaskExecutor

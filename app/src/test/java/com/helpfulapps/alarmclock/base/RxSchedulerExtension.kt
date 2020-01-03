@@ -1,4 +1,4 @@
-package com.helpfulapps.alarmclock
+package com.helpfulapps.alarmclock.base
 
 import io.reactivex.Scheduler
 import io.reactivex.android.plugins.RxAndroidPlugins
@@ -9,7 +9,7 @@ import org.junit.jupiter.api.extension.BeforeEachCallback
 import org.junit.jupiter.api.extension.ExtensionContext
 import java.util.concurrent.Callable
 
-class RxSchedulerExtensionForJunit5 : AfterEachCallback, BeforeEachCallback {
+class RxSchedulerExtension : AfterEachCallback, BeforeEachCallback {
 
     private val mSchedulerInstance = Schedulers.trampoline()
     private val schedulerFunc: (Scheduler) -> Scheduler = { mSchedulerInstance }

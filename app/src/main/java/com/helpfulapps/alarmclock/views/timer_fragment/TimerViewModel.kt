@@ -21,19 +21,13 @@ class TimerViewModel(
         disposables += ServiceBus.listen(TimerService.TimerServiceEvent::class.java)
             .backgroundTask()
             .subscribe {
-                when (it) {
-                    is TimerService.TimerServiceEvent.StartTimer -> _timerStates.value =
-                        TimerState.Start(-1L)
-                    is TimerService.TimerServiceEvent.UpdateTimer -> _timerStates.value =
-                        TimerState.Update(it.timeLeft)
-                    is TimerService.TimerServiceEvent.TimeIsUpTimer -> _timerStates.value =
-                        TimerState.TimeIsUp
-                    is TimerService.TimerServiceEvent.FinishTimer -> _timerStates.value =
-                        TimerState.Finished(settings.timeLeft)
-                    is TimerService.TimerServiceEvent.PauseTimer -> _timerStates.value =
-                        TimerState.Paused
-                    is TimerService.TimerServiceEvent.RestartTimer -> _timerStates.value =
-                        TimerState.Restart
+                _timerStates.value = when (it) {
+                    is TimerService.TimerServiceEvent.StartTimer -> TimerState.Start(-1L)
+                    is TimerService.TimerServiceEvent.UpdateTimer -> TimerState.Update(it.timeLeft)
+                    is TimerService.TimerServiceEvent.TimeIsUpTimer -> TimerState.TimeIsUp
+                    is TimerService.TimerServiceEvent.FinishTimer -> TimerState.Finished(settings.timeLeft)
+                    is TimerService.TimerServiceEvent.PauseTimer -> TimerState.Paused
+                    is TimerService.TimerServiceEvent.RestartTimer -> TimerState.Restart
                 }
             }
     }
