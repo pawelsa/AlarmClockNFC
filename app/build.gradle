@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'de.mannodermaus.android-junit5'
 
 android {
     compileSdkVersion 29
@@ -53,12 +54,16 @@ dependencies {
     implementation "androidx.work:work-rxjava2:$work_manager_version"
 
     // Tests
-    testImplementation "junit:junit:$junit_version"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:$junit_5_version"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit_5_version"
+    testImplementation "org.junit.jupiter:junit-jupiter-params:$junit_5_version"
+    testRuntimeOnly "org.junit.vintage:junit-vintage-engine:$junit_5_version"
     androidTestImplementation "androidx.test.ext:junit:$runner_version"
     androidTestImplementation "androidx.test:runner:$runner_version"
     androidTestImplementation "androidx.test:rules:$runner_version"
     testImplementation 'android.arch.core:core-testing:1.1.1'
     androidTestImplementation "androidx.test.espresso:espresso-core:$esspresso_core_version"
+    testImplementation 'com.jraska.livedata:testing-ktx:1.1.0'
 
     // Mockito
     testImplementation "io.mockk:mockk:$mockk_version"

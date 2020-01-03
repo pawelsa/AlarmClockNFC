@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.helpfulapps.alarmclock.service.TimerService
 import com.helpfulapps.base.base.BaseViewModel
+import com.helpfulapps.base.extensions.rx.backgroundTask
 import com.helpfulapps.domain.eventBus.ServiceBus
 import com.helpfulapps.domain.helpers.Settings
 import io.reactivex.rxkotlin.plusAssign
@@ -18,6 +19,7 @@ class TimerViewModel(
 
     fun listenToTimer() {
         disposables += ServiceBus.listen(TimerService.TimerServiceEvent::class.java)
+            .backgroundTask()
             .subscribe {
                 when (it) {
                     is TimerService.TimerServiceEvent.StartTimer -> _timerStates.value =
