@@ -21,8 +21,7 @@ class AddAlarmBottomSheetViewModel(
     private val _addAlarmUseCase: AddAlarmUseCase,
     private val _updateAlarmUseCase: UpdateAlarmUseCase,
     _settings: Settings
-) :
-    BaseViewModel() {
+) : BaseViewModel() {
 
     private val _alarmTime: MutableLiveData<String> = MutableLiveData()
     val alarmTime: LiveData<String>
