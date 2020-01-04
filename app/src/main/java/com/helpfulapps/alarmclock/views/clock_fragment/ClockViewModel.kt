@@ -22,8 +22,6 @@ class ClockViewModel(
     private val settings: Settings
 ) : BaseViewModel() {
 
-    private val TAG = ClockViewModel::class.java.simpleName
-
     private val _alarmList: MutableLiveData<List<AlarmData>> = MutableLiveData()
     val alarmList: LiveData<List<AlarmData>>
         get() = _alarmList

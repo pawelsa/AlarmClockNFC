@@ -16,11 +16,15 @@ fun Context.startVersionedService(intent: Intent) {
     })
 }
 
-fun Service.startVersionedForeground(notification: Notification, id: Int = 1) {
+fun Service.startVersionedForeground(
+    notification: Notification,
+    id: Int = 1,
+    serviceType: Int = ServiceInfo.FOREGROUND_SERVICE_TYPE_NONE
+) {
     fromBuildVersion(
         Build.VERSION_CODES.Q,
         matching = {
-            startForeground(id, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION)
+            startForeground(id, notification, serviceType)
         },
         otherwise = {
             startForeground(id, notification)
