@@ -1,16 +1,17 @@
 package com.helpfulapps.domain.use_cases.weather
 
 import com.helpfulapps.domain.repository.WeatherRepository
+import com.helpfulapps.domain.use_cases.BaseUseCaseTest
 import com.helpfulapps.domain.use_cases.mockData.MockData
 import io.mockk.every
 import io.mockk.mockk
 import io.reactivex.Single
 import org.junit.jupiter.api.Test
 
-class GetForecastForAlarmsUseCaseImplTest {
+class GetForecastForAlarmsUseCaseImplTest : BaseUseCaseTest<GetForecastForAlarmsUseCase>() {
 
     private val weatherRepository: WeatherRepository = mockk {}
-    val useCase = GetForecastForAlarmsUseCaseImpl(weatherRepository)
+    override val useCase = GetForecastForAlarmsUseCaseImpl(weatherRepository)
 
     @Test
     fun `should obtain forecast for alarm`() {

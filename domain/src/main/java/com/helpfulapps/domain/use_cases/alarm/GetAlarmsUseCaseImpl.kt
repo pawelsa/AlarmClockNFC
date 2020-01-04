@@ -13,14 +13,14 @@ import io.reactivex.functions.BiFunction
 interface GetAlarmsUseCase : SingleUseCase<List<WeatherAlarm>>
 
 class GetAlarmsUseCaseImpl(
-    private val _alarmRepository: AlarmRepository,
-    private val _weatherRepository: WeatherRepository
+    private val alarmRepository: AlarmRepository,
+    private val weatherRepository: WeatherRepository
 ) : GetAlarmsUseCase {
 
     override fun invoke(): Single<List<WeatherAlarm>> =
         Single.zip(
-            _alarmRepository.getAlarms(),
-            _weatherRepository.getForecastForAlarms().onErrorResumeNext { singleOf { emptyList<DayWeather>() } },
+            alarmRepository.getAlarms(),
+            weatherRepository.getForecastForAlarms().onErrorResumeNext { singleOf { emptyList<DayWeather>() } },
             BiFunction { alarmList, dayWeatherList ->
                 val weatherAlarmList = arrayListOf<WeatherAlarm>()
 

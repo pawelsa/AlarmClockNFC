@@ -10,12 +10,12 @@ import org.junit.jupiter.api.Test
 
 class GetAllStatsUseCaseTest : BaseUseCaseTest<GetAllStatsUseCase>() {
 
-    private val _statsRepository: StatsRepository = mockk {}
-    override val useCase: GetAllStatsUseCase = GetAllStatsUseCaseImpl(_statsRepository)
+    private val statsRepository: StatsRepository = mockk {}
+    override val useCase: GetAllStatsUseCase = GetAllStatsUseCaseImpl(statsRepository)
 
     @Test
     fun `should get all stats`() {
-        every { _statsRepository.getAllStats() } returns singleOf { MockStats.defaultAnalysedStats }
+        every { statsRepository.getAllStats() } returns singleOf { MockStats.defaultAnalysedStats }
 
         useCase()
             .test()
@@ -25,7 +25,7 @@ class GetAllStatsUseCaseTest : BaseUseCaseTest<GetAllStatsUseCase>() {
 
     @Test
     fun `should get empty list`() {
-        every { _statsRepository.getAllStats() } returns singleOf { MockStats.emptyStatsList }
+        every { statsRepository.getAllStats() } returns singleOf { MockStats.emptyStatsList }
 
         useCase()
             .test()

@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 
 class TimerTest {
 
-    private lateinit var timer: Timer
+    private var timer: Timer = Timer()
 
     @BeforeEach
     fun setUp() {

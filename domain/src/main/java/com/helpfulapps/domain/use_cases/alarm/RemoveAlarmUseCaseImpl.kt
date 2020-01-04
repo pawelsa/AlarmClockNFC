@@ -11,11 +11,11 @@ interface RemoveAlarmUseCase : CompletableUseCaseWithParameter<RemoveAlarmUseCas
 }
 
 class RemoveAlarmUseCaseImpl(
-    private val _clockManager: AlarmClockManager,
-    private val _repository: AlarmRepository
+    private val clockManager: AlarmClockManager,
+    private val repository: AlarmRepository
 ) : RemoveAlarmUseCase {
 
     override fun invoke(parameter: RemoveAlarmUseCase.Params): Completable =
-        _clockManager.stopAlarm(parameter.alarmId)
-            .concatWith(_repository.removeAlarm(parameter.alarmId))
+        clockManager.stopAlarm(parameter.alarmId)
+            .concatWith(repository.removeAlarm(parameter.alarmId))
 }

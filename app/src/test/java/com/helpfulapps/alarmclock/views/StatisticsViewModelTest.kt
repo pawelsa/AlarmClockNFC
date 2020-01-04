@@ -14,12 +14,12 @@ import org.junit.jupiter.api.Test
 
 class StatisticsViewModelTest : BaseViewModelTest<StatisticsViewModel>() {
 
-    private val _getStatisticsUseCase: GetAllStatsUseCase = mockk {}
-    override var viewModel = StatisticsViewModel(_getStatisticsUseCase)
+    private val getStatisticsUseCase: GetAllStatsUseCase = mockk {}
+    override var viewModel = StatisticsViewModel(getStatisticsUseCase)
 
     @Test
     fun `should obtain empty data`() {
-        every { _getStatisticsUseCase() } returns singleOf {
+        every { getStatisticsUseCase() } returns singleOf {
             AnalysedAlarmStats(
                 Array(7) { 0f },
                 Array(7) { 0 })
@@ -45,7 +45,7 @@ class StatisticsViewModelTest : BaseViewModelTest<StatisticsViewModel>() {
 
     @Test
     fun `should obtain some data`() {
-        every { _getStatisticsUseCase() } returns singleOf {
+        every { getStatisticsUseCase() } returns singleOf {
             AnalysedAlarmStats(
                 Array(7) { 0f }.also { it[2] = 15f },
                 Array(7) { 0 }.also { it[2] = 1 })

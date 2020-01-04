@@ -4,6 +4,7 @@ import com.helpfulapps.domain.helpers.singleOf
 import com.helpfulapps.domain.repository.AlarmClockManager
 import com.helpfulapps.domain.repository.AlarmRepository
 import com.helpfulapps.domain.repository.StatsRepository
+import com.helpfulapps.domain.use_cases.BaseUseCaseTest
 import com.helpfulapps.domain.use_cases.mockData.MockData
 import io.mockk.every
 import io.mockk.mockk
@@ -11,12 +12,12 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import org.junit.jupiter.api.Test
 
-class SnoozeAlarmUseCaseTest {
+class SnoozeAlarmUseCaseTest : BaseUseCaseTest<SnoozeAlarmUseCase>() {
 
     private val alarmRepository: AlarmRepository = mockk {}
     private val clockManager: AlarmClockManager = mockk {}
     private val statsRepository: StatsRepository = mockk {}
-    private val useCase = SnoozeAlarmUseCaseImpl(alarmRepository, clockManager, statsRepository)
+    override val useCase = SnoozeAlarmUseCaseImpl(alarmRepository, clockManager, statsRepository)
 
     @Test
     fun `should snooze alarm`() {

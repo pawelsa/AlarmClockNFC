@@ -15,14 +15,14 @@ interface GetAlarmUseCase : SingleUseCaseWithParameter<GetAlarmUseCase.Params, W
 
 class GetAlarmUseCaseImpl(
     private val alarmRepository: AlarmRepository,
-    private val _weatherRepository: WeatherRepository
+    private val weatherRepository: WeatherRepository
 ) : GetAlarmUseCase {
     override fun invoke(parameter: GetAlarmUseCase.Params): Single<WeatherAlarm> {
         return alarmRepository.getAlarm(parameter.alarmId)
             .flatMap { alarm ->
                 val timeSetter = TimeSetter()
                 val startingTime = timeSetter.getAlarmStartingPoint(alarm)
-                return@flatMap _weatherRepository.getForecastForAlarm(startingTime)
+                return@flatMap weatherRepository.getForecastForAlarm(startingTime)
                     .map { weather ->
                         WeatherAlarm(alarm, weather)
                     }

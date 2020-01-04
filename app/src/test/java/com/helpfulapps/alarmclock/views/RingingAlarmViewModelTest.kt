@@ -13,12 +13,12 @@ import org.junit.jupiter.api.Test
 
 class RingingAlarmViewModelTest : BaseViewModelTest<RingingAlarmViewModel>() {
 
-    private val _getAlarmUseCase: GetAlarmUseCase = mockk {}
-    override val viewModel: RingingAlarmViewModel = RingingAlarmViewModel(_getAlarmUseCase)
+    private val getAlarmUseCase: GetAlarmUseCase = mockk {}
+    override val viewModel: RingingAlarmViewModel = RingingAlarmViewModel(getAlarmUseCase)
 
     @Test
     fun `should obtain alarm`() {
-        every { _getAlarmUseCase(any()) } returns singleOf { MockData.pairs[0] }
+        every { getAlarmUseCase(any()) } returns singleOf { MockData.pairs[0] }
 
         viewModel.getAlarm(5)
 
@@ -29,7 +29,7 @@ class RingingAlarmViewModelTest : BaseViewModelTest<RingingAlarmViewModel>() {
 
     @Test
     fun `should not obtain alarm`() {
-        every { _getAlarmUseCase(any()) } returns Single.error(Exception())
+        every { getAlarmUseCase(any()) } returns Single.error(Exception())
 
         viewModel.getAlarm(5)
 

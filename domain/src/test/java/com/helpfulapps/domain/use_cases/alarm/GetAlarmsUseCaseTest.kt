@@ -4,6 +4,7 @@ import com.helpfulapps.domain.models.alarm.WeatherAlarm
 import com.helpfulapps.domain.models.weather.DayWeather
 import com.helpfulapps.domain.repository.AlarmRepository
 import com.helpfulapps.domain.repository.WeatherRepository
+import com.helpfulapps.domain.use_cases.BaseUseCaseTest
 import com.helpfulapps.domain.use_cases.mockData.MockData
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
@@ -14,11 +15,11 @@ import io.reactivex.Single
 import org.junit.jupiter.api.Test
 import java.util.*
 
-class GetAlarmsUseCaseTest {
+class GetAlarmsUseCaseTest : BaseUseCaseTest<GetAlarmsUseCase>() {
 
     private val mockedWeatherRepository: WeatherRepository = mockk {}
     private val mockedAlarmRepository: AlarmRepository = mockk {}
-    val useCase = GetAlarmsUseCaseImpl(mockedAlarmRepository, mockedWeatherRepository)
+    override val useCase = GetAlarmsUseCaseImpl(mockedAlarmRepository, mockedWeatherRepository)
 
 
     @Test

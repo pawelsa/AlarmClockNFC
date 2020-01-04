@@ -15,14 +15,14 @@ interface AddAlarmUseCase : CompletableUseCaseWithParameter<AddAlarmUseCase.Para
  * This usecase should add newly created alarm to the DB and setAlarmClock
  */
 class AddAlarmUseCaseImpl(
-    private val _alarmManager: AlarmClockManager,
-    private val _alarmRepository: AlarmRepository
+    private val alarmManager: AlarmClockManager,
+    private val alarmRepository: AlarmRepository
 ) : AddAlarmUseCase {
 
     override fun invoke(parameter: AddAlarmUseCase.Params): Completable {
-        return _alarmRepository.addAlarm(parameter.alarm)
+        return alarmRepository.addAlarm(parameter.alarm)
             .flatMapCompletable { alarm ->
-                _alarmManager.setAlarm(alarm)
+                alarmManager.setAlarm(alarm)
             }
     }
 }
