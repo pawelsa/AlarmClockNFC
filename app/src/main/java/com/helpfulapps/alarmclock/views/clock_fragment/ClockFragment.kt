@@ -67,7 +67,7 @@ class ClockFragment : BaseFragment<ClockViewModel, FragmentClockBinding>() {
     private fun setupRecyclerView() {
         with(rv_clock_list) {
             layoutManager = LinearLayoutManager(context)
-            adapter = adapter
+            adapter = this@ClockFragment.adapter
             addItemDecoration(
                 DividerItemDecoration(context, false)
             )

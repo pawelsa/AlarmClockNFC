@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ca.antonious.materialdaypicker.MaterialDayPicker
 import com.google.android.material.button.MaterialButton
-import com.helpfulapps.alarmclock.helpers.extensions.notEqual
+import com.helpfulapps.alarmclock.helpers.extensions.contentNotEqual
 import com.helpfulapps.alarmclock.helpers.extensions.toDayArray
 import com.helpfulapps.alarmclock.helpers.extensions.toDayList
 
@@ -31,7 +31,7 @@ fun <T : RecyclerView.ViewHolder> setRecyclerViewAdapter(
 
 @BindingAdapter("app:selectedDays")
 fun setSelectedDays(dayPicker: MaterialDayPicker, days: Array<Boolean>) {
-    if (dayPicker.selectedDays.notEqual(days.toDayList())) {
+    if (dayPicker.selectedDays.contentNotEqual(days.toDayList())) {
         dayPicker.setSelectedDays(days.toDayList())
     }
 }

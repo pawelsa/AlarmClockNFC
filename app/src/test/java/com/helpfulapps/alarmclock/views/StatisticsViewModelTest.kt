@@ -2,7 +2,7 @@ package com.helpfulapps.alarmclock.views
 
 import com.github.mikephil.charting.data.BarEntry
 import com.helpfulapps.alarmclock.base.BaseViewModelTest
-import com.helpfulapps.alarmclock.test_extensions.contentEqual
+import com.helpfulapps.alarmclock.test_extensions.contentEqualInOrder
 import com.helpfulapps.alarmclock.views.statistics.StatisticsViewModel
 import com.helpfulapps.domain.helpers.singleOf
 import com.helpfulapps.domain.models.stats.AnalysedAlarmStats
@@ -29,14 +29,14 @@ class StatisticsViewModelTest : BaseViewModelTest<StatisticsViewModel>() {
 
         viewModel.snoozesADay
             .test()
-            .contentEqual(List(7) { index -> BarEntry(index.toFloat(), 0f) }) { e1, e2 ->
+            .contentEqualInOrder(List(7) { index -> BarEntry(index.toFloat(), 0f) }) { e1, e2 ->
                 e1.equalTo(e2)
             }
             .assertValue(true)
 
         viewModel.stopTimeADay
             .test()
-            .contentEqual(List(7) { index -> BarEntry(index.toFloat(), 0f) }) { e1, e2 ->
+            .contentEqualInOrder(List(7) { index -> BarEntry(index.toFloat(), 0f) }) { e1, e2 ->
                 e1.equalTo(e2)
             }
             .assertValue(true)
@@ -55,7 +55,7 @@ class StatisticsViewModelTest : BaseViewModelTest<StatisticsViewModel>() {
 
         viewModel.snoozesADay
             .test()
-            .contentEqual(List(7) { index ->
+            .contentEqualInOrder(List(7) { index ->
                 BarEntry(
                     index.toFloat(),
                     if (index == 2) 1f else 0f
@@ -67,7 +67,7 @@ class StatisticsViewModelTest : BaseViewModelTest<StatisticsViewModel>() {
 
         viewModel.stopTimeADay
             .test()
-            .contentEqual(List(7) { index ->
+            .contentEqualInOrder(List(7) { index ->
                 BarEntry(
                     index.toFloat(),
                     if (index == 2) 15f else 0f
