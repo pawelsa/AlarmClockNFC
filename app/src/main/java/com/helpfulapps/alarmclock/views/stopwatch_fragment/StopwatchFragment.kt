@@ -158,11 +158,13 @@ class StopwatchFragment : BaseFragment<StopWatchViewModel, FragmentStopwatchBind
 
     private fun setupResumedState() {
         tv_stopwatch_time.clearAnimation()
+        bt_stopwatch_lap.visibility = View.VISIBLE
         changeFabIconToPause()
     }
 
     private fun setupPausedState() {
         tv_stopwatch_time.startAnimation(animation)
+        bt_stopwatch_lap.visibility = View.GONE
         changeFabIconToStart()
     }
 
