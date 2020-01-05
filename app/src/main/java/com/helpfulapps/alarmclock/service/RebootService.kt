@@ -44,6 +44,7 @@ class RebootService : BaseService() {
             .subscribeBy(
                 onComplete = {
                     stopForeground(true)
+                    stopSelf()
                 },
                 onError = {}
             )
