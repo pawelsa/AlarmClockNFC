@@ -121,6 +121,11 @@
     <string name="notification_channel_initialization_description">It shows informations during configuration</string>
     <string name="notification_alarm_snooze">Snooze</string>
     <string name="notification_alarm_stop">Stop</string>
+    <string name="ringing_current_temperature">Current temperature</string>
+    <string name="ringing_later_temperature">Temperature later</string>
+    <string name="ringing_rain">It will rain</string>
+    <string name="ringing_snow">It will snow</string>
+    <string name="ringing_wind">It will be windy</string>
 
     <string-array name="settings_alarm_time_titles">
         <item>1 minute</item>

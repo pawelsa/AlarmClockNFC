@@ -57,6 +57,10 @@
         <item name="chipStrokeWidth">@dimen/chip_stroke</item>
     </style>
 
+    <style name="AlarmWeatherTextTheme" parent="AppTheme">
+        <item name="android:textSize">20sp</item>
+    </style>
+
     <style name="AlarmTimeTextTheme" parent="AppTheme">
         <item name="android:textSize">@dimen/ringing_time_text_size</item>
         <item name="android:textStyle">bold</item>
