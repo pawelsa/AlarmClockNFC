@@ -1,12 +1,15 @@
 package com.helpfulapps.alarmclock
 
 import android.app.Application
+import android.content.ComponentName
+import android.content.pm.PackageManager
 import android.nfc.NfcAdapter
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.helpfulapps.alarmclock.di.Modules
+import com.helpfulapps.alarmclock.receiver.RebootReceiver
 import com.helpfulapps.alarmclock.worker.CreateWork
 import com.helpfulapps.domain.eventBus.RxBus
 import com.helpfulapps.domain.helpers.Settings
@@ -37,6 +40,18 @@ class App : Application(), LifecycleObserver {
             settings.firstRun = false
         }
 
+        setupRebootReceiver()
+
+    }
+
+    private fun setupRebootReceiver() {
+        val receiver = ComponentName(applicationContext, RebootReceiver::class.java)
+
+        applicationContext.packageManager?.setComponentEnabledSetting(
+            receiver,
+            PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+            PackageManager.DONT_KILL_APP
+        )
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)

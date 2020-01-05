@@ -18,8 +18,7 @@ class AlarmClockManagerImpl(
     private val context: Context,
     private val manager: AlarmManager,
     private val settings: Settings
-) :
-    AlarmClockManager {
+) : AlarmClockManager {
 
     private val TAG = AlarmClockManagerImpl::class.java.simpleName
 

@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.helpfulapps.alarmclock">
 
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
@@ -21,6 +22,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <receiver
+            android:name=".receiver.RebootReceiver"
+            android:enabled="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
         <activity
             android:name=".views.timer_finished_activity.TimerFinishedActivity"
             android:excludeFromRecents="true"
@@ -31,7 +40,6 @@
             android:label="Statistics"
             android:parentActivityName=".views.main_activity.MainActivity"
             android:theme="@style/SettingsTheme">
-
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".views.main_activity.MainActivity" />
@@ -48,6 +56,10 @@
 
         <service
             android:name=".service.AlarmService"
+            android:enabled="true"
+            android:exported="false" />
+        <service
+            android:name=".service.RebootService"
             android:enabled="true"
             android:exported="false" />
         <service

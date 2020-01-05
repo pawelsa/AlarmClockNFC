@@ -112,6 +112,7 @@ object Modules {
         single<StopRingingAlarmUseCase> { StopRingingAlarmUseCaseImpl(get(), get(), get()) }
         single<SnoozeAlarmUseCase> { SnoozeAlarmUseCaseImpl(get(), get(), get()) }
         single<GetAllStatsUseCase> { GetAllStatsUseCaseImpl(get()) }
+        single<SetupAllAlarmsUseCase> { SetupAllAlarmsUseCaseImpl(get(), get()) }
     }
 
 }
