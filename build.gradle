@@ -13,6 +13,7 @@ buildscript {
     ext.gradle_version = '3.5.3'
     ext.runner_version = '1.1.0'
     ext.junit_version = '4.12'
+    ext.junit_5_version = '5.5.2'
     ext.esspresso_core_version = '3.2.0'
     ext.mockito_version = '2.27.0'
     ext.mockk_version = '1.9.1'
@@ -29,6 +30,7 @@ buildscript {
     dependencies {
         classpath "com.android.tools.build:gradle:${gradle_version}"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "de.mannodermaus.gradle.plugins:android-junit5:1.3.2.0"
     }
 }
 

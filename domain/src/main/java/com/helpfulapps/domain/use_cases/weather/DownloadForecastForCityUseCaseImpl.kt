@@ -12,10 +12,10 @@ interface DownloadForecastForCityUseCase :
     )
 }
 
-class DownloadForecastForCityUseCaseImpl(private val _repository: WeatherRepository) :
+class DownloadForecastForCityUseCaseImpl(private val repository: WeatherRepository) :
     DownloadForecastForCityUseCase {
 
     override fun invoke(parameter: DownloadForecastForCityUseCase.Params): Completable =
-        _repository.downloadForecast(parameter.cityName)
+        repository.downloadForecast(parameter.cityName)
 
 }

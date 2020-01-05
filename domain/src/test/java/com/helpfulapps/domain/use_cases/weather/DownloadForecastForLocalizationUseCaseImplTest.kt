@@ -2,21 +2,23 @@ package com.helpfulapps.domain.use_cases.weather
 
 import com.helpfulapps.domain.exceptions.WeatherException
 import com.helpfulapps.domain.repository.WeatherRepository
+import com.helpfulapps.domain.use_cases.BaseUseCaseTest
 import io.mockk.every
 import io.mockk.mockk
 import io.reactivex.Completable
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
-class DownloadForecastForLocalizationUseCaseImplTest {
+class DownloadForecastForLocalizationUseCaseImplTest :
+    BaseUseCaseTest<DownloadForecastForLocalizationUseCase>() {
 
-    val weatherRepository: WeatherRepository = mockk {}
-    val useCase = DownloadForecastForLocalizationUseCaseImpl(weatherRepository)
+    private val weatherRepository: WeatherRepository = mockk {}
+    override val useCase = DownloadForecastForLocalizationUseCaseImpl(weatherRepository)
 
     @Test
     fun `should download succeed`() {
         every { weatherRepository.downloadForecast(any(), any()) } returns Completable.complete()
 
-        useCase(DownloadForecastForLocalizationUseCase.Params(5, 5))
+        useCase(DownloadForecastForLocalizationUseCase.Params(5.0, 5.0))
             .test()
             .assertComplete()
             .dispose()
@@ -28,7 +30,7 @@ class DownloadForecastForLocalizationUseCaseImplTest {
             WeatherException("failed")
         )
 
-        useCase(DownloadForecastForLocalizationUseCase.Params(5, 5))
+        useCase(DownloadForecastForLocalizationUseCase.Params(5.0, 5.0))
             .test()
             .assertError(WeatherException::class.java)
             .dispose()

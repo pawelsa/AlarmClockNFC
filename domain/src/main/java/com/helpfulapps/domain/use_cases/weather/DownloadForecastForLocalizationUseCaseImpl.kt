@@ -13,10 +13,10 @@ interface DownloadForecastForLocalizationUseCase :
     )
 }
 
-class DownloadForecastForLocalizationUseCaseImpl(private val _repository: WeatherRepository) :
+class DownloadForecastForLocalizationUseCaseImpl(private val repository: WeatherRepository) :
     DownloadForecastForLocalizationUseCase {
 
     override fun invoke(parameter: DownloadForecastForLocalizationUseCase.Params): Completable =
-        _repository.downloadForecast(parameter.lat, parameter.lon)
+        repository.downloadForecast(parameter.lat, parameter.lon)
 
 }

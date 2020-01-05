@@ -6,6 +6,7 @@ import com.helpfulapps.alarmclock.App
 import com.helpfulapps.alarmclock.helpers.AlarmPlayer
 import com.helpfulapps.alarmclock.helpers.NotificationBuilder
 import com.helpfulapps.alarmclock.helpers.Timer
+import com.helpfulapps.alarmclock.helpers.extensions.startVersionedForeground
 import com.helpfulapps.base.base.BaseService
 import com.helpfulapps.domain.eventBus.RxBus
 import com.helpfulapps.domain.eventBus.ServiceBus
@@ -102,11 +103,11 @@ class TimerService : BaseService() {
         ServiceBus.publish(TimerServiceEvent.TimeIsUpTimer)
         alarmPlayer.startPlayingAlarm()
         val notification = getFinishedNotification()
-        startForeground(TIMER_SERVICE_ID, notification)
+        startVersionedForeground(notification, NOTIFICATION_ID)
     }
 
     private fun showRemainingTimeNotification(timeLeft: Long) {
-        startForeground(TIMER_SERVICE_ID, getUpdateNotification(timeLeft))
+        startVersionedForeground(getUpdateNotification(timeLeft), NOTIFICATION_ID)
     }
 
     private fun restartTimer() {
@@ -117,14 +118,14 @@ class TimerService : BaseService() {
         timer.addMinute()
         if (timer.isPaused) {
             val notification = getPauseNotification()
-            startForeground(TIMER_SERVICE_ID, notification)
+            startVersionedForeground(notification, NOTIFICATION_ID)
         }
     }
 
     private fun pauseTimer() {
         whenFalse(isForeground) {
             val notification = getPauseNotification()
-            startForeground(TIMER_SERVICE_ID, notification)
+            startVersionedForeground(notification, NOTIFICATION_ID)
         }
         timer.pauseTimer()
     }
@@ -153,7 +154,7 @@ class TimerService : BaseService() {
 
 
     companion object {
-        const val TIMER_SERVICE_ID = 5
+        private const val NOTIFICATION_ID = 5
         const val TIMER_START = "com.helpfulapps.alarmclock.timer_start"
         const val TIMER_TIME = "com.helpfulapps.alarmclock.timer_time"
         const val TIMER_PAUSE = "com.helpfulapps.alarmclock.timer_pause"

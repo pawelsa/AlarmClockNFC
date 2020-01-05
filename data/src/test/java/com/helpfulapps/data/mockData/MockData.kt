@@ -1,15 +1,10 @@
 package com.helpfulapps.data.mockData
 
-import com.helpfulapps.data.db.alarm.model.AlarmEntity
-import com.helpfulapps.data.db.alarm.model.DaysOfWeekEntity
+import com.helpfulapps.data.db.alarm.model.AlarmData
+import com.helpfulapps.data.db.alarm.model.DaysOfWeekData
+import com.helpfulapps.data.db.weather.model.*
 import com.helpfulapps.domain.models.alarm.Alarm
 import com.helpfulapps.domain.models.weather.*
-import com.example.api.models.Rain as ApiRain
-import com.example.api.models.Snow as ApiSnow
-import com.example.api.models.Wind as ApiWind
-import com.helpfulapps.data.db.weather.model.DayWeatherEntity as DbDayWeather
-import com.helpfulapps.data.db.weather.model.HourWeatherEntity as DbHourWeather
-import com.helpfulapps.data.db.weather.model.WeatherInfoEntity as DbWeatherInfo
 
 object MockData {
 
@@ -19,6 +14,8 @@ object MockData {
     const val DAY_IN_HOURS = HOUR * 24
 
     val defaultAlarm = createDomainAlarm(id = 5, isTurnedOn = false, hour = 0, minute = 15)
+
+    val defaultDataAlarm = createDataAlarm(id = 5, isTurnedOn = false, hour = 0, minute = 15)
 
     val alarmList = listOf(
         createDomainAlarm(),
@@ -36,6 +33,38 @@ object MockData {
         )
     )
 
+    val alarmDataList = listOf(
+        createDataAlarm(),
+        createDataAlarm(id = 2, name = "Alarm 2"),
+        createDataAlarm(
+            id = 3, name = "Alarm 3", isTurnedOn = false, isVibrationOn = false
+        ),
+        createDataAlarm(
+            id = 4, isRepeating = true,
+            daysOfWeek = DaysOfWeekData(
+                monday = false,
+                tuesday = true,
+                wednesday = false,
+                thursday = false,
+                friday = false,
+                saturday = false,
+                sunday = false
+            )
+        ),
+        createDataAlarm(
+            id = 5, isRepeating = true,
+            daysOfWeek = DaysOfWeekData(
+                monday = false,
+                tuesday = false,
+                wednesday = false,
+                thursday = false,
+                friday = false,
+                saturday = true,
+                sunday = false
+            )
+        )
+    )
+
     fun createDomainAlarm(
         id: Long = 1,
         title: String = "Alarm 1",
@@ -45,6 +74,7 @@ object MockData {
         isVibrationOn: Boolean = true,
         ringtoneUrl: String = "ringtoneUrl",
         ringtoneTitle: String = "ringtoneTitle",
+        isUsingNfc: Boolean = false,
         isRepeating: Boolean = false,
         repetitionDays: Array<Boolean> = Array(7) { false }
     ): Alarm {
@@ -56,13 +86,14 @@ object MockData {
             isTurnedOn,
             ringtoneUrl,
             ringtoneTitle,
+            isUsingNfc,
             hour,
             minute,
             repetitionDays
         )
     }
 
-    fun createEntityAlarm(
+    fun createDataAlarm(
         id: Long = 1L,
         name: String = "Alarm 1",
         isRepeating: Boolean = false,
@@ -70,11 +101,12 @@ object MockData {
         isTurnedOn: Boolean = true,
         ringtoneId: String = "ringtoneUrl",
         ringtoneTitle: String = "ringtoneTitle",
+        isUsingNfc: Boolean = false,
         hour: Int = 10,
         minute: Int = 10,
-        daysOfWeek: DaysOfWeekEntity = DaysOfWeekEntity()
-    ): AlarmEntity {
-        return AlarmEntity(
+        daysOfWeek: DaysOfWeekData = DaysOfWeekData()
+    ): AlarmData {
+        return AlarmData(
             id,
             name,
             isRepeating,
@@ -82,6 +114,7 @@ object MockData {
             isTurnedOn,
             ringtoneId,
             ringtoneTitle,
+            isUsingNfc,
             hour,
             minute,
             daysOfWeek
@@ -109,7 +142,7 @@ object MockData {
         id: Int = 0,
         dt: Long = BASE_TIMESTAMP,
         cityName: String = "Pszczyna",
-        hourWeatherList: List<HourWeather> = listOf(),
+        hourWeatherList: List<HourWeather> = listOf(createHourWeather()),
         weatherInfo: WeatherInfo = createWeatherInfo()
     ) =
         DayWeather(
@@ -147,92 +180,18 @@ object MockData {
     }
 
     fun createWeatherInfo(
-        rain: Rain = Rain.NO_RAIN,
+        rain: Rain = Rain.NO_DATA,
         snow: Snow = Snow.NO_DATA,
-        temperature: Temperature = Temperature.HOT,
-        wind: Wind = Wind.NORMAL
+        temperature: Temperature = Temperature.NO_DATA,
+        wind: Wind = Wind.NO_DATA
     ): WeatherInfo {
         return WeatherInfo(
             temperature, rain, wind, snow
         )
     }
 
-    fun createApiWeather(
-        description: String = "desc1",
-        icon: String = "icon1",
-        id: Int = 1,
-        main: String = "main1"
-    ): com.example.api.models.Weather {
-        return com.example.api.models.Weather(
-            description, icon, id, main
-        )
-    }
 
-    val apiWeatherList = listOf(createApiWeather())
-
-    fun createApiForecast(
-        clouds: com.example.api.models.Clouds = com.example.api.models.Clouds(
-            80
-        ),
-        rain: ApiRain = ApiRain(2.0),
-        snow: ApiSnow = ApiSnow(2.0),
-        // using BASE_TIMESTAMP because we multiply timestamp provided by api by 1000, so it works with Calendar.class
-        timestamp: Long = BASE_TIMESTAMP,
-        timestampText: String = "1",
-        main: com.example.api.models.Main = com.example.api.models.Main(
-            100.0,
-            100,
-            100.0,
-            100.0,
-            100.0,
-            100.0,
-            100.0,
-            100.0
-        ),
-        sys: com.example.api.models.Sys = com.example.api.models.Sys(
-            "sys"
-        ),
-        weathers: List<com.example.api.models.Weather> = apiWeatherList,
-        wind: ApiWind = ApiWind(80.0, 200.0)
-    ): com.example.api.models.Forecast {
-        return com.example.api.models.Forecast(
-            clouds, rain, snow, timestamp, timestampText, main, sys, weathers, wind
-        )
-    }
-
-    val forecasts = listOf(
-        createApiForecast()
-    )
-
-    fun createCity(
-        coord: com.example.api.models.Coord = com.example.api.models.Coord(
-            1.0,
-            1.0
-        ),
-        country: String = "PL",
-        id: Int = 1,
-        name: String = "Pszczyna",
-        population: Int = 50000,
-        timezone: Int = 5
-    ): com.example.api.models.City {
-        return com.example.api.models.City(
-            coord, country, id, name, population, timezone
-        )
-    }
-
-    fun createApiForecastForCity(
-        city: com.example.api.models.City = createCity(),
-        cnt: Int = 1,
-        cod: String = "cod",
-        list: List<com.example.api.models.Forecast> = forecasts,
-        message: Double = 200.0
-    ): com.example.api.models.ForecastForCity {
-        return com.example.api.models.ForecastForCity(
-            city, cnt, cod, list, message
-        )
-    }
-
-    fun createDbHourWeather(
+    fun createDataHourWeather(
         id: Int = 0,
         dt: Long = BASE_TIMESTAMP,
         clouds: Int = 80,
@@ -244,38 +203,51 @@ object MockData {
         temp: Double = 100.0,
         tempMax: Double = 100.0,
         tempMin: Double = 100.0
-    ): DbHourWeather {
-        return DbHourWeather(
+    ): HourWeatherData {
+        return HourWeatherData(
             id, dt, clouds, rain, snow, wind, humidity, pressure, temp, tempMax, tempMin
         )
     }
 
-    fun createDbWeatherInfo(
-        rain: Rain = Rain.NO_RAIN,
-        snow: Snow = Snow.NO_DATA,
-        temperature: Temperature = Temperature.HOT,
-        wind: Wind = Wind.NORMAL
-    ): DbWeatherInfo {
-        return DbWeatherInfo(
-            temperature = temperature.importance,
-            rain = rain.importance,
-            snow = snow.importance,
-            wind = wind.importance
+    fun createDataWeatherInfo(
+        rain: RainData = RainData.NO_DATA,
+        snow: SnowData = SnowData.NO_DATA,
+        temperature: TemperatureData = TemperatureData.NO_DATA,
+        wind: WindData = WindData.NO_DATA
+    ): WeatherInfoData {
+        return WeatherInfoData(
+            temperature = temperature,
+            rain = rain,
+            snow = snow,
+            wind = wind
         )
     }
 
-    fun createDbDayWeather(
+    fun createDataDayWeather(
         id: Int = 0,
         dt: Long = BASE_TIMESTAMP,
         cityName: String = "Pszczyna",
-        hourWeatherList: List<DbHourWeather> = listOf(createDbHourWeather()),
-        weatherInfo: DbWeatherInfo = createDbWeatherInfo()
+        hourWeatherList: List<HourWeatherData> = listOf(createDataHourWeather()),
+        weatherInfo: WeatherInfoData = createDataWeatherInfo()
     ) =
-        DbDayWeather(
+        DayWeatherData(
             id,
             dt,
             cityName,
-            hourWeatherEntityList = hourWeatherList,
-            weatherInfoEntity = weatherInfo
+            hourWeatherList = hourWeatherList,
+            weatherInfo = weatherInfo
         )
+
+    val weatherDataList = listOf(
+        createDataDayWeather(id = 1, dt = BASE_TIMESTAMP + 3600),
+        createDataDayWeather(id = 2, dt = BASE_TIMESTAMP + 3600 * 2),
+        createDataDayWeather(id = 3, dt = BASE_TIMESTAMP + 3600 * 3)
+    )
+
+    val weatherDomainList = listOf(
+        createDomainDayWeather(id = 1, dt = BASE_TIMESTAMP + 3600),
+        createDomainDayWeather(id = 2, dt = BASE_TIMESTAMP + 3600 * 2),
+        createDomainDayWeather(id = 3, dt = BASE_TIMESTAMP + 3600 * 3)
+    )
+
 }

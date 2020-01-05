@@ -5,14 +5,14 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import io.mockk.every
 import io.mockk.mockkStatic
-import org.junit.Assert.assertEquals
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 import java.util.*
 
 class TimeSetterTest {
 
     private lateinit var timeSetter: TimeSetter
-
+    //todo change snoozing time, currently 5
     @Test
     fun `should schedule first alarm`() {
         val currentTime = 1560996000000L
@@ -26,7 +26,7 @@ class TimeSetterTest {
 
         val expected = 1560996300000L
         val alarm = MockData.createAlarm(hour = 2, minute = 0)
-        assertEquals(expected, timeSetter.getAlarmSnoozeTime(alarm))
+        assertEquals(expected, timeSetter.getAlarmSnoozeTime(alarm, 5))
     }
 
     @Test
@@ -42,7 +42,7 @@ class TimeSetterTest {
 
         val expected = 1560996600000L
         val alarm = MockData.createAlarm(hour = 2, minute = 0)
-        assertEquals(expected, timeSetter.getAlarmSnoozeTime(alarm))
+        assertEquals(expected, timeSetter.getAlarmSnoozeTime(alarm, 5))
     }
 
     @Test
@@ -58,7 +58,7 @@ class TimeSetterTest {
 
         val expected = 1560996900000L
         val alarm = MockData.createAlarm(hour = 2, minute = 0)
-        assertEquals(expected, timeSetter.getAlarmSnoozeTime(alarm))
+        assertEquals(expected, timeSetter.getAlarmSnoozeTime(alarm, 5))
     }
 
     @Test
@@ -74,7 +74,7 @@ class TimeSetterTest {
 
         val expected = -1
         val alarm = MockData.createAlarm(hour = 2, minute = 0)
-        assertEquals(expected, timeSetter.getAlarmSnoozeTime(alarm))
+        assertEquals(expected, timeSetter.getAlarmSnoozeTime(alarm, 5))
     }
 
 }

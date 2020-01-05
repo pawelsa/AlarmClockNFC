@@ -4,6 +4,7 @@ import android.content.Intent
 import com.helpfulapps.alarmclock.App
 import com.helpfulapps.alarmclock.helpers.NotificationBuilder
 import com.helpfulapps.alarmclock.helpers.Stopwatch
+import com.helpfulapps.alarmclock.helpers.extensions.startVersionedForeground
 import com.helpfulapps.base.base.BaseService
 import com.helpfulapps.domain.eventBus.RxBus
 import com.helpfulapps.domain.eventBus.ServiceBus
@@ -71,7 +72,7 @@ class StopwatchService : BaseService() {
             val notification = notificationBuilder.setNotificationType(
                 NotificationBuilder.NotificationType.TypeStopwatchRunning(currentTime)
             ).build()
-            startForeground(STOPWATCH_SERVICE_ID, notification)
+            startVersionedForeground(notification, NOTIFICATION_ID)
         }
     }
 
@@ -80,7 +81,7 @@ class StopwatchService : BaseService() {
             val notification = notificationBuilder.setNotificationType(
                 NotificationBuilder.NotificationType.TypeStopwatchPaused(currentTime)
             ).build()
-            startForeground(STOPWATCH_SERVICE_ID, notification)
+            startVersionedForeground(notification, NOTIFICATION_ID)
         }
     }
 
@@ -109,6 +110,7 @@ class StopwatchService : BaseService() {
         object Start : StopWatchEvent()
         data class Update(val timeInMillis: Long) : StopWatchEvent()
         object Pause : StopWatchEvent()
+        // used only to inform UI about its paused state
         object Paused : StopWatchEvent()
         object Resume : StopWatchEvent()
         object TakeLap : StopWatchEvent()
@@ -117,7 +119,7 @@ class StopwatchService : BaseService() {
     }
 
     companion object {
-        const val STOPWATCH_SERVICE_ID = 6
+        private const val NOTIFICATION_ID = 6
         const val STOPWATCH_START = "com.helpfulapps.alarmclock.stopwatch_start"
         const val STOPWATCH_STOP = "com.helpfulapps.alarmclock.stopwatch_stop"
         const val STOPWATCH_RESUME = "com.helpfulapps.alarmclock.stopwatch_resume"

@@ -1,7 +1,9 @@
 package com.helpfulapps.alarmclock.views.clock_fragment
 
-import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.helpfulapps.base.base.BaseViewModel
+import com.helpfulapps.base.extensions.rx.backgroundTask
 import com.helpfulapps.domain.eventBus.DatabaseNotifiers
 import com.helpfulapps.domain.eventBus.RxBus
 import com.helpfulapps.domain.helpers.Settings
@@ -20,9 +22,9 @@ class ClockViewModel(
     private val settings: Settings
 ) : BaseViewModel() {
 
-    private val TAG = ClockViewModel::class.java.simpleName
-
-    lateinit var adapter: ClockListAdapter
+    private val _alarmList: MutableLiveData<List<AlarmData>> = MutableLiveData()
+    val alarmList: LiveData<List<AlarmData>>
+        get() = _alarmList
 
     val askForBatteryOptimization = settings.askForBatteryOptimization
 
@@ -31,13 +33,19 @@ class ClockViewModel(
             .map { list ->
                 list.map { AlarmData(it) }
             }
-            .subscribeBy {
-                val lastButOne = it.size - 1
-                if (lastButOne >= 0) {
-                    it[lastButOne].toChange = !it[lastButOne].toChange
+            .backgroundTask()
+            .subscribeBy(
+                onSuccess = {
+                    val lastButOne = it.size - 1
+                    if (lastButOne >= 0) {
+                        it[lastButOne].toChange = !it[lastButOne].toChange
+                    }
+                    _alarmList.value = it
+                },
+                onError = {
+
                 }
-                adapter.submitList(it)
-            }
+            )
     }
 
     fun batteryOptimizationTurnedOff() {
@@ -46,6 +54,7 @@ class ClockViewModel(
 
     fun subscribeToDatabaseChanges() {
         disposables += RxBus.listen(DatabaseNotifiers::class.java)
+            .backgroundTask()
             .subscribe {
                 getAlarms()
             }
@@ -54,6 +63,7 @@ class ClockViewModel(
     // TODO this should inform view about successful change
     fun switchAlarm(alarm: Alarm) {
         disposables += switchAlarmUseCase(SwitchAlarmUseCase.Params(alarm.id))
+            .backgroundTask()
             .subscribe(
                 { },
                 { it.printStackTrace() })
@@ -62,9 +72,11 @@ class ClockViewModel(
     // TODO this should inform view about successful change
     fun removeAlarm(alarm: Alarm) {
         disposables += removeAlarmUseCase(RemoveAlarmUseCase.Params(alarm.id))
-            .subscribe {
-                Log.d(TAG, "removed alarm successfully")
-            }
+            .backgroundTask()
+            .subscribe(
+                { },
+                { it.printStackTrace() }
+            )
     }
 
 

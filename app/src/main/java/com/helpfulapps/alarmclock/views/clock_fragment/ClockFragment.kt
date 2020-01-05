@@ -6,15 +6,19 @@ import android.net.Uri
 import android.os.Build
 import android.os.PowerManager
 import android.provider.Settings
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.FragmentClockBinding
+import com.helpfulapps.alarmclock.helpers.extensions.observe
 import com.helpfulapps.alarmclock.helpers.fromBuildVersion
+import com.helpfulapps.alarmclock.helpers.layout_helpers.DividerItemDecoration
 import com.helpfulapps.alarmclock.helpers.layout_helpers.buildRemoveAlarmDialog
 import com.helpfulapps.alarmclock.views.clock_fragment.add_alarm_bs.AddAlarmBottomSheet
 import com.helpfulapps.alarmclock.views.main_activity.MainActivity
 import com.helpfulapps.base.base.BaseFragment
 import com.helpfulapps.domain.models.alarm.Alarm
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_clock.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
 
@@ -25,9 +29,19 @@ class ClockFragment : BaseFragment<ClockViewModel, FragmentClockBinding>() {
     override val viewModel: ClockViewModel by viewModel()
     private lateinit var modalBottomSheet: AddAlarmBottomSheet
 
+    private val adapter: ClockListAdapter by lazy {
+        ClockListAdapter(
+            switchAlarm = ::switchAlarm,
+            openEditMode = ::openEdit,
+            removeAlarm = ::removeAlarm
+        )
+    }
+
     override fun init() {
-        setupViewModel()
+        setupRecyclerView()
+        binding.viewModel = viewModel
         setupData()
+        subscribeData()
         checkBatteryOptimization()
     }
 
@@ -50,18 +64,25 @@ class ClockFragment : BaseFragment<ClockViewModel, FragmentClockBinding>() {
         }
     }
 
-    private fun setupViewModel() {
-        viewModel.adapter = ClockListAdapter(
-            switchAlarm = ::switchAlarm,
-            openEditMode = ::openEdit,
-            removeAlarm = ::removeAlarm
-        )
-        binding.viewModel = viewModel
+    private fun setupRecyclerView() {
+        with(rv_clock_list) {
+            layoutManager = LinearLayoutManager(context)
+            adapter = this@ClockFragment.adapter
+            addItemDecoration(
+                DividerItemDecoration(context, false)
+            )
+        }
     }
 
     private fun setupData() {
         viewModel.getAlarms()
         viewModel.subscribeToDatabaseChanges()
+    }
+
+    private fun subscribeData() {
+        viewModel.alarmList.observe(this) {
+            adapter.submitList(it)
+        }
     }
 
     private fun switchAlarm(alarm: Alarm) {

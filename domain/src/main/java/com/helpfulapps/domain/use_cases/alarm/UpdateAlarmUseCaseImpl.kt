@@ -11,18 +11,18 @@ interface UpdateAlarmUseCase : CompletableUseCaseWithParameter<UpdateAlarmUseCas
 }
 
 class UpdateAlarmUseCaseImpl(
-    private val _repository: AlarmRepository,
-    private val _clockManager: AlarmClockManager
+    private val repository: AlarmRepository,
+    private val clockManager: AlarmClockManager
 ) :
     UpdateAlarmUseCase {
 
     override fun invoke(parameter: UpdateAlarmUseCase.Params): Completable =
-        _repository.updateAlarm(parameter.alarm)
+        repository.updateAlarm(parameter.alarm)
             .flatMapCompletable {
                 return@flatMapCompletable Completable.concat(
                     listOf(
-                        _clockManager.stopAlarm(it.id),
-                        _clockManager.setAlarm(parameter.alarm)
+                        clockManager.stopAlarm(it.id),
+                        clockManager.setAlarm(parameter.alarm)
                     )
                 )
             }

@@ -1,11 +1,14 @@
-package com.helpfulapps.alarmclock.helpers
+package com.helpfulapps.alarmclock.helpers.extensions
 
 import java.text.DateFormatSymbols
 import java.text.SimpleDateFormat
 import java.util.*
 
 fun timeToString(time: Pair<Int, Int>): String {
-    return timeToString(time.first, time.second)
+    return timeToString(
+        time.first,
+        time.second
+    )
 }
 
 fun timeToString(hour: Int, minute: Int): String {
@@ -20,22 +23,20 @@ fun timeToString(hour: Int, minute: Int): String {
 }
 
 fun Array<Boolean>.toShortWeekdays(): String {
-
-    val weekdayList = arrayListOf<String>()
-
     val formatSymbols = DateFormatSymbols.getInstance()
-    if (this@toShortWeekdays[0]) weekdayList.add(formatSymbols.shortWeekdays[Calendar.MONDAY].capitalize())
-    if (this@toShortWeekdays[1]) weekdayList.add(formatSymbols.shortWeekdays[Calendar.TUESDAY].capitalize())
-    if (this@toShortWeekdays[2]) weekdayList.add(formatSymbols.shortWeekdays[Calendar.WEDNESDAY].capitalize())
-    if (this@toShortWeekdays[3]) weekdayList.add(formatSymbols.shortWeekdays[Calendar.THURSDAY].capitalize())
-    if (this@toShortWeekdays[4]) weekdayList.add(formatSymbols.shortWeekdays[Calendar.FRIDAY].capitalize())
-    if (this@toShortWeekdays[5]) weekdayList.add(formatSymbols.shortWeekdays[Calendar.SATURDAY].capitalize())
-    if (this@toShortWeekdays[6]) weekdayList.add(formatSymbols.shortWeekdays[Calendar.SUNDAY].capitalize())
+    val convertToShortWeekdays: (Int) -> String = { calendarIndex ->
+        formatSymbols.shortWeekdays[calendarIndex].capitalize()
+    }
 
     return buildString {
-        weekdayList.forEachIndexed { index, weekDay ->
-            if (index != 0) append(", ")
-            append(weekDay)
+        var wasSomeBefore = false
+        this@toShortWeekdays.forEachIndexed { index: Int, isTurnedOn: Boolean ->
+            if (isTurnedOn) {
+                if (wasSomeBefore) append(", ")
+                val calendarIndex = if (index == 6) 1 else index + 2
+                append(convertToShortWeekdays(calendarIndex))
+                wasSomeBefore = true
+            }
         }
     }
 }

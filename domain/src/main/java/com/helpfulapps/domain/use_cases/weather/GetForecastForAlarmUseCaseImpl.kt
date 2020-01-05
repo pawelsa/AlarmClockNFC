@@ -10,9 +10,9 @@ interface GetForecastForAlarmUseCase :
     data class Params(val timestamp: Long)
 }
 
-class GetForecastForAlarmUseCaseImpl(private val _repository: WeatherRepository) :
+class GetForecastForAlarmUseCaseImpl(private val repository: WeatherRepository) :
     GetForecastForAlarmUseCase {
 
     override fun invoke(parameter: GetForecastForAlarmUseCase.Params): Single<DayWeather> =
-        _repository.getForecastForAlarm(parameter.timestamp)
+        repository.getForecastForAlarm(parameter.timestamp)
 }

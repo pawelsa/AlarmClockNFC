@@ -3,21 +3,22 @@ package com.helpfulapps.domain.use_cases.alarm
 import com.helpfulapps.domain.exceptions.AlarmException
 import com.helpfulapps.domain.repository.AlarmClockManager
 import com.helpfulapps.domain.repository.AlarmRepository
+import com.helpfulapps.domain.use_cases.BaseUseCaseTest
 import com.helpfulapps.domain.use_cases.mockData.MockData
 import io.mockk.every
 import io.mockk.mockk
 import io.reactivex.Completable
 import io.reactivex.Single
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
-class AddAlarmUseCaseTest {
+class AddAlarmUseCaseTest : BaseUseCaseTest<AddAlarmUseCase>() {
 
     private val alarmRepository: AlarmRepository = mockk {}
     private val alarmManager: AlarmClockManager = mockk {}
-    val useCase = AddAlarmUseCaseImpl(alarmManager, alarmRepository)
+    override val useCase = AddAlarmUseCaseImpl(alarmManager, alarmRepository)
 
     @Test
-    fun `adding alarm was succcessful`() {
+    fun `adding alarm was successful`() {
 
         every { alarmManager.setAlarm(any()) } returns Completable.complete()
         every { alarmRepository.addAlarm(any()) } returns Single.create {

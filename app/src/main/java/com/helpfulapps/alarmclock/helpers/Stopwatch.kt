@@ -9,8 +9,7 @@ import java.util.concurrent.TimeUnit
 
 class Stopwatch {
 
-    var currentTime = 0L
-        private set
+    private var currentTime = 0L
     val seconds: Long
         get() = currentTime / 1000
     private var disposable: Disposable? = null

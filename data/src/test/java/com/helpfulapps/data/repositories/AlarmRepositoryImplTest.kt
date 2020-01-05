@@ -1,14 +1,15 @@
 package com.helpfulapps.data.repositories
 
 import com.helpfulapps.data.db.alarm.dao.AlarmDao
-import com.helpfulapps.data.db.alarm.model.AlarmData
+import com.helpfulapps.data.mockData.MockData
 import com.helpfulapps.domain.exceptions.AlarmException
+import com.helpfulapps.domain.helpers.singleOf
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.spyk
+import io.mockk.verify
 import io.reactivex.Single
-import org.junit.Test
-import com.helpfulapps.data.mockData.MockDataIns as MockData
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
 
 class AlarmRepositoryImplTest {
@@ -16,268 +17,211 @@ class AlarmRepositoryImplTest {
     private val alarmDao: AlarmDao = mockk {}
     private val alarmRepositoryImpl = AlarmRepositoryImpl(alarmDao)
 
+    @Nested
+    inner class GetAlarms {
 
-    @Test
-    fun getNoAlarmsTest() {
+        @Test
+        fun `should return empty list`() {
 
-        val repoMock = spyk(alarmRepositoryImpl)
+            every { alarmDao.getAlarms() } returns Single.just(listOf())
+            alarmRepositoryImpl
+                .getAlarmsQuery()
+                .test()
+                .assertResult(emptyList())
+                .dispose()
+        }
 
-        every { repoMock.getAlarmsQuery() } returns Single.never()
-//        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
+        @Test
+        fun `should return alarms`() {
 
+            every { alarmDao.getAlarms() } returns Single.just(MockData.alarmDataList)
 
-        val testObserver = repoMock.getAlarms()
-            .test()
-
-        testObserver.awaitTerminalEvent()
-
-        testObserver
-            .assertResult(emptyList())
-            .dispose()
+            alarmRepositoryImpl.getAlarms()
+                .test()
+                .assertResult(MockData.alarmList)
+                .dispose()
+        }
     }
 
-    @Test
-    fun getAlarmsTest() {
+    @Nested
+    inner class GetAlarm {
 
-        val alarm = MockData.defaultAlarm
-        val alarmEntry = AlarmData(alarm)
+        @Test
+        fun `should obtain alarm`() {
 
-        val repoMock = spyk(alarmRepositoryImpl)
+            every { alarmDao.getSingleAlarm(any()) } returns singleOf { MockData.defaultDataAlarm }
 
-        every { repoMock.getAlarmsQuery() } returns Single.just(listOf(alarmEntry))
-//        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
+            alarmRepositoryImpl.getAlarm(1)
+                .test()
+                .assertResult(MockData.defaultAlarm)
+                .dispose()
+        }
 
-        repoMock.getAlarms()
-            .test()
-            .assertResult(listOf(alarm))
-            .dispose()
+        @Test
+        fun `should throw error, when no alarm found`() {
+
+            every { alarmDao.getSingleAlarm(any()) } returns Single.error(NoSuchElementException())
+
+            alarmRepositoryImpl.getAlarm(1)
+                .test()
+                .assertError(NoSuchElementException::class.java)
+                .dispose()
+        }
     }
 
-    @Test
-    fun getAlarmCountTest() {
+    @Nested
+    inner class AddAlarm {
 
-        val alarm1 = MockData.defaultAlarm
-        val alarm2 = MockData.createDomainAlarm(id = 2)
-        val alarm3 = MockData.createDomainAlarm(id = 3)
+        @Test
+        fun `should add alarm`() {
 
-        val alarmEntry1 = AlarmData(alarm1)
-        val alarmEntry2 = AlarmData(alarm2)
-        val alarmEntry3 = AlarmData(alarm3)
+            every { alarmDao.insert(any()) } returns singleOf { 1L }
+            every { alarmDao.getSingleAlarm(any()) } returns singleOf { MockData.defaultDataAlarm }
 
-        val repoMock = spyk(alarmRepositoryImpl)
-
-        every { repoMock.getAlarmsQuery() } returns
-                Single.just(
-                    listOf(
-                        alarmEntry1,
-                        alarmEntry2,
-                        alarmEntry3
-                    )
-                )
-
-//        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
-
-        repoMock.getAlarms()
-            .test()
-            .assertResult(listOf(alarm1, alarm2, alarm3))
-            .dispose()
-    }
-
-    @Test
-    fun addAlarmTest() {
-
-        val repoMock = spyk(alarmRepositoryImpl)
-
-//        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
-
-        val alarm1 = repoMock.addAlarm(
-            MockData.defaultAlarm
-        )
-        val alarm2 = repoMock.addAlarm(
-            MockData.createDomainAlarm(id = 2)
-        )
-        val alarm3 = repoMock.addAlarm(
-            MockData.createDomainAlarm(id = 3)
-        )
-
-        val alarmList = listOf(alarm1, alarm2, alarm3)
-
-        Single.merge(alarmList)
-            .test()
-            .assertResult(
-                MockData.defaultAlarm,
-                MockData.createDomainAlarm(id = 2),
-                MockData.createDomainAlarm(id = 3)
+            val alarm = alarmRepositoryImpl.addAlarm(
+                MockData.defaultAlarm
             )
-            .dispose()
+
+            alarm
+                .test()
+                .assertResult(MockData.defaultAlarm)
+                .dispose()
+
+        }
+
+        @Test
+        fun `should throw invalid row, when error occured when adding to db`() {
+            every { alarmDao.insert(any()) } returns singleOf { -1L }
+
+            alarmRepositoryImpl.addAlarm(MockData.defaultAlarm)
+                .test()
+                .assertError(AlarmException::class.java)
+                .dispose()
+        }
+
+        @Test
+        fun `should throw exception`() {
+            every { alarmDao.insert(any()) } returns Single.error(Exception())
+
+            alarmRepositoryImpl.addAlarm(MockData.defaultAlarm)
+                .test()
+                .assertError(Exception::class.java)
+                .dispose()
+        }
     }
 
-    @Test
-    fun removeAlarmWhenDbTableIsEmptyTest() {
+    @Nested
+    inner class RemoveAlarm {
 
-        val repoMock = spyk(alarmRepositoryImpl)
+        @Test
+        fun `should not remove alarm when db table is empty`() {
 
-//        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
+            every { alarmDao.getSingleAlarm(any()) } returns Single.error(NoSuchElementException())
 
-        repoMock.removeAlarm(5)
-            .test()
-            .assertError(NoSuchElementException::class.java)
-            .dispose()
+            alarmRepositoryImpl.removeAlarm(5)
+                .test()
+                .assertError(NoSuchElementException::class.java)
+                .dispose()
+
+            verify(exactly = 0) { alarmDao.delete(any()) }
+        }
+
+        @Test
+        fun `should remove alarm test`() {
+
+            every { alarmDao.delete(any()) } returns singleOf { true }
+            every { alarmDao.getSingleAlarm(any()) } returns singleOf { MockData.defaultDataAlarm }
+
+            alarmRepositoryImpl.removeAlarm(5)
+                .test()
+                .assertComplete()
+                .dispose()
+
+            verify(exactly = 1) { alarmDao.getSingleAlarm(any()) }
+        }
+
+        @Test
+        fun `should not remove alarm that is not in db`() {
+
+            every { alarmDao.getSingleAlarm(any()) } returns Single.error(NoSuchElementException())
+
+            alarmRepositoryImpl.removeAlarm(2)
+                .test()
+                .assertError(NoSuchElementException::class.java)
+                .dispose()
+
+            verify(exactly = 0) { alarmDao.delete(any()) }
+        }
     }
 
-    @Test
-    fun removeAlarmTest() {
+    @Nested
+    inner class SwitchAlarm {
 
-        val repoMock = spyk(alarmRepositoryImpl)
+        @Test
+        fun `should switch when there is alarm in db`() {
 
-//        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
+            every { alarmDao.update(any()) } returns singleOf { true }
+            every { alarmDao.getSingleAlarm(any()) } returns singleOf { MockData.defaultDataAlarm }
 
-        val saveAlarmInDb = repoMock.addAlarm(
-            MockData.defaultAlarm
-        )
+            alarmRepositoryImpl.switchAlarm(5)
+                .test()
+                .assertResult(MockData.defaultAlarm)
+                .dispose()
+        }
 
-        saveAlarmInDb.blockingGet()
+        @Test
+        fun `should not switch when there is no alarm in db`() {
 
-        repoMock.removeAlarm(5)
-            .test()
-            .assertResult()
-            .dispose()
+            every { alarmDao.getSingleAlarm(any()) } returns Single.error(NoSuchElementException())
+
+            alarmRepositoryImpl.switchAlarm(2)
+                .test()
+                .assertError(NoSuchElementException::class.java)
+                .dispose()
+
+            verify(exactly = 0) { alarmDao.update(any()) }
+        }
+
+        @Test
+        fun `should not switch when db is empty`() {
+
+            every { alarmDao.getSingleAlarm(any()) } returns Single.error(NoSuchElementException())
+
+            alarmRepositoryImpl.switchAlarm(2)
+                .test()
+                .assertError(NoSuchElementException::class.java)
+                .dispose()
+
+            verify(exactly = 0) { alarmDao.update(any()) }
+        }
     }
 
-    @Test
-    fun removeAlarmThatIsNotInDbTest() {
+    @Nested
+    inner class UpdateAlarm {
 
-        val repoMock = spyk(alarmRepositoryImpl)
+        @Test
+        fun `should update when there is alarm in db`() {
 
-//        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
+            every { alarmDao.getSingleAlarm(any()) } returns singleOf { MockData.defaultDataAlarm }
+            every { alarmDao.update(any()) } returns singleOf { true }
 
-        val saveAlarmInDb = repoMock.addAlarm(
-            MockData.defaultAlarm
-        )
+            alarmRepositoryImpl.updateAlarm(MockData.defaultAlarm)
+                .test()
+                .assertResult(MockData.defaultAlarm)
+                .dispose()
+        }
 
-        saveAlarmInDb.blockingGet()
+        @Test
+        fun `should not update when there is no alarm in the db`() {
 
-        repoMock.removeAlarm(2)
-            .test()
-            .assertError(NoSuchElementException::class.java)
-            .dispose()
-    }
+            every { alarmDao.update(any()) } returns Single.error(NoSuchElementException())
 
-    @Test
-    fun switchWhenThereIsAlarmInDbTest() {
-
-        val repoMock = spyk(alarmRepositoryImpl)
-
-//        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
-
-        val saveAlarmInDb = repoMock.addAlarm(
-            MockData.defaultAlarm
-        )
-
-        saveAlarmInDb.blockingGet()
-
-        repoMock.switchAlarm(5)
-            .test()
-            .assertResult(MockData.defaultAlarm)
-            .dispose()
-    }
-
-    @Test
-    fun switchWhenThereIsNoAlarmInDbTest() {
-
-        val repoMock = spyk(alarmRepositoryImpl)
-
-//        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
-
-        val alarm1 = repoMock.addAlarm(
-            MockData.defaultAlarm
-        )
-
-        alarm1.concatWith(repoMock.switchAlarm(2))
-            .test()
-            .assertError(NoSuchElementException::class.java)
-            .dispose()
-    }
-
-    @Test
-    fun switchWhenDbTableIsEmptyTest() {
-
-        val repoMock = spyk(alarmRepositoryImpl)
-
-//        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
-
-        repoMock.switchAlarm(2)
-            .test()
-            .assertError(NoSuchElementException::class.java)
-            .dispose()
-    }
-
-    @Test
-    fun updateWhenThereIsAlarmInDbTest() {
-
-        val repoMock = spyk(alarmRepositoryImpl)
-
-//        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
-        val alarm = MockData.defaultAlarm
-        val saveAlarmInDb = repoMock.addAlarm(alarm)
-
-        saveAlarmInDb.blockingGet()
-
-        repoMock.updateAlarm(alarm)
-            .test()
-            .assertResult(alarm)
-            .dispose()
-    }
-
-    @Test
-    fun updateWhenDbTableIsEmptyTest() {
-
-        val repoMock = spyk(alarmRepositoryImpl)
-
-//        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
-
-        val alarm1 = MockData.defaultAlarm
-
-        repoMock.updateAlarm(alarm1)
-            .test()
-            .assertError(AlarmException::class.java)
-            .dispose()
-    }
-
-    @Test
-    fun updateWhenThereIsNotAlarmInDbTest() {
-
-        val repoMock = spyk(alarmRepositoryImpl)
-
-//        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
-
-        val alarm = MockData.defaultAlarm
-        val alarmNotInDb = MockData.createDomainAlarm(id = 4)
-        val alarm1 = repoMock.addAlarm(alarm)
-
-        alarm1.concatWith(repoMock.updateAlarm(alarmNotInDb))
-            .test()
-            .assertError(AlarmException::class.java)
-            .dispose()
-    }
-
-    @Test
-    fun moreAddedAlarmsShouldIncrementAlarmId() {
-
-        val repoMock = spyk(alarmRepositoryImpl)
-
-        val alarm1 = MockData.defaultAlarm
-        val alarm2 = MockData.createDomainAlarm(id = 4)
-
-//        every { repoMock.getSchedulerIO() } returns Schedulers.trampoline()
-
-        Single.merge(repoMock.addAlarm(alarm1), repoMock.addAlarm(alarm2)).blockingLast()
-
-        repoMock.getAlarms().map { alarmList -> alarmList.count() }
-            .test()
-            .assertResult(2)
-            .dispose()
-
+            alarmRepositoryImpl.updateAlarm(MockData.defaultAlarm)
+                .test()
+                .assertError(NoSuchElementException::class.java)
+                .dispose()
+            verify(exactly = 0) { alarmDao.getSingleAlarm(any()) }
+        }
     }
 
 }

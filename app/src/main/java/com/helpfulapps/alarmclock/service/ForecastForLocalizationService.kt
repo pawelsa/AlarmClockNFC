@@ -2,10 +2,11 @@ package com.helpfulapps.alarmclock.service
 
 import android.app.Service
 import android.content.Intent
+import android.content.pm.ServiceInfo
 import android.os.IBinder
 import com.google.android.gms.location.LocationRequest
 import com.helpfulapps.alarmclock.helpers.NotificationBuilder
-import com.helpfulapps.alarmclock.helpers.startVersionedForeground
+import com.helpfulapps.alarmclock.helpers.extensions.startVersionedForeground
 import com.helpfulapps.alarmclock.worker.CreateWork
 import com.helpfulapps.base.extensions.rx.backgroundTask
 import com.helpfulapps.domain.helpers.Settings
@@ -32,7 +33,11 @@ class ForecastForLocalizationService : Service() {
             notificationBuilder.setNotificationType(NotificationBuilder.NotificationType.TypeLocalization)
                 .build()
 
-        startVersionedForeground(notification)
+        startVersionedForeground(
+            notification,
+            NOTIFICATION_ID,
+            ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION
+        )
 
 
         val locationRequest = LocationRequest.create()
@@ -64,11 +69,12 @@ class ForecastForLocalizationService : Service() {
         return START_STICKY
     }
 
-
-
-
     override fun onDestroy() {
         disposables.clear()
         super.onDestroy()
+    }
+
+    companion object {
+        private const val NOTIFICATION_ID = 8
     }
 }

@@ -3,16 +3,17 @@ package com.helpfulapps.domain.use_cases.alarm
 import com.helpfulapps.domain.exceptions.AlarmException
 import com.helpfulapps.domain.repository.AlarmClockManager
 import com.helpfulapps.domain.repository.AlarmRepository
+import com.helpfulapps.domain.use_cases.BaseUseCaseTest
 import io.mockk.every
 import io.mockk.mockk
 import io.reactivex.Completable
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
-class RemoveAlarmUseCaseTest {
+class RemoveAlarmUseCaseTest : BaseUseCaseTest<RemoveAlarmUseCase>() {
 
     private val alarmRepository: AlarmRepository = mockk {}
     private val alarmManager: AlarmClockManager = mockk {}
-    val useCase = RemoveAlarmUseCaseImpl(alarmManager, alarmRepository)
+    override val useCase = RemoveAlarmUseCaseImpl(alarmManager, alarmRepository)
 
     @Test
     fun `alarm should be removed`() {

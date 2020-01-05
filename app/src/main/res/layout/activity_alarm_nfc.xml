@@ -5,7 +5,7 @@
 
     <data>
 
-        <import type="com.helpfulapps.alarmclock.helpers.TimeKt" />
+        <import type="com.helpfulapps.alarmclock.helpers.extensions.TimeKt" />
 
         <variable
             name="model"

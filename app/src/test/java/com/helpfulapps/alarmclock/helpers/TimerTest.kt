@@ -1,17 +1,25 @@
 package com.helpfulapps.alarmclock.helpers
 
-import junit.framework.Assert.assertEquals
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+
 
 class TimerTest {
 
-    private lateinit var timer: Timer
+    private var timer: Timer = Timer()
 
-    @Before
+    @BeforeEach
     fun setUp() {
         timer = Timer()
     }
+
+    @AfterEach
+    fun cleanUp() {
+        timer.pauseTimer()
+    }
+
 
     @Test
     fun `should start timer`() {

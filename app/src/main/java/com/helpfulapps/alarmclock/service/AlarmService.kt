@@ -10,6 +10,7 @@ import com.helpfulapps.alarmclock.helpers.AlarmPlayer
 import com.helpfulapps.alarmclock.helpers.NotificationBuilder
 import com.helpfulapps.alarmclock.helpers.NotificationBuilderImpl.Companion.KEY_ALARM_ID
 import com.helpfulapps.alarmclock.helpers.VibrationController
+import com.helpfulapps.alarmclock.helpers.extensions.startVersionedForeground
 import com.helpfulapps.alarmclock.views.ringing_alarm.BaseRingingAlarmActivity.Companion.AUTO_SNOOZE_ALARM
 import com.helpfulapps.alarmclock.views.ringing_alarm.BaseRingingAlarmActivity.Companion.SNOOZE_ACTION
 import com.helpfulapps.alarmclock.views.ringing_alarm.BaseRingingAlarmActivity.Companion.STOP_ACTION
@@ -94,7 +95,7 @@ class AlarmService : Service() {
                     it, shouldUseNfc()
                 )
             ).build()
-            startForeground(1, notification)
+            startVersionedForeground(notification, NOTIFICATION_ID)
             startCountdownToAutoSnooze()
         }
     }
@@ -132,5 +133,9 @@ class AlarmService : Service() {
         vibrationController.stopVibrating()
         disposables.clear()
         super.onDestroy()
+    }
+
+    companion object {
+        private const val NOTIFICATION_ID = 9
     }
 }

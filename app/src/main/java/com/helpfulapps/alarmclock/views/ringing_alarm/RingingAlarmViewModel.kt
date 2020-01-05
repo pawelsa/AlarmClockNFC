@@ -11,7 +11,6 @@ import io.reactivex.rxkotlin.subscribeBy
 class RingingAlarmViewModel(
     private val getAlarmUseCase: GetAlarmUseCase
 ) : BaseViewModel() {
-    val TAG = this.javaClass.simpleName
 
     private val _weatherAlarm: MutableLiveData<WeatherAlarm> = MutableLiveData()
     val weatherAlarm: LiveData<WeatherAlarm>

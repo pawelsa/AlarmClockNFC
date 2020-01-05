@@ -4,16 +4,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.helpfulapps.alarmclock.service.StopwatchService
 import com.helpfulapps.base.base.BaseViewModel
+import com.helpfulapps.base.extensions.rx.backgroundTask
 import com.helpfulapps.domain.eventBus.ServiceBus
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.plusAssign
 
 class StopWatchViewModel : BaseViewModel() {
 
     private val _stopwatchState: MutableLiveData<StopWatchState> =
-        MutableLiveData<StopWatchState>().apply {
-            value = StopWatchState.Stopped
-        }
+        MutableLiveData()
     val stopwatchState: LiveData<StopWatchState>
         get() = _stopwatchState
 
@@ -28,7 +26,7 @@ class StopWatchViewModel : BaseViewModel() {
     fun observeStopwatch() {
 
         disposables += ServiceBus.listen(StopwatchService.StopWatchEvent::class.java)
-            .observeOn(AndroidSchedulers.mainThread())
+            .backgroundTask()
             .subscribe {
                 when (it) {
                     is StopwatchService.StopWatchEvent.Start -> _stopwatchState.value =

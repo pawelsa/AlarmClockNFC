@@ -7,8 +7,8 @@ import io.reactivex.Single
 
 interface GetForecastForAlarmsUseCase : SingleUseCase<List<DayWeather>>
 
-class GetForecastForAlarmsUseCaseImpl(private val _repository: WeatherRepository) :
+class GetForecastForAlarmsUseCaseImpl(private val repository: WeatherRepository) :
     GetForecastForAlarmsUseCase {
 
-    override fun invoke(): Single<List<DayWeather>> = _repository.getForecastForAlarms()
+    override fun invoke(): Single<List<DayWeather>> = repository.getForecastForAlarms()
 }

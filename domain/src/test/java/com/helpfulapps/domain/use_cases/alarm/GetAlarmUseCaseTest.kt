@@ -5,22 +5,23 @@ import com.helpfulapps.domain.models.alarm.WeatherAlarm
 import com.helpfulapps.domain.models.weather.DayWeather
 import com.helpfulapps.domain.repository.AlarmRepository
 import com.helpfulapps.domain.repository.WeatherRepository
+import com.helpfulapps.domain.use_cases.BaseUseCaseTest
 import com.helpfulapps.domain.use_cases.mockData.MockData
 import io.mockk.every
 import io.mockk.mockk
 import io.reactivex.Single
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
-class GetAlarmUseCaseTest {
+class GetAlarmUseCaseTest : BaseUseCaseTest<GetAlarmUseCase>() {
 
     private val alarmRepository: AlarmRepository = mockk {}
-    private val _weatherRepository: WeatherRepository = mockk {}
-    private val useCase = GetAlarmUseCaseImpl(alarmRepository, _weatherRepository)
+    private val weatherRepository: WeatherRepository = mockk {}
+    override val useCase = GetAlarmUseCaseImpl(alarmRepository, weatherRepository)
 
     @Test
     fun `should obtain alarm`() {
         every { alarmRepository.getAlarm(any()) } returns singleOf { MockData.pairs[0].alarm }
-        every { _weatherRepository.getForecastForAlarm(any()) } returns singleOf { MockData.pairs[0].dayWeather }
+        every { weatherRepository.getForecastForAlarm(any()) } returns singleOf { MockData.pairs[0].dayWeather }
 
         useCase(GetAlarmUseCase.Params(1))
             .test()
@@ -41,7 +42,7 @@ class GetAlarmUseCaseTest {
     @Test
     fun `should obtaining weather fail`() {
         every { alarmRepository.getAlarm(any()) } returns singleOf { MockData.pairs[0].alarm }
-        every { _weatherRepository.getForecastForAlarm(any()) } returns Single.error(Exception())
+        every { weatherRepository.getForecastForAlarm(any()) } returns Single.error(Exception())
 
         useCase(GetAlarmUseCase.Params(1))
             .test()

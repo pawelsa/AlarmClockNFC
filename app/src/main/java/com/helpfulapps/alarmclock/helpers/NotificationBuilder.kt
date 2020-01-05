@@ -10,6 +10,8 @@ import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.helpfulapps.alarmclock.R
+import com.helpfulapps.alarmclock.helpers.extensions.secondsToString
+import com.helpfulapps.alarmclock.helpers.extensions.timeToString
 import com.helpfulapps.alarmclock.service.StopwatchService
 import com.helpfulapps.alarmclock.service.StopwatchService.Companion.STOPWATCH_LAP
 import com.helpfulapps.alarmclock.service.StopwatchService.Companion.STOPWATCH_PAUSE
@@ -131,7 +133,10 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
                 .setContentText(
                     context.getString(
                         R.string.notification_alarm_text,
-                        timeToString(alarm.hour, alarm.minute)
+                        timeToString(
+                            alarm.hour,
+                            alarm.minute
+                        )
                     )
                 )
                 .setPriority(NotificationCompat.PRIORITY_MAX)

@@ -10,8 +10,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.FragmentStopwatchBinding
 import com.helpfulapps.alarmclock.helpers.extensions.marginParams
+import com.helpfulapps.alarmclock.helpers.extensions.millisToString
 import com.helpfulapps.alarmclock.helpers.extensions.observe
-import com.helpfulapps.alarmclock.helpers.millisToString
 import com.helpfulapps.alarmclock.service.StopwatchService
 import com.helpfulapps.alarmclock.service.StopwatchService.Companion.STOPWATCH_START
 import com.helpfulapps.alarmclock.views.main_activity.MainActivity
