@@ -12,6 +12,7 @@ import androidx.core.app.NotificationCompat
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.helpers.extensions.secondsToString
 import com.helpfulapps.alarmclock.helpers.extensions.timeToString
+import com.helpfulapps.alarmclock.service.AlarmService
 import com.helpfulapps.alarmclock.service.StopwatchService
 import com.helpfulapps.alarmclock.service.StopwatchService.Companion.STOPWATCH_LAP
 import com.helpfulapps.alarmclock.service.StopwatchService.Companion.STOPWATCH_PAUSE
@@ -21,6 +22,7 @@ import com.helpfulapps.alarmclock.service.TimerService
 import com.helpfulapps.alarmclock.views.main_activity.MainActivity
 import com.helpfulapps.alarmclock.views.main_activity.MainActivity.Companion.ACTION_OPEN_STOPWATCH
 import com.helpfulapps.alarmclock.views.main_activity.MainActivity.Companion.ACTION_OPEN_TIMER
+import com.helpfulapps.alarmclock.views.ringing_alarm.BaseRingingAlarmActivity
 import com.helpfulapps.alarmclock.views.ringing_alarm.NfcRingingAlarmActivity
 import com.helpfulapps.alarmclock.views.ringing_alarm.RingingAlarmActivity
 import com.helpfulapps.alarmclock.views.timer_finished_activity.TimerFinishedActivity
@@ -131,6 +133,16 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
     private fun setupAlarmType(notificationType: NotificationBuilder.NotificationType.TypeAlarm) {
         val alarm = notificationType.alarm
 
+        val snoozeAlarmIntent = Intent(context, AlarmService::class.java).let {
+            it.action = BaseRingingAlarmActivity.SNOOZE_ACTION
+            getService(context, 0, it, FLAG_UPDATE_CURRENT)
+        }
+
+        val stopAlarmIntent = Intent(context, AlarmService::class.java).let {
+            it.action = BaseRingingAlarmActivity.STOP_ACTION
+            getService(context, 0, it, FLAG_UPDATE_CURRENT)
+        }
+
         val ringingActivity =
             if (notificationType.usingNfc) NfcRingingAlarmActivity::class.java else RingingAlarmActivity::class.java
 
@@ -162,7 +174,20 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
                 .setCategory(NotificationCompat.CATEGORY_ALARM)
                 .setFullScreenIntent(fullScreenPendingIntent, true)
                 .setVibrate(LongArray(3) { 500L })
+                .addAction(
+                    R.drawable.ic_snooze,
+                    context.getString(R.string.notification_alarm_snooze),
+                    snoozeAlarmIntent
+                )
 
+        if (!notificationType.usingNfc) {
+            builder
+                .addAction(
+                    R.drawable.ic_cancel,
+                    context.getString(R.string.notification_alarm_stop),
+                    stopAlarmIntent
+                )
+        }
 
         buildNotificationChannel(NotificationBuilder.NotificationType.HighPriority)
 
