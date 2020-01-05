@@ -18,8 +18,7 @@ class AlarmClockManagerImpl(
     private val context: Context,
     private val manager: AlarmManager,
     private val settings: Settings
-) :
-    AlarmClockManager {
+) : AlarmClockManager {
 
     private val TAG = AlarmClockManagerImpl::class.java.simpleName
 
@@ -28,7 +27,7 @@ class AlarmClockManagerImpl(
 
             val alarm = Alarm(domainAlarm)
             val timeSetter = TimeSetter()
-            val alarmStart = timeSetter.getAlarmStartingPoint(domainAlarm)
+            val alarmStart = timeSetter.getAlarmStartingTime(domainAlarm)
 //            val alarmStart = System.currentTimeMillis() + 10 * 1000
 
             val alarmIntent = IntentCreator.getAlarmIntent(context, alarm.id)

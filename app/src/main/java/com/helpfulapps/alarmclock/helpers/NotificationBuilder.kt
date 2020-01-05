@@ -41,6 +41,7 @@ interface NotificationBuilder {
         data class TypeTimerPaused(val timeLeft: Long) : NotificationType()
         object TypeTimerFinished : NotificationType()
         object TypeLocalization : NotificationType()
+        object Initialization : NotificationType()
     }
 }
 
@@ -66,8 +67,26 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
                 )
                 is NotificationBuilder.NotificationType.TypeTimerFinished -> setupTimerFinished()
                 is NotificationBuilder.NotificationType.TypeLocalization -> setupLocalizationType()
+                is NotificationBuilder.NotificationType.Initialization -> setupInitialization()
             }
         }
+
+    private fun setupInitialization() {
+        builder =
+            NotificationCompat.Builder(context, CHANNEL_INITIALIZATION_ID)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle(context.getString(R.string.app_name))
+                .setContentText(
+                    context.getString(R.string.notification_initialization)
+                )
+                .setPriority(NotificationCompat.PRIORITY_LOW)
+                .setCategory(NotificationCompat.CATEGORY_SERVICE)
+                .setAutoCancel(false)
+
+        buildNotificationChannel(NotificationBuilder.NotificationType.Initialization)
+
+        builder.setChannelId(CHANNEL_INITIALIZATION_ID)
+    }
 
     private fun setupStopWatchPausedType(notificationType: NotificationBuilder.NotificationType.TypeStopwatchPaused) {
 
@@ -366,6 +385,13 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
                     importance = NotificationManager.IMPORTANCE_LOW
                     channelId = CHANNEL_LOCALIZATION_ID
                 }
+                is NotificationBuilder.NotificationType.Initialization -> {
+                    name = context.getString(R.string.notification_channel_initialization_name)
+                    descriptionText =
+                        context.getString(R.string.notification_channel_initialization_description)
+                    importance = NotificationManager.IMPORTANCE_LOW
+                    channelId = CHANNEL_INITIALIZATION_ID
+                }
             }
             val mChannel = NotificationChannel(channelId, name, importance)
             mChannel.description = descriptionText
@@ -392,6 +418,8 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
         private const val CHANNEL_STOPWATCH_ID = "com.helpfulapps.alarmclock.STOPWATCH_CHANNEL_ID"
         private const val CHANNEL_LOCALIZATION_ID =
             "com.helpfulapps.alarmclock.CHANNEL_LOCALIZATION_ID"
+        private const val CHANNEL_INITIALIZATION_ID =
+            "com.helpfulapps.alarmclock.CHANNEL_INITIALIZATION_ID"
     }
 
 }

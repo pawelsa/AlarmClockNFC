@@ -116,6 +116,9 @@
     <string name="stopwatch_reset">Reset</string>
     <string name="stopwatch_lap">Lap</string>
     <string name="menu_statistics">Statistics</string>
+    <string name="notification_initialization">Alarms are setting up after restart</string>
+    <string name="notification_channel_initialization_name">Displays initialization message</string>
+    <string name="notification_channel_initialization_description">It shows informations during configuration</string>
 
     <string-array name="settings_alarm_time_titles">
         <item>1 minute</item>

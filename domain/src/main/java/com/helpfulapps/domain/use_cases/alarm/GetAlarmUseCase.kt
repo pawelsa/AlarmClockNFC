@@ -21,7 +21,7 @@ class GetAlarmUseCaseImpl(
         return alarmRepository.getAlarm(parameter.alarmId)
             .flatMap { alarm ->
                 val timeSetter = TimeSetter()
-                val startingTime = timeSetter.getAlarmStartingPoint(alarm)
+                val startingTime = timeSetter.getAlarmStartingTime(alarm)
                 return@flatMap weatherRepository.getForecastForAlarm(startingTime)
                     .map { weather ->
                         WeatherAlarm(alarm, weather)

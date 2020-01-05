@@ -31,7 +31,7 @@ class TimeSetterTest {
         val expect = 1561451400000L
 
 
-        val result = timeSetter.getAlarmStartingPoint(alarm)
+        val result = timeSetter.getAlarmStartingTime(alarm)
 
         assertEquals(expect, result)
 
@@ -47,7 +47,7 @@ class TimeSetterTest {
         val expect = 1561386600000L
 
 
-        val result = timeSetter.getAlarmStartingPoint(alarm)
+        val result = timeSetter.getAlarmStartingTime(alarm)
 
         assertEquals(expect, result)
     }
@@ -62,7 +62,7 @@ class TimeSetterTest {
         val expect = 1561444200000L
 
 
-        val result = timeSetter.getAlarmStartingPoint(alarm)
+        val result = timeSetter.getAlarmStartingTime(alarm)
 
         assertEquals(expect, result)
     }
@@ -76,7 +76,7 @@ class TimeSetterTest {
         val expect = 1561883400000L
 
 
-        val result = timeSetter.getAlarmStartingPoint(alarm)
+        val result = timeSetter.getAlarmStartingTime(alarm)
 
         assertEquals(expect, result)
     }

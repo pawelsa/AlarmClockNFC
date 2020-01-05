@@ -52,7 +52,6 @@ class PrepareDataImpl(
         this.flatMapSingle { response ->
             when (response.isSuccessful) {
                 true -> Single.create { emitter: SingleEmitter<ForecastForCity> ->
-                    println(response.raw().request())
                     emitter.onSuccess(response.body()!!)
                 }
                 else -> Single.error(CouldNotObtainForecast())
