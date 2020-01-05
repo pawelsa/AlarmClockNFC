@@ -9,7 +9,9 @@ class TimeSetter(
 ) {
     private val TAG = this.javaClass.simpleName
 
-    fun getAlarmStartingPoint(alarm: Alarm): Long {
+    fun getAlarmStartingCalendar(alarm: Alarm): Calendar = setStartingPoint(alarm)
+
+    fun getAlarmStartingTime(alarm: Alarm): Long {
         val calendar = setStartingPoint(alarm)
 
         return calendar.timeInMillis

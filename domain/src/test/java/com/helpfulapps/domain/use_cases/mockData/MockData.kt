@@ -15,9 +15,25 @@ object MockData {
 
     val alarmList = listOf(
         createAlarm(),
-        createAlarm(id = 2, title = "Alarm 2"),
+        createAlarm(id = 2),
         createAlarm(
-            id = 3, title = "Alarm 3", isTurnedOn = false, isVibrationOn = false
+            id = 3, isTurnedOn = false, isVibrationOn = false
+        ),
+        createAlarm(
+            id = 4, isRepeating = true,
+            repetitionDays = arrayOf(false, true, false, false, false, false, false)
+        ),
+        createAlarm(
+            id = 5, isRepeating = true,
+            repetitionDays = arrayOf(false, false, false, false, false, true, false)
+        )
+    )
+
+    val lateAlarmList = listOf(
+        createAlarm(hour = 23, minute = 58),
+        createAlarm(id = 2, hour = 23, minute = 59),
+        createAlarm(
+            id = 3, isTurnedOn = false, isVibrationOn = false
         ),
         createAlarm(
             id = 4, isRepeating = true,
@@ -31,7 +47,7 @@ object MockData {
 
     fun createAlarm(
         id: Long = 1,
-        title: String = "Alarm 1",
+        title: String = "Alarm $id",
         hour: Int = 10,
         minute: Int = 10,
         isTurnedOn: Boolean = true,

@@ -35,7 +35,7 @@ class SetupAllAlarmsUseCaseTest : BaseUseCaseTest<SetupAllAlarmsUseCase>() {
 
     @Test
     fun `when alarm list not empty, alarms should be started, and complete`() {
-        every { alarmRepository.getAlarms() } returns singleOf { MockData.alarmList }
+        every { alarmRepository.getAlarms() } returns singleOf { MockData.lateAlarmList }
         every { alarmManager.setAlarm(any()) } returns Completable.complete()
 
         useCase()
@@ -56,6 +56,19 @@ class SetupAllAlarmsUseCaseTest : BaseUseCaseTest<SetupAllAlarmsUseCase>() {
             .dispose()
 
         verify(exactly = 2) { alarmRepository.getAlarms() }
+    }
+
+    @Test
+    fun `non repeating alarm, that should be started in meantime, should not be set up`() {
+        every { alarmRepository.getAlarms() } returns singleOf { MockData.alarmList }
+        every { alarmManager.setAlarm(any()) } returns Completable.complete()
+
+        useCase()
+            .test()
+            .assertComplete()
+            .dispose()
+
+        verify(exactly = 3) { alarmManager.setAlarm(any()) }
     }
 
 }
