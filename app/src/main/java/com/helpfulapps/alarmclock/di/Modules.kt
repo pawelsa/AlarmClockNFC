@@ -74,7 +74,7 @@ object Modules {
     }
 
     private val other = module {
-        single<RingtoneDialogBuilder> { RingtoneDialogBuilderImpl(get()) }
+        single<RingtoneDialogBuilder> { RingtoneDialogBuilderImpl(get(), get()) }
         single<AlarmClockManager> {
             AlarmClockManagerImpl(
                 androidContext(),

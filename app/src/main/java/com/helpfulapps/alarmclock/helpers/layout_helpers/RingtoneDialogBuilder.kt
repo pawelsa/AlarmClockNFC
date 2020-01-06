@@ -4,7 +4,6 @@ import android.app.Dialog
 import android.content.Context
 import androidx.appcompat.app.AlertDialog
 import com.helpfulapps.alarmclock.R
-import com.helpfulapps.device.alarms.other.AlarmPlayerImpl
 import com.helpfulapps.domain.other.AlarmPlayer
 import com.helpfulapps.domain.repository.RingtoneRepository
 
@@ -16,8 +15,10 @@ interface RingtoneDialogBuilder {
     ): Dialog
 }
 
-class RingtoneDialogBuilderImpl(private val ringtoneRepository: RingtoneRepository) :
-    RingtoneDialogBuilder {
+class RingtoneDialogBuilderImpl(
+    private val ringtoneRepository: RingtoneRepository,
+    private val alarmPlayer: AlarmPlayer
+) : RingtoneDialogBuilder {
 
     override fun buildSelectRingtoneDialog(
         context: Context,
@@ -25,8 +26,6 @@ class RingtoneDialogBuilderImpl(private val ringtoneRepository: RingtoneReposito
         selectedRingtone: (Pair<String, String>) -> Unit
     ): Dialog {
 
-        val alarmPlayer: AlarmPlayer =
-            AlarmPlayerImpl(context)
 
         val ringtones = ringtoneRepository.getRingtones()
         var selectedRingtoneIndex = ringtones
