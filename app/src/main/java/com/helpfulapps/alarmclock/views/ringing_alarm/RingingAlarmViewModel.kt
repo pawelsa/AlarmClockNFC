@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.helpfulapps.base.base.BaseViewModel
 import com.helpfulapps.base.extensions.rx.backgroundTask
 import com.helpfulapps.domain.models.alarm.WeatherAlarm
+import com.helpfulapps.domain.models.weather.DayWeather
 import com.helpfulapps.domain.models.weather.Rain
 import com.helpfulapps.domain.models.weather.Snow
 import com.helpfulapps.domain.models.weather.Wind
@@ -32,47 +33,7 @@ class RingingAlarmViewModel(
         this.alarmId = alarmId
         disposables += getAlarmUseCase(GetAlarmUseCase.Params(alarmId))
             .map {
-                val currentTime = GregorianCalendar.getInstance().timeInMillis
-                val afternoonTime =
-                    GregorianCalendar.getInstance().apply { set(Calendar.HOUR_OF_DAY, 15) }
-                        .timeInMillis
-                val withinOneAndHalfHour: (Long) -> Boolean =
-                    { time ->
-                        abs(time - currentTime) <= ONE_AND_HALF_HOUR_MILLIS
-                    }
-
-                val weatherData = WeatherData()
-
-                with(it.dayWeather) {
-
-                    weatherData.currentTemperature =
-                        hourWeatherList.find { hourWeather -> withinOneAndHalfHour(hourWeather.dt) }
-                            ?.temp
-
-                    if (weatherData.currentTemperature == null) {
-                        weatherData.currentTemperature = hourWeatherList[0].temp
-                    }
-
-                    if (withinOneAndHalfHour(afternoonTime)) {
-                        weatherData.laterTemperature =
-                            hourWeatherList.find { withinOneAndHalfHour(afternoonTime) }?.temp
-                    }
-
-                    if (weatherInfo.rain != Rain.NO_RAIN && weatherInfo.rain != Rain.NO_DATA) {
-                        weatherData.averageRain =
-                            (hourWeatherList.sumByDouble { hourWeather -> hourWeather.rain }) / hourWeatherList.size
-                    }
-
-                    if (weatherInfo.snow != Snow.NORMAL && weatherInfo.snow != Snow.NO_DATA) {
-                        weatherData.averageSnow =
-                            (hourWeatherList.sumByDouble { hourWeather -> hourWeather.snow }) / hourWeatherList.size
-                    }
-
-                    if (weatherInfo.wind != Wind.NO_DATA && weatherInfo.wind != Wind.NORMAL) {
-                        weatherData.averageWind =
-                            (hourWeatherList.sumByDouble { hourWeather -> hourWeather.wind }) / hourWeatherList.size
-                    }
-                }
+                val weatherData = extractWeatherData(it.dayWeather)
                 return@map it to weatherData
             }
             .backgroundTask()
@@ -85,6 +46,50 @@ class RingingAlarmViewModel(
                     it.printStackTrace()
                 }
             )
+    }
+
+    private fun extractWeatherData(dayWeather: DayWeather): WeatherData {
+        val currentTime = GregorianCalendar.getInstance().timeInMillis
+        val afternoonTime =
+            GregorianCalendar.getInstance().apply { set(Calendar.HOUR_OF_DAY, 15) }
+                .timeInMillis
+        val withinOneAndHalfHour: (Long) -> Boolean =
+            { time ->
+                abs(time - currentTime) <= ONE_AND_HALF_HOUR_MILLIS
+            }
+
+        val weatherData = WeatherData()
+        val weatherInfo = dayWeather.weatherInfo
+        val hourWeatherList = dayWeather.hourWeatherList
+
+        weatherData.currentTemperature =
+            hourWeatherList.find { hourWeather -> withinOneAndHalfHour(hourWeather.dt) }
+                ?.temp
+
+        if (weatherData.currentTemperature == null) {
+            weatherData.currentTemperature = hourWeatherList[0].temp
+        }
+
+        if (withinOneAndHalfHour(afternoonTime)) {
+            weatherData.laterTemperature =
+                hourWeatherList.find { withinOneAndHalfHour(afternoonTime) }?.temp
+        }
+
+        if (weatherInfo.rain != Rain.NO_RAIN && weatherInfo.rain != Rain.NO_DATA) {
+            weatherData.averageRain =
+                (hourWeatherList.sumByDouble { hourWeather -> hourWeather.rain }) / hourWeatherList.size
+        }
+
+        if (weatherInfo.snow != Snow.NORMAL && weatherInfo.snow != Snow.NO_DATA) {
+            weatherData.averageSnow =
+                (hourWeatherList.sumByDouble { hourWeather -> hourWeather.snow }) / hourWeatherList.size
+        }
+
+        if (weatherInfo.wind != Wind.NO_DATA && weatherInfo.wind != Wind.NORMAL) {
+            weatherData.averageWind =
+                (hourWeatherList.sumByDouble { hourWeather -> hourWeather.wind }) / hourWeatherList.size
+        }
+        return weatherData
     }
 
 

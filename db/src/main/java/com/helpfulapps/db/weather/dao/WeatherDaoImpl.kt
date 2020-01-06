@@ -56,8 +56,6 @@ class WeatherDaoImpl(
     override fun getWeatherForTime(time: Long): Single<DayWeatherData> {
         return (select from DayWeatherEntity::class where (DayWeatherEntity_Table.dt lessThanOrEq time + HALF_DAY) and (DayWeatherEntity_Table.dt greaterThan time - HALF_DAY))
             .rx().querySingle().toSingle().map { it.toData() }
-            .doOnSuccess { println("DAO SUCC") }
-            .doOnError { println("DAO FAIL") }
     }
 /*    return (select from DayWeatherEntity::class)
     .rx().queryList()
