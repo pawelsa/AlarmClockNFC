@@ -46,7 +46,7 @@ class ClockViewModel(
                     }
                     if (alarmList.value != null
                         && alarmList.value!!.isNotEmpty()
-                        && it.size > alarmList.value?.size ?: 0
+                        && it.size > alarmList.value!!.size
                     ) {
                         _message.value = AlarmTurnedOn(getTimeToAlarm(it[it.size - 1].toDomain()))
                     }
