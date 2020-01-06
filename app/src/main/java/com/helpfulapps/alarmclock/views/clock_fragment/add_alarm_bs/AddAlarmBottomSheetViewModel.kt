@@ -4,10 +4,12 @@ import android.content.Context
 import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.helpfulapps.alarmclock.helpers.AlarmChanged
 import com.helpfulapps.alarmclock.helpers.extensions.timeToString
 import com.helpfulapps.alarmclock.helpers.getDefaultRingtone
 import com.helpfulapps.base.base.BaseViewModel
 import com.helpfulapps.base.extensions.rx.backgroundTask
+import com.helpfulapps.domain.eventBus.RxBus
 import com.helpfulapps.domain.extensions.singleOf
 import com.helpfulapps.domain.helpers.Settings
 import com.helpfulapps.domain.helpers.Time
@@ -87,6 +89,8 @@ class AddAlarmBottomSheetViewModel(
             minute = time.second,
             repetitionDays = repetitionDays
         )
+        RxBus.publish(AlarmChanged(finalAlarm))
+
         when {
             isUpdating -> updateAlarm(finalAlarm)
             else -> saveAlarm(finalAlarm)

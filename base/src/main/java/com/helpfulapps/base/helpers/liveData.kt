@@ -1,4 +1,4 @@
-package com.helpfulapps.alarmclock.helpers.extensions
+package com.helpfulapps.base.helpers
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData

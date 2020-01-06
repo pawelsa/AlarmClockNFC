@@ -11,11 +11,12 @@ import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.FragmentStopwatchBinding
 import com.helpfulapps.alarmclock.helpers.extensions.marginParams
 import com.helpfulapps.alarmclock.helpers.extensions.millisToString
-import com.helpfulapps.alarmclock.helpers.extensions.observe
 import com.helpfulapps.alarmclock.service.StopwatchService
 import com.helpfulapps.alarmclock.service.StopwatchService.Companion.STOPWATCH_START
 import com.helpfulapps.alarmclock.views.main_activity.MainActivity
 import com.helpfulapps.base.base.BaseFragment
+import com.helpfulapps.base.helpers.Failure
+import com.helpfulapps.base.helpers.observe
 import com.helpfulapps.domain.eventBus.ServiceBus
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_stopwatch.*
@@ -195,4 +196,6 @@ class StopwatchFragment : BaseFragment<StopWatchViewModel, FragmentStopwatchBind
         fab.setImageResource(R.drawable.ic_start)
         fab.show()
     }
+
+    override fun handleFailure(failure: Failure) = Unit
 }

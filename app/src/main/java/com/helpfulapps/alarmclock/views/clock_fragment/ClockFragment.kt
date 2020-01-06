@@ -9,13 +9,15 @@ import android.provider.Settings
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.FragmentClockBinding
-import com.helpfulapps.alarmclock.helpers.extensions.observe
-import com.helpfulapps.alarmclock.helpers.fromBuildVersion
+import com.helpfulapps.alarmclock.helpers.*
+import com.helpfulapps.alarmclock.helpers.extensions.millisToString
 import com.helpfulapps.alarmclock.helpers.layout_helpers.DividerItemDecoration
 import com.helpfulapps.alarmclock.helpers.layout_helpers.buildRemoveAlarmDialog
 import com.helpfulapps.alarmclock.views.clock_fragment.add_alarm_bs.AddAlarmBottomSheet
 import com.helpfulapps.alarmclock.views.main_activity.MainActivity
 import com.helpfulapps.base.base.BaseFragment
+import com.helpfulapps.base.helpers.Failure
+import com.helpfulapps.base.helpers.observe
 import com.helpfulapps.domain.models.alarm.Alarm
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_clock.*
@@ -41,8 +43,23 @@ class ClockFragment : BaseFragment<ClockViewModel, FragmentClockBinding>() {
         setupRecyclerView()
         binding.viewModel = viewModel
         setupData()
-        subscribeData()
+        subscribeAlarms()
+        subscribeMessages()
         checkBatteryOptimization()
+    }
+
+    private fun subscribeMessages() {
+        viewModel.message.observe(this) {
+            when (it) {
+                is AlarmRemoved -> showMessage(getString(R.string.message_alarm_removed))
+                is AlarmTurnedOn -> showMessage(
+                    getString(
+                        R.string.message_alarm_switched,
+                        it.timeToAlarm.millisToString(withLabels = true, withMillis = false)
+                    )
+                )
+            }
+        }
     }
 
     private fun checkBatteryOptimization() {
@@ -77,9 +94,10 @@ class ClockFragment : BaseFragment<ClockViewModel, FragmentClockBinding>() {
     private fun setupData() {
         viewModel.getAlarms()
         viewModel.subscribeToDatabaseChanges()
+        viewModel.subscribeToAlarmChange()
     }
 
-    private fun subscribeData() {
+    private fun subscribeAlarms() {
         viewModel.alarmList.observe(this) {
             adapter.submitList(it)
         }
@@ -98,6 +116,16 @@ class ClockFragment : BaseFragment<ClockViewModel, FragmentClockBinding>() {
         buildRemoveAlarmDialog(this.context!!) { shouldRemove ->
             if (shouldRemove) viewModel.removeAlarm(alarm)
         }.show()
+    }
+
+    override fun handleFailure(failure: Failure) {
+        val stringResource: Int = when (failure) {
+            is CouldNotRemoveAlarm -> R.string.failure_could_not_remove_alarm
+            is CouldNotObtainAlarms -> R.string.failure_could_not_obtain_alarms
+            is CouldNotSwitchAlarm -> if (failure.isTurningOn) R.string.failure_could_not_switch_on else R.string.failure_could_not_switch_off
+            else -> R.string.failure_generic
+        }
+        showMessage(getString(stringResource))
     }
 
     override fun onResume() {

@@ -13,6 +13,8 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import com.helpfulapps.base.helpers.Failure
+import com.helpfulapps.base.helpers.observe
 import io.reactivex.disposables.CompositeDisposable
 
 abstract class BaseFragment<T : BaseViewModel, DB : ViewDataBinding> : Fragment() {
@@ -49,8 +51,17 @@ abstract class BaseFragment<T : BaseViewModel, DB : ViewDataBinding> : Fragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
+        subscribeToError()
         init()
     }
+
+    private fun subscribeToError() {
+        viewModel.error.observe(this) {
+            handleFailure(it)
+        }
+    }
+
+    abstract fun handleFailure(failure: Failure)
 
     fun showMessage(text: String) {
         Log.d(TAG, "showMessage: $text")
