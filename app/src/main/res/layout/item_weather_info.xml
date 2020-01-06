@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="info"
+            type="kotlin.Pair&lt;String, String>" />
+    </data>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <TextView
+            android:id="@+id/tv_weather_info"
+            style="@style/AlarmWeatherTextTheme"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="@dimen/padding_small"
+            android:text="@{info.first}"
+            android:textAlignment="textEnd"
+            tools:text="There will be snow" />
+
+        <TextView
+            android:id="@+id/tv_weather_value"
+            style="@style/AlarmWeatherTextTheme"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="@dimen/padding_small"
+            android:text="@{info.second}"
+            tools:text="44mm" />
+    </LinearLayout>
+</layout>

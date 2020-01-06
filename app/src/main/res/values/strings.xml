@@ -121,6 +121,16 @@
     <string name="notification_channel_initialization_description">It shows informations during configuration</string>
     <string name="notification_alarm_snooze">Snooze</string>
     <string name="notification_alarm_stop">Stop</string>
+    <string name="ringing_current_temperature">Current temperature</string>
+    <string name="ringing_later_temperature">Temperature later</string>
+    <string name="ringing_rain">It will rain</string>
+    <string name="ringing_snow">It will snow</string>
+    <string name="ringing_wind">It will be windy</string>
+    <string name="weather_celcius">C</string>
+    <string name="weather_fahrenheit">F</string>
+    <string name="weather_rain_metric">mm/3h</string>
+    <string name="weather_wind_metric">m/s</string>
+    <string name="weather_wind_imperial">mil/h</string>
     <string name="failure_could_not_remove_alarm">Could not remove alarm</string>
     <string name="failure_could_not_obtain_alarms">Could not obtain alarm</string>
     <string name="failure_could_not_switch_off">Problem occured when turning off</string>

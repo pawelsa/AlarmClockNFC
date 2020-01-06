@@ -3,7 +3,6 @@ package com.helpfulapps.db.weather.dao
 import android.content.Context
 import com.helpfulapps.data.db.weather.dao.WeatherDao
 import com.helpfulapps.data.db.weather.model.DayWeatherData
-import com.helpfulapps.data.repositories.WeatherRepositoryImpl
 import com.helpfulapps.db.weather.models.DayWeatherEntity
 import com.helpfulapps.db.weather.models.DayWeatherEntity_Table
 import com.helpfulapps.db.weather.models.HourWeatherEntity
@@ -55,7 +54,19 @@ class WeatherDaoImpl(
     }
 
     override fun getWeatherForTime(time: Long): Single<DayWeatherData> {
-        return (select from DayWeatherEntity::class where (DayWeatherEntity_Table.dt lessThanOrEq time + WeatherRepositoryImpl.ONE_AND_HALF_AN_HOUR) and (DayWeatherEntity_Table.dt greaterThan time - WeatherRepositoryImpl.ONE_AND_HALF_AN_HOUR))
+        return (select from DayWeatherEntity::class where (DayWeatherEntity_Table.dt lessThanOrEq time + HALF_DAY) and (DayWeatherEntity_Table.dt greaterThan time - HALF_DAY))
             .rx().querySingle().toSingle().map { it.toData() }
+    }
+/*    return (select from DayWeatherEntity::class)
+    .rx().queryList()
+    .map {
+        val currentTime = GregorianCalendar.getInstance().timeInMillis
+        it.first {dayWeather ->
+            return@first abs(currentTime - dayWeather.dt) <= HALF_DAY
+        }.toData()
+    }*/
+
+    companion object {
+        private const val HALF_DAY = 12 * 60 * 60 * 1000
     }
 }
