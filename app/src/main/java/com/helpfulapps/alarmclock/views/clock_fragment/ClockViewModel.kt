@@ -1,10 +1,9 @@
 package com.helpfulapps.alarmclock.views.clock_fragment
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.helpfulapps.alarmclock.helpers.*
 import com.helpfulapps.base.base.BaseViewModel
 import com.helpfulapps.base.extensions.rx.backgroundTask
+import com.helpfulapps.base.helpers.LiveDataDelegate
 import com.helpfulapps.domain.eventBus.DatabaseNotifiers
 import com.helpfulapps.domain.eventBus.RxBus
 import com.helpfulapps.domain.helpers.Settings
@@ -26,9 +25,11 @@ class ClockViewModel(
     private val settings: Settings
 ) : BaseViewModel() {
 
-    private val _alarmList: MutableLiveData<List<AlarmData>> = MutableLiveData()
-    val alarmList: LiveData<List<AlarmData>>
-        get() = _alarmList
+//    private val alarmList: MutableLiveData<List<AlarmData>> = MutableLiveData()
+    /*val alarmList: LiveData<List<AlarmData>>
+        get() = _alarmList*/
+
+    val alarmList = LiveDataDelegate<List<AlarmData>>()
 
     val askForBatteryOptimization = settings.askForBatteryOptimization
 
@@ -50,7 +51,7 @@ class ClockViewModel(
                     ) {
                         _message.value = AlarmTurnedOn(getTimeToAlarm(it[it.size - 1].toDomain()))
                     }
-                    _alarmList.value = it
+                    alarmList.value = it
                 },
                 onError = { _error.value = CouldNotObtainAlarms }
             )
