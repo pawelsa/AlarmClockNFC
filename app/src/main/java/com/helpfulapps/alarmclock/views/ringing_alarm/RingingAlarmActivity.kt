@@ -5,6 +5,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.ActivityRingingAlarmBinding
 import com.helpfulapps.alarmclock.helpers.extensions.observe
+import com.helpfulapps.alarmclock.helpers.extensions.round
 import com.helpfulapps.base.helpers.whenNotNull
 import kotlinx.android.synthetic.main.activity_ringing_alarm.*
 
@@ -31,16 +32,20 @@ class RingingAlarmActivity : BaseRingingAlarmActivity<ActivityRingingAlarmBindin
                     weatherInfoList.add(getString(R.string.ringing_current_temperature) to temperature.toString())
                 }
                 whenNotNull(laterTemperature) { temperature ->
-                    weatherInfoList.add(getString(R.string.ringing_later_temperature) to temperature.toString())
+                    weatherInfoList.add(
+                        getString(R.string.ringing_later_temperature) to temperature.round(
+                            2
+                        ).toString()
+                    )
                 }
                 whenNotNull(averageRain) { rain ->
-                    weatherInfoList.add(getString(R.string.ringing_rain) to rain.toString())
+                    weatherInfoList.add(getString(R.string.ringing_rain) to rain.round(2).toString())
                 }
                 whenNotNull(averageSnow) { snow ->
-                    weatherInfoList.add(getString(R.string.ringing_snow) to snow.toString())
+                    weatherInfoList.add(getString(R.string.ringing_snow) to snow.round(2).toString())
                 }
                 whenNotNull(averageWind) { wind ->
-                    weatherInfoList.add(getString(R.string.ringing_wind) to wind.toString())
+                    weatherInfoList.add(getString(R.string.ringing_wind) to wind.round(2).toString())
                 }
             }
             adapter.submitList(weatherInfoList)

@@ -3,6 +3,7 @@ package com.helpfulapps.alarmclock.helpers.extensions
 import java.text.DateFormatSymbols
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.round
 
 fun timeToString(time: Pair<Int, Int>): String {
     return timeToString(
@@ -70,4 +71,10 @@ fun Long.millisToString(): String {
         minutes > 0 -> String.format("%02d:%02d:%02d", minutes, seconds, timeInMillis)
         else -> String.format("%02d:%02d", seconds, timeInMillis)
     }
+}
+
+fun Double.round(decimals: Int): Double {
+    var multiplier = 1.0
+    repeat(decimals) { multiplier *= 10 }
+    return round(this * multiplier) / multiplier
 }
