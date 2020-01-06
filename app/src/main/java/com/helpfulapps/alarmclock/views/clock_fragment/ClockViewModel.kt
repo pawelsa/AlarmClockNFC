@@ -1,6 +1,5 @@
 package com.helpfulapps.alarmclock.views.clock_fragment
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.helpfulapps.alarmclock.helpers.*
@@ -49,14 +48,11 @@ class ClockViewModel(
                         && alarmList.value!!.isNotEmpty()
                         && it.size > alarmList.value?.size ?: 0
                     ) {
-                        Log.d(TAG, "all")
                         _message.value = AlarmTurnedOn(getTimeToAlarm(it[it.size - 1].toDomain()))
                     }
                     _alarmList.value = it
                 },
-                onError = {
-                    _error.value = CouldNotObtainAlarms
-                }
+                onError = { _error.value = CouldNotObtainAlarms }
             )
     }
 
@@ -67,26 +63,19 @@ class ClockViewModel(
     fun subscribeToDatabaseChanges() {
         disposables += RxBus.listen(DatabaseNotifiers::class.java)
             .backgroundTask()
-            .subscribe {
-                getAlarms()
-            }
+            .subscribe { getAlarms() }
     }
 
     fun subscribeToAlarmChange() {
         disposables += RxBus.listen(AlarmChanged::class.java)
             .backgroundTask()
-            .subscribe {
-                Log.d(TAG, "change, h: ${it.alarm.hour}, m: ${it.alarm.minute}")
-                _message.value = AlarmTurnedOn(getTimeToAlarm(it.alarm))
-            }
-
+            .subscribe { _message.value = AlarmTurnedOn(getTimeToAlarm(it.alarm)) }
     }
 
     private fun getTimeToAlarm(alarm: Alarm): Long {
         val timeSetter = TimeSetter()
         val startTime = timeSetter.getAlarmStartingTime(alarm)
         val currentTime = GregorianCalendar.getInstance().timeInMillis
-        Log.d(TAG, "curr: $currentTime, sta: $startTime")
         return abs(startTime - currentTime)
     }
 
@@ -94,12 +83,7 @@ class ClockViewModel(
         disposables += switchAlarmUseCase(SwitchAlarmUseCase.Params(alarm.id))
             .backgroundTask()
             .subscribe(
-                {
-                    if (alarm.isTurnedOn) {
-                        Log.d(TAG, "switch")
-                        _message.value = AlarmTurnedOn(getTimeToAlarm(alarm))
-                    }
-                },
+                { if (alarm.isTurnedOn) _message.value = AlarmTurnedOn(getTimeToAlarm(alarm)) },
                 { _error.value = CouldNotSwitchAlarm(!alarm.isTurnedOn) })
     }
 
