@@ -9,12 +9,13 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.FragmentTimerBinding
 import com.helpfulapps.alarmclock.helpers.extensions.marginParams
-import com.helpfulapps.alarmclock.helpers.extensions.observe
 import com.helpfulapps.alarmclock.helpers.extensions.secondsToString
 import com.helpfulapps.alarmclock.helpers.extensions.showFab
 import com.helpfulapps.alarmclock.service.TimerService
 import com.helpfulapps.alarmclock.views.main_activity.MainActivity
 import com.helpfulapps.base.base.BaseFragment
+import com.helpfulapps.base.helpers.Failure
+import com.helpfulapps.base.helpers.observe
 import com.helpfulapps.domain.eventBus.ServiceBus
 import com.helpfulapps.domain.extensions.whenFalse
 import kotlinx.android.synthetic.main.activity_main.*
@@ -240,4 +241,6 @@ class TimerFragment : BaseFragment<TimerViewModel, FragmentTimerBinding>() {
         fab.setImageResource(R.drawable.ic_start)
         fab.show()
     }
+
+    override fun handleFailure(failure: Failure) = Unit
 }

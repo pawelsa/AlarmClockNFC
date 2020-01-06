@@ -1,18 +1,23 @@
 package com.helpfulapps.alarmclock.views.clock_fragment
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.helpfulapps.alarmclock.helpers.*
 import com.helpfulapps.base.base.BaseViewModel
 import com.helpfulapps.base.extensions.rx.backgroundTask
 import com.helpfulapps.domain.eventBus.DatabaseNotifiers
 import com.helpfulapps.domain.eventBus.RxBus
 import com.helpfulapps.domain.helpers.Settings
+import com.helpfulapps.domain.helpers.TimeSetter
 import com.helpfulapps.domain.models.alarm.Alarm
 import com.helpfulapps.domain.use_cases.alarm.GetAlarmsUseCase
 import com.helpfulapps.domain.use_cases.alarm.RemoveAlarmUseCase
 import com.helpfulapps.domain.use_cases.alarm.SwitchAlarmUseCase
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy
+import java.util.*
+import kotlin.math.abs
 
 
 class ClockViewModel(
@@ -40,10 +45,17 @@ class ClockViewModel(
                     if (lastButOne >= 0) {
                         it[lastButOne].toChange = !it[lastButOne].toChange
                     }
+                    if (alarmList.value != null
+                        && alarmList.value!!.isNotEmpty()
+                        && it.size > alarmList.value?.size ?: 0
+                    ) {
+                        Log.d(TAG, "all")
+                        _message.value = AlarmTurnedOn(getTimeToAlarm(it[it.size - 1].toDomain()))
+                    }
                     _alarmList.value = it
                 },
                 onError = {
-
+                    _error.value = CouldNotObtainAlarms
                 }
             )
     }
@@ -60,22 +72,43 @@ class ClockViewModel(
             }
     }
 
-    // TODO this should inform view about successful change
+    fun subscribeToAlarmChange() {
+        disposables += RxBus.listen(AlarmChanged::class.java)
+            .backgroundTask()
+            .subscribe {
+                Log.d(TAG, "change, h: ${it.alarm.hour}, m: ${it.alarm.minute}")
+                _message.value = AlarmTurnedOn(getTimeToAlarm(it.alarm))
+            }
+
+    }
+
+    private fun getTimeToAlarm(alarm: Alarm): Long {
+        val timeSetter = TimeSetter()
+        val startTime = timeSetter.getAlarmStartingTime(alarm)
+        val currentTime = GregorianCalendar.getInstance().timeInMillis
+        Log.d(TAG, "curr: $currentTime, sta: $startTime")
+        return abs(startTime - currentTime)
+    }
+
     fun switchAlarm(alarm: Alarm) {
         disposables += switchAlarmUseCase(SwitchAlarmUseCase.Params(alarm.id))
             .backgroundTask()
             .subscribe(
-                { },
-                { it.printStackTrace() })
+                {
+                    if (alarm.isTurnedOn) {
+                        Log.d(TAG, "switch")
+                        _message.value = AlarmTurnedOn(getTimeToAlarm(alarm))
+                    }
+                },
+                { _error.value = CouldNotSwitchAlarm(!alarm.isTurnedOn) })
     }
 
-    // TODO this should inform view about successful change
     fun removeAlarm(alarm: Alarm) {
         disposables += removeAlarmUseCase(RemoveAlarmUseCase.Params(alarm.id))
             .backgroundTask()
             .subscribe(
-                { },
-                { it.printStackTrace() }
+                { _message.value = AlarmRemoved },
+                { _error.value = CouldNotRemoveAlarm }
             )
     }
 

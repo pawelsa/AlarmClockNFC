@@ -7,8 +7,8 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.google.android.material.snackbar.Snackbar
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.ActivityStatisticsBinding
-import com.helpfulapps.alarmclock.helpers.extensions.observe
 import com.helpfulapps.base.base.BaseActivity
+import com.helpfulapps.base.helpers.observe
 import kotlinx.android.synthetic.main.activity_statistics.*
 import org.koin.android.viewmodel.ext.android.viewModel
 import java.text.DateFormatSymbols

@@ -55,7 +55,7 @@ fun Long.secondsToString(): String {
     }
 }
 
-fun Long.millisToString(): String {
+fun Long.millisToString(withLabels: Boolean = false, withMillis: Boolean = false): String {
     var timeInMillis = this
     val hours = timeInMillis / 3600000
     timeInMillis -= hours * 3600000
@@ -65,9 +65,29 @@ fun Long.millisToString(): String {
     timeInMillis -= seconds * 1000
     timeInMillis /= 10
 
-    return when {
-        hours > 0 -> String.format("%02d:%02d:%02d:%02d", hours, minutes, seconds, timeInMillis)
-        minutes > 0 -> String.format("%02d:%02d:%02d", minutes, seconds, timeInMillis)
-        else -> String.format("%02d:%02d", seconds, timeInMillis)
+    return if (withLabels && withMillis) {
+        when {
+            hours > 0 -> String.format(
+                "%02d h %02d m %02d s %02d ms",
+                hours,
+                minutes,
+                seconds,
+                timeInMillis
+            )
+            minutes > 0 -> String.format("%02d m %02d s %02d ms", minutes, seconds, timeInMillis)
+            else -> String.format("%02d s %02d ms", seconds, timeInMillis)
+        }
+    } else if (withLabels && !withMillis) {
+        when {
+            hours > 0 -> String.format("%02d h %02d m %02d s", hours, minutes, seconds)
+            minutes > 0 -> String.format("%02d m %02d s", minutes, seconds)
+            else -> String.format("%02d s", seconds)
+        }
+    } else {
+        when {
+            hours > 0 -> String.format("%02d:%02d:%02d:%02d", hours, minutes, seconds, timeInMillis)
+            minutes > 0 -> String.format("%02d:%02d:%02d", minutes, seconds, timeInMillis)
+            else -> String.format("%02d:%02d", seconds, timeInMillis)
+        }
     }
 }
