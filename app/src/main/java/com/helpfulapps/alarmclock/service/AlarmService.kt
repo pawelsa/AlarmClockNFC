@@ -2,14 +2,11 @@ package com.helpfulapps.alarmclock.service
 
 import android.app.Service
 import android.content.Intent
-import android.net.Uri
 import android.os.IBinder
 import android.util.Log
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.helpfulapps.alarmclock.helpers.AlarmPlayer
 import com.helpfulapps.alarmclock.helpers.NotificationBuilder
 import com.helpfulapps.alarmclock.helpers.NotificationBuilderImpl.Companion.KEY_ALARM_ID
-import com.helpfulapps.alarmclock.helpers.VibrationController
 import com.helpfulapps.alarmclock.helpers.extensions.startVersionedForeground
 import com.helpfulapps.alarmclock.views.ringing_alarm.BaseRingingAlarmActivity.Companion.AUTO_SNOOZE_ALARM
 import com.helpfulapps.alarmclock.views.ringing_alarm.BaseRingingAlarmActivity.Companion.SNOOZE_ACTION
@@ -17,6 +14,8 @@ import com.helpfulapps.alarmclock.views.ringing_alarm.BaseRingingAlarmActivity.C
 import com.helpfulapps.base.extensions.rx.backgroundTask
 import com.helpfulapps.domain.helpers.Settings
 import com.helpfulapps.domain.models.alarm.Alarm
+import com.helpfulapps.domain.other.AlarmPlayer
+import com.helpfulapps.domain.other.VibrationController
 import com.helpfulapps.domain.use_cases.alarm.GetAlarmUseCase
 import com.helpfulapps.domain.use_cases.alarm.SnoozeAlarmUseCase
 import com.helpfulapps.domain.use_cases.alarm.StopRingingAlarmUseCase
@@ -87,8 +86,7 @@ class AlarmService : Service() {
 
     private fun startAlarm(alarmId: Int) {
         subscribeToAlarm(alarmId) {
-            val ringtoneUri = Uri.parse(it.ringtoneUrl)
-            alarmPlayer.startPlaying(ringtoneUri)
+            alarmPlayer.startPlaying(it.ringtoneUrl)
             vibrationController.startVibrating(it.isVibrationOn)
             val notification = notificationBuilder.setNotificationType(
                 NotificationBuilder.NotificationType.TypeAlarm(

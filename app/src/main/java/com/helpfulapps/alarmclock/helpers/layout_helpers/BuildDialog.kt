@@ -4,12 +4,8 @@ import android.app.Dialog
 import android.content.Context
 import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
-import androidx.core.net.toUri
 import com.google.android.material.textfield.TextInputEditText
 import com.helpfulapps.alarmclock.R
-import com.helpfulapps.alarmclock.helpers.AlarmPlayer
-import com.helpfulapps.alarmclock.helpers.AlarmPlayerImpl
-import com.helpfulapps.alarmclock.helpers.getRingtones
 
 
 fun buildEditTitleDialog(context: Context, oldLabel: String, listener: (String) -> Unit): Dialog {
@@ -37,39 +33,6 @@ fun buildEditTitleDialog(context: Context, oldLabel: String, listener: (String) 
     return alertDialogBuilder.create()
 }
 
-fun buildSelectRingtoneDialog(
-    context: Context,
-    currentRingtoneTitle: String?,
-    selectedRingtone: (Pair<String, String>) -> Unit
-): Dialog {
-
-    val alarmPlayer: AlarmPlayer = AlarmPlayerImpl(context)
-
-    val ringtones = getRingtones(context)
-    var selectedRingtoneIndex = ringtones
-        .indexOfFirst { it.first == currentRingtoneTitle }
-        .let { indexOfCurrentRingtoneInList ->
-            if (indexOfCurrentRingtoneInList > -1) indexOfCurrentRingtoneInList else 0
-        }
-
-    val ringtoneTitles = ringtones.map { it.first }.toTypedArray()
-
-    return AlertDialog.Builder(context).apply {
-        setTitle(context.getString(R.string.select_ringtone_dialog_title))
-
-        setSingleChoiceItems(ringtoneTitles, selectedRingtoneIndex) { _, whichPressed ->
-            selectedRingtoneIndex = whichPressed
-            alarmPlayer.startPlaying(ringtones[selectedRingtoneIndex].second.toUri())
-        }
-        setPositiveButton(android.R.string.ok) { _, _ ->
-            selectedRingtone(ringtones[selectedRingtoneIndex])
-            alarmPlayer.stopPlaying()
-        }
-        setNegativeButton(android.R.string.cancel) { _, _ ->
-            alarmPlayer.stopPlaying()
-        }
-    }.create()
-}
 
 fun buildRemoveAlarmDialog(context: Context, response: (Boolean) -> Unit): Dialog {
     return AlertDialog.Builder(context).apply {

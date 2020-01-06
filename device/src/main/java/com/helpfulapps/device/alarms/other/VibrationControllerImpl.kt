@@ -1,17 +1,15 @@
-package com.helpfulapps.alarmclock.helpers
+package com.helpfulapps.device.alarms.other
 
 import android.content.Context
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
+import com.helpfulapps.device.alarms.helpers.fromBuildVersion
+import com.helpfulapps.domain.other.VibrationController
 
 
-interface VibrationController {
-    fun startVibrating(shouldPlay: Boolean)
-    fun stopVibrating()
-}
-
-class VibrationControllerImpl(context: Context) : VibrationController {
+class VibrationControllerImpl(context: Context) :
+    VibrationController {
 
     private val vibrator: Vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
     private val scheme = LongArray(2) { 500L }

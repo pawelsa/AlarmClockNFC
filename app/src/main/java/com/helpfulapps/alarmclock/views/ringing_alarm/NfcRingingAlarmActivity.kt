@@ -11,9 +11,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.ActivityRingingAlarmBinding
-import com.helpfulapps.alarmclock.helpers.extensions.observe
 import com.helpfulapps.alarmclock.helpers.extensions.round
 import com.helpfulapps.alarmclock.helpers.layout_helpers.buildEnableNfcAlarmDialog
+import com.helpfulapps.base.helpers.observe
 import com.helpfulapps.base.helpers.whenNotNull
 import kotlinx.android.synthetic.main.activity_alarm_nfc.*
 import org.koin.android.ext.android.inject

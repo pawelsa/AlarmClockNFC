@@ -3,7 +3,10 @@ package com.helpfulapps.alarmclock.di
 import android.app.AlarmManager
 import android.content.Context
 import com.example.api.other.PrepareDataImpl
-import com.helpfulapps.alarmclock.helpers.*
+import com.helpfulapps.alarmclock.helpers.NotificationBuilder
+import com.helpfulapps.alarmclock.helpers.NotificationBuilderImpl
+import com.helpfulapps.alarmclock.helpers.layout_helpers.RingtoneDialogBuilder
+import com.helpfulapps.alarmclock.helpers.layout_helpers.RingtoneDialogBuilderImpl
 import com.helpfulapps.alarmclock.views.clock_fragment.ClockViewModel
 import com.helpfulapps.alarmclock.views.clock_fragment.add_alarm_bs.AddAlarmBottomSheetViewModel
 import com.helpfulapps.alarmclock.views.main_activity.MainActivityViewModel
@@ -26,12 +29,14 @@ import com.helpfulapps.db.weather.dao.WeatherDaoImpl
 import com.helpfulapps.device.alarms.AlarmClockManagerImpl
 import com.helpfulapps.device.alarms.helpers.NetworkCheckImpl
 import com.helpfulapps.device.alarms.helpers.SettingsData
+import com.helpfulapps.device.alarms.other.AlarmPlayerImpl
+import com.helpfulapps.device.alarms.other.RingtoneRepositoryImpl
+import com.helpfulapps.device.alarms.other.VibrationControllerImpl
 import com.helpfulapps.domain.helpers.NetworkCheck
 import com.helpfulapps.domain.helpers.Settings
-import com.helpfulapps.domain.repository.AlarmClockManager
-import com.helpfulapps.domain.repository.AlarmRepository
-import com.helpfulapps.domain.repository.StatsRepository
-import com.helpfulapps.domain.repository.WeatherRepository
+import com.helpfulapps.domain.other.AlarmPlayer
+import com.helpfulapps.domain.other.VibrationController
+import com.helpfulapps.domain.repository.*
 import com.helpfulapps.domain.use_cases.alarm.*
 import com.helpfulapps.domain.use_cases.stats.GetAllStatsUseCase
 import com.helpfulapps.domain.use_cases.stats.GetAllStatsUseCaseImpl
@@ -46,7 +51,7 @@ object Modules {
 
     val modules
         get() = listOf(
-            appModules, repository, data, useCase
+            appModules, repository, data, useCase, other
         )
 
     private val appModules = module {
@@ -54,7 +59,7 @@ object Modules {
         viewModel { ClockViewModel(get(), get(), get(), get()) }
         viewModel { TimerViewModel(get()) }
         viewModel { StopWatchViewModel() }
-        viewModel { AddAlarmBottomSheetViewModel(get(), get(), get()) }
+        viewModel { AddAlarmBottomSheetViewModel(get(), get(), get(), get()) }
         viewModel { RingingAlarmViewModel(get()) }
         viewModel { SettingsViewModel(get()) }
         viewModel { StatisticsViewModel(get()) }
@@ -63,6 +68,13 @@ object Modules {
 
     private val repository = module {
         single<AlarmRepository> { AlarmRepositoryImpl(get()) }
+        single<WeatherRepository> { WeatherRepositoryImpl(get(), get()) }
+        single<StatsRepository> { StatsRepositoryImpl(get()) }
+        single<RingtoneRepository> { RingtoneRepositoryImpl(androidContext()) }
+    }
+
+    private val other = module {
+        single<RingtoneDialogBuilder> { RingtoneDialogBuilderImpl(get()) }
         single<AlarmClockManager> {
             AlarmClockManagerImpl(
                 androidContext(),
@@ -70,7 +82,11 @@ object Modules {
                 get()
             )
         }
-        single<AlarmPlayer> { AlarmPlayerImpl(androidContext()) }
+        single<AlarmPlayer> {
+            AlarmPlayerImpl(
+                androidContext()
+            )
+        }
         single<NotificationBuilder> { NotificationBuilderImpl(androidContext()) }
         single<Settings> {
             SettingsData(
@@ -80,9 +96,11 @@ object Modules {
                 )
             )
         }
-        single<StatsRepository> { StatsRepositoryImpl(get()) }
-        single<VibrationController> { VibrationControllerImpl(androidContext()) }
-        single<WeatherRepository> { WeatherRepositoryImpl(get(), get()) }
+        single<VibrationController> {
+            VibrationControllerImpl(
+                androidContext()
+            )
+        }
     }
 
     private val data = module {

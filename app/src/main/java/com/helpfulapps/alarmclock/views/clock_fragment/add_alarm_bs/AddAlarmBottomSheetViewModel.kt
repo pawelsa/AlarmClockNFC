@@ -1,12 +1,10 @@
 package com.helpfulapps.alarmclock.views.clock_fragment.add_alarm_bs
 
-import android.content.Context
 import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.helpfulapps.alarmclock.helpers.AlarmChanged
 import com.helpfulapps.alarmclock.helpers.extensions.timeToString
-import com.helpfulapps.alarmclock.helpers.getDefaultRingtone
 import com.helpfulapps.base.base.BaseViewModel
 import com.helpfulapps.base.extensions.rx.backgroundTask
 import com.helpfulapps.domain.eventBus.RxBus
@@ -14,6 +12,7 @@ import com.helpfulapps.domain.extensions.singleOf
 import com.helpfulapps.domain.helpers.Settings
 import com.helpfulapps.domain.helpers.Time
 import com.helpfulapps.domain.models.alarm.Alarm
+import com.helpfulapps.domain.repository.RingtoneRepository
 import com.helpfulapps.domain.use_cases.alarm.AddAlarmUseCase
 import com.helpfulapps.domain.use_cases.alarm.UpdateAlarmUseCase
 import io.reactivex.rxkotlin.plusAssign
@@ -22,6 +21,7 @@ import io.reactivex.rxkotlin.subscribeBy
 class AddAlarmBottomSheetViewModel(
     private val _addAlarmUseCase: AddAlarmUseCase,
     private val _updateAlarmUseCase: UpdateAlarmUseCase,
+    private val ringtoneRepository: RingtoneRepository,
     _settings: Settings
 ) : BaseViewModel() {
 
@@ -36,6 +36,7 @@ class AddAlarmBottomSheetViewModel(
     private val _alarmTitle: MutableLiveData<String> = MutableLiveData()
     val alarmTitle: LiveData<String>
         get() = _alarmTitle
+
 
     var repeatingDays = MutableLiveData<Array<Boolean>>().apply { value = Array(7) { false } }
     val vibrating = ObservableBoolean(true)
@@ -115,10 +116,10 @@ class AddAlarmBottomSheetViewModel(
             )
     }
 
-    fun getDefaultRingtoneTitle(context: Context) {
+    fun getDefaultRingtoneTitle() {
         if (ringtone.first.isEmpty() || ringtone.second.isEmpty()) {
             disposables += singleOf {
-                getDefaultRingtone(context)
+                ringtoneRepository.getDefaultRingtone()
             }
                 .backgroundTask()
                 .subscribe { defaultRingtone ->
