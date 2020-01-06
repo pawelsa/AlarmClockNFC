@@ -46,11 +46,6 @@ class ClockFragment : BaseFragment<ClockViewModel, FragmentClockBinding>() {
         subscribeAlarms()
         subscribeMessages()
         checkBatteryOptimization()
-
-        rv_clock_list.setOnClickListener {
-
-        }
-
     }
 
     private fun subscribeMessages() {
