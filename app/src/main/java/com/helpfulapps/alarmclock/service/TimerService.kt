@@ -3,7 +3,6 @@ package com.helpfulapps.alarmclock.service
 import android.app.Notification
 import android.content.Intent
 import com.helpfulapps.alarmclock.App
-import com.helpfulapps.alarmclock.helpers.AlarmPlayer
 import com.helpfulapps.alarmclock.helpers.NotificationBuilder
 import com.helpfulapps.alarmclock.helpers.Timer
 import com.helpfulapps.alarmclock.helpers.extensions.startVersionedForeground
@@ -11,6 +10,7 @@ import com.helpfulapps.base.base.BaseService
 import com.helpfulapps.domain.eventBus.RxBus
 import com.helpfulapps.domain.eventBus.ServiceBus
 import com.helpfulapps.domain.extensions.whenFalse
+import com.helpfulapps.domain.other.AlarmPlayer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy

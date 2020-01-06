@@ -1,34 +1,33 @@
-package com.helpfulapps.alarmclock.helpers
+package com.helpfulapps.device.alarms.other
 
 import android.content.Context
 import android.media.AudioAttributes
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.net.Uri
-import com.helpfulapps.alarmclock.R
+import com.helpfulapps.device.R
+import com.helpfulapps.domain.other.AlarmPlayer
 
-interface AlarmPlayer {
-    fun startPlaying(ringtoneUri: Uri)
-    fun startPlayingAlarm()
-    fun stopPlaying()
-    fun destroyPlayer()
-}
+class AlarmPlayerImpl(private val context: Context) :
+    AlarmPlayer {
 
-class AlarmPlayerImpl(private val context: Context) : AlarmPlayer {
+    private var mediaPlayer: MediaPlayer =
+        MediaPlayer()
 
-    private var mediaPlayer: MediaPlayer = MediaPlayer()
-
-    override fun startPlaying(ringtoneUri: Uri) {
+    override fun startPlaying(ringtoneUri: String) {
         startPlaying(true) {
             MediaPlayer().apply {
-                setDataSource(context, ringtoneUri)
+                setDataSource(context, Uri.parse(ringtoneUri))
             }
         }
     }
 
     override fun startPlayingAlarm() {
         startPlaying(false) {
-            MediaPlayer.create(context, R.raw.alarm_sound)
+            MediaPlayer.create(
+                context,
+                R.raw.alarm_sound
+            )
         }
     }
 

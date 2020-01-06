@@ -4,8 +4,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.ActivityRingingAlarmBinding
-import com.helpfulapps.alarmclock.helpers.extensions.observe
 import com.helpfulapps.alarmclock.helpers.extensions.round
+import com.helpfulapps.base.helpers.observe
 import com.helpfulapps.base.helpers.whenNotNull
 import com.helpfulapps.domain.helpers.Settings
 import kotlinx.android.synthetic.main.activity_ringing_alarm.*

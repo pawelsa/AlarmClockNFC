@@ -12,8 +12,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.DialogAddAlarmBinding
 import com.helpfulapps.alarmclock.helpers.ShortPermissionListener
+import com.helpfulapps.alarmclock.helpers.layout_helpers.RingtoneDialogBuilder
 import com.helpfulapps.alarmclock.helpers.layout_helpers.buildEditTitleDialog
-import com.helpfulapps.alarmclock.helpers.layout_helpers.buildSelectRingtoneDialog
 import com.helpfulapps.alarmclock.views.main_activity.MainActivity
 import com.helpfulapps.base.helpers.observe
 import com.helpfulapps.domain.helpers.Time
@@ -22,12 +22,14 @@ import com.karumi.dexter.Dexter
 import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
 import kotlinx.android.synthetic.main.dialog_add_alarm.*
+import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class AddAlarmBottomSheet(val alarm: Alarm? = null) : BottomSheetDialogFragment() {
 
     private val TAG = this::class.java.simpleName
     private lateinit var binding: DialogAddAlarmBinding
+    private val ringtoneDialogBuilder: RingtoneDialogBuilder by inject()
     private val viewModel: AddAlarmBottomSheetViewModel by viewModel()
 
     override fun onCreateView(
@@ -52,7 +54,7 @@ class AddAlarmBottomSheet(val alarm: Alarm? = null) : BottomSheetDialogFragment(
     }
 
     private fun subscribeData() {
-        viewModel.getDefaultRingtoneTitle(context!!)
+        viewModel.getDefaultRingtoneTitle()
         viewModel.setupData()
         subscribeSavingAlarm()
     }
@@ -93,7 +95,7 @@ class AddAlarmBottomSheet(val alarm: Alarm? = null) : BottomSheetDialogFragment(
                 .withListener(object : ShortPermissionListener {
 
                     override fun onPermissionGranted(response: PermissionGrantedResponse?) {
-                        buildSelectRingtoneDialog(
+                        ringtoneDialogBuilder.buildSelectRingtoneDialog(
                             context!!,
                             viewModel.ringtoneTitle.value
                         ) {
