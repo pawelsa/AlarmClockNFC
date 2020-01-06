@@ -126,6 +126,11 @@
     <string name="ringing_rain">It will rain</string>
     <string name="ringing_snow">It will snow</string>
     <string name="ringing_wind">It will be windy</string>
+    <string name="weather_celcius">C</string>
+    <string name="weather_fahrenheit">F</string>
+    <string name="weather_rain_metric">mm/3h</string>
+    <string name="weather_wind_metric">m/s</string>
+    <string name="weather_wind_imperial">mil/h</string>
 
     <string-array name="settings_alarm_time_titles">
         <item>1 minute</item>
