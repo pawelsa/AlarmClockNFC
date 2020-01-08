@@ -23,6 +23,7 @@
             android:fontFamily="@font/comfortaa"
             android:text="@{Integer.toString(lapTime.lapNo)}"
             android:textAlignment="gravity"
+            android:textColor="@color/textColor"
             tools:text="No1." />
 
         <TextView
@@ -33,6 +34,7 @@
             android:gravity="start"
             android:padding="@dimen/padding_small"
             android:fontFamily="@font/comfortaa"
+            android:textColor="@color/textColor"
             android:text="@{lapTime.time}"
             android:textAlignment="gravity"
             tools:text="0:26:00" />

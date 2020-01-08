@@ -140,6 +140,7 @@
 
     <style name="CountTimeTextTheme" parent="AppTheme">
         <item name="android:textSize">@dimen/timer_time_size</item>
+        <item name="android:textColor">@color/textColor</item>
         <item name="android:fontFamily">@font/comfortaa</item>
     </style>
 
