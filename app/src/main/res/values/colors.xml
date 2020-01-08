@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#C890E4</color>
+    <color name="colorPrimary">#525252</color>
+    <color name="colorPrimaryDark">#313131</color>
+    <color name="colorAccent">#ec625f</color>
 
-    <color name="background">#434343</color>
+    <color name="background">#414141</color>
 
-    <color name="toolbar">#767676</color>
-    <color name="tab_active">#C890E4</color>
-    <color name="tab_not_active">#000</color>
-    <color name="menu_icon">#000</color>
-    <color name="indicator">#C890E4</color>
+    <color name="toolbar">@color/colorPrimaryDark</color>
+    <color name="tab_active">@color/colorAccent</color>
+    <color name="tab_not_active">#b0bec5</color>
+    <color name="menu_icon">#b0bec5</color>
+    <color name="indicator">@color/colorAccent</color>
 
-    <color name="selected_comment_background">#222222</color>
-    <color name="comment_background">#222222</color>
+    <color name="selected_comment_background">@color/background</color>
+    <color name="comment_background">@color/background</color>
 
     <color name="day_selected">#008577</color>
     <color name="day_pressed">#00574B</color>

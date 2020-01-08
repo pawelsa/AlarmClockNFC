@@ -38,6 +38,8 @@
 
     <style name="IconTextButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Icon">
         <item name="android:fontFamily">@font/comfortaa</item>
+        <item name="android:textColor">@color/textColor</item>
+        <item name="iconTint">@color/colorAccent</item>
     </style>
 
     <style name="PopupStyle" parent="TextAppearance.MaterialComponents.Caption">
@@ -80,13 +82,14 @@
     </style>
 
     <style name="NewAlarmTitleTheme" parent="Widget.MaterialComponents.Button.TextButton">
-        <item name="android:iconTint" tools:targetApi="o">@android:color/darker_gray</item>
+        <item name="android:iconTint" tools:targetApi="o">@color/colorAccent</item>
+        <item name="iconTint">@color/colorAccent</item>
         <item name="android:textSize">@dimen/add_alarm_title_text_size</item>
         <item name="android:fontFamily">@font/comfortaa</item>
     </style>
 
     <style name="NewAlarmCheckboxTheme" parent="AppTheme">
-        <item name="android:buttonTint">@color/colorPrimary</item>
+        <item name="android:buttonTint">@color/colorAccent</item>
         <item name="android:fontFamily">@font/comfortaa</item>
     </style>
 
