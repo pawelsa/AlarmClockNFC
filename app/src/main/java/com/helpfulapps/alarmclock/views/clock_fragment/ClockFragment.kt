@@ -86,7 +86,7 @@ class ClockFragment : BaseFragment<ClockViewModel, FragmentClockBinding>() {
             layoutManager = LinearLayoutManager(context)
             adapter = this@ClockFragment.adapter
             addItemDecoration(
-                DividerItemDecoration(context, false)
+                DividerItemDecoration(context, true)
             )
         }
     }
