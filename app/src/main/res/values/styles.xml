@@ -20,6 +20,9 @@
         <item name="textAppearanceListItemSecondary">@style/ComfortaaTextTheme</item>
         <item name="textAppearanceListItemSmall">@style/ComfortaaTextTheme</item>
         <item name="textAppearanceLargePopupMenu">@style/PopupStyle</item>
+        <item name="alertDialogTheme">@style/AlertDialogTheme</item>
+        <item name="alertDialogStyle">@style/AlertDialogTheme</item>
+        <item name="colorControlHighlight">@color/colorAccent</item>
         <item name="buttonStyle">@style/ComfortaaTextTheme</item>
     </style>
 
@@ -40,6 +43,7 @@
         <item name="android:fontFamily">@font/comfortaa</item>
         <item name="android:textColor">@color/textColor</item>
         <item name="iconTint">@color/colorAccent</item>
+        <item name="rippleColor">@color/colorAccent</item>
     </style>
 
     <style name="PopupStyle" parent="TextAppearance.MaterialComponents.Caption">
@@ -60,12 +64,13 @@
 
     <style name="AppModalStyle" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@drawable/rounded_dialog</item>
+        <item name="colorControlHighlight">@color/colorAccent</item>
     </style>
 
     <style name="TimePickerTheme.Button" parent="Widget.MaterialComponents.Button.TextButton" />
 
     <style name="TimePickerTheme" parent="Theme.AppCompat.Light.Dialog">
-        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="colorAccent">@color/colorAccent</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:buttonStyle">@style/TimePickerTheme.Button</item>
@@ -84,12 +89,14 @@
     <style name="NewAlarmTitleTheme" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:iconTint" tools:targetApi="o">@color/colorAccent</item>
         <item name="iconTint">@color/colorAccent</item>
+        <item name="rippleColor">@color/colorAccent</item>
         <item name="android:textSize">@dimen/add_alarm_title_text_size</item>
         <item name="android:fontFamily">@font/comfortaa</item>
     </style>
 
     <style name="NewAlarmCheckboxTheme" parent="AppTheme">
         <item name="android:buttonTint">@color/colorAccent</item>
+        <item name="colorControlHighlight">@color/colorAccent</item>
         <item name="android:fontFamily">@font/comfortaa</item>
     </style>
 
@@ -135,4 +142,12 @@
         <item name="android:textSize">@dimen/timer_time_size</item>
         <item name="android:fontFamily">@font/comfortaa</item>
     </style>
+
+    <style name="AlertDialogTheme" parent="Theme.MaterialComponents.Light.Dialog.Alert">
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColor">@color/textColor</item>
+        <item name="android:textColorPrimary">@color/textColor</item>
+        <item name="android:background">@color/background</item>
+    </style>
+
 </resources>

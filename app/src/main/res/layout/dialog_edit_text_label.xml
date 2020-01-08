@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:backgroundTint="@color/background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -8,6 +9,7 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColorHint="@color/textColor"
         android:layout_marginLeft="@dimen/dialog_edit_text_margin"
         android:layout_marginTop="@dimen/dialog_edit_text_margin"
         android:layout_marginRight="@dimen/dialog_edit_text_margin">
@@ -17,6 +19,7 @@
             android:fontFamily="@font/comfortaa"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColorHint="@color/textColor"
             android:hint="@string/hint_alarm_name"
             android:textSize="@dimen/dialog_edit_text_hint_size" />
 

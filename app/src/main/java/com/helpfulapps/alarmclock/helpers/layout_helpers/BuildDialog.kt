@@ -12,13 +12,14 @@ import com.helpfulapps.alarmclock.R
 
 fun buildEditTitleDialog(context: Context, oldLabel: String, listener: (String) -> Unit): Dialog {
 
-    val alertDialogBuilder = AlertDialog.Builder(context).apply {
+    val alertDialogBuilder = AlertDialog.Builder(context, R.style.AlertDialogTheme).apply {
 
         val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_edit_text_label, null)
 
         val userInput: TextInputEditText = dialogView.findViewById(R.id.et_dialog_alarm_name)
         // set dialog message
         userInput.setText(oldLabel)
+//        userInput.setBackgroundColor(ContextCompat.getColor(context, R.color.background))
 
         // set alert_dialog.xml to alertdialog builder
         setView(dialogView)
@@ -37,7 +38,7 @@ fun buildEditTitleDialog(context: Context, oldLabel: String, listener: (String) 
 
 
 fun buildRemoveAlarmDialog(context: Context, response: (Boolean) -> Unit): Dialog {
-    val dialog = AlertDialog.Builder(context).apply {
+    val dialog = AlertDialog.Builder(context, R.style.AlertDialogTheme).apply {
         setTitle(context.getString(R.string.dialog_remove_title))
         setMessage(context.getString(R.string.dialog_remove_message))
         setPositiveButton(context.getString(android.R.string.yes)) { _, _ ->
