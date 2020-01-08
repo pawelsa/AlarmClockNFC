@@ -3,7 +3,9 @@ package com.helpfulapps.alarmclock.helpers.layout_helpers
 import android.app.Dialog
 import android.content.Context
 import android.view.LayoutInflater
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.res.ResourcesCompat
 import com.google.android.material.textfield.TextInputEditText
 import com.helpfulapps.alarmclock.R
 
@@ -35,7 +37,7 @@ fun buildEditTitleDialog(context: Context, oldLabel: String, listener: (String) 
 
 
 fun buildRemoveAlarmDialog(context: Context, response: (Boolean) -> Unit): Dialog {
-    return AlertDialog.Builder(context).apply {
+    val dialog = AlertDialog.Builder(context).apply {
         setTitle(context.getString(R.string.dialog_remove_title))
         setMessage(context.getString(R.string.dialog_remove_message))
         setPositiveButton(context.getString(android.R.string.yes)) { _, _ ->
@@ -45,6 +47,18 @@ fun buildRemoveAlarmDialog(context: Context, response: (Boolean) -> Unit): Dialo
             response(false)
         }
     }.create()
+
+    dialog.setOnShowListener {
+        val titleId = context.resources.getIdentifier("alertTitle", "id", "android")
+        if (titleId > 0) {
+            (dialog.findViewById<TextView>(titleId))?.let {
+                val typeface = ResourcesCompat.getFont(context, R.font.comfortaa)
+                it.typeface = typeface
+            }
+        }
+    }
+
+    return dialog
 }
 
 fun buildEnableNfcAlarmDialog(context: Context, action: () -> Unit): Dialog {

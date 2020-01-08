@@ -14,6 +14,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_dialog_alarm_name"
+            android:fontFamily="@font/comfortaa"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/hint_alarm_name"

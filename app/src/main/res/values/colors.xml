@@ -2,18 +2,22 @@
 <resources>
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorAccent">#C890E4</color>
 
-    <color name="toolbar">#008577</color>
-    <color name="tab_active">#D81B60</color>
+    <color name="background">#434343</color>
+
+    <color name="toolbar">#767676</color>
+    <color name="tab_active">#C890E4</color>
     <color name="tab_not_active">#000</color>
     <color name="menu_icon">#000</color>
-    <color name="indicator">#D81B60</color>
+    <color name="indicator">#C890E4</color>
 
-    <color name="selected_comment_background">#679983</color>
-    <color name="comment_background">#678233</color>
+    <color name="selected_comment_background">#222222</color>
+    <color name="comment_background">#222222</color>
 
     <color name="day_selected">#008577</color>
     <color name="day_pressed">#00574B</color>
     <color name="chip_color">@color/colorAccent</color>
+
+    <color name="textColor">#b0bec5</color>
 </resources>

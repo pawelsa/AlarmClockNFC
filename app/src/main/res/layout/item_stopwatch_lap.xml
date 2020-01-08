@@ -20,6 +20,7 @@
             android:layout_weight="3"
             android:gravity="end"
             android:padding="@dimen/padding_small"
+            android:fontFamily="@font/comfortaa"
             android:text="@{Integer.toString(lapTime.lapNo)}"
             android:textAlignment="gravity"
             tools:text="No1." />
@@ -31,6 +32,7 @@
             android:layout_weight="2"
             android:gravity="start"
             android:padding="@dimen/padding_small"
+            android:fontFamily="@font/comfortaa"
             android:text="@{lapTime.time}"
             android:textAlignment="gravity"
             tools:text="0:26:00" />
