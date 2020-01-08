@@ -1,5 +1,6 @@
 package com.helpfulapps.alarmclock.views.statistics
 
+import androidx.core.content.ContextCompat
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
@@ -36,6 +37,11 @@ class StatisticsActivity : BaseActivity<StatisticsViewModel, ActivityStatisticsB
         bc_statistics_stop_time.xAxis.valueFormatter = IndexAxisValueFormatter(labels)
         bc_statistics_stop_time.setTouchEnabled(false)
         bc_statistics_stop_time.xAxis.setDrawGridLines(false)
+        bc_statistics_stop_time.xAxis.textColor =
+            ContextCompat.getColor(baseContext, R.color.textColor)
+        bc_statistics_stop_time.axisLeft.textColor =
+            ContextCompat.getColor(baseContext, R.color.textColor)
+        bc_statistics_stop_time.axisRight.isEnabled = false
         bc_statistics_stop_time.xAxis.position = XAxis.XAxisPosition.BOTTOM
         bc_statistics_stop_time.description.isEnabled = false
     }
@@ -44,6 +50,11 @@ class StatisticsActivity : BaseActivity<StatisticsViewModel, ActivityStatisticsB
         bc_statistics_snoozed.xAxis.valueFormatter = IndexAxisValueFormatter(labels)
         bc_statistics_snoozed.setTouchEnabled(false)
         bc_statistics_snoozed.xAxis.setDrawGridLines(false)
+        bc_statistics_snoozed.xAxis.textColor =
+            ContextCompat.getColor(baseContext, R.color.textColor)
+        bc_statistics_snoozed.axisLeft.textColor =
+            ContextCompat.getColor(baseContext, R.color.textColor)
+        bc_statistics_snoozed.axisRight.isEnabled = false
         bc_statistics_snoozed.xAxis.position = XAxis.XAxisPosition.BOTTOM
         bc_statistics_snoozed.description.isEnabled = false
     }
@@ -52,6 +63,8 @@ class StatisticsActivity : BaseActivity<StatisticsViewModel, ActivityStatisticsB
         viewModel.stopTimeADay.observe(this) {
 
             val dataSet = BarDataSet(it, "Average time to stop alarm (seconds)")
+            dataSet.valueTextColor = ContextCompat.getColor(baseContext, R.color.textColor)
+            dataSet.valueTextSize = 12f
             val barData = BarData(dataSet)
 
             bc_statistics_stop_time.data = barData
@@ -63,6 +76,8 @@ class StatisticsActivity : BaseActivity<StatisticsViewModel, ActivityStatisticsB
         viewModel.snoozesADay.observe(this) {
 
             val dataSet = BarDataSet(it, "Number of snoozes")
+            dataSet.valueTextColor = ContextCompat.getColor(baseContext, R.color.textColor)
+            dataSet.valueTextSize = 12f
             val barData = BarData(dataSet)
 
             bc_statistics_snoozed.data = barData

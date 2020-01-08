@@ -24,6 +24,14 @@
         <item name="alertDialogStyle">@style/AlertDialogTheme</item>
         <item name="colorControlHighlight">@color/colorAccent</item>
         <item name="buttonStyle">@style/ComfortaaTextTheme</item>
+        <item name="android:textColorPrimary">@color/textColor</item>
+        <item name="popupMenuStyle">@style/PopupMenuStyles</item>
+    </style>
+
+    <style name="PopupMenuStyles" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:popupBackground">@color/background</item>
+        <item name="android:itemBackground">@color/background</item>
+        <item name="android:textColor">@color/textColor</item>
     </style>
 
     <style name="ComfortaaTextTheme" parent="Widget.AppCompat.TextView">
@@ -52,6 +60,10 @@
 
     <style name="SettingsTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="android:background">@color/background</item>
+        <item name="android:textColor">@color/textColor</item>
+        <item name="android:textColorHint">@color/textColor</item>
+        <item name="android:textColorSecondary">@color/textColor</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
@@ -104,6 +116,8 @@
         <item name="android:fontFamily">@font/comfortaa</item>
         <item name="chipStrokeColor">@color/chip_color</item>
         <item name="chipStrokeWidth">@dimen/chip_stroke</item>
+        <item name="chipBackgroundColor">@color/background</item>
+        <item name="android:textColor">@color/textColor</item>
         <item name="android:textAppearance">@style/WeatherChipTextTheme</item>
     </style>
 
@@ -113,17 +127,20 @@
 
     <style name="AlarmWeatherTextTheme" parent="AppTheme">
         <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/textColor</item>
         <item name="android:fontFamily">@font/comfortaa</item>
     </style>
 
     <style name="AlarmTimeTextTheme" parent="AppTheme">
         <item name="android:textSize">@dimen/ringing_time_text_size</item>
+        <item name="android:textColor">@color/textColor</item>
         <item name="android:fontFamily">@font/comfortaa</item>
         <item name="android:textStyle">bold</item>
     </style>
 
     <style name="AlarmTitleTextTheme" parent="AppTheme">
         <item name="android:textSize">@dimen/ringing_title_text_size</item>
+        <item name="android:textColor">@color/textColor</item>
         <item name="android:fontFamily">@font/comfortaa</item>
     </style>
 
