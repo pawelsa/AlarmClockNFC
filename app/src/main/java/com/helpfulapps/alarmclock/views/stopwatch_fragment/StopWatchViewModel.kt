@@ -39,7 +39,7 @@ class StopWatchViewModel : BaseViewModel() {
                         StopWatchState.Resumed
                     is StopwatchService.StopWatchEvent.Lap -> _lapTimes.value = it.laps
                     is StopwatchService.StopWatchEvent.Stop -> {
-                        _lapTimes.value = listOf()
+                        _lapTimes.value = emptyList()
                         _currentTime.value = 0
                         _stopwatchState.value =
                             StopWatchState.Stopped

@@ -36,6 +36,7 @@ class StopwatchService : BaseService() {
     }
 
     private fun startStopwatch() {
+        ServiceBus.publish(StopWatchEvent.None)
         disposables += ServiceBus.listen(StopWatchEvent::class.java)
             .subscribe {
                 when (it) {
@@ -116,6 +117,7 @@ class StopwatchService : BaseService() {
         object TakeLap : StopWatchEvent()
         data class Lap(val laps: List<Long>) : StopWatchEvent()
         object Stop : StopWatchEvent()
+        object None : StopWatchEvent()
     }
 
     companion object {

@@ -102,6 +102,7 @@ class StopwatchFragment : BaseFragment<StopWatchViewModel, FragmentStopwatchBind
     private fun subscribeLapTimes() {
         viewModel.lapTimes.observe(this) {
             if (it.isEmpty()) {
+                adapter.submitList(emptyList())
                 rv_stopwatch_times.visibility = View.GONE
             } else {
                 rv_stopwatch_times.visibility = View.VISIBLE
