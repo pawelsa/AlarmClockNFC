@@ -1,5 +1,6 @@
 package com.helpfulapps.alarmclock.views.ringing_alarm
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.helpfulapps.base.base.BaseViewModel
@@ -39,6 +40,7 @@ class RingingAlarmViewModel(
             .backgroundTask()
             .subscribeBy(
                 onSuccess = {
+                    Log.d(TAG, "${it.first.alarm.hour}:${it.first.alarm.minute}")
                     _weatherAlarm.value = it.first
                     _weatherInfoDatas.value = it.second
                 },
@@ -61,6 +63,8 @@ class RingingAlarmViewModel(
         val weatherData = WeatherData()
         val weatherInfo = dayWeather.weatherInfo
         val hourWeatherList = dayWeather.hourWeatherList
+
+        if (hourWeatherList.isEmpty()) return weatherData
 
         weatherData.currentTemperature =
             hourWeatherList.find { hourWeather -> withinOneAndHalfHour(hourWeather.dt) }

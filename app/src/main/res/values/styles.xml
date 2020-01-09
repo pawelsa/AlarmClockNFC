@@ -8,7 +8,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
-        <item name="android:navigationBarColor">#B3FFFFFF</item>
+        <item name="android:navigationBarColor">@color/background</item>
         <item name="textAppearanceBody1">@style/ComfortaaTextTheme</item>
         <item name="textAppearanceBody2">@style/ComfortaaTextTheme</item>
         <item name="textAppearanceButton">@style/ComfortaaTextTheme</item>
@@ -67,7 +67,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
-        <item name="android:navigationBarColor">#B3FFFFFF</item>
+        <item name="android:navigationBarColor">@color/background</item>
     </style>
 
     <style name="AppBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">

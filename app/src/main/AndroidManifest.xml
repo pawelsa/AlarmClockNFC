@@ -37,6 +37,7 @@
 
         <activity
             android:name=".views.timer_finished_activity.TimerFinishedActivity"
+            android:theme="@style/AppTheme"
             android:excludeFromRecents="true"
             android:launchMode="singleTop"
             android:showOnLockScreen="true" />

@@ -4,7 +4,6 @@
     <color name="colorPrimaryDark">#313131</color>
     <color name="colorAccent">#ec625f</color>
 
-    <color name="background">#414141</color>
 
     <color name="toolbar">@color/colorPrimaryDark</color>
     <color name="tab_active">@color/colorAccent</color>
