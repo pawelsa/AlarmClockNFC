@@ -1,7 +1,8 @@
 package com.helpfulapps.data.repositories
 
 import com.helpfulapps.data.db.stats.dao.StatsDao
-import com.helpfulapps.data.db.stats.model.AlarmStatsData
+import com.helpfulapps.data.db.stats.model.SnoozeData
+import com.helpfulapps.data.db.stats.model.TimeToStopData
 import com.helpfulapps.data.mockData.MockStats
 import com.helpfulapps.domain.helpers.singleOf
 import com.helpfulapps.domain.models.stats.AlarmStats
@@ -21,21 +22,23 @@ class StatsRepositoryImplTest {
 
         @Test
         fun `should get all stats`() {
-            every { statsDao.getAll() } returns singleOf { MockStats.alarmStatsList }
+            every { statsDao.getStopTime() } returns singleOf { MockStats.timeToStopDataList }
+            every { statsDao.getSnoozed() } returns singleOf { MockStats.snoozeDataList }
 
             statsRepository.getAllStats()
                 .test()
-                .assertResult(MockStats.defaultAnalysedStats)
+                .assertResult(MockStats.analysedStatsData)
                 .dispose()
         }
 
         @Test
         fun `should get empty list`() {
-            every { statsDao.getAll() } returns singleOf { listOf<AlarmStatsData>() }
+            every { statsDao.getStopTime() } returns singleOf { emptyList<TimeToStopData>() }
+            every { statsDao.getSnoozed() } returns singleOf { emptyList<SnoozeData>() }
 
             statsRepository.getAllStats()
                 .test()
-                .assertResult(MockStats.emptyStatsList)
+                .assertResult(MockStats.analysedEmptyStatsData)
                 .dispose()
         }
 
