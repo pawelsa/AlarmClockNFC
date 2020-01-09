@@ -2,38 +2,31 @@ package com.helpfulapps.data.repositories
 
 import com.helpfulapps.data.db.stats.dao.StatsDao
 import com.helpfulapps.data.db.stats.model.AlarmStatsData
-import com.helpfulapps.domain.helpers.singleOf
+import com.helpfulapps.data.db.stats.model.SnoozeData
+import com.helpfulapps.data.db.stats.model.TimeToStopData
 import com.helpfulapps.domain.models.stats.AlarmStats
 import com.helpfulapps.domain.models.stats.AnalysedAlarmStats
 import com.helpfulapps.domain.repository.StatsRepository
 import io.reactivex.Completable
 import io.reactivex.Single
+import io.reactivex.functions.BiFunction
 
 class StatsRepositoryImpl(
     private val statsDao: StatsDao
 ) : StatsRepository {
     override fun getAllStats(): Single<AnalysedAlarmStats> {
-        return statsDao.getAll()
-            .flatMap { alarmStatsList ->
-                val data = alarmStatsList.groupBy { it.dayOfWeek }
-
-                val snoozesADay =
-                    Array(7) { index -> data[index]?.size ?: 0 }.map { if (it < 0) 0 else it }
-                        .toTypedArray()
-
-                val sumOfStopTime = Array(7) { index ->
-                    data[index]?.map { it.timeToStop }?.average()?.toFloat() ?: 0f
+        return Single.zip(
+            statsDao.getStopTime(),
+            statsDao.getSnoozed(),
+            BiFunction<List<TimeToStopData>, List<SnoozeData>, AnalysedAlarmStats> { timeToStop, snooze ->
+                val stopTime = Array(7) { index ->
+                    timeToStop.find { it.dayOfWeek == index }?.avgStopTime ?: 0f
                 }
+                val noSnoozes =
+                    Array(7) { index -> snooze.find { it.dayOfWeek == index }?.noSnoozes ?: 0 }
 
-                singleOf {
-                    AnalysedAlarmStats(
-                        sumOfStopTime, snoozesADay
-                    )
-                }
-
-            }
-
-
+                AnalysedAlarmStats(stopTime, noSnoozes)
+            })
     }
 
     override fun saveInfo(alarmStats: AlarmStats): Completable {
