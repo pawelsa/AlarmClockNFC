@@ -6,6 +6,7 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.core.view.marginBottom
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.FragmentStopwatchBinding
@@ -46,6 +47,11 @@ class StopwatchFragment : BaseFragment<StopWatchViewModel, FragmentStopwatchBind
         StopwatchTimesAdapter().also {
             rv_stopwatch_times.layoutManager = LinearLayoutManager(context)
             rv_stopwatch_times.adapter = it
+            it.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+                override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                    rv_stopwatch_times.layoutManager?.scrollToPosition(0)
+                }
+            })
         }
     }
 
@@ -104,7 +110,10 @@ class StopwatchFragment : BaseFragment<StopWatchViewModel, FragmentStopwatchBind
                         index + 1,
                         lapTime.millisToString()
                     )
-                })
+                }.asReversed())
+//                rv_stopwatch_times.smoothScrollToPosition(0)
+//                rv_stopwatch_times.layoutManager?.scrollToPosition(0)
+//                rv_stopwatch_times.layoutManager?.smoothScrollToPosition(rv_stopwatch_times, null, 0)
             }
         }
     }

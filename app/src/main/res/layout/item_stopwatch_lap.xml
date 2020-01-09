@@ -9,6 +9,7 @@
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/ll_item_stopwatch_base"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
