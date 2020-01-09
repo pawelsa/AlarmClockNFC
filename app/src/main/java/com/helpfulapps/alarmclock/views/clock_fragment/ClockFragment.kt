@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.PowerManager
 import android.provider.Settings
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.FragmentClockBinding
 import com.helpfulapps.alarmclock.helpers.*
@@ -84,6 +85,7 @@ class ClockFragment : BaseFragment<ClockViewModel, FragmentClockBinding>() {
     private fun setupRecyclerView() {
         with(rv_clock_list) {
             layoutManager = LinearLayoutManager(context)
+            (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
             adapter = this@ClockFragment.adapter
             addItemDecoration(
                 DividerItemDecoration(context, true)
