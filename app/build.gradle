@@ -97,7 +97,7 @@ dependencies {
     implementation "com.google.android.gms:play-services-location:15.0.0"
 
     //timepicker timer
-    implementation "com.github.pawelsa:HmsPickerView:0.1.4"
+    implementation "com.github.pawelsa:HmsPickerView:0.1.4-beta"
 
     // plots
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'

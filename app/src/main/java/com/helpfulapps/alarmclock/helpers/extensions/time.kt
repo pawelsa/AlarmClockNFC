@@ -20,7 +20,7 @@ fun timeToString(hour: Int, minute: Int): String {
         }.let {
             Date(it.timeInMillis)
         }
-    return SimpleDateFormat("H:mm").format(date)
+    return SimpleDateFormat("HH:mm").format(date)
 }
 
 fun Array<Boolean>.toShortWeekdays(): String {

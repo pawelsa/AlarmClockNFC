@@ -4,6 +4,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_timer_base"
+        android:background="@color/background"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -22,7 +23,7 @@
 
         <Button
             android:id="@+id/bt_timer_reset"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
+            style="@style/TextButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/touch_target_size"
             android:layout_alignParentEnd="true"

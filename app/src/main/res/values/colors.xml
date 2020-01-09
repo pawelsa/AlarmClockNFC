@@ -1,19 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <color name="colorPrimary">#525252</color>
+    <color name="colorPrimaryDark">#313131</color>
+    <color name="colorAccent">#ec625f</color>
 
-    <color name="toolbar">#008577</color>
-    <color name="tab_active">#D81B60</color>
-    <color name="tab_not_active">#000</color>
-    <color name="menu_icon">#000</color>
-    <color name="indicator">#D81B60</color>
 
-    <color name="selected_comment_background">#679983</color>
-    <color name="comment_background">#678233</color>
+    <color name="toolbar">@color/colorPrimaryDark</color>
+    <color name="tab_active">@color/colorAccent</color>
+    <color name="tab_not_active">#b0bec5</color>
+    <color name="menu_icon">#b0bec5</color>
+    <color name="indicator">@color/colorAccent</color>
+
+    <color name="selected_comment_background">@color/background</color>
+    <color name="comment_background">@color/background</color>
 
     <color name="day_selected">#008577</color>
     <color name="day_pressed">#00574B</color>
     <color name="chip_color">@color/colorAccent</color>
+
+    <color name="dayPressed">@color/colorAccent</color>
+    <color name="daySelected">@color/colorAccent</color>
+    <color name="dayDeselected">@color/textColor</color>
+    <color name="daySelectedTextColor">@color/textColor</color>
+    <color name="dayDeselectedTextColor">@color/colorAccent</color>
+
+    <color name="textColor">#b0bec5</color>
+    <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">@color/textColor
+    </color>
 </resources>

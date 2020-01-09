@@ -62,6 +62,8 @@ class RingingAlarmViewModel(
         val weatherInfo = dayWeather.weatherInfo
         val hourWeatherList = dayWeather.hourWeatherList
 
+        if (hourWeatherList.isEmpty()) return weatherData
+
         weatherData.currentTemperature =
             hourWeatherList.find { hourWeather -> withinOneAndHalfHour(hourWeather.dt) }
                 ?.temp

@@ -9,6 +9,7 @@
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/ll_item_stopwatch_base"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -20,8 +21,10 @@
             android:layout_weight="3"
             android:gravity="end"
             android:padding="@dimen/padding_small"
+            android:fontFamily="@font/comfortaa"
             android:text="@{Integer.toString(lapTime.lapNo)}"
             android:textAlignment="gravity"
+            android:textColor="@color/textColor"
             tools:text="No1." />
 
         <TextView
@@ -31,6 +34,8 @@
             android:layout_weight="2"
             android:gravity="start"
             android:padding="@dimen/padding_small"
+            android:fontFamily="@font/comfortaa"
+            android:textColor="@color/textColor"
             android:text="@{lapTime.time}"
             android:textAlignment="gravity"
             tools:text="0:26:00" />

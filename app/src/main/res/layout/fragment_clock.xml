@@ -12,6 +12,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_clock_container"
+        android:background="@color/background"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
