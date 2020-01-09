@@ -63,7 +63,7 @@ fun buildRemoveAlarmDialog(context: Context, response: (Boolean) -> Unit): Dialo
 }
 
 fun buildEnableNfcAlarmDialog(context: Context, action: () -> Unit): Dialog {
-    return AlertDialog.Builder(context).apply {
+    return AlertDialog.Builder(context, R.style.AlertDialogTheme).apply {
         setTitle(R.string.nfc_enable_dialog_title)
         setMessage(R.string.nfc_enable_dialog_message)
         setPositiveButton(context.getString(R.string.nfc_enable_dialog_open_settings)) { dialog, _ ->
@@ -77,7 +77,7 @@ fun buildEnableNfcAlarmDialog(context: Context, action: () -> Unit): Dialog {
 }
 
 fun buildGpsEnableAlarmDialog(context: Context, action: () -> Unit): Dialog {
-    return AlertDialog.Builder(context).apply {
+    return AlertDialog.Builder(context, R.style.AlertDialogTheme).apply {
         setTitle(context.getString(R.string.dialog_gps_enable_title))
         setMessage(context.getString(R.string.dialog_gps_enable_message))
         setPositiveButton(context.getString(R.string.gps_dialog_open_settings)) { dialog, _ ->

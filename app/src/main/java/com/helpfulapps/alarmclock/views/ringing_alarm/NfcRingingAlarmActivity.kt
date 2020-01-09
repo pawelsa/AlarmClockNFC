@@ -6,12 +6,14 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.nfc.NfcAdapter
+import android.os.Build
 import android.provider.Settings
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.ActivityRingingAlarmBinding
 import com.helpfulapps.alarmclock.helpers.extensions.round
+import com.helpfulapps.alarmclock.helpers.fromBuildVersion
 import com.helpfulapps.alarmclock.helpers.layout_helpers.buildEnableNfcAlarmDialog
 import com.helpfulapps.base.helpers.observe
 import com.helpfulapps.base.helpers.whenNotNull
@@ -23,6 +25,7 @@ class NfcRingingAlarmActivity : BaseRingingAlarmActivity<ActivityRingingAlarmBin
 
     override val layoutId: Int = R.layout.activity_ringing_alarm
     private val settings: com.helpfulapps.domain.helpers.Settings by inject()
+    private var wasNfcNotChecked = true
     private val adapter: WeatherInfoAdapter by lazy {
         WeatherInfoAdapter()
     }
@@ -123,10 +126,26 @@ class NfcRingingAlarmActivity : BaseRingingAlarmActivity<ActivityRingingAlarmBin
 
     private fun checkIfNfcIsTurnedOn() {
         if (!nfcAdapter.isEnabled) {
-            buildEnableNfcAlarmDialog(this) {
-                startActivity(Intent(Settings.ACTION_NFC_SETTINGS))
-            }.show()
+            fromBuildVersion(
+                Build.VERSION_CODES.P,
+                matching = {
+                    if (wasNfcNotChecked) {
+                        val intent = Intent(Settings.Panel.ACTION_NFC)
+                        startActivityForResult(intent, 20)
+                    }
+                },
+                otherwise = {
+                    buildEnableNfcAlarmDialog(this) {
+                        startActivity(Intent(Settings.ACTION_NFC_SETTINGS))
+                    }.show()
+                }
+            )
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        wasNfcNotChecked = false
     }
 
     private fun enableForegroundMode() {

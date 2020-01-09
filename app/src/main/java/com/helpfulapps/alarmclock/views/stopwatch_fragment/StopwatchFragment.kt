@@ -111,9 +111,6 @@ class StopwatchFragment : BaseFragment<StopWatchViewModel, FragmentStopwatchBind
                         lapTime.millisToString()
                     )
                 }.asReversed())
-//                rv_stopwatch_times.smoothScrollToPosition(0)
-//                rv_stopwatch_times.layoutManager?.scrollToPosition(0)
-//                rv_stopwatch_times.layoutManager?.smoothScrollToPosition(rv_stopwatch_times, null, 0)
             }
         }
     }
