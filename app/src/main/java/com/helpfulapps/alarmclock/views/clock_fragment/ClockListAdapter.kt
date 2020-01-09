@@ -45,6 +45,10 @@ class ClockListAdapter(
             }
         }
 
+    override fun getItemId(position: Int): Long {
+        return getItem(position).id
+    }
+
     private fun ItemAlarmBinding.setupChips(context: Context) {
         setupTemperatureChip(this, context)
         setupRainChip(this, context)

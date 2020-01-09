@@ -37,7 +37,9 @@ class ClockFragment : BaseFragment<ClockViewModel, FragmentClockBinding>() {
             switchAlarm = ::switchAlarm,
             openEditMode = ::openEdit,
             removeAlarm = ::removeAlarm
-        )
+        ).apply {
+            setHasStableIds(true)
+        }
     }
 
     override fun init() {
