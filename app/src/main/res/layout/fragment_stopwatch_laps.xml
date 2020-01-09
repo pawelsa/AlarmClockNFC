@@ -4,20 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_stopwatch_base"
-        android:background="@color/background"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/background">
 
         <TextView
             android:id="@+id/tv_stopwatch_time"
+            style="@style/CountTimeTextTheme"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_centerInParent="true"
             android:gravity="center"
             android:text="0:00"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            style="@style/CountTimeTextTheme"
             app:layout_constraintBottom_toTopOf="@+id/rv_stopwatch_times"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -28,12 +27,11 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:overScrollMode="never"
-            android:visibility="gone"
-            tools:listitem="@layout/item_stopwatch_lap"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_stopwatch_time" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_stopwatch_time"
+            tools:listitem="@layout/item_stopwatch_lap" />
 
         <View
             android:id="@+id/v_stopwatch_gradient"
@@ -52,7 +50,6 @@
             android:layout_marginStart="@dimen/margin_big"
             android:layout_marginBottom="@dimen/margin_big"
             android:text="@string/stopwatch_lap"
-            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline3" />
@@ -65,7 +62,6 @@
             android:layout_marginEnd="@dimen/margin_big"
             android:layout_marginBottom="@dimen/margin_big"
             android:text="@string/stopwatch_reset"
-            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guideline3"
             app:layout_constraintStart_toStartOf="parent" />

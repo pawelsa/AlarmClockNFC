@@ -1,9 +1,11 @@
 package com.helpfulapps.alarmclock.views.stopwatch_fragment
 
 import android.content.Intent
+import android.transition.TransitionManager
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.marginBottom
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -103,8 +105,10 @@ class StopwatchFragment : BaseFragment<StopWatchViewModel, FragmentStopwatchBind
         viewModel.lapTimes.observe(this) {
             if (it.isEmpty()) {
                 adapter.submitList(emptyList())
+                hideRecyclerView()
                 rv_stopwatch_times.visibility = View.GONE
             } else {
+                showRecyclerView()
                 rv_stopwatch_times.visibility = View.VISIBLE
                 adapter.submitList(it.mapIndexed { index, lapTime ->
                     LapModel(
@@ -114,6 +118,20 @@ class StopwatchFragment : BaseFragment<StopWatchViewModel, FragmentStopwatchBind
                 }.asReversed())
             }
         }
+    }
+
+    private fun showRecyclerView() {
+        val constraintSet = ConstraintSet()
+        constraintSet.clone(context, R.layout.fragment_stopwatch)
+        TransitionManager.beginDelayedTransition(cl_stopwatch_base)
+        constraintSet.applyTo(cl_stopwatch_base)
+    }
+
+    private fun hideRecyclerView() {
+        val constraintSet = ConstraintSet()
+        constraintSet.clone(context, R.layout.fragment_stopwatch_laps)
+        TransitionManager.beginDelayedTransition(cl_stopwatch_base)
+        constraintSet.applyTo(cl_stopwatch_base)
     }
 
     private fun setupResetListener() {
