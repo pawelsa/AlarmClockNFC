@@ -87,7 +87,7 @@ class TimeSetter(
         currentDayOfWeek: Int,
         currentTime: Time
     ) =
-        currentDayOfWeek == index && currentTime.first <= alarmTime.first && currentTime.second < alarmTime.second
+        currentDayOfWeek == index && ((currentTime.first == alarmTime.first && currentTime.second < alarmTime.second) || (currentTime.first < alarmTime.first))
 
     private fun analyzeSingleAlarm(alarm: Alarm): Calendar {
         val calendar = setHourAndMinute(alarm, calendar)
