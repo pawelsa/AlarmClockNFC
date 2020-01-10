@@ -57,16 +57,13 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
         apply {
             when (notificationType) {
                 is NotificationBuilder.NotificationType.TypeAlarm -> setupAlarmType(notificationType)
-                is NotificationBuilder.NotificationType.TypeStopwatchRunning -> setupStopWatchType(
-                    notificationType
-                )
-                is NotificationBuilder.NotificationType.TypeStopwatchPaused -> setupStopWatchPausedType(
-                    notificationType
-                )
+                is NotificationBuilder.NotificationType.TypeStopwatchRunning ->
+                    setupStopWatchType(notificationType)
+                is NotificationBuilder.NotificationType.TypeStopwatchPaused ->
+                    setupStopWatchPausedType(notificationType)
                 is NotificationBuilder.NotificationType.TypeTimer -> setupTimerType(notificationType)
-                is NotificationBuilder.NotificationType.TypeTimerPaused -> setupTimerPause(
-                    notificationType
-                )
+                is NotificationBuilder.NotificationType.TypeTimerPaused ->
+                    setupTimerPause(notificationType)
                 is NotificationBuilder.NotificationType.TypeTimerFinished -> setupTimerFinished()
                 is NotificationBuilder.NotificationType.TypeLocalization -> setupLocalizationType()
                 is NotificationBuilder.NotificationType.Initialization -> setupInitialization()
