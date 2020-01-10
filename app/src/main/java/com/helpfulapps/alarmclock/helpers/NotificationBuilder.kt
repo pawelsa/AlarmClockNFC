@@ -57,16 +57,13 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
         apply {
             when (notificationType) {
                 is NotificationBuilder.NotificationType.TypeAlarm -> setupAlarmType(notificationType)
-                is NotificationBuilder.NotificationType.TypeStopwatchRunning -> setupStopWatchType(
-                    notificationType
-                )
-                is NotificationBuilder.NotificationType.TypeStopwatchPaused -> setupStopWatchPausedType(
-                    notificationType
-                )
+                is NotificationBuilder.NotificationType.TypeStopwatchRunning ->
+                    setupStopWatchType(notificationType)
+                is NotificationBuilder.NotificationType.TypeStopwatchPaused ->
+                    setupStopWatchPausedType(notificationType)
                 is NotificationBuilder.NotificationType.TypeTimer -> setupTimerType(notificationType)
-                is NotificationBuilder.NotificationType.TypeTimerPaused -> setupTimerPause(
-                    notificationType
-                )
+                is NotificationBuilder.NotificationType.TypeTimerPaused ->
+                    setupTimerPause(notificationType)
                 is NotificationBuilder.NotificationType.TypeTimerFinished -> setupTimerFinished()
                 is NotificationBuilder.NotificationType.TypeLocalization -> setupLocalizationType()
                 is NotificationBuilder.NotificationType.Initialization -> setupInitialization()
@@ -76,7 +73,7 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
     private fun setupInitialization() {
         builder =
             NotificationCompat.Builder(context, CHANNEL_INITIALIZATION_ID)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.drawable.ic_alarm)
                 .setContentTitle(context.getString(R.string.app_name))
                 .setContentText(
                     context.getString(R.string.notification_initialization)
@@ -90,45 +87,25 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
         builder.setChannelId(CHANNEL_INITIALIZATION_ID)
     }
 
-    private fun setupStopWatchPausedType(notificationType: NotificationBuilder.NotificationType.TypeStopwatchPaused) {
-
-        val restartIntent = Intent(context, StopwatchService::class.java).let {
-            it.action = STOPWATCH_RESUME
-            getService(context, 0, it, FLAG_UPDATE_CURRENT)
-        }
-
-        val stopIntent = Intent(context, StopwatchService::class.java).let {
-            it.action = STOPWATCH_STOP
-            getService(context, 0, it, FLAG_UPDATE_CURRENT)
-        }
-
+    private fun setupLocalizationType() {
         builder =
-            NotificationCompat.Builder(context, CHANNEL_STOPWATCH_ID)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle(context.getString(R.string.app_name))
+            NotificationCompat.Builder(context, CHANNEL_LOCALIZATION_ID)
+                .setSmallIcon(R.drawable.ic_location)
+                .setContentTitle(context.getString(R.string.location_notification))
                 .setContentText(
-                    notificationType.seconds.secondsToString()
+                    context.getString(
+                        R.string.notification_location_text
+                    )
                 )
-                .setContentIntent(buildIntentToStartFragment(ACTION_OPEN_STOPWATCH))
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setPriority(NotificationCompat.PRIORITY_LOW)
                 .setCategory(NotificationCompat.CATEGORY_SERVICE)
-                .addAction(
-                    R.drawable.ic_start,
-                    context.getString(R.string.notification_stopwatch_resume),
-                    restartIntent
-                )
-                .addAction(
-                    0,
-                    context.getString(R.string.notification_stopwatch_reset),
-                    stopIntent
-                )
                 .setAutoCancel(false)
 
-        buildNotificationChannel(NotificationBuilder.NotificationType.TypeStopwatchRunning(0L))
+        buildNotificationChannel(NotificationBuilder.NotificationType.TypeLocalization)
 
-        builder.setChannelId(CHANNEL_STOPWATCH_ID)
+        builder.setChannelId(CHANNEL_LOCALIZATION_ID)
+
     }
-
 
     private fun setupAlarmType(notificationType: NotificationBuilder.NotificationType.TypeAlarm) {
         val alarm = notificationType.alarm
@@ -159,8 +136,8 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
         )
         builder =
             NotificationCompat.Builder(context, CHANNEL_PRIORITY_ID)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle(context.getString(R.string.app_name))
+                .setSmallIcon(R.drawable.ic_alarm)
+                .setContentTitle(context.getString(R.string.alarm_notification))
                 .setContentText(
                     context.getString(
                         R.string.notification_alarm_text,
@@ -194,65 +171,6 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
         builder.setChannelId(CHANNEL_PRIORITY_ID)
     }
 
-    private fun setupLocalizationType() {
-        builder =
-            NotificationCompat.Builder(context, CHANNEL_LOCALIZATION_ID)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle(context.getString(R.string.app_name))
-                .setContentText(
-                    context.getString(
-                        R.string.notification_location_text
-                    )
-                )
-                .setPriority(NotificationCompat.PRIORITY_LOW)
-                .setCategory(NotificationCompat.CATEGORY_SERVICE)
-                .setAutoCancel(false)
-
-        buildNotificationChannel(NotificationBuilder.NotificationType.TypeLocalization)
-
-        builder.setChannelId(CHANNEL_LOCALIZATION_ID)
-
-    }
-
-    private fun setupStopWatchType(notificationType: NotificationBuilder.NotificationType.TypeStopwatchRunning) {
-
-        val pauseIntent = Intent(context, StopwatchService::class.java).let {
-            it.action = STOPWATCH_PAUSE
-            getService(context, 0, it, FLAG_UPDATE_CURRENT)
-        }
-
-        val takeLapIntent = Intent(context, StopwatchService::class.java).let {
-            it.action = STOPWATCH_LAP
-            getService(context, 0, it, FLAG_UPDATE_CURRENT)
-        }
-
-        builder =
-            NotificationCompat.Builder(context, CHANNEL_STOPWATCH_ID)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle(context.getString(R.string.app_name))
-                .setContentText(
-                    notificationType.seconds.secondsToString()
-                )
-                .setContentIntent(buildIntentToStartFragment(ACTION_OPEN_STOPWATCH))
-                .setPriority(NotificationCompat.PRIORITY_LOW)
-                .setCategory(NotificationCompat.CATEGORY_SERVICE)
-                .addAction(
-                    R.drawable.ic_pause,
-                    context.getString(R.string.notification_stopwatch_pause),
-                    pauseIntent
-                )
-                .addAction(
-                    0,
-                    context.getString(R.string.notification_stopwatch_take_lap),
-                    takeLapIntent
-                )
-                .setAutoCancel(true)
-
-        buildNotificationChannel(notificationType)
-
-        builder.setChannelId(CHANNEL_STOPWATCH_ID)
-    }
-
     private fun setupTimerType(notificationType: NotificationBuilder.NotificationType.TypeTimer) {
 
         val pauseIntent = Intent(context, TimerService::class.java).let {
@@ -267,8 +185,8 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
 
         builder =
             NotificationCompat.Builder(context, CHANNEL_TIMER_ID)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle(context.getString(R.string.app_name))
+                .setSmallIcon(R.drawable.ic_hourglass)
+                .setContentTitle(context.getString(R.string.timer_notification))
                 .setContentText(
                     context.getString(
                         R.string.notification_timer_text,
@@ -314,8 +232,8 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
 
         builder =
             NotificationCompat.Builder(context, CHANNEL_TIMER_ID)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle(context.getString(R.string.app_name))
+                .setSmallIcon(R.drawable.ic_hourglass)
+                .setContentTitle(context.getString(R.string.timer_notification))
                 .setContentText(
                     context.getString(
                         R.string.notification_timer_paused_text,
@@ -360,8 +278,8 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
         )
 
         builder = NotificationCompat.Builder(context, CHANNEL_PRIORITY_ID)
-            .setSmallIcon(R.mipmap.ic_launcher)
-            .setContentTitle(context.getString(R.string.app_name))
+            .setSmallIcon(R.drawable.ic_hourglass)
+            .setContentTitle(context.getString(R.string.timer_notification))
             .setContentText(context.getString(R.string.notification_timer_text_finished))
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setCategory(NotificationCompat.CATEGORY_ALARM)
@@ -374,6 +292,84 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
             .setAutoCancel(false)
 
         buildNotificationChannel(NotificationBuilder.NotificationType.HighPriority)
+    }
+
+    private fun setupStopWatchPausedType(notificationType: NotificationBuilder.NotificationType.TypeStopwatchPaused) {
+
+        val restartIntent = Intent(context, StopwatchService::class.java).let {
+            it.action = STOPWATCH_RESUME
+            getService(context, 0, it, FLAG_UPDATE_CURRENT)
+        }
+
+        val stopIntent = Intent(context, StopwatchService::class.java).let {
+            it.action = STOPWATCH_STOP
+            getService(context, 0, it, FLAG_UPDATE_CURRENT)
+        }
+
+        builder =
+            NotificationCompat.Builder(context, CHANNEL_STOPWATCH_ID)
+                .setSmallIcon(R.drawable.ic_stopwatch)
+                .setContentTitle(context.getString(R.string.stopwatch_notification))
+                .setContentText(
+                    notificationType.seconds.secondsToString()
+                )
+                .setContentIntent(buildIntentToStartFragment(ACTION_OPEN_STOPWATCH))
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setCategory(NotificationCompat.CATEGORY_SERVICE)
+                .addAction(
+                    R.drawable.ic_start,
+                    context.getString(R.string.notification_stopwatch_resume),
+                    restartIntent
+                )
+                .addAction(
+                    0,
+                    context.getString(R.string.notification_stopwatch_reset),
+                    stopIntent
+                )
+                .setAutoCancel(false)
+
+        buildNotificationChannel(NotificationBuilder.NotificationType.TypeStopwatchRunning(0L))
+
+        builder.setChannelId(CHANNEL_STOPWATCH_ID)
+    }
+
+    private fun setupStopWatchType(notificationType: NotificationBuilder.NotificationType.TypeStopwatchRunning) {
+
+        val pauseIntent = Intent(context, StopwatchService::class.java).let {
+            it.action = STOPWATCH_PAUSE
+            getService(context, 0, it, FLAG_UPDATE_CURRENT)
+        }
+
+        val takeLapIntent = Intent(context, StopwatchService::class.java).let {
+            it.action = STOPWATCH_LAP
+            getService(context, 0, it, FLAG_UPDATE_CURRENT)
+        }
+
+        builder =
+            NotificationCompat.Builder(context, CHANNEL_STOPWATCH_ID)
+                .setSmallIcon(R.drawable.ic_stopwatch)
+                .setContentTitle(context.getString(R.string.stopwatch_notification))
+                .setContentText(
+                    notificationType.seconds.secondsToString()
+                )
+                .setContentIntent(buildIntentToStartFragment(ACTION_OPEN_STOPWATCH))
+                .setPriority(NotificationCompat.PRIORITY_LOW)
+                .setCategory(NotificationCompat.CATEGORY_SERVICE)
+                .addAction(
+                    R.drawable.ic_pause,
+                    context.getString(R.string.notification_stopwatch_pause),
+                    pauseIntent
+                )
+                .addAction(
+                    0,
+                    context.getString(R.string.notification_stopwatch_take_lap),
+                    takeLapIntent
+                )
+                .setAutoCancel(true)
+
+        buildNotificationChannel(notificationType)
+
+        builder.setChannelId(CHANNEL_STOPWATCH_ID)
     }
 
     private fun buildNotificationChannel(notificationType: NotificationBuilder.NotificationType) {
