@@ -133,11 +133,15 @@
     <string name="weather_wind_imperial">mil/h</string>
     <string name="failure_could_not_remove_alarm">Could not remove alarm</string>
     <string name="failure_could_not_obtain_alarms">Could not obtain alarm</string>
-    <string name="failure_could_not_switch_off">Problem occured when turning off</string>
-    <string name="failure_could_not_switch_on">Problem occured when turning on</string>
+    <string name="failure_could_not_switch_off">Problem occurred when turning off</string>
+    <string name="failure_could_not_switch_on">Problem occurred when turning on</string>
     <string name="message_alarm_removed">Alarm removed successfully</string>
     <string name="message_alarm_switched">Alarm will start in %1$s</string>
-    <string name="failure_generic">Some error occured</string>
+    <string name="failure_generic">Some error occurred</string>
+    <string name="timer_notification">Timer</string>
+    <string name="stopwatch_notification">Stopwatch</string>
+    <string name="location_notification">Obtaining localization</string>
+    <string name="alarm_notification">Alarm</string>
 
     <string-array name="settings_alarm_time_titles">
         <item>1 minute</item>

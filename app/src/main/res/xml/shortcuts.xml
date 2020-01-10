@@ -1,43 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
 
-	<shortcut
-			android:shortcutId="add_alarm"
-			android:icon="@drawable/ic_alarm"
-			android:enabled="true"
-			android:shortcutShortLabel="@string/add_alarm_short">
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_alarm"
+        android:shortcutId="add_alarm"
+        android:shortcutShortLabel="@string/add_alarm_short">
 
-		<intent
-				android:action="com.helpfulapps.alarmclock.addAlarm"
+        <intent
+            android:action="com.helpfulapps.alarmclock.addAlarm"
             android:targetClass="com.helpfulapps.alarmclock.views.main_activity.MainActivity"
-				android:targetPackage="com.helpfulapps.alarmclock" />
+            android:targetPackage="com.helpfulapps.alarmclock" />
 
-	</shortcut>
+    </shortcut>
 
-	<shortcut
+    <shortcut
         android:enabled="true"
         android:icon="@drawable/ic_hourglass"
         android:shortcutId="set_hourglass"
         android:shortcutShortLabel="@string/set_hourglass_short">
 
-		<intent
+        <intent
             android:action="com.helpfulapps.alarmclock.setHourglass"
             android:targetClass="com.helpfulapps.alarmclock.views.main_activity.MainActivity"
             android:targetPackage="com.helpfulapps.alarmclock" />
 
-	</shortcut>
+    </shortcut>
 
-	<shortcut
+    <shortcut
+        android:enabled="true"
         android:icon="@drawable/ic_stopwatch"
         android:shortcutId="start_stopwatch"
-			android:enabled="true"
         android:shortcutShortLabel="@string/start_stopwatch_short">
 
-		<intent
+        <intent
             android:action="com.helpfulapps.alarmclock.startStopwatch"
             android:targetClass="com.helpfulapps.alarmclock.views.main_activity.MainActivity"
-				android:targetPackage="com.helpfulapps.alarmclock" />
+            android:targetPackage="com.helpfulapps.alarmclock" />
 
-	</shortcut>
+    </shortcut>
 
 </shortcuts>
