@@ -126,6 +126,7 @@ class NfcRingingAlarmActivity : BaseRingingAlarmActivity<ActivityRingingAlarmBin
 
     private fun checkIfNfcIsTurnedOn() {
         if (!nfcAdapter.isEnabled) {
+/*
             fromBuildVersion(
                 Build.VERSION_CODES.P,
                 matching = {
@@ -140,6 +141,10 @@ class NfcRingingAlarmActivity : BaseRingingAlarmActivity<ActivityRingingAlarmBin
                     }.show()
                 }
             )
+*/
+            buildEnableNfcAlarmDialog(this) {
+                startActivity(Intent(Settings.ACTION_NFC_SETTINGS))
+            }.show()
         }
     }
 

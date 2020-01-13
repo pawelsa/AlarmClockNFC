@@ -2,6 +2,7 @@ package com.helpfulapps.alarmclock.service
 
 import android.app.Notification
 import android.content.Intent
+import android.util.Log
 import com.helpfulapps.alarmclock.App
 import com.helpfulapps.alarmclock.helpers.NotificationBuilder
 import com.helpfulapps.alarmclock.helpers.Timer
@@ -41,6 +42,7 @@ class TimerService : BaseService() {
     }
 
     private fun finishTimer() {
+        Log.d(TAG, "finish timer")
         timer.pauseTimer()
         alarmPlayer.stopPlaying()
         stopForeground(true)
@@ -126,6 +128,7 @@ class TimerService : BaseService() {
         whenFalse(isForeground) {
             val notification = getPauseNotification()
             startVersionedForeground(notification, NOTIFICATION_ID)
+            stopForeground(false)
         }
         timer.pauseTimer()
     }

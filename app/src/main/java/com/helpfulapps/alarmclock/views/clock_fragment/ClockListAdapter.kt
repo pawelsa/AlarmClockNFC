@@ -2,6 +2,8 @@ package com.helpfulapps.alarmclock.views.clock_fragment
 
 import android.content.Context
 import androidx.recyclerview.widget.DiffUtil
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipDrawable
 import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.databinding.ItemAlarmBinding
 import com.helpfulapps.alarmclock.helpers.extensions.marginParams
@@ -50,6 +52,7 @@ class ClockListAdapter(
     }
 
     private fun ItemAlarmBinding.setupChips(context: Context) {
+        this.cgItemAlarmGroup.removeAllViews()
         setupTemperatureChip(this, context)
         setupRainChip(this, context)
         setupSnowChip(this, context)
@@ -60,51 +63,96 @@ class ClockListAdapter(
         itemAlarmBinding: ItemAlarmBinding,
         context: Context
     ) {
-        itemAlarmBinding.chipItemAlarmWind.text =
-            when (itemAlarmBinding.alarmData?.weatherShort?.wind) {
-                1 -> context.getString(R.string.item_alarm_wind_windy)
-                2 -> context.getString(R.string.item_alarm_wind_very_windy)
-                else -> context.getString(R.string.item_alarm_wind_no)
-            }
+        itemAlarmBinding.cgItemAlarmGroup.addView(
+            Chip(itemAlarmBinding.root.context)
+                .also {
+                    it.setChipDrawable(
+                        ChipDrawable.createFromAttributes(
+                            it.context,
+                            null,
+                            0,
+                            R.style.WeatherChipTheme
+                        )
+                    )
+                    it.text = when (itemAlarmBinding.alarmData?.weatherShort?.wind) {
+                        1 -> context.getString(R.string.item_alarm_wind_windy)
+                        2 -> context.getString(R.string.item_alarm_wind_very_windy)
+                        else -> context.getString(R.string.item_alarm_wind_no)
+                    }
+                })
     }
 
     private fun setupSnowChip(
         itemAlarmBinding: ItemAlarmBinding,
         context: Context
     ) {
-        itemAlarmBinding.chipItemAlarmSnow.text =
-            when (itemAlarmBinding.alarmData?.weatherShort?.snow) {
-                1 -> context.getString(R.string.item_alarm_snow_snowy)
-                2 -> context.getString(R.string.item_alarm_snow_heavy_snow)
-                else -> context.getString(R.string.item_alarm_snow_no)
-            }
+        itemAlarmBinding.cgItemAlarmGroup.addView(
+            Chip(itemAlarmBinding.root.context)
+                .also {
+                    it.setChipDrawable(
+                        ChipDrawable.createFromAttributes(
+                            it.context,
+                            null,
+                            0,
+                            R.style.WeatherChipTheme
+                        )
+                    )
+                it.text = when (itemAlarmBinding.alarmData?.weatherShort?.snow) {
+                    1 -> context.getString(R.string.item_alarm_snow_snowy)
+                    2 -> context.getString(R.string.item_alarm_snow_heavy_snow)
+                    else -> context.getString(R.string.item_alarm_snow_no)
+                }
+            })
     }
 
     private fun setupRainChip(
         itemAlarmBinding: ItemAlarmBinding,
         context: Context
     ) {
-        itemAlarmBinding.chipItemAlarmRain.text =
-            when (itemAlarmBinding.alarmData?.weatherShort?.rain) {
-                1 -> context.getString(R.string.item_alarm_rain_may_rain)
-                2 -> context.getString(R.string.item_alarm_rain_will_rain)
-                3 -> context.getString(R.string.item_alarm_rain_heavy_rain)
-                else -> context.getString(R.string.item_alarm_rain_no)
-            }
+        itemAlarmBinding.cgItemAlarmGroup.addView(
+            Chip(itemAlarmBinding.root.context)
+                .also {
+                    it.setChipDrawable(
+                        ChipDrawable.createFromAttributes(
+                            it.context,
+                            null,
+                            0,
+                            R.style.WeatherChipTheme
+                        )
+                    )
+                it.text = when (itemAlarmBinding.alarmData?.weatherShort?.rain) {
+                    1 -> context.getString(R.string.item_alarm_rain_may_rain)
+                    2 -> context.getString(R.string.item_alarm_rain_will_rain)
+                    3 -> context.getString(R.string.item_alarm_rain_heavy_rain)
+                    else -> context.getString(R.string.item_alarm_rain_no)
+                }
+            })
     }
 
     private fun setupTemperatureChip(
         itemAlarmBinding: ItemAlarmBinding,
         context: Context
     ) {
-        itemAlarmBinding.chipItemAlarmTemperature.text =
-            when (itemAlarmBinding.alarmData?.weatherShort?.temperature) {
-                -2 -> context.getString(R.string.item_alarm_temperature_very_cold)
-                -1 -> context.getString(R.string.item_alarm_temperature_cold)
-                1 -> context.getString(R.string.item_alarm_temperature_hot)
-                2 -> context.getString(R.string.item_alarm_temperature_very_hot)
-                else -> context.getString(R.string.item_alarm_temperature_ok)
-            }
+        itemAlarmBinding.cgItemAlarmGroup.addView(
+            Chip(itemAlarmBinding.root.context)
+                .also {
+                    it.setChipDrawable(
+                        ChipDrawable.createFromAttributes(
+                            it.context,
+                            null,
+                            0,
+                            R.style.WeatherChipTheme
+                        )
+                    )
+                it.text = when (itemAlarmBinding.alarmData?.weatherShort?.temperature) {
+                    -2 -> context.getString(R.string.item_alarm_temperature_very_cold)
+                    -1 -> context.getString(R.string.item_alarm_temperature_cold)
+                    1 -> context.getString(R.string.item_alarm_temperature_hot)
+                    2 -> context.getString(R.string.item_alarm_temperature_very_hot)
+                    else -> context.getString(R.string.item_alarm_temperature_ok)
+                }
+
+            })
     }
 
 

@@ -1,7 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar.Bridge">
         <!-- Customize your theme here. -->
         <item name="android:background">@color/background</item>
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -113,7 +113,7 @@
         <item name="android:textColor">@color/textColor</item>
     </style>
 
-    <style name="WeatherChipTheme" parent="Widget.MaterialComponents.Chip.Action">
+    <style name="WeatherChipTheme" parent="Theme.AppCompat.Light">
         <item name="android:fontFamily">@font/comfortaa</item>
         <item name="chipStrokeColor">@color/chip_color</item>
         <item name="chipStrokeWidth">@dimen/chip_stroke</item>

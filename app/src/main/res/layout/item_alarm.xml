@@ -72,18 +72,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_item_alarm_repeating_days">
 
-            <com.google.android.material.chip.Chip
+<!--            <com.google.android.material.chip.Chip
                 android:id="@+id/chip_item_alarm_temperature"
-                style="@style/WeatherChipTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/comfortaa"
                 android:text="@string/item_alarm_temperature_ok"
                 android:visibility="@{alarmData.weatherShort.temperature != 0 ? View.VISIBLE : View.GONE}" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_item_alarm_rain"
-                style="@style/WeatherChipTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/item_alarm_rain_no"
@@ -91,7 +88,6 @@
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_item_alarm_wind"
-                style="@style/WeatherChipTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/item_alarm_wind_no"
@@ -99,11 +95,10 @@
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_item_alarm_snow"
-                style="@style/WeatherChipTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/item_alarm_snow_no"
-                android:visibility="@{alarmData.weatherShort.snow != 0 ? View.VISIBLE : View.GONE}" />
+                android:visibility="@{alarmData.weatherShort.snow != 0 ? View.VISIBLE : View.GONE}" />-->
 
         </com.google.android.material.chip.ChipGroup>
 

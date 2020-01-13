@@ -123,12 +123,15 @@ class ClockFragment : BaseFragment<ClockViewModel, FragmentClockBinding>() {
     }
 
     override fun handleFailure(failure: Failure) {
-        val stringResource: Int = when (failure) {
-            is CouldNotRemoveAlarm -> R.string.failure_could_not_remove_alarm
-            is CouldNotObtainAlarms -> R.string.failure_could_not_obtain_alarms
-            is CouldNotSwitchAlarm -> if (failure.isTurningOn) R.string.failure_could_not_switch_on else R.string.failure_could_not_switch_off
-            else -> R.string.failure_generic
-        }
+        val stringResource: Int =
+            if (failure is CouldNotRemoveAlarm) R.string.failure_could_not_remove_alarm
+            else if (failure is CouldNotObtainAlarms) R.string.failure_could_not_obtain_alarms
+            else if (failure is CouldNotSwitchAlarm) {
+                if (failure.isTurningOn)
+                    R.string.failure_could_not_switch_on
+                else
+                    R.string.failure_could_not_switch_off
+            } else R.string.failure_generic
         showMessage(getString(stringResource))
     }
 
