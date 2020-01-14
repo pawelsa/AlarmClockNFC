@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.PowerManager
 import android.provider.Settings
+import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.helpfulapps.alarmclock.R
@@ -43,6 +44,7 @@ class ClockFragment : BaseFragment<ClockViewModel, FragmentClockBinding>() {
     }
 
     override fun init() {
+        Log.d(TAG, "rest")
         setupRecyclerView()
         binding.viewModel = viewModel
         setupData()
