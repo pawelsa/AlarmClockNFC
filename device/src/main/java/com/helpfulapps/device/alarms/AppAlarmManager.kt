@@ -25,16 +25,8 @@ class AlarmClockManagerImpl(
     override fun setAlarm(domainAlarm: DomainAlarm): Completable {
         return completableOf {
 
-            val alarm = Alarm(domainAlarm)
-            val timeSetter = TimeSetter()
-            val alarmStart = timeSetter.getAlarmStartingTime(domainAlarm)
-//            val alarmStart = System.currentTimeMillis() + 10 * 1000
-
-            val alarmIntent = IntentCreator.getAlarmIntent(context, alarm.id)
-            val alarmInfoIntent =
-                IntentCreator.createPendingIntentForAlarmIconPress(context, alarm.id)
-
-            setAlarmInAlarmManager(alarmStart, alarmInfoIntent, alarmIntent)
+            val alarmSetupData = getAlarmSetupData(domainAlarm)
+            setAlarmInAlarmManager(alarmSetupData)
         }
     }
 
@@ -46,31 +38,6 @@ class AlarmClockManagerImpl(
         }
     }
 
-    private fun setAlarmInAlarmManager(
-        alarmStart: Long,
-        alarmInfoIntent: PendingIntent?,
-        alarmIntent: PendingIntent?
-    ) {
-        when {
-            matchesVersionsFrom(Build.VERSION_CODES.LOLLIPOP) -> {
-                manager.setAlarmClock(
-                    AlarmManager.AlarmClockInfo(
-                        alarmStart,
-                        alarmInfoIntent
-                    ), alarmIntent
-                )
-            }
-            matchesVersionsFrom(Build.VERSION_CODES.M) -> {
-                manager.setExactAndAllowWhileIdle(
-                    AlarmManager.RTC_WAKEUP,
-                    alarmStart,
-                    alarmIntent
-                )
-            }
-            else -> manager.set(AlarmManager.RTC_WAKEUP, alarmStart, alarmIntent)
-        }
-    }
-
     override fun snoozeAlarm(alarm: DomainAlarm): Completable {
         return completableOf {
             val timeSetter = TimeSetter()
@@ -79,9 +46,55 @@ class AlarmClockManagerImpl(
                 val alarmIntent = IntentCreator.getAlarmIntent(context, alarm.id.toInt())
                 val alarmInfoIntent =
                     IntentCreator.createPendingIntentForAlarmIconPress(context, alarm.id.toInt())
-                setAlarmInAlarmManager(snoozeTime, alarmInfoIntent, alarmIntent)
+                val alarmSetupData = AlarmSetupData(snoozeTime, alarmInfoIntent, alarmIntent)
+                setAlarmInAlarmManager(alarmSetupData)
+            } else {
+                val alarmSetupData = getAlarmSetupData(alarm)
+                setAlarmInAlarmManager(alarmSetupData)
             }
         }
     }
+
+    private fun getAlarmSetupData(domainAlarm: DomainAlarm): AlarmSetupData {
+        val secondAlarm = Alarm(domainAlarm)
+        val timeSetter = TimeSetter()
+        val alarmStart = timeSetter.getAlarmStartingTime(domainAlarm)
+//            val alarmStart = System.currentTimeMillis() + 10 * 1000
+
+        val alarmIntent = IntentCreator.getAlarmIntent(context, secondAlarm.id)
+        val alarmInfoIntent =
+            IntentCreator.createPendingIntentForAlarmIconPress(context, secondAlarm.id)
+
+        return AlarmSetupData(alarmStart, alarmInfoIntent, alarmIntent)
+    }
+
+    private fun setAlarmInAlarmManager(alarmSetupData: AlarmSetupData) {
+        with(alarmSetupData) {
+            when {
+                matchesVersionsFrom(Build.VERSION_CODES.LOLLIPOP) -> {
+                    manager.setAlarmClock(
+                        AlarmManager.AlarmClockInfo(
+                            alarmStart,
+                            alarmInfoIntent
+                        ), alarmIntent
+                    )
+                }
+                matchesVersionsFrom(Build.VERSION_CODES.M) -> {
+                    manager.setExactAndAllowWhileIdle(
+                        AlarmManager.RTC_WAKEUP,
+                        alarmStart,
+                        alarmIntent
+                    )
+                }
+                else -> manager.set(AlarmManager.RTC_WAKEUP, alarmStart, alarmIntent)
+            }
+        }
+    }
+
+    data class AlarmSetupData(
+        val alarmStart: Long,
+        val alarmInfoIntent: PendingIntent,
+        val alarmIntent: PendingIntent
+    )
 
 }
