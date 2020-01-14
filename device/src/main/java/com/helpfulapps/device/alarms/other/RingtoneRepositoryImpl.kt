@@ -10,9 +10,7 @@ class RingtoneRepositoryImpl(val context: Context) :
     override fun getDefaultRingtone(): Pair<String, String> {
         val uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
         val ringtoneAlarm = RingtoneManager.getRingtone(context, uri)
-        val title = ringtoneAlarm.getTitle(context).let {
-            it.substring(it.indexOf("(") + 1, it.indexOf(")"))
-        }
+        val title = ringtoneAlarm.getTitle(context)
         return title to uri.toString()
     }
 
