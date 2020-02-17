@@ -8,6 +8,8 @@ import com.helpfulapps.domain.helpers.Settings.Companion.KEY_ASK_FOR_OPTIMIZATIO
 import com.helpfulapps.domain.helpers.Settings.Companion.KEY_CITY
 import com.helpfulapps.domain.helpers.Settings.Companion.KEY_FIRST_TIME
 import com.helpfulapps.domain.helpers.Settings.Companion.KEY_HAS_NFC
+import com.helpfulapps.domain.helpers.Settings.Companion.KEY_LATITUDE
+import com.helpfulapps.domain.helpers.Settings.Companion.KEY_LONGITUDE
 import com.helpfulapps.domain.helpers.Settings.Companion.KEY_SNOOZE_ALARM
 import com.helpfulapps.domain.helpers.Settings.Companion.KEY_TIMER_TIME
 import com.helpfulapps.domain.helpers.Settings.Companion.KEY_USE_MOBILE_DATA
@@ -30,6 +32,14 @@ class SettingsData(private val sharedPreferences: SharedPreferences) : Settings 
     override var city: String
         set(value) = sharedPreferences.edit { putString(KEY_CITY, value) }
         get() = sharedPreferences.getString(KEY_CITY, "-1") ?: "-1"
+
+    override var latitude: Float
+        set(value) = sharedPreferences.edit { putFloat(KEY_LATITUDE, value) }
+        get() = sharedPreferences.getFloat(KEY_LATITUDE, 0.0f)
+
+    override var longitude: Float
+        set(value) = sharedPreferences.edit { putFloat(KEY_LONGITUDE, value) }
+        get() = sharedPreferences.getFloat(KEY_LONGITUDE, 0.0f)
 
     override var useMobileData: Boolean
         set(value) = sharedPreferences.edit { putBoolean(KEY_USE_MOBILE_DATA, value) }

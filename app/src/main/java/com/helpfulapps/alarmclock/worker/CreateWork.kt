@@ -69,8 +69,8 @@ object CreateWork {
         val downloadWeather =
             OneTimeWorkRequest.Builder(DownloadWeatherWorker::class.java)
                 .setConstraints(downloadConstraints).apply {
-                    if (locationData != null) {
-                        setInputData(locationData)
+                    whenNotNull(locationData) {
+                        setInputData(it)
                     }
                 }
                 .addTag(FORECAST_DOWNLOAD_WORK_ONE_TIME)

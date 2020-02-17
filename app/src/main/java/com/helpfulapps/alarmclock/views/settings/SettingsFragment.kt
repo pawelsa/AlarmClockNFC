@@ -2,10 +2,8 @@ package com.helpfulapps.alarmclock.views.settings
 
 
 import android.Manifest
-import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.location.LocationManager
 import android.os.Bundle
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -13,7 +11,6 @@ import com.helpfulapps.alarmclock.R
 import com.helpfulapps.alarmclock.di.Modules
 import com.helpfulapps.alarmclock.helpers.ShortPermissionListener
 import com.helpfulapps.alarmclock.helpers.extensions.startVersionedService
-import com.helpfulapps.alarmclock.helpers.layout_helpers.buildGpsEnableAlarmDialog
 import com.helpfulapps.alarmclock.service.ForecastForLocalizationService
 import com.helpfulapps.alarmclock.worker.CreateWork
 import com.helpfulapps.domain.helpers.Settings
@@ -52,28 +49,12 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 .withListener(object : ShortPermissionListener {
                     override fun onPermissionGranted(response: PermissionGrantedResponse?) {
                         super.onPermissionGranted(response)
-
-                        val lm: LocationManager =
-                            context!!.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-                        var gpsEnabled = false
-                        var networkEnabled = false
-                        try {
-                            gpsEnabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER)
-                            networkEnabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
-                        } catch (e: Exception) {
-                        }
-                        if (gpsEnabled && networkEnabled) {
-                            context?.startVersionedService(
-                                Intent(
-                                    context,
-                                    ForecastForLocalizationService::class.java
-                                )
+                        context?.startVersionedService(
+                            Intent(
+                                context,
+                                ForecastForLocalizationService::class.java
                             )
-                        } else {
-                            buildGpsEnableAlarmDialog(context!!) {
-                                startActivity(Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS))
-                            }.show()
-                        }
+                        )
                     }
                 })
                 .check()
