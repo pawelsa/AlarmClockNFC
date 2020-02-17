@@ -1,7 +1,6 @@
 package com.helpfulapps.alarmclock.worker
 
 import android.content.Context
-import android.util.Log
 import androidx.work.RxWorker
 import androidx.work.WorkerParameters
 import com.helpfulapps.domain.exceptions.WorkException
@@ -18,8 +17,6 @@ class DownloadWeatherWorker(
     workerParameters: WorkerParameters
 ) : RxWorker(context, workerParameters), KoinComponent {
 
-    private val TAG = this.javaClass.simpleName
-
     private val downloadForecastForCityUseCase: DownloadForecastForCityUseCase by inject()
     private val downloadForecastForLocalizationUseCase: DownloadForecastForLocalizationUseCase by inject()
     private val settings: Settings by inject()
@@ -28,11 +25,6 @@ class DownloadWeatherWorker(
 
         val location = getLocation()
         saveLocation(location)
-
-        Log.d(
-            TAG,
-            "localization ${location.isLocalizationValid}, cityName ${location.isCityNameValid}, summary $location"
-        )
 
         return when {
             location.isLocalizationValid -> prepareDownloaderForLocation(location)
@@ -87,7 +79,6 @@ class DownloadWeatherWorker(
         return this
             .toSingleDefault(Result.success())
             .onErrorReturn {
-                it.printStackTrace()
                 return@onErrorReturn Result.retry()
             }
     }
