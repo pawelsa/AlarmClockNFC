@@ -9,6 +9,7 @@ import com.helpfulapps.alarmclock.helpers.NotificationBuilder
 import com.helpfulapps.alarmclock.helpers.extensions.startVersionedForeground
 import com.helpfulapps.alarmclock.worker.CreateWork
 import com.helpfulapps.base.extensions.rx.backgroundTask
+import com.helpfulapps.domain.exceptions.NoPermissionException
 import com.helpfulapps.domain.helpers.Settings
 import com.patloew.rxlocation.RxLocation
 import io.reactivex.Completable
@@ -44,16 +45,13 @@ class ForecastForLocalizationService : Service() {
             .setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY)
             .setInterval(3000)
 
-        disposables += RxLocation(baseContext)
-            .location()
-            .updates(locationRequest)
-            .skip(4)
-            .firstOrError()
-            .flatMapCompletable { location ->
-                return@flatMapCompletable Completable.create {
-                    CreateWork.oneTimeWeatherDownload(baseContext, settings.useMobileData, location)
-                    it.onComplete()
-                }
+        val rxLocation = RxLocation(baseContext)
+
+        disposables += rxLocation
+            .settings()
+            .checkAndHandleResolution(locationRequest)
+            .flatMapCompletable {
+                return@flatMapCompletable locationListener(it, locationRequest)
             }
             .backgroundTask()
             .subscribeBy(
@@ -67,6 +65,31 @@ class ForecastForLocalizationService : Service() {
 
 
         return START_STICKY
+    }
+
+    private fun locationListener(
+        hasPermission: Boolean,
+        locationRequest: LocationRequest
+    ): Completable {
+        return if (hasPermission) {
+            RxLocation(baseContext)
+                .location()
+                .updates(locationRequest)
+                .skip(4)
+                .firstOrError()
+                .flatMapCompletable { location ->
+                    return@flatMapCompletable Completable.create {
+                        CreateWork.oneTimeWeatherDownload(
+                            baseContext,
+                            settings.useMobileData,
+                            location
+                        )
+                        it.onComplete()
+                    }
+                }
+        } else {
+            Completable.error(NoPermissionException())
+        }
     }
 
     override fun onDestroy() {
