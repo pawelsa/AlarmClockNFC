@@ -12,6 +12,7 @@ interface Settings {
     var alarmTime: Int
     var units: Units
     var timeLeft: Long
+    var noSnoozes: Int
 
 
     companion object {
@@ -28,6 +29,7 @@ interface Settings {
         const val KEY_USE_MOBILE_DATA = "com.helpfulapps.alarmclock.use_mobile_data"
         const val KEY_SNOOZE_ALARM = "com.helpfulapps.alarmclock.settings_snooze"
         const val KEY_ALARM_TIME = "com.helpfulapps.alarmclock.settings_alarm"
+        const val KEY_NO_SNOOZES = "com.helpfulapps.alarmclock.no_snoozes"
     }
 
     enum class Units(val unit: String) {

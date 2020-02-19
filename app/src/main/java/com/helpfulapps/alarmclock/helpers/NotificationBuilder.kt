@@ -36,7 +36,12 @@ interface NotificationBuilder {
 
     sealed class NotificationType {
         object HighPriority : NotificationType()
-        data class TypeAlarm(val alarm: Alarm, val usingNfc: Boolean = false) : NotificationType()
+        data class TypeAlarm(
+            val alarm: Alarm,
+            val isUsingNfc: Boolean = false,
+            val canStillSnooze: Boolean
+        ) : NotificationType()
+
         data class TypeStopwatchRunning(val seconds: Long) : NotificationType()
         data class TypeStopwatchPaused(val seconds: Long) : NotificationType()
         data class TypeTimer(val timeLeft: Long) : NotificationType()
@@ -121,7 +126,7 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
         }
 
         val ringingActivity =
-            if (notificationType.usingNfc) NfcRingingAlarmActivity::class.java else RingingAlarmActivity::class.java
+            if (notificationType.isUsingNfc) NfcRingingAlarmActivity::class.java else RingingAlarmActivity::class.java
 
         val fullScreenIntent = Intent(context, ringingActivity).also {
             it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -151,18 +156,22 @@ class NotificationBuilderImpl(private val context: Context) : NotificationBuilde
                 .setCategory(NotificationCompat.CATEGORY_ALARM)
                 .setFullScreenIntent(fullScreenPendingIntent, true)
                 .setVibrate(LongArray(3) { 500L })
-                .addAction(
-                    R.drawable.ic_snooze,
-                    context.getString(R.string.notification_alarm_snooze),
-                    snoozeAlarmIntent
-                )
 
-        if (!notificationType.usingNfc) {
+        if (!notificationType.isUsingNfc) {
             builder
                 .addAction(
                     R.drawable.ic_cancel,
                     context.getString(R.string.notification_alarm_stop),
                     stopAlarmIntent
+                )
+        }
+
+        if (notificationType.canStillSnooze) {
+            builder
+                .addAction(
+                    R.drawable.ic_snooze,
+                    context.getString(R.string.notification_alarm_snooze),
+                    snoozeAlarmIntent
                 )
         }
 

@@ -40,6 +40,7 @@ class AlarmService : Service() {
     private val vibrationController: VibrationController by inject()
     private val notificationBuilder: NotificationBuilder by inject()
     private val settings: Settings by inject()
+    private var noSnoozesSoFar: Int = 0
 
     private val disposables = CompositeDisposable()
 
@@ -79,22 +80,29 @@ class AlarmService : Service() {
             disposables += snoozeAlarmUseCase(SnoozeAlarmUseCase.Param(it.id))
                 .backgroundTask()
                 .subscribeBy {
-                    stopSelf()
+                    stopForeground(true)
+//                    stopSelf()
                 }
         }
     }
 
     private fun startAlarm(alarmId: Int) {
+        noSnoozesSoFar = 0
         subscribeToAlarm(alarmId) {
             alarmPlayer.startPlaying(it.ringtoneUrl)
             vibrationController.startVibrating(it.isVibrationOn)
+
+            val canStillSnooze = noSnoozesSoFar++ < settings.noSnoozes
+
             val notification = notificationBuilder.setNotificationType(
                 NotificationBuilder.NotificationType.TypeAlarm(
-                    it, shouldUseNfc()
+                    it, shouldUseNfc(), canStillSnooze
                 )
             ).build()
             startVersionedForeground(notification, NOTIFICATION_ID)
-            startCountdownToAutoSnooze()
+            if (canStillSnooze) {
+                startCountdownToAutoSnooze()
+            }
         }
     }
 

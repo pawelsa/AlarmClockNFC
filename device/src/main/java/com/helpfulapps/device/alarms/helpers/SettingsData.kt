@@ -10,6 +10,7 @@ import com.helpfulapps.domain.helpers.Settings.Companion.KEY_FIRST_TIME
 import com.helpfulapps.domain.helpers.Settings.Companion.KEY_HAS_NFC
 import com.helpfulapps.domain.helpers.Settings.Companion.KEY_LATITUDE
 import com.helpfulapps.domain.helpers.Settings.Companion.KEY_LONGITUDE
+import com.helpfulapps.domain.helpers.Settings.Companion.KEY_NO_SNOOZES
 import com.helpfulapps.domain.helpers.Settings.Companion.KEY_SNOOZE_ALARM
 import com.helpfulapps.domain.helpers.Settings.Companion.KEY_TIMER_TIME
 import com.helpfulapps.domain.helpers.Settings.Companion.KEY_USE_MOBILE_DATA
@@ -48,6 +49,10 @@ class SettingsData(private val sharedPreferences: SharedPreferences) : Settings 
     override var snoozeAlarmTime: Int
         set(value) = sharedPreferences.edit { putString(KEY_SNOOZE_ALARM, value.toString()) }
         get() = (sharedPreferences.getString(KEY_SNOOZE_ALARM, "3") ?: "3").toInt()
+
+    override var noSnoozes: Int
+        set(value) = sharedPreferences.edit { putString(KEY_NO_SNOOZES, value.toString()) }
+        get() = (sharedPreferences.getString(KEY_NO_SNOOZES, "3") ?: "3").toInt()
 
     override var alarmTime: Int
         set(value) = sharedPreferences.edit { putString(KEY_ALARM_TIME, value.toString()) }

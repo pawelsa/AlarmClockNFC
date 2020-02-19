@@ -52,4 +52,15 @@
         app:positiveButtonText="@null"
         app:useSimpleSummaryProvider="true" />
 
+    <ListPreference
+        android:defaultValue="3"
+        android:entries="@array/settings_no_snoozes_titles"
+        android:entryValues="@array/settings_no_snoozes_values"
+        android:key="com.helpfulapps.alarmclock.no_snoozes"
+        android:negativeButtonText="@null"
+        android:summary="How many of snoozes should be allowed"
+        android:title="Number of snoozes"
+        app:positiveButtonText="@null"
+        app:useSimpleSummaryProvider="true" />
+
 </PreferenceScreen>

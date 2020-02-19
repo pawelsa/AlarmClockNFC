@@ -41,14 +41,15 @@ class AlarmClockManagerImpl(
     override fun snoozeAlarm(alarm: DomainAlarm): Completable {
         return completableOf {
             val timeSetter = TimeSetter()
-            val snoozeTime = timeSetter.getAlarmSnoozeTime(alarm, settings.snoozeAlarmTime)
+            val snoozeTime =
+                timeSetter.getAlarmSnoozeTime(alarm, settings.snoozeAlarmTime, settings.noSnoozes)
             if (snoozeTime != -1L) {
                 val alarmIntent = IntentCreator.getAlarmIntent(context, alarm.id.toInt())
                 val alarmInfoIntent =
                     IntentCreator.createPendingIntentForAlarmIconPress(context, alarm.id.toInt())
                 val alarmSetupData = AlarmSetupData(snoozeTime, alarmInfoIntent, alarmIntent)
                 setAlarmInAlarmManager(alarmSetupData)
-            } else {
+            } else if (alarm.isRepeating) {
                 val alarmSetupData = getAlarmSetupData(alarm)
                 setAlarmInAlarmManager(alarmSetupData)
             }
