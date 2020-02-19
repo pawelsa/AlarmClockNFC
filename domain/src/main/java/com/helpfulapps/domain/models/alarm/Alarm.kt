@@ -2,6 +2,7 @@ package com.helpfulapps.domain.models.alarm
 
 import com.helpfulapps.domain.extensions.dayOfWeek
 import com.helpfulapps.domain.extensions.dayOfYear
+import com.helpfulapps.domain.helpers.TimeSetter
 import com.helpfulapps.domain.models.weather.DayWeather
 import java.util.*
 
@@ -39,13 +40,21 @@ data class Alarm(
             }
             is DayWeather -> {
 
+                println(
+                    "Alarm: id - $id,  isRepeating - ${isRepeating}, calendar - ${
+                    Calendar.getInstance().timeInMillis.dayOfYear}, weather - ${other.dt.dayOfYear}"
+                )
+
                 if (!this.isTurnedOn) return false
                 val otherDayOfWeek = other.dt.dayOfWeek.let {
                     if (it == 1) 6 else it - 2
                 }
                 if (this.isRepeating && this.repetitionDays[otherDayOfWeek]) return true
+
+                val timeSetter = TimeSetter()
+                val alarmStartTime = timeSetter.getAlarmStartingTime(this)
                 return !this.isRepeating &&
-                        Calendar.getInstance().timeInMillis.dayOfYear == other.dt.dayOfYear
+                        alarmStartTime.dayOfYear == other.dt.dayOfYear
             }
             else -> false
         }
