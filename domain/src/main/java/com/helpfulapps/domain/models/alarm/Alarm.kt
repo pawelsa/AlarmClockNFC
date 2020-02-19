@@ -53,8 +53,11 @@ data class Alarm(
 
                 val timeSetter = TimeSetter()
                 val alarmStartTime = timeSetter.getAlarmStartingTime(this)
+
+                val rangeOfAlarmForForecast =
+                    (alarmStartTime - ONE_AND_HALF_HOUR_MILLIS)..(alarmStartTime + ONE_AND_HALF_HOUR_MILLIS)
                 return !this.isRepeating &&
-                        alarmStartTime.dayOfYear == other.dt.dayOfYear
+                        (other.dt in rangeOfAlarmForForecast || alarmStartTime.dayOfYear == other.dt.dayOfYear)
             }
             else -> false
         }
@@ -64,4 +67,7 @@ data class Alarm(
         return id.hashCode()
     }
 
+    companion object {
+        const val ONE_AND_HALF_HOUR_MILLIS = 90 * 60 * 1000
+    }
 }
