@@ -5,6 +5,8 @@ import android.Manifest
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import androidx.core.content.ContextCompat
+import androidx.preference.EditTextPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.helpfulapps.alarmclock.R
@@ -39,8 +41,14 @@ class SettingsFragment : PreferenceFragmentCompat() {
         preferenceManager.sharedPreferencesName = Modules.SHARED_PREFERENCES_KEY
         addPreferencesFromResource(R.xml.preferences)
 
+        val forecastForCity = findPreference<EditTextPreference>("com.helpfulapps.alarmclock.city")
+
         val forecastForLocalization =
             findPreference<Preference>("com.helpfulapps.alarmclock.city_gps")
+
+        forecastForCity?.setOnBindEditTextListener {
+            it.setTextColor(ContextCompat.getColor(it.context, R.color.textColor))
+        }
 
         forecastForLocalization?.setOnPreferenceClickListener {
 
