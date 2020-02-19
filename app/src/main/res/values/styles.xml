@@ -67,6 +67,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
+        <item name="textColorAlertDialogListItem">@color/textColor</item>
         <item name="android:navigationBarColor">@color/background</item>
     </style>
 

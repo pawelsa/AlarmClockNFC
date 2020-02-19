@@ -20,6 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColorHint="@color/textColor"
+            android:textColor="@color/textColor"
             android:hint="@string/hint_alarm_name"
             android:textSize="@dimen/dialog_edit_text_hint_size" />
 
