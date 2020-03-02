@@ -2,8 +2,8 @@ package com.helpfulapps.domain.models.alarm
 
 import com.helpfulapps.domain.extensions.dayOfWeek
 import com.helpfulapps.domain.extensions.dayOfYear
+import com.helpfulapps.domain.helpers.TimeSetter
 import com.helpfulapps.domain.models.weather.DayWeather
-import java.util.*
 
 data class Alarm(
     val id: Long = 0,
@@ -44,8 +44,13 @@ data class Alarm(
                     if (it == 1) 6 else it - 2
                 }
                 if (this.isRepeating && this.repetitionDays[otherDayOfWeek]) return true
+
+                val alarmStartTime = TimeSetter().getAlarmStartingTime(this)
+
+                val rangeOfAlarmForForecast =
+                    (alarmStartTime - ONE_AND_HALF_HOUR_MILLIS)..(alarmStartTime + ONE_AND_HALF_HOUR_MILLIS)
                 return !this.isRepeating &&
-                        Calendar.getInstance().timeInMillis.dayOfYear == other.dt.dayOfYear
+                        (other.dt in rangeOfAlarmForForecast || alarmStartTime.dayOfYear == other.dt.dayOfYear)
             }
             else -> false
         }
@@ -55,4 +60,7 @@ data class Alarm(
         return id.hashCode()
     }
 
+    companion object {
+        const val ONE_AND_HALF_HOUR_MILLIS = 90 * 60 * 1000
+    }
 }

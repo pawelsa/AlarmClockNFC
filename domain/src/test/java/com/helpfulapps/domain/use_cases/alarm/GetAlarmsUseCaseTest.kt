@@ -93,4 +93,33 @@ class GetAlarmsUseCaseTest : BaseUseCaseTest<GetAlarmsUseCase>() {
             .dispose()
     }
 
+    @Test
+    fun `should return alarm, after downloading forecast at 23`() {
+
+        val expectedResult = listOf(
+            WeatherAlarm(MockData.alarmList[0], MockData.shortWeatherList[0]),
+            WeatherAlarm(MockData.alarmList[1], MockData.shortWeatherList[0]),
+            WeatherAlarm(MockData.alarmList[2], DayWeather())
+        )
+
+        val calendar = mock<Calendar>()
+        mockkStatic(Calendar::class)
+        every { Calendar.getInstance() } returns calendar
+        whenever(calendar.timeInMillis).thenReturn(1560987490000L)
+
+        every { mockedWeatherRepository.getForecastForAlarms() } returns Single.just(
+            MockData.shortWeatherList.drop(
+                1
+            )
+        )
+        every { mockedAlarmRepository.getAlarms() } returns Single.just(MockData.alarmList.take(3))
+
+
+        useCase()
+            .test()
+            .assertResult(expectedResult)
+            .dispose()
+    }
+
+
 }
