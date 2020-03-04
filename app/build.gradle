@@ -119,6 +119,9 @@ dependencies {
     // plots
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 
+    // banner
+    implementation "com.sergivonavi:materialbanner:1.2.0"
+
     implementation project(path: ':data')
     implementation project(':domain')
     implementation project(path: ':base')

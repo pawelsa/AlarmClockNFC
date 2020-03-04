@@ -2,6 +2,7 @@ package com.helpfulapps.alarmclock.views.clock_fragment
 
 import android.content.Context
 import android.content.Intent
+import android.media.AudioManager
 import android.net.Uri
 import android.os.Build
 import android.os.PowerManager
@@ -32,6 +33,9 @@ class ClockFragment : BaseFragment<ClockViewModel, FragmentClockBinding>() {
 
     override val viewModel: ClockViewModel by viewModel()
     private lateinit var modalBottomSheet: AddAlarmBottomSheet
+    private val audioStreamVolumeObserver: AudioStreamVolumeObserver by lazy {
+        AudioStreamVolumeObserver(context!!)
+    }
 
     private val adapter: ClockListAdapter by lazy {
         ClockListAdapter(
@@ -48,9 +52,67 @@ class ClockFragment : BaseFragment<ClockViewModel, FragmentClockBinding>() {
         setupRecyclerView()
         binding.viewModel = viewModel
         setupData()
+        setupBannerButtons()
         subscribeAlarms()
         subscribeMessages()
         checkBatteryOptimization()
+        checkIfAlarmSoundIsMutedAndDisplayBannerIfNeeded()
+        subscribeToVolume()
+    }
+
+    private fun setupBannerButtons() {
+        bn_clock_banner.setLeftButtonListener {
+            it.dismiss()
+        }
+        bn_clock_banner.setRightButtonListener {
+            openVolumeSettings()
+        }
+    }
+
+    private fun openVolumeSettings() {
+        fromBuildVersion(Build.VERSION_CODES.Q, matching = {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                val panelIntent = Intent(Settings.Panel.ACTION_VOLUME)
+                startActivityForResult(panelIntent, 545)
+            }
+        }, otherwise = {
+            val audioManager = context?.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+            audioManager.adjustStreamVolume(
+                AudioManager.STREAM_ALARM,
+                AudioManager.ADJUST_SAME,
+                AudioManager.FLAG_SHOW_UI
+            )
+        })
+    }
+
+    private fun subscribeToVolume() {
+        audioStreamVolumeObserver.startObserving { isMuted ->
+            handleVolumeBanner(isMuted)
+        }
+    }
+
+    private fun checkIfAlarmSoundIsMutedAndDisplayBannerIfNeeded() {
+        val audioManager = context?.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        val volume = audioManager.getStreamVolume(AudioManager.STREAM_ALARM)
+        handleVolumeBanner(isAlarmMuted(volume))
+    }
+
+    private fun isAlarmMuted(volume: Int) = volume == 1
+
+    private fun handleVolumeBanner(shouldDisplay: Boolean) {
+        if (shouldDisplay) {
+            displayBanner()
+        } else {
+            hideBanner()
+        }
+    }
+
+    private fun displayBanner() {
+        bn_clock_banner.show()
+    }
+
+    private fun hideBanner() {
+        bn_clock_banner.dismiss()
     }
 
     private fun subscribeMessages() {
@@ -140,5 +202,11 @@ class ClockFragment : BaseFragment<ClockViewModel, FragmentClockBinding>() {
             modalBottomSheet = AddAlarmBottomSheet()
             modalBottomSheet.show(fragmentManager!!, AddAlarmBottomSheet::class.java.simpleName)
         }
+        subscribeToVolume()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        audioStreamVolumeObserver.stopObserving()
     }
 }

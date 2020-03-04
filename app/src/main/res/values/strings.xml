@@ -142,6 +142,9 @@
     <string name="stopwatch_notification">Stopwatch</string>
     <string name="location_notification">Obtaining localization</string>
     <string name="alarm_notification">Alarm</string>
+    <string name="clock_banner_open_volume_settings">Open Volume Settings</string>
+    <string name="clock_banner_ignore">Ignore</string>
+    <string name="clock_banner_message">Alarms are muted, so there will be no sound</string>
 
     <string-array name="settings_alarm_time_titles">
         <item>1 minute</item>
