@@ -89,7 +89,7 @@ abstract class BaseRingingAlarmActivity<T : ViewDataBinding> :
     }
 
     companion object {
-        const val STOP_ACTION = "com.helpfulapps.alarmclock.views.ringing_alarm.stop"
+        const val STOP_ACTION = "com.helpfulapps.alarmclock.views.ringing_alarm.stopObserving"
         const val SNOOZE_ACTION = "com.helpfulapps.alarmclock.views.ringing_alarm.snooze"
         const val AUTO_SNOOZE_ALARM = "com.helpfulapps.alarmclock.views.ringing_alarm.auto_snooze"
         const val STOP_ALARM_INTENT = "com.helpfulapps.alarmclock.views.ringing_alarm.close"

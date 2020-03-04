@@ -72,7 +72,7 @@ class StatisticsActivity : BaseActivity<StatisticsViewModel, ActivityStatisticsB
     private fun subscribeToStopTime() {
         viewModel.stopTimeADay.observe(this) {
 
-            val dataSet = BarDataSet(it, "Average time to stop alarm (seconds)")
+            val dataSet = BarDataSet(it, "Average time to stopObserving alarm (seconds)")
             dataSet.valueTextColor = ContextCompat.getColor(baseContext, R.color.textColor)
             dataSet.valueTextSize = VALUE_TEXT_SIZE
             val barData = BarData(dataSet)

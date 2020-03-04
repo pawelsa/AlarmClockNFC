@@ -12,20 +12,36 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_clock_container"
-        android:background="@color/background"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/background">
 
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:clipToPadding="false"
-            android:id="@+id/rv_clock_list"
+        <com.sergivonavi.materialbanner.Banner
+            android:id="@+id/bn_clock_banner"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_height="wrap_content"
+            android:background="@color/background"
+            android:visibility="visible"
+            app:backgroundColor="@color/background"
+            app:buttonLeftText="@string/clock_banner_ignore"
+            app:buttonRightText="@string/clock_banner_open_volume_settings"
+            app:buttonsTextColor="@color/textColor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:messageText="@string/clock_banner_message"
+            app:messageTextAppearance="@style/BannerTextStyle"
+            app:messageTextColor="@color/textColor" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_clock_list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:clipToPadding="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/bn_clock_banner"
             tools:listitem="@layout/item_alarm" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

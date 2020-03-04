@@ -47,7 +47,7 @@ class TabFragmentChangeListener(
     }
 
     override fun onPageScrollStateChanged(state: Int) {
-        //state 0 = nothing happen, state 1 = beginning scrolling, state 2 = stop at selected tab.
+        //state 0 = nothing happen, state 1 = beginning scrolling, state 2 = stopObserving at selected tab.
         this.state = state
         if (state == SCROLL_STATE_IDLE) {
             isFloatButtonHidden = false

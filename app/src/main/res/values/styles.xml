@@ -28,6 +28,12 @@
         <item name="popupMenuStyle">@style/PopupMenuStyles</item>
     </style>
 
+    <style name="BannerTextStyle">
+        <item name="android:textColor">@color/textColor</item>
+        <item name="android:fontFamily">@font/comfortaa</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <style name="PopupMenuStyles" parent="Widget.AppCompat.Light.PopupMenu">
         <item name="android:popupBackground">@color/background</item>
         <item name="android:itemBackground">@color/background</item>
