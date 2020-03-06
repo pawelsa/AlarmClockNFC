@@ -1,23 +1,94 @@
 package com.helpfulapps.domain.helpers
 
 import com.helpfulapps.domain.models.alarm.Alarm
+import com.soywiz.klock.DateTime
 import java.util.*
+
+
+interface ITimeSetter {
+    fun getAlarmStartingCalendar(alarm: Alarm): Calendar
+    fun getAlarmStartingTime(alarm: Alarm): Long
+    fun getAlarmSnoozeTime(alarm: Alarm, snoozingTime: Int): Long
+    fun setHourAndMinute(alarm: Alarm, calendar: Calendar): Calendar
+}
+
+
+class NewTimeSetter(val currentTime: DateTime) : ITimeSetter {
+
+    override fun getAlarmStartingCalendar(alarm: Alarm): Calendar {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun getAlarmStartingTime(alarm: Alarm): Long {
+        return when (alarm.isRepeating) {
+            true -> getRepeatingAlarmStartingTime(alarm)
+            false -> getNonRepeatingAlarmStartingTime(alarm)
+        }
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    private fun getNonRepeatingAlarmStartingTime(alarm: Alarm): Long {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    private fun getRepeatingAlarmStartingTime(alarm: Alarm): Long {
+        /*
+        1. sprawdzić jaki mamy dzień
+        2. sprawdzić w jaki dzień się powtarza
+        3. sprawdzić czy jesteśmy przed czasem alarmu czy po
+        4a. jeśli po, to sprawdzamy kiedy kolejny raz się powtarza i wyciągamy czas
+        4b. jeśli przed, to wyciągamy czas
+        5. zwracamy czas
+
+        Może zrobić klasę która będzie ładnie obsługiwać te warunki ??
+         */
+
+        val alarmTime = com.soywiz.klock.Time(hour = alarm.hour, minute = alarm.minute)
+        val alarmDate = DateTime.now().date
+        val alarmTimeFinal = DateTime.invoke(date = alarmDate, time = alarmTime)
+//        currentTime.dayOfYear
+
+    }
+
+    override fun getAlarmSnoozeTime(alarm: Alarm, snoozingTime: Int): Long {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun setHourAndMinute(alarm: Alarm, calendar: Calendar): Calendar {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 class TimeSetter(
     private var calendar: Calendar = GregorianCalendar.getInstance(),
     private val currentTime: () -> Long = { System.currentTimeMillis() }
-) {
+) : ITimeSetter {
     private val TAG = this.javaClass.simpleName
 
-    fun getAlarmStartingCalendar(alarm: Alarm): Calendar = setStartingPoint(alarm)
+    override fun getAlarmStartingCalendar(alarm: Alarm): Calendar = setStartingPoint(alarm)
 
-    fun getAlarmStartingTime(alarm: Alarm): Long {
+    override fun getAlarmStartingTime(alarm: Alarm): Long {
         val calendar = setStartingPoint(alarm)
 
         return calendar.timeInMillis
     }
 
-    fun getAlarmSnoozeTime(alarm: Alarm, snoozingTime: Int): Long {
+    override fun getAlarmSnoozeTime(alarm: Alarm, snoozingTime: Int): Long {
         val baseAlarmStarting =
             setHourAndMinute(alarm, GregorianCalendar.getInstance()).timeInMillis
         val currentT = currentTime()
@@ -101,7 +172,7 @@ class TimeSetter(
         return calendar
     }
 
-    fun setHourAndMinute(
+    override fun setHourAndMinute(
         alarm: Alarm,
         calendar: Calendar
     ): Calendar {

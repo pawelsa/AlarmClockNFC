@@ -38,6 +38,9 @@ dependencies {
     testImplementation "io.mockk:mockk:$mockk_version"
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockito_kotlin_version"
 
+    //klock
+    implementation "com.soywiz.korlibs.klock:klock:$klock_version"
+
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "io.reactivex.rxjava2:rxjava:$rxJava_version"
     implementation "io.reactivex.rxjava2:rxkotlin:$rxKotlin_version"
