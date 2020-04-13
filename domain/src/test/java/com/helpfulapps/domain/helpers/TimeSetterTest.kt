@@ -2,15 +2,13 @@ package com.helpfulapps.domain.helpers
 
 import com.helpfulapps.domain.use_cases.mockData.MockData
 import com.helpfulapps.domain.use_cases.mockData.MockData.createAlarm
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.whenever
-import io.mockk.every
-import io.mockk.mockkStatic
+import com.soywiz.klock.DateTime
+import com.soywiz.klock.Month
+import com.soywiz.klock.Year
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import java.util.*
 
 
 class NewTimeSetterTest {
@@ -371,68 +369,111 @@ class TimeSetterTest {
     @DisplayName("Snooze for ")
     inner class Snoozes {
 
+
         @Test
         fun `first time should schedule`() {
-            val currentTime = 1560996000000L
-            val calendar = mock<Calendar>()
-            mockkStatic(Calendar::class)
-            every { Calendar.getInstance() } returns calendar
-            //06/20/2019 @ 2:00am
-            whenever(calendar.timeInMillis).thenReturn(currentTime)
+//            20 June 2019 02:00:00 - 1560996000000L
+            val calendar = DateTime.now().copyDayOfMonth(
+                dayOfMonth = 20,
+                month = Month.June,
+                year = Year(2019),
+                hours = 2,
+                minutes = 0,
+                seconds = 0,
+                milliseconds = 0
+            )
 
-            timeSetter = TimeSetter(calendar, currentTime = { currentTime })
+            timeSetter = TimeSetter(calendar)
 
-            val expected = 1560996300000L
+//            Thursday, 20 June 2019 02:05:00 - 1560996300000L
+            val expected = DateTime.now().copyDayOfMonth(
+                dayOfMonth = 20,
+                month = Month.June,
+                year = Year(2019),
+                hours = 2,
+                minutes = 5,
+                seconds = 0,
+                milliseconds = 0
+            ).milliseconds.toLong()
             val alarm = MockData.createAlarm(hour = 2, minute = 0)
             assertEquals(expected, timeSetter.getAlarmSnoozeTime(alarm, 5))
         }
 
+
         @Test
         fun `second time should schedule`() {
-            val currentTime = 1560996300000L
-            val calendar = mock<Calendar>()
-            mockkStatic(Calendar::class)
-            every { Calendar.getInstance() } returns calendar
-            //06/20/2019 @ 2:00am
-            whenever(calendar.timeInMillis).thenReturn(currentTime)
+//            Thursday, 20 June 2019 02:05:00 - 1560996300000L
+            val calendar = DateTime.now().copyDayOfMonth(
+                dayOfMonth = 20,
+                month = Month.June,
+                year = Year(2019),
+                hours = 2,
+                minutes = 5,
+                seconds = 0,
+                milliseconds = 0
+            )
 
-            timeSetter = TimeSetter(calendar, currentTime = { currentTime })
+            timeSetter = TimeSetter(calendar)
 
-            val expected = 1560996600000L
+//            Thursday, 20 June 2019 02:10:00 - 1560996600000L
+            val expected = DateTime.now().copyDayOfMonth(
+                dayOfMonth = 20,
+                month = Month.June,
+                year = Year(2019),
+                hours = 2,
+                minutes = 10,
+                seconds = 0,
+                milliseconds = 0
+            ).milliseconds.toLong()
             val alarm = MockData.createAlarm(hour = 2, minute = 0)
             assertEquals(expected, timeSetter.getAlarmSnoozeTime(alarm, 5))
         }
 
         @Test
         fun `third time should schedule`() {
-            //06/20/2019 @ 2:10am
-            val currentTime = 1560996600000L
-            val calendar = mock<Calendar>()
-            mockkStatic(Calendar::class)
-            every { Calendar.getInstance() } returns calendar
-            //06/20/2019 @ 2:00am
-            whenever(calendar.timeInMillis).thenReturn(currentTime)
+            //06/20/2019 @ 2:10am - 1560996600000L
+            val calendar = DateTime.now().copyDayOfMonth(
+                dayOfMonth = 20,
+                month = Month.June,
+                year = Year(2019),
+                hours = 2,
+                minutes = 10,
+                seconds = 0,
+                milliseconds = 0
+            )
 
-            timeSetter = TimeSetter(calendar, currentTime = { currentTime })
+            timeSetter = TimeSetter(calendar)
 
-            val expected = 1560996900000L
+//            Thursday, 20 June 2019 02:15:00 - 1560996900000L
+            val expected = DateTime.now().copyDayOfMonth(
+                dayOfMonth = 20,
+                month = Month.June,
+                year = Year(2019),
+                hours = 2,
+                minutes = 15,
+                seconds = 0,
+                milliseconds = 0
+            ).milliseconds.toLong()
             val alarm = MockData.createAlarm(hour = 2, minute = 0)
             assertEquals(expected, timeSetter.getAlarmSnoozeTime(alarm, 5))
         }
 
         @Test
         fun `forth time should not schedule any more`() {
-            //06/20/2019 @ 2:15am
-            val currentTime = 1560996900000L
-            val calendar = mock<Calendar>()
-            mockkStatic(Calendar::class)
-            every { Calendar.getInstance() } returns calendar
-            //06/20/2019 @ 2:00am
-            whenever(calendar.timeInMillis).thenReturn(currentTime + 5)
+            //06/20/2019 @ 2:15am - 1560996900000L
+            val calendar = DateTime.now().copyDayOfMonth(
+                dayOfMonth = 20,
+                month = Month.June,
+                year = Year(2019),
+                hours = 2,
+                minutes = 15,
+                seconds = 0,
+                milliseconds = 0
+            )
 
-            timeSetter = TimeSetter(calendar, currentTime = { currentTime })
+            timeSetter = TimeSetter(calendar)
 
-            val expected = -1
+            val expected = -1L
             val alarm = MockData.createAlarm(hour = 2, minute = 0)
             assertEquals(expected, timeSetter.getAlarmSnoozeTime(alarm, 5))
         }
@@ -448,18 +489,29 @@ class TimeSetterTest {
 
             @Test
             fun `for one day should be scheduled`() {
-//                01/09/2020 @ 8:00am
-                val currentTime = 1578556800005L
-                val calendar = mock<Calendar>()
-                mockkStatic(Calendar::class)
-                every { Calendar.getInstance() } returns calendar
-                whenever(calendar.timeInMillis).thenReturn(currentTime)
+//                01/09/2020 @ 8:00am - 1578556800005L
+                val calendar = DateTime.now().copyDayOfMonth(
+                    dayOfMonth = 9,
+                    month = Month.January,
+                    year = Year(2020),
+                    hours = 8,
+                    minutes = 0,
+                    seconds = 0,
+                    milliseconds = 0
+                )
 
-                timeSetter = TimeSetter(calendar, currentTime = { currentTime })
+                timeSetter = TimeSetter(calendar)
 
-//                01/10/2020 @ 8:00am
-                val expected =
-                    GregorianCalendar.getInstance().apply { timeInMillis = 1578643200000L }
+//                01/10/2020 @ 8:00am - 1578643200000L
+                val expected = DateTime.now().copyDayOfMonth(
+                    dayOfMonth = 10,
+                    month = Month.January,
+                    year = Year(2020),
+                    hours = 8,
+                    minutes = 0,
+                    seconds = 0,
+                    milliseconds = 0
+                )
                 val alarm = MockData.createAlarm(
                     hour = 8,
                     minute = 0,
@@ -471,18 +523,29 @@ class TimeSetterTest {
 
             @Test
             fun `for multiple days should be scheduled`() {
-//                01/09/2020 @ 8:00am
-                val currentTime = 1578556800005L
-                val calendar = mock<Calendar>()
-                mockkStatic(Calendar::class)
-                every { Calendar.getInstance() } returns calendar
-                whenever(calendar.timeInMillis).thenReturn(currentTime)
+//                01/09/2020 @ 8:00am - 1578556800005L
+                val calendar = DateTime.now().copyDayOfMonth(
+                    dayOfMonth = 9,
+                    month = Month.January,
+                    year = Year(2020),
+                    hours = 8,
+                    minutes = 0,
+                    seconds = 0,
+                    milliseconds = 0
+                )
 
-                timeSetter = TimeSetter(calendar, currentTime = { currentTime })
+                timeSetter = TimeSetter(calendar)
 
-//                01/10/2020 @ 8:00am
-                val expected =
-                    GregorianCalendar.getInstance().apply { timeInMillis = 1578643200000L }
+//                01/10/2020 @ 8:00am - 1578643200000L
+                val expected = DateTime.now().copyDayOfMonth(
+                    dayOfMonth = 10,
+                    month = Month.January,
+                    year = Year(2020),
+                    hours = 8,
+                    minutes = 0,
+                    seconds = 0,
+                    milliseconds = 0
+                )
                 val alarm = MockData.createAlarm(
                     hour = 8,
                     minute = 0,
@@ -500,18 +563,29 @@ class TimeSetterTest {
 
             @Test
             fun `for one day should be scheduled`() {
-//                01/09/2020 @ 5:00pm
-                val currentTime = 1578589200000L
-                val calendar = mock<Calendar>()
-                mockkStatic(Calendar::class)
-                every { Calendar.getInstance() } returns calendar
-                whenever(calendar.timeInMillis).thenReturn(currentTime)
+//                01/09/2020 @ 5:00pm - 1578589200000L
+                val calendar = DateTime.now().copyDayOfMonth(
+                    dayOfMonth = 9,
+                    month = Month.January,
+                    year = Year(2020),
+                    hours = 17,
+                    minutes = 0,
+                    seconds = 0,
+                    milliseconds = 0
+                )
 
-                timeSetter = TimeSetter(calendar, currentTime = { currentTime })
+                timeSetter = TimeSetter(calendar)
 
-//                01/10/2020 @ 8:00am
-                val expected =
-                    GregorianCalendar.getInstance().apply { timeInMillis = 1578643200000L }
+//                01/10/2020 @ 8:00am - 1578643200000L
+                val expected = DateTime.now().copyDayOfMonth(
+                    dayOfMonth = 10,
+                    month = Month.January,
+                    year = Year(2020),
+                    hours = 8,
+                    minutes = 0,
+                    seconds = 0,
+                    milliseconds = 0
+                )
                 val alarm = MockData.createAlarm(
                     hour = 8,
                     minute = 0,
@@ -523,18 +597,29 @@ class TimeSetterTest {
 
             @Test
             fun `for multiple days should be scheduled`() {
-//                01/09/2020 @ 5:00pm
-                val currentTime = 1578589200000L
-                val calendar = mock<Calendar>()
-                mockkStatic(Calendar::class)
-                every { Calendar.getInstance() } returns calendar
-                whenever(calendar.timeInMillis).thenReturn(currentTime)
+//                01/09/2020 @ 5:00pm - 1578589200000L
+                val calendar = DateTime.now().copyDayOfMonth(
+                    dayOfMonth = 9,
+                    month = Month.January,
+                    year = Year(2020),
+                    hours = 17,
+                    minutes = 0,
+                    seconds = 0,
+                    milliseconds = 0
+                )
 
-                timeSetter = TimeSetter(calendar, currentTime = { currentTime })
+                timeSetter = TimeSetter(calendar)
 
 //                01/10/2020 @ 8:00am
-                val expected =
-                    GregorianCalendar.getInstance().apply { timeInMillis = 1578643200000L }
+                val expected = DateTime.now().copyDayOfMonth(
+                    dayOfMonth = 10,
+                    month = Month.January,
+                    year = Year(2020),
+                    hours = 8,
+                    minutes = 0,
+                    seconds = 0,
+                    milliseconds = 0
+                )
                 val alarm = MockData.createAlarm(
                     hour = 8,
                     minute = 0,
@@ -551,18 +636,29 @@ class TimeSetterTest {
 
             @Test
             fun `for one day should be scheduled`() {
-//                01/09/2020 @ 11:35pm
-                val currentTime = 1578612900000L
-                val calendar = mock<Calendar>()
-                mockkStatic(Calendar::class)
-                every { Calendar.getInstance() } returns calendar
-                whenever(calendar.timeInMillis).thenReturn(currentTime)
+//                01/09/2020 @ 11:35pm - 1578612900000L
+                val calendar = DateTime.now().copyDayOfMonth(
+                    dayOfMonth = 9,
+                    month = Month.January,
+                    year = Year(2020),
+                    hours = 23,
+                    minutes = 35,
+                    seconds = 0,
+                    milliseconds = 0
+                )
 
-                timeSetter = TimeSetter(calendar, currentTime = { currentTime })
+                timeSetter = TimeSetter(calendar)
 
-//                01/10/2020 @ 8:00am
-                val expected =
-                    GregorianCalendar.getInstance().apply { timeInMillis = 1578643200000L }
+//                01/10/2020 @ 8:00am - 1578643200000L
+                val expected = DateTime.now().copyDayOfMonth(
+                    dayOfMonth = 10,
+                    month = Month.January,
+                    year = Year(2020),
+                    hours = 8,
+                    minutes = 0,
+                    seconds = 0,
+                    milliseconds = 0
+                )
                 val alarm = MockData.createAlarm(
                     hour = 8,
                     minute = 0,
@@ -574,18 +670,29 @@ class TimeSetterTest {
 
             @Test
             fun `for multiple days should be scheduled`() {
-//                01/09/2020 @ 11:35pm
-                val currentTime = 1578612900000L
-                val calendar = mock<Calendar>()
-                mockkStatic(Calendar::class)
-                every { Calendar.getInstance() } returns calendar
-                whenever(calendar.timeInMillis).thenReturn(currentTime)
+//                01/09/2020 @ 11:35pm - 1578612900000L
+                val calendar = DateTime.now().copyDayOfMonth(
+                    dayOfMonth = 9,
+                    month = Month.January,
+                    year = Year(2020),
+                    hours = 23,
+                    minutes = 35,
+                    seconds = 0,
+                    milliseconds = 0
+                )
 
-                timeSetter = TimeSetter(calendar, currentTime = { currentTime })
+                timeSetter = TimeSetter(calendar)
 
-//                01/10/2020 @ 8:00am
-                val expected =
-                    GregorianCalendar.getInstance().apply { timeInMillis = 1578643200000L }
+//                01/10/2020 @ 8:00am - 1578643200000L
+                val expected = DateTime.now().copyDayOfMonth(
+                    dayOfMonth = 10,
+                    month = Month.January,
+                    year = Year(2020),
+                    hours = 8,
+                    minutes = 0,
+                    seconds = 0,
+                    milliseconds = 0
+                )
                 val alarm = MockData.createAlarm(
                     hour = 8,
                     minute = 0,
@@ -602,18 +709,29 @@ class TimeSetterTest {
 
             @Test
             fun `for one day should be scheduled`() {
-//                01/10/2020 @ 12:35am
-                val currentTime = 1578616500000L
-                val calendar = mock<Calendar>()
-                mockkStatic(Calendar::class)
-                every { Calendar.getInstance() } returns calendar
-                whenever(calendar.timeInMillis).thenReturn(currentTime)
+//                01/10/2020 @ 12:35am - 1578616500000L
+                val calendar = DateTime.now().copyDayOfMonth(
+                    dayOfMonth = 9,
+                    month = Month.January,
+                    year = Year(2020),
+                    hours = 12,
+                    minutes = 35,
+                    seconds = 0,
+                    milliseconds = 0
+                )
 
-                timeSetter = TimeSetter(calendar, currentTime = { currentTime })
+                timeSetter = TimeSetter(calendar)
 
-//                01/10/2020 @ 8:00am
-                val expected =
-                    GregorianCalendar.getInstance().apply { timeInMillis = 1578643200000L }
+//                01/10/2020 @ 8:00am - 1578643200000L
+                val expected = DateTime.now().copyDayOfMonth(
+                    dayOfMonth = 10,
+                    month = Month.January,
+                    year = Year(2020),
+                    hours = 8,
+                    minutes = 0,
+                    seconds = 0,
+                    milliseconds = 0
+                )
                 val alarm = MockData.createAlarm(
                     hour = 8,
                     minute = 0,
@@ -625,18 +743,29 @@ class TimeSetterTest {
 
             @Test
             fun `for multiple days should be scheduled`() {
-//                01/10/2020 @ 12:35am
-                val currentTime = 1578616500000L
-                val calendar = mock<Calendar>()
-                mockkStatic(Calendar::class)
-                every { Calendar.getInstance() } returns calendar
-                whenever(calendar.timeInMillis).thenReturn(currentTime)
+//                01/10/2020 @ 12:35am - 1578616500000L
+                val calendar = DateTime.now().copyDayOfMonth(
+                    dayOfMonth = 9,
+                    month = Month.January,
+                    year = Year(2020),
+                    hours = 12,
+                    minutes = 35,
+                    seconds = 0,
+                    milliseconds = 0
+                )
 
-                timeSetter = TimeSetter(calendar, currentTime = { currentTime })
+                timeSetter = TimeSetter(calendar)
 
-//                01/10/2020 @ 8:00am
-                val expected =
-                    GregorianCalendar.getInstance().apply { timeInMillis = 1578643200000L }
+//                01/10/2020 @ 8:00am - 1578643200000L
+                val expected = DateTime.now().copyDayOfMonth(
+                    dayOfMonth = 10,
+                    month = Month.January,
+                    year = Year(2020),
+                    hours = 8,
+                    minutes = 0,
+                    seconds = 0,
+                    milliseconds = 0
+                )
                 val alarm = MockData.createAlarm(
                     hour = 8,
                     minute = 0,
